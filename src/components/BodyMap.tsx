@@ -84,8 +84,10 @@ export default function BodyMap({primary = [], secondary = [], className, onSele
     : undefined;
   const svgStyle = onSelect ? {cursor: 'pointer'} : undefined;
 
+  const showLegend = primary.length > 0 || secondary.length > 0;
+
   return (
-    <div className={className}>
+    <div className={`${onSelect ? 'bodymap-interactive ' : ''}${className ?? ''}`}>
       <div className="flex items-start justify-center gap-6">
         <Figure label="Face avant">
           <Model data={data} type="anterior" bodyColor={BODY_COLOR} highlightedColors={COLORS} style={{width: '8rem'}} svgStyle={svgStyle} onClick={handleClick} />
@@ -94,14 +96,16 @@ export default function BodyMap({primary = [], secondary = [], className, onSele
           <Model data={data} type="posterior" bodyColor={BODY_COLOR} highlightedColors={COLORS} style={{width: '8rem'}} svgStyle={svgStyle} onClick={handleClick} />
         </Figure>
       </div>
-      <div className="mt-2 flex justify-center gap-4 text-xs text-slate-400">
-        <span className="flex items-center gap-1.5">
-          <span className="inline-block h-2.5 w-2.5 rounded-full" style={{background: COLORS[1]}} /> Principaux
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="inline-block h-2.5 w-2.5 rounded-full" style={{background: COLORS[0]}} /> Secondaires
-        </span>
-      </div>
+      {showLegend && (
+        <div className="mt-2 flex justify-center gap-4 text-xs text-slate-400">
+          <span className="flex items-center gap-1.5">
+            <span className="inline-block h-2.5 w-2.5 rounded-full" style={{background: COLORS[1]}} /> Principaux
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="inline-block h-2.5 w-2.5 rounded-full" style={{background: COLORS[0]}} /> Secondaires
+          </span>
+        </div>
+      )}
     </div>
   );
 }

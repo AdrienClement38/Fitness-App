@@ -15,3 +15,11 @@ body {
 * {
   -webkit-tap-highlight-color: transparent;
 }
+
+/* Survol d'un muscle sur le schéma interactif (page Muscles) — desktop. */
+.bodymap-interactive svg polygon {
+  transition: fill 0.1s ease;
+}
+.bodymap-interactive svg polygon:hover {
+  fill: #ef4444 !important;
+}

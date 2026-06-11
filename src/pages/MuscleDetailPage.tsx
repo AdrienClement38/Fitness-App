@@ -3,6 +3,7 @@ import {Link, useNavigate, useParams} from 'react-router-dom';
 import {api, label, type ExerciseRef} from '../lib/api';
 import {useFetch} from '../lib/useFetch';
 import {Badge, ErrorState, Loading, SectionTitle} from '../components/ui';
+import BodyMap from '../components/BodyMap';
 
 function ExerciseLinks({items}: {items: ExerciseRef[]}) {
   return (
@@ -48,6 +49,8 @@ export default function MuscleDetailPage() {
           </Link>
         )}
       </div>
+
+      <BodyMap primary={[m.id]} className="mt-4" />
 
       {m.functionFr && (
         <>
