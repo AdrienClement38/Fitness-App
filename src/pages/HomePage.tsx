@@ -1,13 +1,12 @@
-import {ClipboardList, HeartPulse, Leaf, LineChart, Play, Search} from 'lucide-react';
+import {ClipboardList, Leaf, LineChart, Play, Search} from 'lucide-react';
 import {useState, type FormEvent} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {useActiveWorkout, useWorkoutHistory} from '../lib/workoutLogs';
 import {useMyPrograms} from '../lib/myPrograms';
 import {summary} from '../lib/stats';
 
-// Accès uniques à l'accueil (absents de la barre du bas).
+// Accès unique à l'accueil (le cardio, lui, est un exercice -> onglet Exercices).
 const browseCards = [
-  {to: '/cardio', icon: HeartPulse, title: 'Cardio', desc: 'Tapis, vélo, rameur — échauffement, endurance, récup active.'},
   {to: '/recuperation', icon: Leaf, title: 'Récup & Mobilité', desc: 'Étirements et automassages, pour après la séance.'},
 ];
 
