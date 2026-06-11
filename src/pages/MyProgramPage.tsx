@@ -194,7 +194,7 @@ export default function MyProgramPage() {
       </button>
 
       <button
-        onClick={() => navigate('/programmes')}
+        onClick={() => navigate(`/mes-programmes/${program.id}`)}
         className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500/20 px-4 py-2.5 text-sm font-semibold text-emerald-300 transition-colors hover:bg-emerald-500/30"
       >
         <Check className="h-4 w-4" /> Terminé

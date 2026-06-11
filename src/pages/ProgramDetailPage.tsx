@@ -55,7 +55,7 @@ export default function ProgramDetailPage() {
       {p.descriptionFr && <p className="mt-3 text-sm leading-relaxed text-slate-300">{p.descriptionFr}</p>}
 
       <button
-        onClick={() => navigate(`/mes-programmes/${duplicateProgram(p)}`)}
+        onClick={() => navigate(`/mes-programmes/${duplicateProgram(p)}/modifier`)}
         className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-2.5 text-sm font-medium text-emerald-300 transition-colors hover:bg-emerald-500/20"
       >
         <Copy className="h-4 w-4" /> Dupliquer / personnaliser
