@@ -4,6 +4,7 @@ import {api, exerciseImageUrl, label} from '../lib/api';
 import {useFetch} from '../lib/useFetch';
 import {Badge, ErrorState, Loading, SectionTitle} from '../components/ui';
 import FavoriteButton from '../components/FavoriteButton';
+import BodyMap from '../components/BodyMap';
 
 function List({items, tone}: {items: string[]; tone?: 'amber' | 'slate'}) {
   return (
@@ -86,6 +87,11 @@ export default function ExerciseDetailPage() {
       )}
 
       <SectionTitle>Muscles</SectionTitle>
+      <BodyMap
+        primary={ex.primaryMuscles.map((m) => m.id)}
+        secondary={ex.secondaryMuscles.map((m) => m.id)}
+        className="mb-3"
+      />
       <div className="flex flex-wrap gap-1.5">
         {ex.primaryMuscles.map((m) => (
           <Link key={m.id} to={`/muscles/${m.id}`} className="rounded-full bg-emerald-500/15 px-2.5 py-1 text-xs font-medium text-emerald-300 hover:bg-emerald-500/25">
