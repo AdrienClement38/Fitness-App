@@ -1,6 +1,6 @@
 import {ArrowLeft, Copy, Play} from 'lucide-react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
-import {api, label, type ProgramExerciseItem, type ProgramSession} from '../lib/api';
+import {api, isTimed, label, type ProgramExerciseItem, type ProgramSession} from '../lib/api';
 import {duplicateProgram} from '../lib/myPrograms';
 import {startSession, useActiveWorkout} from '../lib/workoutLogs';
 import {useFetch} from '../lib/useFetch';
@@ -31,6 +31,7 @@ export default function ProgramDetailPage() {
         exerciseId: e.exerciseId,
         nameFr: e.nameFr,
         nameEn: e.nameEn,
+        force: e.force,
         sets: e.sets,
         repsMin: e.repsMin,
         repsMax: e.repsMax,
@@ -77,6 +78,7 @@ export default function ProgramDetailPage() {
                     </Link>
                     <span className="shrink-0 text-sm font-semibold text-slate-200">
                       {e.sets} × {reps(e)}
+                      {isTimed(e.force) ? ' s' : ''}
                     </span>
                   </div>
                   {(e.restSeconds || e.notesFr) && (

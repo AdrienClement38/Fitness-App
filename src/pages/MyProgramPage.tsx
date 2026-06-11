@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {ArrowLeft, Check, Plus, Trash2} from 'lucide-react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
-import {label, type ExerciseListItem} from '../lib/api';
+import {isTimed, label, type ExerciseListItem} from '../lib/api';
 import {Badge, Empty} from '../components/ui';
 import ExercisePicker from '../components/ExercisePicker';
 import {
@@ -65,15 +65,17 @@ export default function MyProgramPage() {
       Object.assign(d.sessions[si].exercises[ei], p);
     });
   const addExercise = (si: number, e: ExerciseListItem) => {
+    const timed = isTimed(e.force);
     patch((d) =>
       d.sessions[si].exercises.push({
         exerciseId: e.id,
         nameFr: e.nameFr,
         nameEn: e.nameEn,
+        force: e.force,
         sets: 3,
-        repsMin: 8,
-        repsMax: 12,
-        restSeconds: 90,
+        repsMin: timed ? 30 : 8,
+        repsMax: timed ? 45 : 12,
+        restSeconds: timed ? 60 : 90,
         notesFr: null,
       }),
     );
@@ -163,9 +165,10 @@ export default function MyProgramPage() {
                         Séries <Num value={e.sets} onChange={(v) => patchEx(si, ei, {sets: v})} title="Séries" />
                       </label>
                       <label className="flex items-center gap-1">
-                        Reps <Num value={e.repsMin} onChange={(v) => patchEx(si, ei, {repsMin: v})} title="Reps min" />
+                        {isTimed(e.force) ? 'Durée (s)' : 'Reps'}{' '}
+                        <Num value={e.repsMin} onChange={(v) => patchEx(si, ei, {repsMin: v})} title="min" />
                         <span>–</span>
-                        <Num value={e.repsMax} onChange={(v) => patchEx(si, ei, {repsMax: v})} title="Reps max" />
+                        <Num value={e.repsMax} onChange={(v) => patchEx(si, ei, {repsMax: v})} title="max" />
                       </label>
                       <label className="flex items-center gap-1">
                         Repos <Num value={e.restSeconds} onChange={(v) => patchEx(si, ei, {restSeconds: v})} title="Repos (s)" />s

@@ -10,6 +10,7 @@ export interface MyProgramExercise {
   exerciseId: string;
   nameFr: string | null;
   nameEn: string;
+  force: string | null;
   sets: number | null;
   repsMin: number | null;
   repsMax: number | null;
@@ -82,6 +83,7 @@ export function duplicateProgram(source: ProgramDetail): string {
         exerciseId: e.exerciseId,
         nameFr: e.nameFr,
         nameEn: e.nameEn,
+        force: e.force,
         sets: e.sets,
         repsMin: e.repsMin,
         repsMax: e.repsMax,

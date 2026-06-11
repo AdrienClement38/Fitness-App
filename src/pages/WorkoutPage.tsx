@@ -81,8 +81,6 @@ export default function WorkoutPage() {
     }
   };
 
-  const cols = 'grid grid-cols-[1.5rem_1fr_1fr_2.5rem_1.5rem] items-center gap-2';
-
   return (
     <div>
       <div className="rounded-xl border border-emerald-900/40 bg-emerald-950/20 p-4">
@@ -94,46 +92,68 @@ export default function WorkoutPage() {
       </div>
 
       <div className="mt-4 grid gap-4">
-        {w.exercises.map((e, ei) => (
-          <div key={ei} className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
-            <div className="flex items-baseline justify-between gap-2">
-              <Link to={`/exercices/${e.exerciseId}`} className="font-semibold hover:text-emerald-300">
-                {e.nameFr ?? e.nameEn}
-              </Link>
-              {e.targetReps && <span className="shrink-0 text-xs text-slate-500">objectif {e.targetReps} reps</span>}
-            </div>
-
-            <div className={`mt-3 ${cols} text-xs text-slate-500`}>
-              <span />
-              <span className="text-center">kg</span>
-              <span className="text-center">reps</span>
-              <span className="text-center">fait</span>
-              <span />
-            </div>
-            {e.sets.map((s, si) => (
-              <div key={si} className={`mt-1.5 ${cols} rounded-md ${s.done ? 'bg-emerald-500/10' : ''}`}>
-                <span className="text-center text-sm text-slate-500">{si + 1}</span>
-                <NumCell value={s.weight} onChange={(v) => setField(ei, si, {weight: v})} step={0.5} placeholder="kg" />
-                <NumCell value={s.reps} onChange={(v) => setField(ei, si, {reps: v})} step={1} placeholder="reps" />
-                <button
-                  onClick={() => setField(ei, si, {done: !s.done})}
-                  aria-label="Série faite"
-                  className={`mx-auto flex h-7 w-7 items-center justify-center rounded-full border transition-colors ${
-                    s.done ? 'border-emerald-500 bg-emerald-500 text-slate-950' : 'border-slate-600 text-transparent hover:border-emerald-500'
-                  }`}
-                >
-                  <Check className="h-4 w-4" />
-                </button>
-                <button onClick={() => removeSet(ei, si)} aria-label="Retirer la série" className="text-slate-600 hover:text-red-300">
-                  <X className="h-4 w-4" />
-                </button>
+        {w.exercises.map((e, ei) => {
+          const timed = e.isTimed;
+          const cols = timed
+            ? 'grid grid-cols-[1.5rem_1fr_2.5rem_1.5rem] items-center gap-2'
+            : 'grid grid-cols-[1.5rem_1fr_1fr_2.5rem_1.5rem] items-center gap-2';
+          return (
+            <div key={ei} className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+              <div className="flex items-baseline justify-between gap-2">
+                <Link to={`/exercices/${e.exerciseId}`} className="font-semibold hover:text-emerald-300">
+                  {e.nameFr ?? e.nameEn}
+                </Link>
+                {e.targetReps && (
+                  <span className="shrink-0 text-xs text-slate-500">
+                    objectif {e.targetReps} {timed ? 's' : 'reps'}
+                  </span>
+                )}
               </div>
-            ))}
-            <button onClick={() => addSet(ei)} className="mt-2 flex items-center gap-1 text-xs text-slate-400 hover:text-emerald-300">
-              <Plus className="h-3.5 w-3.5" /> série
-            </button>
-          </div>
-        ))}
+
+              <div className={`mt-3 ${cols} text-xs text-slate-500`}>
+                <span />
+                {timed ? (
+                  <span className="text-center">durée (s)</span>
+                ) : (
+                  <>
+                    <span className="text-center">kg</span>
+                    <span className="text-center">reps</span>
+                  </>
+                )}
+                <span className="text-center">fait</span>
+                <span />
+              </div>
+              {e.sets.map((s, si) => (
+                <div key={si} className={`mt-1.5 ${cols} rounded-md ${s.done ? 'bg-emerald-500/10' : ''}`}>
+                  <span className="text-center text-sm text-slate-500">{si + 1}</span>
+                  {timed ? (
+                    <NumCell value={s.reps} onChange={(v) => setField(ei, si, {reps: v})} step={5} placeholder="sec" />
+                  ) : (
+                    <>
+                      <NumCell value={s.weight} onChange={(v) => setField(ei, si, {weight: v})} step={0.5} placeholder="kg" />
+                      <NumCell value={s.reps} onChange={(v) => setField(ei, si, {reps: v})} step={1} placeholder="reps" />
+                    </>
+                  )}
+                  <button
+                    onClick={() => setField(ei, si, {done: !s.done})}
+                    aria-label="Série faite"
+                    className={`mx-auto flex h-7 w-7 items-center justify-center rounded-full border transition-colors ${
+                      s.done ? 'border-emerald-500 bg-emerald-500 text-slate-950' : 'border-slate-600 text-transparent hover:border-emerald-500'
+                    }`}
+                  >
+                    <Check className="h-4 w-4" />
+                  </button>
+                  <button onClick={() => removeSet(ei, si)} aria-label="Retirer la série" className="text-slate-600 hover:text-red-300">
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+              ))}
+              <button onClick={() => addSet(ei)} className="mt-2 flex items-center gap-1 text-xs text-slate-400 hover:text-emerald-300">
+                <Plus className="h-3.5 w-3.5" /> série
+              </button>
+            </div>
+          );
+        })}
       </div>
 
       <button

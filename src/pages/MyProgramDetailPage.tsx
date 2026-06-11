@@ -1,6 +1,6 @@
 import {ArrowLeft, Pencil, Play} from 'lucide-react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
-import {label} from '../lib/api';
+import {isTimed, label} from '../lib/api';
 import {Badge, Empty} from '../components/ui';
 import {getMyProgram, useMyPrograms, type MyProgramExercise, type MyProgramSession} from '../lib/myPrograms';
 import {startSession, useActiveWorkout} from '../lib/workoutLogs';
@@ -38,6 +38,7 @@ export default function MyProgramDetailPage() {
         exerciseId: e.exerciseId,
         nameFr: e.nameFr,
         nameEn: e.nameEn,
+        force: e.force,
         sets: e.sets,
         repsMin: e.repsMin,
         repsMax: e.repsMax,
@@ -88,6 +89,7 @@ export default function MyProgramDetailPage() {
                         </Link>
                         <span className="shrink-0 text-sm font-semibold text-slate-200">
                           {e.sets ?? '–'} × {reps(e) || '–'}
+                          {isTimed(e.force) ? ' s' : ''}
                         </span>
                       </div>
                       {(e.restSeconds || e.notesFr) && (

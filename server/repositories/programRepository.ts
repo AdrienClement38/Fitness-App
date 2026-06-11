@@ -40,6 +40,7 @@ export async function getProgramById(id: string) {
       nameFr: exercises.nameFr,
       nameEn: exercises.nameEn,
       level: exercises.level,
+      force: exercises.force,
       sets: programExercises.sets,
       repsMin: programExercises.repsMin,
       repsMax: programExercises.repsMax,

@@ -190,6 +190,7 @@ export interface ProgramExerciseItem {
   nameFr: string | null;
   nameEn: string;
   level: string;
+  force: string | null;
   sets: number | null;
   repsMin: number | null;
   repsMax: number | null;
@@ -235,6 +236,9 @@ export const LABELS = {
 
 export const label = (kind: keyof typeof LABELS, value: string | null): string =>
   value ? (LABELS[kind][value] ?? value) : '';
+
+/** Exercice tenu en durée (gainage, isométrie) : on logge des secondes, pas des reps ni du poids. */
+export const isTimed = (force: string | null | undefined): boolean => force === 'static';
 
 /** Images d'exécution (free-exercise-db, domaine public) servies depuis l'upstream. */
 export const EXERCISE_IMAGE_BASE =
