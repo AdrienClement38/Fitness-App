@@ -1,6 +1,7 @@
-import {ArrowLeft} from 'lucide-react';
+import {ArrowLeft, Copy} from 'lucide-react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
 import {api, label, type ProgramExerciseItem} from '../lib/api';
+import {duplicateProgram} from '../lib/myPrograms';
 import {useFetch} from '../lib/useFetch';
 import {Badge, ErrorState, Loading} from '../components/ui';
 
@@ -33,6 +34,13 @@ export default function ProgramDetailPage() {
         {p.goal && <Badge>{label('goal', p.goal)}</Badge>}
       </div>
       {p.descriptionFr && <p className="mt-3 text-sm leading-relaxed text-slate-300">{p.descriptionFr}</p>}
+
+      <button
+        onClick={() => navigate(`/mes-programmes/${duplicateProgram(p)}`)}
+        className="mt-4 flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-2.5 text-sm font-medium text-emerald-300 transition-colors hover:bg-emerald-500/20"
+      >
+        <Copy className="h-4 w-4" /> Dupliquer / personnaliser
+      </button>
 
       <div className="mt-4 grid gap-4">
         {p.sessions.map((s) => (
