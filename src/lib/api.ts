@@ -270,6 +270,17 @@ async function get<T>(path: string): Promise<T> {
   return (await res.json()) as T;
 }
 
+async function post<T>(path: string, body: unknown): Promise<T> {
+  const res = await fetch(`/api${path}`, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(body),
+  });
+  const data = await res.json().catch(() => null);
+  if (!res.ok) throw new Error((data && data.error) || `Erreur ${res.status}`);
+  return data as T;
+}
+
 export interface ExerciseQuery {
   search?: string;
   muscle?: string;
@@ -301,4 +312,16 @@ export const api = {
   sources: () => get<Source[]>('/knowledge/sources'),
   programs: () => get<ProgramListItem[]>('/programs'),
   program: (id: string) => get<ProgramDetail>(`/programs/${encodeURIComponent(id)}`),
+};
+
+export interface AuthUser {
+  id: string;
+  email: string;
+}
+
+export const authApi = {
+  me: () => get<AuthUser>('/auth/me'),
+  register: (email: string, password: string) => post<AuthUser>('/auth/register', {email, password}),
+  login: (email: string, password: string) => post<AuthUser>('/auth/login', {email, password}),
+  logout: () => post<{ok: boolean}>('/auth/logout', {}),
 };

@@ -12,6 +12,7 @@ import MyProgramDetailPage from './pages/MyProgramDetailPage';
 import SuiviPage from './pages/SuiviPage';
 import WorkoutPage from './pages/WorkoutPage';
 import KnowledgePage from './pages/KnowledgePage';
+import AccountPage from './pages/AccountPage';
 import CategoryBrowse from './components/CategoryBrowse';
 
 export default function App() {
@@ -50,6 +51,7 @@ export default function App() {
           }
         />
         <Route path="/savoir" element={<KnowledgePage />} />
+        <Route path="/compte" element={<AccountPage />} />
       </Route>
     </Routes>
   );

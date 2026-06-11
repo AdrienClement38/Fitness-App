@@ -1,5 +1,6 @@
-import {Activity, BookOpen, ClipboardList, Dumbbell, Home, LineChart} from 'lucide-react';
+import {Activity, BookOpen, ClipboardList, Dumbbell, Home, LineChart, User} from 'lucide-react';
 import {NavLink, Outlet} from 'react-router-dom';
+import {useAuth} from '../lib/auth';
 
 const tabs = [
   {to: '/', label: 'Accueil', icon: Home, end: true},
@@ -11,14 +12,21 @@ const tabs = [
 ];
 
 export default function Layout() {
+  const {user} = useAuth();
   return (
     <div className="mx-auto flex min-h-screen max-w-2xl flex-col">
-      <header className="sticky top-0 z-10 border-b border-slate-800/80 bg-slate-950/90 px-4 py-3 backdrop-blur">
+      <header className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-800/80 bg-slate-950/90 px-4 py-3 backdrop-blur">
         <NavLink to="/" className="flex items-center gap-2">
           <Dumbbell className="h-5 w-5 text-emerald-400" />
-          <span className="text-lg font-bold tracking-tight">
-            Salle de sport
-          </span>
+          <span className="text-lg font-bold tracking-tight">Salle de sport</span>
+        </NavLink>
+        <NavLink
+          to="/compte"
+          title={user ? user.email : 'Se connecter'}
+          className="flex items-center gap-1.5 rounded-lg px-2 py-1 text-sm text-slate-400 hover:text-slate-200"
+        >
+          <User className={`h-5 w-5 ${user ? 'text-emerald-400' : ''}`} />
+          <span className="hidden sm:inline">{user ? 'Mon compte' : 'Se connecter'}</span>
         </NavLink>
       </header>
 
