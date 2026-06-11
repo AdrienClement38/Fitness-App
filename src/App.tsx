@@ -1,3 +1,4 @@
+import {useEffect} from 'react';
 import {Route, Routes} from 'react-router-dom';
 import Layout from './components/Layout';
 import HomePage from './pages/HomePage';
@@ -16,8 +17,17 @@ import AccountPage from './pages/AccountPage';
 import PrivacyPage from './pages/PrivacyPage';
 import LegalPage from './pages/LegalPage';
 import CategoryBrowse from './components/CategoryBrowse';
+import {useAuth} from './lib/auth';
+import {connect, disconnect} from './lib/sync';
+import './lib/workoutLogs'; // enregistre la collection « séances » pour la sync
 
 export default function App() {
+  const {user} = useAuth();
+  useEffect(() => {
+    if (user) connect();
+    else disconnect();
+  }, [user]);
+
   return (
     <Routes>
       <Route element={<Layout />}>

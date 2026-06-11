@@ -6,6 +6,7 @@
  */
 import {useSyncExternalStore} from 'react';
 import type {MeasureKind} from './api';
+import {pushItems, registerCollection, type SyncItem} from './sync';
 
 export interface LoggedSet {
   weight: number | null;
@@ -27,6 +28,7 @@ export interface WorkoutLog {
   programName: string | null;
   sessionName: string;
   exercises: LoggedExercise[];
+  updatedAt?: string; // pour la sync (last-write-wins)
 }
 
 /** Graine pour démarrer une séance (depuis un programme curated ou perso). */
@@ -46,6 +48,8 @@ export interface SessionSeed {
 
 const HKEY = 'workout-logs';
 const AKEY = 'active-workout';
+const TKEY = 'workout-tombstones'; // id -> date ISO de suppression (pour la sync)
+const KIND = 'workout-log';
 
 function readH(): WorkoutLog[] {
   try {
@@ -61,9 +65,17 @@ function readA(): WorkoutLog | null {
     return null;
   }
 }
+function readT(): Record<string, string> {
+  try {
+    return JSON.parse(localStorage.getItem(TKEY) || '{}') as Record<string, string>;
+  } catch {
+    return {};
+  }
+}
 
 let history = readH();
 let active = readA();
+const tombstones = readT();
 const listeners = new Set<() => void>();
 
 function subscribe(cb: () => void) {
@@ -93,6 +105,13 @@ function saveActive(next: WorkoutLog | null) {
     /* quota */
   }
   emit();
+}
+function saveTombstones() {
+  try {
+    localStorage.setItem(TKEY, JSON.stringify(tombstones));
+  } catch {
+    /* quota */
+  }
 }
 
 const genId = () => `w-${crypto.randomUUID()}`;
@@ -152,9 +171,11 @@ export function updateActive(mut: (draft: WorkoutLog) => void) {
 /** Termine la séance active -> bascule dans l'historique. */
 export function finishActive() {
   if (!active) return;
-  const finished: WorkoutLog = {...structuredClone(active), finishedIso: new Date().toISOString()};
+  const at = new Date().toISOString();
+  const finished: WorkoutLog = {...structuredClone(active), finishedIso: at, updatedAt: at};
   saveHistory([finished, ...history]);
   saveActive(null);
+  pushItems([{kind: KIND, itemId: finished.id, data: finished, updatedAt: at, deleted: false}]);
 }
 
 export function abandonActive() {
@@ -162,7 +183,11 @@ export function abandonActive() {
 }
 
 export function deleteLog(id: string) {
+  const at = new Date().toISOString();
+  tombstones[id] = at;
+  saveTombstones();
   saveHistory(history.filter((l) => l.id !== id));
+  pushItems([{kind: KIND, itemId: id, data: null, updatedAt: at, deleted: true}]);
 }
 
 /** Volume total d'une séance (somme poids × reps des séries faites). */
@@ -186,3 +211,44 @@ export function useActiveWorkout(): WorkoutLog | null {
 export function useWorkoutHistory(): WorkoutLog[] {
   return useSyncExternalStore(subscribe, () => history, () => history);
 }
+
+/* ---- Synchronisation (last-write-wins par updatedAt + tombstones) ------ */
+const logAt = (l: WorkoutLog) => l.updatedAt ?? l.finishedIso ?? l.startedIso;
+
+function snapshot(): SyncItem[] {
+  const items: SyncItem[] = history.map((l) => ({kind: KIND, itemId: l.id, data: l, updatedAt: logAt(l), deleted: false}));
+  for (const [id, at] of Object.entries(tombstones)) {
+    items.push({kind: KIND, itemId: id, data: null, updatedAt: at, deleted: true});
+  }
+  return items;
+}
+
+function applyRemote(items: SyncItem[]) {
+  const byId = new Map(history.map((l) => [l.id, l]));
+  let histChanged = false;
+  let tombChanged = false;
+  for (const it of items) {
+    const local = byId.get(it.itemId);
+    const localAt = local ? logAt(local) : tombstones[it.itemId];
+    if (localAt && localAt >= it.updatedAt) continue; // le nôtre est aussi récent ou plus
+    if (it.deleted) {
+      if (local) {
+        byId.delete(it.itemId);
+        histChanged = true;
+      }
+      tombstones[it.itemId] = it.updatedAt;
+      tombChanged = true;
+    } else {
+      byId.set(it.itemId, it.data as WorkoutLog);
+      histChanged = true;
+      if (tombstones[it.itemId]) {
+        delete tombstones[it.itemId];
+        tombChanged = true;
+      }
+    }
+  }
+  if (tombChanged) saveTombstones();
+  if (histChanged) saveHistory([...byId.values()].sort((a, b) => (logAt(a) < logAt(b) ? 1 : -1)));
+}
+
+registerCollection(KIND, {snapshot, applyRemote});
