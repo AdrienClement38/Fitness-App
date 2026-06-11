@@ -39,6 +39,17 @@ export default defineConfig(() => {
               urlPattern: ({url}) => url.pathname.startsWith('/api/'),
               handler: 'NetworkOnly',
             },
+            {
+              // Images d'exercices (GitHub raw) : mises en cache au 1er affichage
+              // -> hors-ligne et instantanees ensuite, zero stockage serveur.
+              urlPattern: ({url}) => url.href.startsWith('https://raw.githubusercontent.com/yuhonas/free-exercise-db/'),
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'exercise-images',
+                expiration: {maxEntries: 500, maxAgeSeconds: 60 * 60 * 24 * 60},
+                cacheableResponse: {statuses: [0, 200]},
+              },
+            },
           ],
         },
       }),
