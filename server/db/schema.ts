@@ -18,6 +18,7 @@ import {
   jsonb,
   primaryKey,
   index,
+  timestamp,
 } from 'drizzle-orm/pg-core';
 
 /* ------------------------------------------------------------------ */
@@ -275,4 +276,29 @@ export const programExercises = pgTable(
     primaryKey({columns: [t.programId, t.dayOrder, t.position]}),
     index('program_exercises_exercise_idx').on(t.exerciseId),
   ],
+);
+
+/* ------------------------------------------------------------------ */
+/*  Comptes utilisateurs (auth + sync)                                */
+/* ------------------------------------------------------------------ */
+
+export const users = pgTable('users', {
+  id: text('id').primaryKey(), // 'u-<uuid>'
+  email: text('email').notNull().unique(),
+  passwordHash: text('password_hash').notNull(), // scrypt : 'saltHex:hashHex'
+  createdAt: timestamp('created_at', {withTimezone: true}).notNull().defaultNow(),
+});
+
+// Sessions serveur : un jeton = un cookie httpOnly. Révocable (logout / expiration).
+export const sessions = pgTable(
+  'sessions',
+  {
+    token: text('token').primaryKey(),
+    userId: text('user_id')
+      .notNull()
+      .references(() => users.id, {onDelete: 'cascade'}),
+    expiresAt: timestamp('expires_at', {withTimezone: true}).notNull(),
+    createdAt: timestamp('created_at', {withTimezone: true}).notNull().defaultNow(),
+  },
+  (t) => [index('sessions_user_idx').on(t.userId)],
 );

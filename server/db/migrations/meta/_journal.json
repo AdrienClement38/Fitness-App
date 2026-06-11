@@ -15,6 +15,13 @@
       "when": 1781182389542,
       "tag": "0001_flaky_hairball",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1781203085641,
+      "tag": "0002_powerful_vapor",
+      "breakpoints": true
     }
   ]
 }

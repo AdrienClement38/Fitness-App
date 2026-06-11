@@ -7,6 +7,7 @@ import exercisesRouter from './server/routes/exercises';
 import musclesRouter from './server/routes/muscles';
 import knowledgeRouter from './server/routes/knowledge';
 import programsRouter from './server/routes/programs';
+import authRouter from './server/routes/auth';
 import {migrateDb} from './server/db/client';
 
 const app = express();
@@ -25,7 +26,7 @@ app.use(express.json({limit: '1mb'}));
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Content-Type');
-  res.header('Access-Control-Allow-Methods', 'GET,OPTIONS');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,DELETE,OPTIONS');
   if (req.method === 'OPTIONS') {
     res.sendStatus(204);
     return;
@@ -37,6 +38,7 @@ app.use('/api/exercises', exercisesRouter);
 app.use('/api/muscles', musclesRouter);
 app.use('/api/knowledge', knowledgeRouter);
 app.use('/api/programs', programsRouter);
+app.use('/api/auth', authRouter);
 
 async function startServer() {
   // Auto-migration au démarrage : la base (PostgreSQL en prod, PGlite en dev)
