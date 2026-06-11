@@ -1,0 +1,195 @@
+[
+  {
+    "id": "full-body-debutant",
+    "name_fr": "Full Body Débutant",
+    "theme": "full-body",
+    "level": "beginner",
+    "goal": "hypertrophy",
+    "days_per_week": 3,
+    "summary_fr": "3 séances corps entier par semaine : le meilleur point de départ. Fréquence élevée par muscle, mouvements de base, peu de temps requis.",
+    "description_fr": "Alterne les 3 séances (A, B, C) sur des jours non consécutifs (ex. lundi/mercredi/vendredi). Concentre-toi sur la technique avant la charge. Quand tu atteins le haut de la fourchette de reps en propre, augmente le poids.",
+    "sessions": [
+      {
+        "day_order": 1,
+        "name_fr": "Séance A",
+        "focus_fr": "Corps entier",
+        "exercises": [
+          {"exercise_id": "barbell-full-squat", "sets": 3, "reps_min": 8, "reps_max": 12, "rest_seconds": 120},
+          {"exercise_id": "barbell-bench-press-medium-grip", "sets": 3, "reps_min": 8, "reps_max": 12, "rest_seconds": 120},
+          {"exercise_id": "seated-cable-rows", "sets": 3, "reps_min": 10, "reps_max": 12, "rest_seconds": 90},
+          {"exercise_id": "barbell-shoulder-press", "sets": 3, "reps_min": 10, "reps_max": 12, "rest_seconds": 90},
+          {"exercise_id": "plank", "sets": 3, "reps_min": 30, "reps_max": 45, "rest_seconds": 60, "notes_fr": "Maintien en secondes."}
+        ]
+      },
+      {
+        "day_order": 2,
+        "name_fr": "Séance B",
+        "focus_fr": "Corps entier",
+        "exercises": [
+          {"exercise_id": "romanian-deadlift", "sets": 3, "reps_min": 8, "reps_max": 12, "rest_seconds": 120},
+          {"exercise_id": "dumbbell-bench-press", "sets": 3, "reps_min": 10, "reps_max": 12, "rest_seconds": 90},
+          {"exercise_id": "wide-grip-lat-pulldown", "sets": 3, "reps_min": 10, "reps_max": 12, "rest_seconds": 90},
+          {"exercise_id": "side-lateral-raise", "sets": 3, "reps_min": 12, "reps_max": 15, "rest_seconds": 60},
+          {"exercise_id": "hanging-leg-raise", "sets": 3, "reps_min": 10, "reps_max": 15, "rest_seconds": 60}
+        ]
+      },
+      {
+        "day_order": 3,
+        "name_fr": "Séance C",
+        "focus_fr": "Corps entier",
+        "exercises": [
+          {"exercise_id": "leg-press", "sets": 3, "reps_min": 10, "reps_max": 15, "rest_seconds": 120},
+          {"exercise_id": "barbell-incline-bench-press-medium-grip", "sets": 3, "reps_min": 8, "reps_max": 12, "rest_seconds": 90},
+          {"exercise_id": "bent-over-barbell-row", "sets": 3, "reps_min": 8, "reps_max": 12, "rest_seconds": 90},
+          {"exercise_id": "barbell-curl", "sets": 3, "reps_min": 10, "reps_max": 12, "rest_seconds": 60},
+          {"exercise_id": "triceps-pushdown", "sets": 3, "reps_min": 10, "reps_max": 12, "rest_seconds": 60}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "upper-lower-hypertrophie",
+    "name_fr": "Haut / Bas — Hypertrophie",
+    "theme": "upper-lower",
+    "level": "intermediate",
+    "goal": "hypertrophy",
+    "days_per_week": 4,
+    "summary_fr": "4 séances : chaque muscle travaillé 2×/semaine. Bon équilibre fréquence/volume pour la prise de muscle.",
+    "description_fr": "Haut A, Bas A, repos, Haut B, Bas B. Les variantes A/B varient les angles et les charges. Vise 1 à 3 répétitions en réserve sur les séries de travail.",
+    "sessions": [
+      {
+        "day_order": 1,
+        "name_fr": "Haut A",
+        "focus_fr": "Pectoraux, dos, épaules, bras",
+        "exercises": [
+          {"exercise_id": "barbell-bench-press-medium-grip", "sets": 4, "reps_min": 6, "reps_max": 10, "rest_seconds": 150},
+          {"exercise_id": "bent-over-barbell-row", "sets": 4, "reps_min": 6, "reps_max": 10, "rest_seconds": 150},
+          {"exercise_id": "barbell-shoulder-press", "sets": 3, "reps_min": 8, "reps_max": 12, "rest_seconds": 120},
+          {"exercise_id": "wide-grip-lat-pulldown", "sets": 3, "reps_min": 10, "reps_max": 12, "rest_seconds": 90},
+          {"exercise_id": "barbell-curl", "sets": 3, "reps_min": 10, "reps_max": 12, "rest_seconds": 60},
+          {"exercise_id": "triceps-pushdown", "sets": 3, "reps_min": 10, "reps_max": 12, "rest_seconds": 60}
+        ]
+      },
+      {
+        "day_order": 2,
+        "name_fr": "Bas A",
+        "focus_fr": "Quadriceps, ischios, fessiers, mollets",
+        "exercises": [
+          {"exercise_id": "barbell-full-squat", "sets": 4, "reps_min": 6, "reps_max": 10, "rest_seconds": 180},
+          {"exercise_id": "romanian-deadlift", "sets": 3, "reps_min": 8, "reps_max": 12, "rest_seconds": 150},
+          {"exercise_id": "leg-press", "sets": 3, "reps_min": 10, "reps_max": 15, "rest_seconds": 120},
+          {"exercise_id": "lying-leg-curls", "sets": 3, "reps_min": 10, "reps_max": 12, "rest_seconds": 90},
+          {"exercise_id": "standing-calf-raises", "sets": 4, "reps_min": 12, "reps_max": 15, "rest_seconds": 60}
+        ]
+      },
+      {
+        "day_order": 3,
+        "name_fr": "Haut B",
+        "focus_fr": "Pectoraux, dos, épaules, bras",
+        "exercises": [
+          {"exercise_id": "barbell-incline-bench-press-medium-grip", "sets": 4, "reps_min": 8, "reps_max": 12, "rest_seconds": 120},
+          {"exercise_id": "seated-cable-rows", "sets": 4, "reps_min": 8, "reps_max": 12, "rest_seconds": 120},
+          {"exercise_id": "dumbbell-shoulder-press", "sets": 3, "reps_min": 10, "reps_max": 12, "rest_seconds": 90},
+          {"exercise_id": "pullups", "sets": 3, "reps_min": 6, "reps_max": 10, "rest_seconds": 120, "notes_fr": "Avec assistance si besoin."},
+          {"exercise_id": "alternate-hammer-curl", "sets": 3, "reps_min": 10, "reps_max": 12, "rest_seconds": 60},
+          {"exercise_id": "dips-triceps-version", "sets": 3, "reps_min": 8, "reps_max": 12, "rest_seconds": 90}
+        ]
+      },
+      {
+        "day_order": 4,
+        "name_fr": "Bas B",
+        "focus_fr": "Chaîne postérieure, fessiers, mollets",
+        "exercises": [
+          {"exercise_id": "barbell-deadlift", "sets": 3, "reps_min": 5, "reps_max": 8, "rest_seconds": 180},
+          {"exercise_id": "front-barbell-squat", "sets": 3, "reps_min": 8, "reps_max": 12, "rest_seconds": 150},
+          {"exercise_id": "barbell-hip-thrust", "sets": 3, "reps_min": 10, "reps_max": 12, "rest_seconds": 120},
+          {"exercise_id": "seated-leg-curl", "sets": 3, "reps_min": 10, "reps_max": 12, "rest_seconds": 90},
+          {"exercise_id": "seated-calf-raise", "sets": 4, "reps_min": 12, "reps_max": 15, "rest_seconds": 60}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "push-pull-legs-hypertrophie",
+    "name_fr": "Push / Pull / Legs",
+    "theme": "ppl",
+    "level": "intermediate",
+    "goal": "hypertrophy",
+    "days_per_week": 6,
+    "summary_fr": "3 séances (poussée / tirage / jambes) à enchaîner 1 à 2 fois par semaine (3 ou 6 jours). Volume élevé par muscle.",
+    "description_fr": "Push = pectoraux/épaules/triceps, Pull = dos/biceps, Legs = jambes complètes. En 6 jours, chaque muscle est travaillé 2×/semaine. Garde 1 à 2 reps en réserve sur les gros mouvements.",
+    "sessions": [
+      {
+        "day_order": 1,
+        "name_fr": "Push (poussée)",
+        "focus_fr": "Pectoraux, épaules, triceps",
+        "exercises": [
+          {"exercise_id": "barbell-bench-press-medium-grip", "sets": 4, "reps_min": 6, "reps_max": 10, "rest_seconds": 150},
+          {"exercise_id": "barbell-shoulder-press", "sets": 3, "reps_min": 8, "reps_max": 12, "rest_seconds": 120},
+          {"exercise_id": "barbell-incline-bench-press-medium-grip", "sets": 3, "reps_min": 8, "reps_max": 12, "rest_seconds": 120},
+          {"exercise_id": "side-lateral-raise", "sets": 4, "reps_min": 12, "reps_max": 15, "rest_seconds": 60},
+          {"exercise_id": "triceps-pushdown", "sets": 3, "reps_min": 10, "reps_max": 12, "rest_seconds": 60},
+          {"exercise_id": "dips-triceps-version", "sets": 3, "reps_min": 8, "reps_max": 12, "rest_seconds": 90}
+        ]
+      },
+      {
+        "day_order": 2,
+        "name_fr": "Pull (tirage)",
+        "focus_fr": "Dos, biceps, avant-bras",
+        "exercises": [
+          {"exercise_id": "barbell-deadlift", "sets": 3, "reps_min": 5, "reps_max": 6, "rest_seconds": 180},
+          {"exercise_id": "pullups", "sets": 4, "reps_min": 6, "reps_max": 10, "rest_seconds": 120},
+          {"exercise_id": "bent-over-barbell-row", "sets": 4, "reps_min": 8, "reps_max": 12, "rest_seconds": 120},
+          {"exercise_id": "wide-grip-lat-pulldown", "sets": 3, "reps_min": 10, "reps_max": 12, "rest_seconds": 90},
+          {"exercise_id": "face-pull", "sets": 3, "reps_min": 15, "reps_max": 20, "rest_seconds": 60},
+          {"exercise_id": "barbell-curl", "sets": 3, "reps_min": 10, "reps_max": 12, "rest_seconds": 60}
+        ]
+      },
+      {
+        "day_order": 3,
+        "name_fr": "Legs (jambes)",
+        "focus_fr": "Quadriceps, ischios, fessiers, mollets",
+        "exercises": [
+          {"exercise_id": "barbell-full-squat", "sets": 4, "reps_min": 6, "reps_max": 10, "rest_seconds": 180},
+          {"exercise_id": "romanian-deadlift", "sets": 3, "reps_min": 8, "reps_max": 12, "rest_seconds": 150},
+          {"exercise_id": "leg-press", "sets": 3, "reps_min": 10, "reps_max": 15, "rest_seconds": 120},
+          {"exercise_id": "lying-leg-curls", "sets": 3, "reps_min": 10, "reps_max": 12, "rest_seconds": 90},
+          {"exercise_id": "standing-calf-raises", "sets": 4, "reps_min": 12, "reps_max": 15, "rest_seconds": 60},
+          {"exercise_id": "hanging-leg-raise", "sets": 3, "reps_min": 10, "reps_max": 15, "rest_seconds": 60}
+        ]
+      }
+    ]
+  },
+  {
+    "id": "force-5x5",
+    "name_fr": "Force 5×5",
+    "theme": "strength",
+    "level": "intermediate",
+    "goal": "strength",
+    "days_per_week": 3,
+    "summary_fr": "Programme de force classique : 5 séries de 5 sur les gros mouvements polyarticulaires, charges lourdes, surcharge progressive séance après séance.",
+    "description_fr": "Alterne les séances A et B (3 fois par semaine). Ajoute un peu de poids à chaque séance tant que tu réussis tes 5×5. Repos longs (3 min) pour maintenir la charge.",
+    "sessions": [
+      {
+        "day_order": 1,
+        "name_fr": "Séance A",
+        "focus_fr": "Squat, développé, rowing",
+        "exercises": [
+          {"exercise_id": "barbell-full-squat", "sets": 5, "reps_min": 5, "reps_max": 5, "rest_seconds": 180},
+          {"exercise_id": "barbell-bench-press-medium-grip", "sets": 5, "reps_min": 5, "reps_max": 5, "rest_seconds": 180},
+          {"exercise_id": "bent-over-barbell-row", "sets": 5, "reps_min": 5, "reps_max": 5, "rest_seconds": 180}
+        ]
+      },
+      {
+        "day_order": 2,
+        "name_fr": "Séance B",
+        "focus_fr": "Squat, militaire, soulevé de terre",
+        "exercises": [
+          {"exercise_id": "barbell-full-squat", "sets": 5, "reps_min": 5, "reps_max": 5, "rest_seconds": 180},
+          {"exercise_id": "barbell-shoulder-press", "sets": 5, "reps_min": 5, "reps_max": 5, "rest_seconds": 180},
+          {"exercise_id": "barbell-deadlift", "sets": 1, "reps_min": 5, "reps_max": 5, "rest_seconds": 180, "notes_fr": "1 série lourde de 5 suffit."}
+        ]
+      }
+    ]
+  }
+]

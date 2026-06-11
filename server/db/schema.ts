@@ -220,3 +220,59 @@ export const splitDays = pgTable(
   },
   (t) => [primaryKey({columns: [t.splitId, t.dayOrder]})],
 );
+
+/* ------------------------------------------------------------------ */
+/*  Programmes d'entraînement (curated, seedés)                       */
+/* ------------------------------------------------------------------ */
+
+export const programs = pgTable(
+  'programs',
+  {
+    id: text('id').primaryKey(),
+    nameFr: text('name_fr').notNull(),
+    theme: text('theme'), // 'full-body'|'upper-lower'|'ppl'|'strength'|'glutes'|'upper-body'…
+    level: text('level'), // 'beginner'|'intermediate'|'advanced'
+    goal: text('goal'), // 'strength'|'hypertrophy'|'endurance'|'power'
+    daysPerWeek: integer('days_per_week'),
+    summaryFr: text('summary_fr'),
+    descriptionFr: text('description_fr'),
+  },
+  (t) => [index('programs_theme_idx').on(t.theme), index('programs_level_idx').on(t.level)],
+);
+
+export const programSessions = pgTable(
+  'program_sessions',
+  {
+    programId: text('program_id')
+      .notNull()
+      .references(() => programs.id, {onDelete: 'cascade'}),
+    dayOrder: integer('day_order').notNull(),
+    nameFr: text('name_fr').notNull(), // ex: 'Jour A', 'Push'
+    focusFr: text('focus_fr'),
+  },
+  (t) => [primaryKey({columns: [t.programId, t.dayOrder]})],
+);
+
+// Un exercice dans une séance d'un programme. Lié à NOTRE base d'exercices.
+export const programExercises = pgTable(
+  'program_exercises',
+  {
+    programId: text('program_id')
+      .notNull()
+      .references(() => programs.id, {onDelete: 'cascade'}),
+    dayOrder: integer('day_order').notNull(), // séance (programId + dayOrder)
+    position: integer('position').notNull(), // ordre dans la séance
+    exerciseId: text('exercise_id')
+      .notNull()
+      .references(() => exercises.id),
+    sets: integer('sets'),
+    repsMin: integer('reps_min'),
+    repsMax: integer('reps_max'),
+    restSeconds: integer('rest_seconds'),
+    notesFr: text('notes_fr'),
+  },
+  (t) => [
+    primaryKey({columns: [t.programId, t.dayOrder, t.position]}),
+    index('program_exercises_exercise_idx').on(t.exerciseId),
+  ],
+);

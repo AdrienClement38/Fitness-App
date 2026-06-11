@@ -173,6 +173,43 @@ export interface Split {
   days: SplitDay[];
 }
 
+export interface ProgramListItem {
+  id: string;
+  nameFr: string;
+  theme: string | null;
+  level: string | null;
+  goal: string | null;
+  daysPerWeek: number | null;
+  summaryFr: string | null;
+}
+
+export interface ProgramExerciseItem {
+  dayOrder: number;
+  position: number;
+  exerciseId: string;
+  nameFr: string | null;
+  nameEn: string;
+  level: string;
+  sets: number | null;
+  repsMin: number | null;
+  repsMax: number | null;
+  restSeconds: number | null;
+  notesFr: string | null;
+}
+
+export interface ProgramSession {
+  programId: string;
+  dayOrder: number;
+  nameFr: string;
+  focusFr: string | null;
+  exercises: ProgramExerciseItem[];
+}
+
+export interface ProgramDetail extends ProgramListItem {
+  descriptionFr: string | null;
+  sessions: ProgramSession[];
+}
+
 /* ---- Libellés FR des énumérations (affichage) ------------------------- */
 export const LABELS = {
   level: {beginner: 'Débutant', intermediate: 'Intermédiaire', advanced: 'Avancé'} as Record<string, string>,
@@ -188,6 +225,10 @@ export const LABELS = {
   sourceType: {
     scientific: 'Étude scientifique', guideline: 'Recommandation officielle',
     coach: 'Coach', dataset: 'Jeu de données', book: 'Ouvrage',
+  } as Record<string, string>,
+  theme: {
+    'full-body': 'Full Body', 'upper-lower': 'Haut / Bas', ppl: 'Push Pull Legs',
+    strength: 'Force', glutes: 'Fessiers', 'upper-body': 'Haut du corps', 'fat-loss': 'Perte de gras',
   } as Record<string, string>,
 };
 
@@ -235,4 +276,6 @@ export const api = {
   volumeLandmarks: () => get<VolumeLandmark[]>('/knowledge/volume-landmarks'),
   splits: () => get<Split[]>('/knowledge/splits'),
   sources: () => get<Source[]>('/knowledge/sources'),
+  programs: () => get<ProgramListItem[]>('/programs'),
+  program: (id: string) => get<ProgramDetail>(`/programs/${encodeURIComponent(id)}`),
 };

@@ -62,6 +62,22 @@ interface Translation {
   name_fr?: string;
   instructions_fr?: string[];
 }
+interface ProgramJson {
+  id: string;
+  name_fr: string;
+  theme?: string;
+  level?: string;
+  goal?: string;
+  days_per_week?: number;
+  summary_fr?: string;
+  description_fr?: string;
+  sessions?: {
+    day_order: number;
+    name_fr: string;
+    focus_fr?: string;
+    exercises?: {exercise_id: string; sets?: number; reps_min?: number; reps_max?: number; rest_seconds?: number; notes_fr?: string}[];
+  }[];
+}
 type JsonRow = Record<string, unknown>;
 
 function loadJson<T>(name: string): T {
@@ -94,6 +110,7 @@ async function main() {
   const splits = loadJson<JsonRow[]>('splits.json');
   const enrichedList = loadJson<Enriched[]>('exercises_enriched.json');
   const translationList = loadJsonOptional<Translation[]>('exercises_translations.json', []);
+  const programs = loadJsonOptional<ProgramJson[]>('programs.json', []);
   const dataset = JSON.parse(readFileSync(DATASET, 'utf-8')) as RawExercise[];
 
   const groupIds = new Set(muscleGroups.map((g) => g.id as string));
@@ -216,6 +233,32 @@ async function main() {
     }
   }
 
+  /* ---- Programmes : construction + validation (exos référencés) ----- */
+  const programRows: (typeof schema.programs.$inferInsert)[] = [];
+  const programSessionRows: (typeof schema.programSessions.$inferInsert)[] = [];
+  const programExerciseRows: (typeof schema.programExercises.$inferInsert)[] = [];
+  for (const p of programs) {
+    programRows.push({
+      id: p.id, nameFr: p.name_fr, theme: p.theme ?? null, level: p.level ?? null,
+      goal: p.goal ?? null, daysPerWeek: p.days_per_week ?? null,
+      summaryFr: p.summary_fr ?? null, descriptionFr: p.description_fr ?? null,
+    });
+    for (const s of p.sessions ?? []) {
+      programSessionRows.push({programId: p.id, dayOrder: s.day_order, nameFr: s.name_fr, focusFr: s.focus_fr ?? null});
+      let pos = 1;
+      for (const ex of s.exercises ?? []) {
+        if (!seen.has(ex.exercise_id)) {
+          errors.push(`programme '${p.id}' jour ${s.day_order} : exercice inconnu '${ex.exercise_id}'`);
+        }
+        programExerciseRows.push({
+          programId: p.id, dayOrder: s.day_order, position: pos++, exerciseId: ex.exercise_id,
+          sets: ex.sets ?? null, repsMin: ex.reps_min ?? null, repsMax: ex.reps_max ?? null,
+          restSeconds: ex.rest_seconds ?? null, notesFr: ex.notes_fr ?? null,
+        });
+      }
+    }
+  }
+
   /* ---- Stop si données aberrantes ----------------------------------- */
   if (errors.length) {
     console.error(`VALIDATION ÉCHOUÉE — ${errors.length} anomalie(s) :`);
@@ -227,6 +270,9 @@ async function main() {
   await migrateDb();
 
   // Vide (dépendants d'abord) pour une recharge propre.
+  await db.delete(schema.programExercises);
+  await db.delete(schema.programSessions);
+  await db.delete(schema.programs);
   await db.delete(schema.exerciseMuscles);
   await db.delete(schema.muscleVolumeLandmarks);
   await db.delete(schema.principleSources);
@@ -266,6 +312,10 @@ async function main() {
 
   for (let i = 0; i < exerciseRows.length; i += 400) await db.insert(schema.exercises).values(exerciseRows.slice(i, i + 400));
   for (let i = 0; i < exerciseMuscleRows.length; i += 400) await db.insert(schema.exerciseMuscles).values(exerciseMuscleRows.slice(i, i + 400));
+
+  if (programRows.length) await db.insert(schema.programs).values(programRows);
+  if (programSessionRows.length) await db.insert(schema.programSessions).values(programSessionRows);
+  if (programExerciseRows.length) await db.insert(schema.programExercises).values(programExerciseRows);
 
   await db.insert(schema.trainingPrinciples).values(
     principles.map((p) => ({
@@ -313,6 +363,7 @@ async function main() {
   console.log(`  liens ex-muscle  : ${exerciseMuscleRows.length}`);
   console.log(`  muscles ${muscles.length} | groupes ${muscleGroups.length} | équipement ${equipment.length} | patterns ${patterns.length}`);
   console.log(`  sources ${sources.length} | principes ${principles.length} | rep_schemes ${repSchemes.length} | volumes ${volumeLandmarks.length} | splits ${splits.length}`);
+  console.log(`  programmes ${programRows.length} | séances ${programSessionRows.length} | exos programmés ${programExerciseRows.length}`);
   process.exit(0);
 }
 

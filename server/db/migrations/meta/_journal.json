@@ -8,6 +8,13 @@
       "when": 1781124733623,
       "tag": "0000_perpetual_bushwacker",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1781182389542,
+      "tag": "0001_flaky_hairball",
+      "breakpoints": true
     }
   ]
 }

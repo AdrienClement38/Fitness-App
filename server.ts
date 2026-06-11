@@ -6,6 +6,7 @@ import compression from 'compression';
 import exercisesRouter from './server/routes/exercises';
 import musclesRouter from './server/routes/muscles';
 import knowledgeRouter from './server/routes/knowledge';
+import programsRouter from './server/routes/programs';
 import {migrateDb} from './server/db/client';
 
 const app = express();
@@ -35,6 +36,7 @@ app.use((req, res, next) => {
 app.use('/api/exercises', exercisesRouter);
 app.use('/api/muscles', musclesRouter);
 app.use('/api/knowledge', knowledgeRouter);
+app.use('/api/programs', programsRouter);
 
 async function startServer() {
   // Auto-migration au démarrage : la base (PostgreSQL en prod, PGlite en dev)
