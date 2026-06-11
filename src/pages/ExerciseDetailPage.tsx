@@ -58,16 +58,30 @@ export default function ExerciseDetailPage() {
       </div>
 
       {ex.images && ex.images.length > 0 && (
-        <div className="mt-4 grid grid-cols-2 gap-2">
-          {ex.images.map((img, i) => (
-            <img
-              key={i}
-              src={exerciseImageUrl(img)}
-              alt={`${ex.nameFr ?? ex.nameEn} — position ${i + 1}`}
-              loading="lazy"
-              className="aspect-[4/3] w-full rounded-xl border border-slate-800 bg-slate-950 object-contain"
-            />
-          ))}
+        <div className="mt-4">
+          <div className="grid grid-cols-2 gap-2">
+            {ex.images.map((img, i) => (
+              <img
+                key={i}
+                src={exerciseImageUrl(img)}
+                alt={`${ex.nameFr ?? ex.nameEn} — position ${i + 1}`}
+                loading="lazy"
+                className="aspect-[4/3] w-full rounded-xl border border-slate-800 bg-slate-950 object-contain"
+              />
+            ))}
+          </div>
+          <p className="mt-1.5 text-xs text-slate-500">
+            Photos :{' '}
+            <a
+              href="https://github.com/yuhonas/free-exercise-db"
+              target="_blank"
+              rel="noreferrer"
+              className="hover:text-slate-300 hover:underline"
+            >
+              free-exercise-db
+            </a>{' '}
+            — domaine public (The Unlicense)
+          </p>
         </div>
       )}
 
