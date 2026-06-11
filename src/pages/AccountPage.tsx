@@ -1,7 +1,7 @@
 import {useState, type FormEvent} from 'react';
-import {useNavigate} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import {LogOut, User} from 'lucide-react';
-import {changePassword, login, logout, register, useAuth} from '../lib/auth';
+import {changePassword, deleteAccount, login, logout, register, useAuth} from '../lib/auth';
 import {Loading} from '../components/ui';
 
 const inputClass =
@@ -84,6 +84,88 @@ function ChangePasswordForm() {
   );
 }
 
+function DeleteAccountForm() {
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [busy, setBusy] = useState(false);
+
+  const submit = async (e: FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setBusy(true);
+    try {
+      await deleteAccount(password);
+      navigate('/');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Une erreur est survenue.');
+      setBusy(false);
+    }
+  };
+
+  if (!open) {
+    return (
+      <button onClick={() => setOpen(true)} className="mt-3 block text-sm text-red-400 hover:underline">
+        Supprimer mon compte
+      </button>
+    );
+  }
+
+  return (
+    <form onSubmit={submit} className="mt-3 grid gap-3 rounded-xl border border-red-900/50 bg-red-950/20 p-4">
+      <p className="text-sm font-semibold text-red-300">Supprimer définitivement mon compte</p>
+      <p className="text-xs text-slate-400">
+        Efface ton compte et tes données côté serveur. Action irréversible. Confirme avec ton mot de passe.
+      </p>
+      <input
+        type="password"
+        required
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="Mot de passe"
+        autoComplete="current-password"
+        className={inputClass}
+      />
+      {error && <p className="text-sm text-red-400">{error}</p>}
+      <div className="flex gap-2">
+        <button
+          type="submit"
+          disabled={busy}
+          className="flex-1 rounded-lg bg-red-500/20 py-2 text-sm font-semibold text-red-300 hover:bg-red-500/30 disabled:opacity-50"
+        >
+          {busy ? '…' : 'Supprimer définitivement'}
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setOpen(false);
+            setError('');
+            setPassword('');
+          }}
+          className="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800"
+        >
+          Annuler
+        </button>
+      </div>
+    </form>
+  );
+}
+
+function LegalLinks() {
+  return (
+    <p className="mt-6 border-t border-slate-800 pt-4 text-xs text-slate-500">
+      <Link to="/confidentialite" className="hover:text-slate-300">
+        Confidentialité
+      </Link>
+      {' · '}
+      <Link to="/mentions-legales" className="hover:text-slate-300">
+        Mentions légales
+      </Link>
+    </p>
+  );
+}
+
 export default function AccountPage() {
   const {user, loading} = useAuth();
   const navigate = useNavigate();
@@ -118,10 +200,12 @@ export default function AccountPage() {
         </div>
 
         <ChangePasswordForm />
+        <DeleteAccountForm />
 
         <p className="mt-3 text-xs text-slate-500">
           Bientôt : tes séances, programmes et favoris synchronisés sur tous tes appareils.
         </p>
+        <LegalLinks />
       </div>
     );
   }
@@ -189,6 +273,17 @@ export default function AccountPage() {
       >
         {mode === 'login' ? 'Pas de compte ? En créer un' : 'Déjà un compte ? Se connecter'}
       </button>
+
+      {mode === 'register' && (
+        <p className="mt-3 text-xs text-slate-500">
+          En créant un compte, tu acceptes notre{' '}
+          <Link to="/confidentialite" className="text-emerald-400 hover:underline">
+            politique de confidentialité
+          </Link>
+          .
+        </p>
+      )}
+      <LegalLinks />
     </div>
   );
 }

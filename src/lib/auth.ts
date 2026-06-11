@@ -44,6 +44,10 @@ export async function logout() {
 export async function changePassword(currentPassword: string, newPassword: string) {
   await authApi.changePassword(currentPassword, newPassword);
 }
+export async function deleteAccount(password: string) {
+  await authApi.deleteAccount(password);
+  set({user: null, loading: false});
+}
 
 export function useAuth(): AuthState {
   return useSyncExternalStore(subscribe, () => state, () => state);

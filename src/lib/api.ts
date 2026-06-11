@@ -326,4 +326,5 @@ export const authApi = {
   logout: () => post<{ok: boolean}>('/auth/logout', {}),
   changePassword: (currentPassword: string, newPassword: string) =>
     post<{ok: boolean}>('/auth/change-password', {currentPassword, newPassword}),
+  deleteAccount: (password: string) => post<{ok: boolean}>('/auth/delete-account', {password}),
 };

@@ -47,3 +47,8 @@ export async function updatePassword(id: string, passwordHash: string) {
 export async function deleteUserSessions(userId: string) {
   await db.delete(sessions).where(eq(sessions.userId, userId));
 }
+
+/** Suppression du compte (RGPD). Les sessions (et données liées) tombent en cascade. */
+export async function deleteUser(id: string) {
+  await db.delete(users).where(eq(users.id, id));
+}

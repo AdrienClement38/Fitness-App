@@ -15,6 +15,7 @@ import {
   createSession,
   createUser,
   deleteSession,
+  deleteUser,
   deleteUserSessions,
   getUserByEmail,
   getUserById,
@@ -111,6 +112,24 @@ router.post('/change-password', async (req, res) => {
   const token = newToken();
   await createSession(user.id, token, sessionExpiry());
   res.cookie(SESSION_COOKIE, token, cookieOptions());
+  return res.json({ok: true});
+});
+
+const deleteAccount = z.object({password: z.string().min(1).max(200)});
+
+router.post('/delete-account', async (req, res) => {
+  const auth = await getUserFromRequest(req);
+  if (!auth) return res.status(401).json({error: 'Non connecté.'});
+  const parsed = deleteAccount.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({error: 'Mot de passe requis pour confirmer.'});
+
+  const user = await getUserById(auth.id);
+  if (!user || !(await verifyPassword(parsed.data.password, user.passwordHash))) {
+    return res.status(401).json({error: 'Mot de passe incorrect.'});
+  }
+
+  await deleteUser(user.id); // efface le compte + ses sessions/données (cascade)
+  res.clearCookie(SESSION_COOKIE, {path: '/'});
   return res.json({ok: true});
 });
 
