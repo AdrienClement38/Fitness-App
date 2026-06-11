@@ -1,4 +1,6 @@
 import {useState, type ReactNode} from 'react';
+import {ArrowLeft} from 'lucide-react';
+import {Link} from 'react-router-dom';
 import {api} from '../lib/api';
 import {useFetch} from '../lib/useFetch';
 import ExerciseCard from './ExerciseCard';
@@ -11,6 +13,9 @@ export default function CategoryBrowse({category, title, intro}: {category: stri
 
   return (
     <div>
+      <Link to="/" className="mb-3 flex items-center gap-1 text-sm text-slate-400 hover:text-slate-200">
+        <ArrowLeft className="h-4 w-4" /> Accueil
+      </Link>
       <h1 className="text-xl font-bold">{title}</h1>
       <p className="mt-1 text-sm leading-relaxed text-slate-400">{intro}</p>
 
