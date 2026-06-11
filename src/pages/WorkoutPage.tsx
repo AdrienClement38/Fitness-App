@@ -93,10 +93,12 @@ export default function WorkoutPage() {
 
       <div className="mt-4 grid gap-4">
         {w.exercises.map((e, ei) => {
-          const timed = e.isTimed;
-          const cols = timed
-            ? 'grid grid-cols-[1.5rem_1fr_2.5rem_1.5rem] items-center gap-2'
-            : 'grid grid-cols-[1.5rem_1fr_1fr_2.5rem_1.5rem] items-center gap-2';
+          const load = e.kind === 'load';
+          const valLabel = e.kind === 'duration' ? 'durée (s)' : e.kind === 'cardio' ? 'durée (min)' : 'reps';
+          const objUnit = e.kind === 'duration' ? 's' : e.kind === 'cardio' ? 'min' : 'reps';
+          const cols = load
+            ? 'grid grid-cols-[1.5rem_1fr_1fr_2.5rem_1.5rem] items-center gap-2'
+            : 'grid grid-cols-[1.5rem_1fr_2.5rem_1.5rem] items-center gap-2';
           return (
             <div key={ei} className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
               <div className="flex items-baseline justify-between gap-2">
@@ -105,20 +107,20 @@ export default function WorkoutPage() {
                 </Link>
                 {e.targetReps && (
                   <span className="shrink-0 text-xs text-slate-500">
-                    objectif {e.targetReps} {timed ? 's' : 'reps'}
+                    objectif {e.targetReps} {objUnit}
                   </span>
                 )}
               </div>
 
               <div className={`mt-3 ${cols} text-xs text-slate-500`}>
                 <span />
-                {timed ? (
-                  <span className="text-center">durée (s)</span>
-                ) : (
+                {load ? (
                   <>
                     <span className="text-center">kg</span>
                     <span className="text-center">reps</span>
                   </>
+                ) : (
+                  <span className="text-center">{valLabel}</span>
                 )}
                 <span className="text-center">fait</span>
                 <span />
@@ -126,13 +128,13 @@ export default function WorkoutPage() {
               {e.sets.map((s, si) => (
                 <div key={si} className={`mt-1.5 ${cols} rounded-md ${s.done ? 'bg-emerald-500/10' : ''}`}>
                   <span className="text-center text-sm text-slate-500">{si + 1}</span>
-                  {timed ? (
-                    <NumCell value={s.reps} onChange={(v) => setField(ei, si, {reps: v})} step={5} placeholder="sec" />
-                  ) : (
+                  {load ? (
                     <>
                       <NumCell value={s.weight} onChange={(v) => setField(ei, si, {weight: v})} step={0.5} placeholder="kg" />
                       <NumCell value={s.reps} onChange={(v) => setField(ei, si, {reps: v})} step={1} placeholder="reps" />
                     </>
+                  ) : (
+                    <NumCell value={s.reps} onChange={(v) => setField(ei, si, {reps: v})} step={e.kind === 'duration' ? 5 : 1} placeholder={valLabel} />
                   )}
                   <button
                     onClick={() => setField(ei, si, {done: !s.done})}

@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {ArrowLeft, Check, Plus, Trash2} from 'lucide-react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
-import {isTimed, label, type ExerciseListItem} from '../lib/api';
+import {label, measureKind, type ExerciseListItem, type MeasureKind} from '../lib/api';
 import {Badge, Empty} from '../components/ui';
 import ExercisePicker from '../components/ExercisePicker';
 import {
@@ -12,6 +12,20 @@ import {
   type MyProgram,
   type MyProgramExercise,
 } from '../lib/myPrograms';
+
+/** Valeurs par défaut à l'ajout d'un exercice, selon son mode de saisie. */
+const DEFAULTS: Record<MeasureKind, {sets: number; min: number; max: number; rest: number}> = {
+  load: {sets: 3, min: 8, max: 12, rest: 90},
+  bodyweight: {sets: 3, min: 10, max: 15, rest: 60},
+  duration: {sets: 3, min: 30, max: 45, rest: 60},
+  cardio: {sets: 1, min: 15, max: 20, rest: 0},
+};
+
+/** Libellé du champ « répétitions » selon le mode (reps / durée). */
+const repLabel = (e: {category: string | null; force: string | null; equipmentId: string | null}): string => {
+  const k = measureKind(e);
+  return k === 'duration' ? 'Durée (s)' : k === 'cardio' ? 'Durée (min)' : 'Reps';
+};
 
 /** Petit champ numérique : vide -> null. */
 function Num({value, onChange, title}: {value: number | null; onChange: (v: number | null) => void; title?: string}) {
@@ -65,17 +79,19 @@ export default function MyProgramPage() {
       Object.assign(d.sessions[si].exercises[ei], p);
     });
   const addExercise = (si: number, e: ExerciseListItem) => {
-    const timed = isTimed(e.force);
+    const def = DEFAULTS[measureKind(e)];
     patch((d) =>
       d.sessions[si].exercises.push({
         exerciseId: e.id,
         nameFr: e.nameFr,
         nameEn: e.nameEn,
         force: e.force,
-        sets: 3,
-        repsMin: timed ? 30 : 8,
-        repsMax: timed ? 45 : 12,
-        restSeconds: timed ? 60 : 90,
+        category: e.category,
+        equipmentId: e.equipmentId,
+        sets: def.sets,
+        repsMin: def.min,
+        repsMax: def.max,
+        restSeconds: def.rest,
         notesFr: null,
       }),
     );
@@ -165,7 +181,7 @@ export default function MyProgramPage() {
                         Séries <Num value={e.sets} onChange={(v) => patchEx(si, ei, {sets: v})} title="Séries" />
                       </label>
                       <label className="flex items-center gap-1">
-                        {isTimed(e.force) ? 'Durée (s)' : 'Reps'}{' '}
+                        {repLabel(e)}{' '}
                         <Num value={e.repsMin} onChange={(v) => patchEx(si, ei, {repsMin: v})} title="min" />
                         <span>–</span>
                         <Num value={e.repsMax} onChange={(v) => patchEx(si, ei, {repsMax: v})} title="max" />

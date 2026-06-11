@@ -191,6 +191,8 @@ export interface ProgramExerciseItem {
   nameEn: string;
   level: string;
   force: string | null;
+  category: string | null;
+  equipmentId: string | null;
   sets: number | null;
   repsMin: number | null;
   repsMax: number | null;
@@ -237,8 +239,24 @@ export const LABELS = {
 export const label = (kind: keyof typeof LABELS, value: string | null): string =>
   value ? (LABELS[kind][value] ?? value) : '';
 
-/** Exercice tenu en durée (gainage, isométrie) : on logge des secondes, pas des reps ni du poids. */
-export const isTimed = (force: string | null | undefined): boolean => force === 'static';
+/** Mode de saisie d'un exercice (déduit de la catégorie / force / matériel). */
+export type MeasureKind = 'load' | 'bodyweight' | 'duration' | 'cardio';
+
+/**
+ * - cardio    : tapis, vélo… → durée (min)
+ * - duration  : gainage, isométrie, étirements → durée (s)
+ * - bodyweight: poids du corps (abdos, pompes, tractions) → reps seules
+ * - load      : charge externe → poids × reps
+ */
+export function measureKind(ex: {category?: string | null; force?: string | null; equipmentId?: string | null}): MeasureKind {
+  if (ex.category === 'cardio') return 'cardio';
+  if (ex.category === 'stretching' || ex.force === 'static') return 'duration';
+  if (ex.equipmentId === 'bodyweight') return 'bodyweight';
+  return 'load';
+}
+
+/** Unité de la « valeur » d'une série selon le mode (vide = reps). */
+export const KIND_UNIT: Record<MeasureKind, string> = {load: '', bodyweight: '', duration: 's', cardio: 'min'};
 
 /** Images d'exécution (free-exercise-db, domaine public) servies depuis l'upstream. */
 export const EXERCISE_IMAGE_BASE =

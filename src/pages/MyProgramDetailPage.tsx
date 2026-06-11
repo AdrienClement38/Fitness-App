@@ -1,6 +1,6 @@
 import {ArrowLeft, Pencil, Play} from 'lucide-react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
-import {isTimed, label} from '../lib/api';
+import {KIND_UNIT, label, measureKind} from '../lib/api';
 import {Badge, Empty} from '../components/ui';
 import {getMyProgram, useMyPrograms, type MyProgramExercise, type MyProgramSession} from '../lib/myPrograms';
 import {startSession, useActiveWorkout} from '../lib/workoutLogs';
@@ -9,6 +9,11 @@ function reps(e: MyProgramExercise): string {
   if (e.repsMin == null) return '';
   if (e.repsMax == null || e.repsMin === e.repsMax) return `${e.repsMin}`;
   return `${e.repsMin}–${e.repsMax}`;
+}
+
+function unitSuffix(e: MyProgramExercise): string {
+  const u = KIND_UNIT[measureKind(e)];
+  return u ? ` ${u}` : '';
 }
 
 export default function MyProgramDetailPage() {
@@ -38,7 +43,7 @@ export default function MyProgramDetailPage() {
         exerciseId: e.exerciseId,
         nameFr: e.nameFr,
         nameEn: e.nameEn,
-        force: e.force,
+        kind: measureKind(e),
         sets: e.sets,
         repsMin: e.repsMin,
         repsMax: e.repsMax,
@@ -89,7 +94,7 @@ export default function MyProgramDetailPage() {
                         </Link>
                         <span className="shrink-0 text-sm font-semibold text-slate-200">
                           {e.sets ?? '–'} × {reps(e) || '–'}
-                          {isTimed(e.force) ? ' s' : ''}
+                          {unitSuffix(e)}
                         </span>
                       </div>
                       {(e.restSeconds || e.notesFr) && (

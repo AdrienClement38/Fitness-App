@@ -2,12 +2,28 @@ import {useMemo, useState} from 'react';
 import {Play, Trash2} from 'lucide-react';
 import {Link} from 'react-router-dom';
 import {deleteLog, logVolume, setsDone, useActiveWorkout, useWorkoutHistory} from '../lib/workoutLogs';
-import {exerciseStats, progression, summary, weeklyVolume} from '../lib/stats';
+import {exerciseStats, progression, summary, weeklyVolume, type ExerciseStat} from '../lib/stats';
+import type {MeasureKind} from '../lib/api';
 import {BarChart, LineChart} from '../components/Charts';
 import {Badge, Empty, SectionTitle} from '../components/ui';
 
 const fmtDay = (iso: string) => new Date(iso).toLocaleDateString('fr-FR', {weekday: 'short', day: 'numeric', month: 'short'});
 const fmtShort = (iso: string) => new Date(iso).toLocaleDateString('fr-FR', {day: '2-digit', month: '2-digit'});
+
+const progUnit = (k: MeasureKind): string => (k === 'duration' ? 's' : k === 'cardio' ? 'min' : '');
+const progCaption = (k: MeasureKind): string =>
+  k === 'load'
+    ? '1RM estimé (kg) — charge max théorique (Epley)'
+    : k === 'bodyweight'
+      ? 'Meilleur nombre de reps par séance'
+      : k === 'duration'
+        ? 'Meilleure durée par séance (secondes)'
+        : 'Meilleure durée par séance (minutes)';
+const recordLabel = (s: ExerciseStat): string => {
+  if (s.kind === 'load') return s.heaviest ? `${s.heaviest.weight} kg × ${s.heaviest.reps}` : '–';
+  if (s.bestValue == null) return '–';
+  return `${s.bestValue}${s.kind === 'duration' ? ' s' : s.kind === 'cardio' ? ' min' : ' reps'}`;
+};
 
 function StatCard({label, value}: {label: string; value: string | number}) {
   return (
@@ -29,7 +45,7 @@ export default function SuiviPage() {
   const chartable = stats.filter((s) => s.sessions >= 2);
   const [exId, setExId] = useState('');
   const selected = exId || chartable[0]?.exerciseId || '';
-  const prog = useMemo(() => (selected ? progression(history, selected) : {points: [], timed: false}), [history, selected]);
+  const prog = useMemo(() => (selected ? progression(history, selected) : {points: [], kind: 'load' as const}), [history, selected]);
 
   return (
     <div>
@@ -85,10 +101,8 @@ export default function SuiviPage() {
               <div className="mt-3 rounded-xl border border-slate-800 bg-slate-900/50 p-3">
                 {prog.points.length >= 2 ? (
                   <>
-                    <LineChart data={prog.points.map((p) => ({label: fmtShort(p.dateIso), value: p.value}))} unit={prog.timed ? 's' : ''} />
-                    <p className="mt-1 text-center text-xs text-slate-500">
-                      {prog.timed ? 'Meilleure durée par séance (secondes)' : '1RM estimé (kg) — charge max théorique (Epley)'}
-                    </p>
+                    <LineChart data={prog.points.map((p) => ({label: fmtShort(p.dateIso), value: p.value}))} unit={progUnit(prog.kind)} />
+                    <p className="mt-1 text-center text-xs text-slate-500">{progCaption(prog.kind)}</p>
                   </>
                 ) : (
                   <p className="py-6 text-center text-sm text-slate-500">Loggue au moins 2 séances de cet exercice pour voir la courbe.</p>
@@ -106,13 +120,7 @@ export default function SuiviPage() {
                   <Link to={`/exercices/${s.exerciseId}`} className="min-w-0 flex-1 truncate text-sm hover:text-emerald-300">
                     {s.name}
                   </Link>
-                  <span className="shrink-0 text-sm font-semibold text-emerald-300">
-                    {s.isTimed
-                      ? `${s.bestDuration ?? '–'} s`
-                      : s.heaviest
-                        ? `${s.heaviest.weight} kg × ${s.heaviest.reps}`
-                        : '–'}
-                  </span>
+                  <span className="shrink-0 text-sm font-semibold text-emerald-300">{recordLabel(s)}</span>
                 </div>
               ))}
             </div>

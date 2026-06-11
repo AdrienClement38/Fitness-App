@@ -8,10 +8,10 @@ import type {WorkoutLog} from '../src/lib/workoutLogs';
 
 const set = (weight: number | null, reps: number | null, done = true) => ({weight, reps, done});
 const bench = (sets: ReturnType<typeof set>[]) => ({
-  exerciseId: 'bench', nameFr: 'Développé', nameEn: 'Bench', targetReps: '8', isTimed: false, sets,
+  exerciseId: 'bench', nameFr: 'Développé', nameEn: 'Bench', targetReps: '8', kind: 'load' as const, sets,
 });
 const plank = (sets: ReturnType<typeof set>[]) => ({
-  exerciseId: 'plank', nameFr: 'Gainage', nameEn: 'Plank', targetReps: '30', isTimed: true, sets,
+  exerciseId: 'plank', nameFr: 'Gainage', nameEn: 'Plank', targetReps: '30', kind: 'duration' as const, sets,
 });
 const log = (id: string, dateIso: string, exercises: WorkoutLog['exercises']): WorkoutLog => ({
   id, startedIso: dateIso, finishedIso: dateIso, programName: 'P', sessionName: 'S', exercises,
@@ -46,8 +46,8 @@ describe('exerciseStats', () => {
   });
 
   it('exo chronométré = record durée, pas de poids', () => {
-    expect(stats[1].isTimed).toBe(true);
-    expect(stats[1].bestDuration).toBe(45);
+    expect(stats[1].kind).toBe('duration');
+    expect(stats[1].bestValue).toBe(45);
     expect(stats[1].heaviest).toBeNull();
   });
 
@@ -59,15 +59,39 @@ describe('exerciseStats', () => {
 
 describe('progression', () => {
   it('un point par séance, du plus ancien au plus récent (1RM estimé)', () => {
-    const {points, timed} = progression(history, 'bench');
-    expect(timed).toBe(false);
+    const {points, kind} = progression(history, 'bench');
+    expect(kind).toBe('load');
     expect(points.map((p) => p.value)).toEqual([76, 82.3, 88.7]);
   });
 
   it('exo chronométré : meilleure durée par séance', () => {
-    const {points, timed} = progression(history, 'plank');
-    expect(timed).toBe(true);
+    const {points, kind} = progression(history, 'plank');
+    expect(kind).toBe('duration');
     expect(points.map((p) => p.value)).toEqual([30, 45]);
+  });
+});
+
+describe('mode poids du corps (bodyweight)', () => {
+  const bw = (sets: ReturnType<typeof set>[]) => ({
+    exerciseId: 'pushups', nameFr: 'Pompes', nameEn: 'Pushups', targetReps: '10', kind: 'bodyweight' as const, sets,
+  });
+  const h: WorkoutLog[] = [
+    log('p2', '2026-06-11T18:00:00.000Z', [bw([set(null, 20), set(null, 18)])]),
+    log('p1', '2026-06-04T18:00:00.000Z', [bw([set(null, 15)])]),
+  ];
+
+  it('record = meilleur nombre de reps, sans poids ni 1RM', () => {
+    const st = exerciseStats(h)[0];
+    expect(st.kind).toBe('bodyweight');
+    expect(st.bestValue).toBe(20);
+    expect(st.heaviest).toBeNull();
+    expect(st.best1RM).toBeNull();
+  });
+
+  it('progression = max reps par séance', () => {
+    const {points, kind} = progression(h, 'pushups');
+    expect(kind).toBe('bodyweight');
+    expect(points.map((p) => p.value)).toEqual([15, 20]);
   });
 });
 

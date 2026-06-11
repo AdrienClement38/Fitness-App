@@ -11,6 +11,8 @@ export interface MyProgramExercise {
   nameFr: string | null;
   nameEn: string;
   force: string | null;
+  category: string | null;
+  equipmentId: string | null;
   sets: number | null;
   repsMin: number | null;
   repsMax: number | null;
@@ -84,6 +86,8 @@ export function duplicateProgram(source: ProgramDetail): string {
         nameFr: e.nameFr,
         nameEn: e.nameEn,
         force: e.force,
+        category: e.category,
+        equipmentId: e.equipmentId,
         sets: e.sets,
         repsMin: e.repsMin,
         repsMax: e.repsMax,

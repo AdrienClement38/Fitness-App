@@ -1,6 +1,6 @@
 import {ArrowLeft, Copy, Play} from 'lucide-react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
-import {api, isTimed, label, type ProgramExerciseItem, type ProgramSession} from '../lib/api';
+import {api, KIND_UNIT, label, measureKind, type ProgramExerciseItem, type ProgramSession} from '../lib/api';
 import {duplicateProgram} from '../lib/myPrograms';
 import {startSession, useActiveWorkout} from '../lib/workoutLogs';
 import {useFetch} from '../lib/useFetch';
@@ -10,6 +10,12 @@ function reps(e: ProgramExerciseItem): string {
   if (e.repsMin == null) return '';
   if (e.repsMax == null || e.repsMin === e.repsMax) return `${e.repsMin}`;
   return `${e.repsMin}–${e.repsMax}`;
+}
+
+/** Suffixe d'unité selon le mode de saisie (« s », « min », ou rien pour des reps). */
+function unitSuffix(e: ProgramExerciseItem): string {
+  const u = KIND_UNIT[measureKind(e)];
+  return u ? ` ${u}` : '';
 }
 
 export default function ProgramDetailPage() {
@@ -31,7 +37,7 @@ export default function ProgramDetailPage() {
         exerciseId: e.exerciseId,
         nameFr: e.nameFr,
         nameEn: e.nameEn,
-        force: e.force,
+        kind: measureKind(e),
         sets: e.sets,
         repsMin: e.repsMin,
         repsMax: e.repsMax,
@@ -78,7 +84,7 @@ export default function ProgramDetailPage() {
                     </Link>
                     <span className="shrink-0 text-sm font-semibold text-slate-200">
                       {e.sets} × {reps(e)}
-                      {isTimed(e.force) ? ' s' : ''}
+                      {unitSuffix(e)}
                     </span>
                   </div>
                   {(e.restSeconds || e.notesFr) && (

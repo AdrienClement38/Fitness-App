@@ -5,7 +5,7 @@
  * Le poids est pré-rempli depuis la dernière fois (progression). Zéro backend.
  */
 import {useSyncExternalStore} from 'react';
-import {isTimed} from './api';
+import type {MeasureKind} from './api';
 
 export interface LoggedSet {
   weight: number | null;
@@ -16,8 +16,8 @@ export interface LoggedExercise {
   exerciseId: string;
   nameFr: string | null;
   nameEn: string;
-  targetReps: string; // "8-12" (reps) ou "30-45" (secondes si isTimed)
-  isTimed: boolean; // exercice tenu en durée (gainage) -> on logge des secondes, pas de poids
+  targetReps: string; // objectif affiché : reps, secondes ou minutes selon kind
+  kind: MeasureKind; // mode de saisie (load / bodyweight / duration / cardio)
   sets: LoggedSet[];
 }
 export interface WorkoutLog {
@@ -37,7 +37,7 @@ export interface SessionSeed {
     exerciseId: string;
     nameFr: string | null;
     nameEn: string;
-    force: string | null;
+    kind: MeasureKind;
     sets: number | null;
     repsMin: number | null;
     repsMax: number | null;
@@ -133,7 +133,7 @@ export function startSession(seed: SessionSeed): string {
         nameFr: e.nameFr,
         nameEn: e.nameEn,
         targetReps: repsLabel(e.repsMin, e.repsMax),
-        isTimed: isTimed(e.force),
+        kind: e.kind,
         sets: Array.from({length: count}, () => ({weight: w, reps: e.repsMin, done: false})),
       };
     }),
