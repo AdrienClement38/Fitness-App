@@ -3,6 +3,7 @@ import {Link, useNavigate, useParams} from 'react-router-dom';
 import {api, exerciseImageUrl, label} from '../lib/api';
 import {useFetch} from '../lib/useFetch';
 import {Badge, ErrorState, Loading, SectionTitle} from '../components/ui';
+import FavoriteButton from '../components/FavoriteButton';
 
 function List({items, tone}: {items: string[]; tone?: 'amber' | 'slate'}) {
   return (
@@ -35,8 +36,13 @@ export default function ExerciseDetailPage() {
         <ArrowLeft className="h-4 w-4" /> Retour
       </button>
 
-      <h1 className="text-xl font-bold leading-tight">{ex.nameFr ?? ex.nameEn}</h1>
-      {ex.nameFr && <p className="text-sm italic text-slate-500">{ex.nameEn}</p>}
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <h1 className="text-xl font-bold leading-tight">{ex.nameFr ?? ex.nameEn}</h1>
+          {ex.nameFr && <p className="text-sm italic text-slate-500">{ex.nameEn}</p>}
+        </div>
+        <FavoriteButton id={ex.id} size={24} />
+      </div>
       {ex.aliasesFr && ex.aliasesFr.length > 0 && (
         <p className="mt-1 text-sm text-slate-400">Aussi appelé : {ex.aliasesFr.join(', ')}</p>
       )}

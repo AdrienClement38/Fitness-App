@@ -136,6 +136,11 @@ describe('exerciseRepository', () => {
     expect((await listExercises({pageSize: 2, page: 2})).items).toHaveLength(1);
   });
 
+  it('filtre par ids (favoris)', async () => {
+    const r = await listExercises({ids: ['bench', 'squat-test']});
+    expect(r.items.map((i) => i.id).sort()).toEqual(['bench', 'squat-test']);
+  });
+
   it('getExerciseById renvoie la fiche complète + muscles', async () => {
     const ex = await getExerciseById('bench');
     expect(ex).not.toBeNull();

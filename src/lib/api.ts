@@ -213,6 +213,7 @@ export interface ExerciseQuery {
   level?: string;
   category?: string;
   force?: string;
+  ids?: string; // liste d'ids séparés par des virgules (favoris)
   page?: number;
 }
 

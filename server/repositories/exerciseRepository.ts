@@ -14,6 +14,7 @@ export interface ExerciseFilters {
   level?: string;
   category?: string;
   force?: string;
+  ids?: string[];
   page?: number;
   pageSize?: number;
 }
@@ -22,6 +23,7 @@ const orderByName = asc(sql`coalesce(${exercises.nameFr}, ${exercises.nameEn})`)
 
 function buildWhere(f: ExerciseFilters) {
   const conds = [];
+  if (f.ids && f.ids.length) conds.push(inArray(exercises.id, f.ids));
   if (f.search?.trim()) {
     const q = `%${f.search.trim()}%`;
     conds.push(or(ilike(exercises.nameFr, q), ilike(exercises.nameEn, q)));

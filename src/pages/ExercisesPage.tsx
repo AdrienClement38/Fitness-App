@@ -1,6 +1,8 @@
+import {Heart} from 'lucide-react';
 import {useEffect, useState} from 'react';
 import {useSearchParams} from 'react-router-dom';
 import {api, label, type Facets} from '../lib/api';
+import {useFavorites} from '../lib/favorites';
 import {useFetch} from '../lib/useFetch';
 import ExerciseCard from '../components/ExerciseCard';
 import {Empty, ErrorState, Loading} from '../components/ui';
@@ -9,6 +11,9 @@ export default function ExercisesPage() {
   const [params, setParams] = useSearchParams();
   const val = (k: string) => params.get(k) ?? '';
   const page = Math.max(1, Number(params.get('page') ?? '1'));
+
+  const {favorites, count: favCount} = useFavorites();
+  const favActive = params.get('fav') === '1';
 
   const facets = useFetch<Facets>(() => api.facets(), []);
   const exercises = useFetch(
@@ -20,9 +25,10 @@ export default function ExercisesPage() {
         level: val('level') || undefined,
         category: val('category') || undefined,
         force: val('force') || undefined,
+        ids: favActive ? (favorites.length ? favorites.join(',') : '__none__') : undefined,
         page,
       }),
-    [params.toString()],
+    [params.toString(), favActive ? favorites.join(',') : ''],
   );
 
   const setParam = (key: string, value: string) =>
@@ -58,6 +64,18 @@ export default function ExercisesPage() {
       />
 
       <div className="mt-3 flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={() => setParam('fav', favActive ? '' : '1')}
+          className={`flex items-center gap-1.5 rounded-lg border px-2.5 py-2 text-sm transition-colors ${
+            favActive
+              ? 'border-rose-500/50 bg-rose-500/15 text-rose-300'
+              : 'border-slate-800 bg-slate-900 text-slate-300 hover:text-slate-100'
+          }`}
+        >
+          <Heart size={15} className={favActive ? 'fill-rose-400 text-rose-400' : ''} />
+          Favoris{favCount ? ` (${favCount})` : ''}
+        </button>
         <select className={selectClass} value={val('muscle')} onChange={(e) => setParam('muscle', e.target.value)}>
           <option value="">Tous les muscles</option>
           {facets.data?.muscles.map((m) => (
@@ -96,7 +114,13 @@ export default function ExercisesPage() {
         <>
           <p className="mb-3 mt-4 text-sm text-slate-400">{exercises.data.total} exercice(s)</p>
           {exercises.data.items.length === 0 ? (
-            <Empty label="Aucun exercice ne correspond à ces filtres." />
+            <Empty
+              label={
+                favActive
+                  ? 'Aucun favori pour l’instant — touche le ♥ sur un exercice.'
+                  : 'Aucun exercice ne correspond à ces filtres.'
+              }
+            />
           ) : (
             <div className="grid gap-2.5">
               {exercises.data.items.map((ex) => (

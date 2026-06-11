@@ -1,6 +1,7 @@
 import {Link} from 'react-router-dom';
 import {exerciseImageUrl, label, type ExerciseListItem} from '../lib/api';
 import {Badge} from './ui';
+import FavoriteButton from './FavoriteButton';
 
 export default function ExerciseCard({ex}: {ex: ExerciseListItem}) {
   return (
@@ -19,9 +20,12 @@ export default function ExerciseCard({ex}: {ex: ExerciseListItem}) {
       <div className="min-w-0 flex-1">
         <div className="flex items-start justify-between gap-2">
           <h3 className="font-semibold leading-snug">{ex.nameFr ?? ex.nameEn}</h3>
-          {ex.isEnriched && (
-            <span title="Fiche en français complète" className="mt-1 h-2 w-2 shrink-0 rounded-full bg-emerald-400" />
-          )}
+          <div className="-mt-1 flex shrink-0 items-center gap-1">
+            {ex.isEnriched && (
+              <span title="Fiche en français complète" className="h-2 w-2 rounded-full bg-emerald-400" />
+            )}
+            <FavoriteButton id={ex.id} size={18} />
+          </div>
         </div>
         {ex.primaryMuscles.length > 0 && (
           <p className="mt-1 text-sm text-slate-400">{ex.primaryMuscles.map((m) => m.nameFr).join(', ')}</p>
