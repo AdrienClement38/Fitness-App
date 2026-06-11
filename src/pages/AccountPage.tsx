@@ -2,6 +2,7 @@ import {useState, type FormEvent} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {LogOut, User} from 'lucide-react';
 import {changePassword, deleteAccount, login, logout, register, useAuth} from '../lib/auth';
+import {useSyncConnected} from '../lib/sync';
 import {Loading} from '../components/ui';
 
 const inputClass =
@@ -166,6 +167,16 @@ function LegalLinks() {
   );
 }
 
+function SyncStatus() {
+  const connected = useSyncConnected();
+  return (
+    <p className={`mt-1 flex items-center gap-1.5 text-xs ${connected ? 'text-emerald-400' : 'text-slate-500'}`}>
+      <span className={`inline-block h-1.5 w-1.5 rounded-full ${connected ? 'bg-emerald-400' : 'bg-slate-600'}`} />
+      {connected ? 'Synchronisé sur tes appareils' : 'Synchronisation…'}
+    </p>
+  );
+}
+
 export default function AccountPage() {
   const {user, loading} = useAuth();
   const navigate = useNavigate();
@@ -189,6 +200,7 @@ export default function AccountPage() {
             <div className="min-w-0">
               <p className="text-sm text-slate-400">Connecté en tant que</p>
               <p className="truncate font-semibold">{user.email}</p>
+              <SyncStatus />
             </div>
           </div>
           <button

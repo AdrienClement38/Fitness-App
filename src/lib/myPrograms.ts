@@ -5,6 +5,8 @@
  */
 import {useSyncExternalStore} from 'react';
 import type {ProgramDetail} from './api';
+import {pushItems, registerCollection, type SyncItem} from './sync';
+import {mergeCollection} from './syncMerge';
 
 export interface MyProgramExercise {
   exerciseId: string;
@@ -31,9 +33,15 @@ export interface MyProgram {
   level: string | null;
   fromProgramId: string | null; // programme curated d'origine (si dupliqué)
   sessions: MyProgramSession[];
+  updatedAt?: string; // pour la sync (last-write-wins)
 }
 
 const KEY = 'my-programs';
+const TKEY = 'my-programs-tombstones';
+const KIND = 'my-program';
+const EPOCH = '1970-01-01T00:00:00.000Z';
+const now = () => new Date().toISOString();
+const progAt = (p: MyProgram) => p.updatedAt ?? EPOCH;
 
 function read(): MyProgram[] {
   try {
@@ -42,8 +50,16 @@ function read(): MyProgram[] {
     return [];
   }
 }
+function readT(): Record<string, string> {
+  try {
+    return JSON.parse(localStorage.getItem(TKEY) || '{}') as Record<string, string>;
+  } catch {
+    return {};
+  }
+}
 
 let list = read();
+let tombstones = readT();
 const listeners = new Set<() => void>();
 
 function commit(next: MyProgram[]) {
@@ -54,6 +70,16 @@ function commit(next: MyProgram[]) {
     /* quota / mode privé : on garde l'état en mémoire */
   }
   listeners.forEach((l) => l());
+}
+function saveTombstones() {
+  try {
+    localStorage.setItem(TKEY, JSON.stringify(tombstones));
+  } catch {
+    /* quota */
+  }
+}
+function pushProgram(p: MyProgram) {
+  pushItems([{kind: KIND, itemId: p.id, data: p, updatedAt: progAt(p), deleted: false}]);
 }
 
 function subscribe(cb: () => void) {
@@ -78,6 +104,7 @@ export function duplicateProgram(source: ProgramDetail): string {
     theme: source.theme,
     level: source.level,
     fromProgramId: source.id,
+    updatedAt: now(),
     sessions: source.sessions.map((s) => ({
       nameFr: s.nameFr,
       focusFr: s.focusFr,
@@ -97,25 +124,54 @@ export function duplicateProgram(source: ProgramDetail): string {
     })),
   };
   commit([...list, copy]);
+  pushProgram(copy);
   return id;
 }
 
 /** Crée un programme vide (de zéro). Retourne son id. */
 export function createEmptyProgram(name = 'Mon programme'): string {
   const id = genId();
-  commit([...list, {id, nameFr: name, theme: null, level: null, fromProgramId: null, sessions: [{nameFr: 'Séance 1', focusFr: null, exercises: []}]}]);
+  const p: MyProgram = {id, nameFr: name, theme: null, level: null, fromProgramId: null, updatedAt: now(), sessions: [{nameFr: 'Séance 1', focusFr: null, exercises: []}]};
+  commit([...list, p]);
+  pushProgram(p);
   return id;
 }
 
 export function updateMyProgram(updated: MyProgram) {
-  commit(list.map((p) => (p.id === updated.id ? updated : p)));
+  const stamped: MyProgram = {...updated, updatedAt: now()};
+  commit(list.map((p) => (p.id === stamped.id ? stamped : p)));
+  pushProgram(stamped);
 }
 
 export function removeMyProgram(id: string) {
+  const at = now();
+  tombstones[id] = at;
+  saveTombstones();
   commit(list.filter((p) => p.id !== id));
+  pushItems([{kind: KIND, itemId: id, data: null, updatedAt: at, deleted: true}]);
 }
 
 /** Liste réactive des programmes persos. */
 export function useMyPrograms(): MyProgram[] {
   return useSyncExternalStore(subscribe, () => list, () => list);
 }
+
+/* ---- Synchronisation (LWW + tombstones) -------------------------------- */
+function snapshot(): SyncItem[] {
+  const items: SyncItem[] = list.map((p) => ({kind: KIND, itemId: p.id, data: p, updatedAt: progAt(p), deleted: false}));
+  for (const [id, at] of Object.entries(tombstones)) {
+    items.push({kind: KIND, itemId: id, data: null, updatedAt: at, deleted: true});
+  }
+  return items;
+}
+function applyRemote(items: SyncItem[]) {
+  const byId = new Map(list.map((p) => [p.id, p]));
+  const tomb = new Map(Object.entries(tombstones));
+  const {itemsChanged, tombstonesChanged} = mergeCollection(byId, tomb, items, progAt);
+  if (tombstonesChanged) {
+    tombstones = Object.fromEntries(tomb);
+    saveTombstones();
+  }
+  if (itemsChanged) commit([...byId.values()]);
+}
+registerCollection(KIND, {snapshot, applyRemote});

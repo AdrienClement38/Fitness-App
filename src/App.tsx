@@ -19,7 +19,10 @@ import LegalPage from './pages/LegalPage';
 import CategoryBrowse from './components/CategoryBrowse';
 import {useAuth} from './lib/auth';
 import {connect, disconnect} from './lib/sync';
-import './lib/workoutLogs'; // enregistre la collection « séances » pour la sync
+// Import à effet : chaque store enregistre sa collection synchronisable au chargement.
+import './lib/workoutLogs';
+import './lib/myPrograms';
+import './lib/favorites';
 
 export default function App() {
   const {user} = useAuth();
