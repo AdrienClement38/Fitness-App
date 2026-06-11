@@ -50,7 +50,7 @@ export default function MuscleDetailPage() {
         )}
       </div>
 
-      <BodyMap primary={[m.id]} className="mt-4" />
+      <BodyMap primary={[m.id]} onSelect={(mid) => navigate(`/muscles/${mid}`)} className="mt-4" />
 
       {m.functionFr && (
         <>
