@@ -32,12 +32,22 @@ export default defineConfig(() => {
         workbox: {
           globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2}'],
           navigateFallback: '/index.html',
-          // L'API n'est jamais mise en cache : toujours le réseau (la SPA gère le repli).
           navigateFallbackDenylist: [/^\/api\//],
           runtimeCaching: [
             {
-              urlPattern: ({url}) => url.pathname.startsWith('/api/'),
+              // Auth & sync : jamais en cache, toujours le réseau (données utilisateur).
+              urlPattern: ({url}) => url.pathname.startsWith('/api/auth') || url.pathname.startsWith('/api/sync'),
               handler: 'NetworkOnly',
+            },
+            {
+              // Bibliothèque (lecture seule, quasi figée) : servie depuis le cache, revalidée
+              // en arrière-plan -> serveur très peu sollicité après le 1er chargement.
+              urlPattern: ({url}) => url.pathname.startsWith('/api/'),
+              handler: 'StaleWhileRevalidate',
+              options: {
+                cacheName: 'library-api',
+                expiration: {maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 7},
+              },
             },
             {
               // Images d'exercices (GitHub raw) : mises en cache au 1er affichage
