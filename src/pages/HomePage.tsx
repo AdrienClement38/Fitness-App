@@ -1,18 +1,23 @@
-import {Activity, BookOpen, Dumbbell, HeartPulse, Leaf, Search} from 'lucide-react';
+import {ClipboardList, HeartPulse, Leaf, LineChart, Play, Search} from 'lucide-react';
 import {useState, type FormEvent} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
+import {useActiveWorkout, useWorkoutHistory} from '../lib/workoutLogs';
+import {useMyPrograms} from '../lib/myPrograms';
+import {summary} from '../lib/stats';
 
-const cards = [
-  {to: '/exercices', icon: Dumbbell, title: 'Exercices', desc: '873 exercices, filtrables par muscle, matériel et niveau.'},
+// Accès uniques à l'accueil (absents de la barre du bas).
+const browseCards = [
   {to: '/cardio', icon: HeartPulse, title: 'Cardio', desc: 'Tapis, vélo, rameur — échauffement, endurance, récup active.'},
   {to: '/recuperation', icon: Leaf, title: 'Récup & Mobilité', desc: 'Étirements et automassages, pour après la séance.'},
-  {to: '/muscles', icon: Activity, title: 'Muscles', desc: 'Anatomie, fonctions et exercices ciblant chaque muscle.'},
-  {to: '/savoir', icon: BookOpen, title: 'Savoir', desc: 'Volume, intensité, repos, splits — appuyés sur la science.'},
 ];
 
 export default function HomePage() {
   const [q, setQ] = useState('');
   const navigate = useNavigate();
+  const active = useActiveWorkout();
+  const myPrograms = useMyPrograms();
+  const history = useWorkoutHistory();
+  const stats = summary(history);
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
@@ -23,7 +28,7 @@ export default function HomePage() {
   return (
     <div>
       <h1 className="text-2xl font-bold tracking-tight">Ta salle, dans ta poche</h1>
-      <p className="mt-1 text-slate-400">Bibliothèque d'exercices et de connaissances d'entraînement.</p>
+      <p className="mt-1 text-slate-400">Tes entraînements, tes programmes, et une bibliothèque complète.</p>
 
       <form onSubmit={submit} className="relative mt-4">
         <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
@@ -35,8 +40,66 @@ export default function HomePage() {
         />
       </form>
 
+      {/* Séance en cours */}
+      {active && (
+        <Link
+          to="/seance"
+          className="mt-4 flex items-center justify-between gap-2 rounded-2xl border border-emerald-500/40 bg-emerald-500/10 p-4 transition-colors hover:bg-emerald-500/20"
+        >
+          <span className="min-w-0">
+            <span className="block text-sm font-semibold text-emerald-300">Séance en cours</span>
+            <span className="block truncate text-xs text-slate-400">
+              {active.sessionName}
+              {active.programName ? ` · ${active.programName}` : ''}
+            </span>
+          </span>
+          <span className="flex shrink-0 items-center gap-1 text-sm font-medium text-emerald-300">
+            <Play className="h-4 w-4" /> Reprendre
+          </span>
+        </Link>
+      )}
+
+      {/* Aperçu suivi */}
+      {stats.sessions > 0 && (
+        <Link
+          to="/suivi"
+          className="mt-3 flex items-center gap-4 rounded-2xl border border-slate-800 bg-slate-900/50 p-4 transition-colors hover:border-slate-700 hover:bg-slate-900"
+        >
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-400">
+            <LineChart className="h-5 w-5" />
+          </div>
+          <div className="min-w-0">
+            <h2 className="font-semibold">
+              {stats.sessions} séance{stats.sessions > 1 ? 's' : ''}
+            </h2>
+            <p className="text-sm text-slate-400">
+              {stats.thisWeek > 0 ? `${stats.thisWeek} cette semaine — ` : ''}voir ta progression
+            </p>
+          </div>
+        </Link>
+      )}
+
+      {/* Mes programmes */}
+      {myPrograms.length > 0 && (
+        <Link
+          to="/programmes"
+          className="mt-3 flex items-center gap-4 rounded-2xl border border-slate-800 bg-slate-900/50 p-4 transition-colors hover:border-slate-700 hover:bg-slate-900"
+        >
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-400">
+            <ClipboardList className="h-5 w-5" />
+          </div>
+          <div className="min-w-0">
+            <h2 className="font-semibold">Mes programmes</h2>
+            <p className="text-sm text-slate-400">
+              {myPrograms.length} programme{myPrograms.length > 1 ? 's' : ''} — reprends ou modifie
+            </p>
+          </div>
+        </Link>
+      )}
+
+      {/* Cardio + Récup */}
       <div className="mt-5 grid gap-3">
-        {cards.map(({to, icon: Icon, title, desc}) => (
+        {browseCards.map(({to, icon: Icon, title, desc}) => (
           <Link
             key={to}
             to={to}
