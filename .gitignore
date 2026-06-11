@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.pglite/
+.pglite-test/
+.env
+.env.local
+*.local
+
+# Python (ancien build ETL — conservé tant que non supprimé)
+etl/__pycache__/
+__pycache__/

@@ -1,0 +1,67 @@
+[
+  {
+    "muscle_id": "chest",
+    "mv_sets": 8, "mev_sets": 10, "mav_sets_min": 12, "mav_sets_max": 20, "mrv_sets": 22,
+    "notes_fr": "Travaillé en partie par les développés ; le volume direct compte avec les poussées."
+  },
+  {
+    "muscle_id": "lats",
+    "mv_sets": 8, "mev_sets": 10, "mav_sets_min": 14, "mav_sets_max": 22, "mrv_sets": 25,
+    "notes_fr": "Le dos tolère un volume élevé. Compte tirages verticaux (largeur) et horizontaux (épaisseur) ensemble."
+  },
+  {
+    "muscle_id": "middle-back",
+    "mv_sets": 6, "mev_sets": 8, "mav_sets_min": 10, "mav_sets_max": 18, "mrv_sets": 20,
+    "notes_fr": "Rhomboïdes et trapèze moyen ; recoupe en partie le volume de tirage du grand dorsal."
+  },
+  {
+    "muscle_id": "traps",
+    "mv_sets": 0, "mev_sets": 6, "mav_sets_min": 12, "mav_sets_max": 20, "mrv_sets": 26,
+    "notes_fr": "Fortement sollicités indirectement (soulevés, tirages, portés). Volume direct via shrugs."
+  },
+  {
+    "muscle_id": "shoulders",
+    "mv_sets": 8, "mev_sets": 8, "mav_sets_min": 16, "mav_sets_max": 22, "mrv_sets": 26,
+    "notes_fr": "Les deltoïdes latéraux tolèrent beaucoup de volume ; l'antérieur est déjà chargé par les poussées."
+  },
+  {
+    "muscle_id": "biceps",
+    "mv_sets": 5, "mev_sets": 8, "mav_sets_min": 14, "mav_sets_max": 20, "mrv_sets": 26,
+    "notes_fr": "Déjà sollicités par tous les tirages : compte une partie du travail de dos."
+  },
+  {
+    "muscle_id": "triceps",
+    "mv_sets": 4, "mev_sets": 6, "mav_sets_min": 10, "mav_sets_max": 14, "mrv_sets": 18,
+    "notes_fr": "Déjà sollicités par toutes les poussées : compte une partie du travail de pectoraux/épaules."
+  },
+  {
+    "muscle_id": "forearms",
+    "mv_sets": 2, "mev_sets": 2, "mav_sets_min": 8, "mav_sets_max": 12, "mrv_sets": 16,
+    "notes_fr": "Travaillés indirectement par le grip sur les tirages et portés. Volume direct optionnel."
+  },
+  {
+    "muscle_id": "abdominals",
+    "mv_sets": 0, "mev_sets": 0, "mav_sets_min": 16, "mav_sets_max": 25, "mrv_sets": 25,
+    "notes_fr": "Tolèrent un volume élevé et récupèrent vite ; sollicités en gainage sur les gros mouvements."
+  },
+  {
+    "muscle_id": "quadriceps",
+    "mv_sets": 6, "mev_sets": 8, "mav_sets_min": 12, "mav_sets_max": 18, "mrv_sets": 20,
+    "notes_fr": "Squats et presses fournissent l'essentiel ; le volume très élevé est lourd à récupérer."
+  },
+  {
+    "muscle_id": "hamstrings",
+    "mv_sets": 3, "mev_sets": 4, "mav_sets_min": 10, "mav_sets_max": 16, "mrv_sets": 20,
+    "notes_fr": "Souvent sous-entraînés. Combine flexion de genou (leg curl) et extension de hanche (soulevé roumain)."
+  },
+  {
+    "muscle_id": "glutes",
+    "mv_sets": 0, "mev_sets": 0, "mav_sets_min": 4, "mav_sets_max": 12, "mrv_sets": 16,
+    "notes_fr": "Très sollicités indirectement (squats, soulevés, fentes) : peu de volume direct nécessaire pour beaucoup."
+  },
+  {
+    "muscle_id": "calves",
+    "mv_sets": 6, "mev_sets": 8, "mav_sets_min": 12, "mav_sets_max": 16, "mrv_sets": 20,
+    "notes_fr": "Réputés têtus : répondent au volume et à l'amplitude complète sur extensions debout (gastrocnémien) et assis (soléaire)."
+  }
+]

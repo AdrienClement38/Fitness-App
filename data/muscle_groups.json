@@ -1,0 +1,44 @@
+[
+  {
+    "id": "chest",
+    "name_fr": "Pectoraux",
+    "region": "upper",
+    "description_fr": "Muscles de la poitrine, moteurs de toutes les poussées horizontales."
+  },
+  {
+    "id": "back",
+    "name_fr": "Dos",
+    "region": "upper",
+    "description_fr": "Grand dorsal, milieu du dos, lombaires et trapèzes : largeur, épaisseur et posture."
+  },
+  {
+    "id": "shoulders",
+    "name_fr": "Épaules",
+    "region": "upper",
+    "description_fr": "Deltoïdes et coiffe des rotateurs : mobilité et stabilité de l'articulation la plus mobile du corps."
+  },
+  {
+    "id": "arms",
+    "name_fr": "Bras",
+    "region": "upper",
+    "description_fr": "Biceps, triceps et avant-bras : flexion/extension du coude et préhension."
+  },
+  {
+    "id": "legs",
+    "name_fr": "Jambes",
+    "region": "lower",
+    "description_fr": "Quadriceps, ischio-jambiers, fessiers, mollets, adducteurs et abducteurs : le plus gros potentiel de force du corps."
+  },
+  {
+    "id": "core",
+    "name_fr": "Sangle abdominale (core)",
+    "region": "core",
+    "description_fr": "Abdominaux et stabilisateurs profonds : transmission de force et protection de la colonne."
+  },
+  {
+    "id": "neck",
+    "name_fr": "Cou",
+    "region": "upper",
+    "description_fr": "Muscles cervicaux : posture et prévention des blessures en sports de contact."
+  }
+]

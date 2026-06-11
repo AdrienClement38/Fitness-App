@@ -1,0 +1,99 @@
+[
+  {
+    "id": "full-body",
+    "name_fr": "Full body (corps entier)",
+    "days_per_week_min": 2,
+    "days_per_week_max": 4,
+    "level": "beginner",
+    "goal": "hypertrophy",
+    "summary_fr": "Chaque séance travaille l'ensemble du corps. Idéal pour débuter : haute fréquence par muscle, peu de séances nécessaires.",
+    "pros_fr": [
+      "Fréquence élevée par muscle même avec 3 séances/semaine.",
+      "Flexible : une séance manquée n'ampute pas un muscle pour la semaine.",
+      "Excellent rapport résultats/temps pour débutants et emplois du temps chargés."
+    ],
+    "cons_fr": [
+      "Volume par muscle limité sur une seule séance.",
+      "Séances longues si on couvre tout en détail.",
+      "Moins adapté aux pratiquants avancés qui ont besoin de beaucoup de volume."
+    ],
+    "days": [
+      { "day_order": 1, "name_fr": "Corps entier A", "focus_fr": "Polyarticulaires : squat, poussée horizontale, tirage" },
+      { "day_order": 2, "name_fr": "Corps entier B", "focus_fr": "Charnière de hanche, poussée verticale, tirage vertical" },
+      { "day_order": 3, "name_fr": "Corps entier C", "focus_fr": "Variantes + points faibles et isolation" }
+    ]
+  },
+  {
+    "id": "upper-lower",
+    "name_fr": "Haut / Bas (upper-lower)",
+    "days_per_week_min": 4,
+    "days_per_week_max": 4,
+    "level": "intermediate",
+    "goal": "hypertrophy",
+    "summary_fr": "Alternance de séances haut du corps et bas du corps. Bon équilibre fréquence/volume, chaque muscle travaillé 2 fois par semaine.",
+    "pros_fr": [
+      "Chaque muscle entraîné 2 fois par semaine (fréquence optimale).",
+      "Permet plus de volume par muscle que le full body.",
+      "Structure simple et éprouvée."
+    ],
+    "cons_fr": [
+      "Demande 4 séances régulières par semaine.",
+      "Séances bas du corps potentiellement éprouvantes."
+    ],
+    "days": [
+      { "day_order": 1, "name_fr": "Haut du corps A", "focus_fr": "Pectoraux, dos, épaules, bras (orienté force)" },
+      { "day_order": 2, "name_fr": "Bas du corps A", "focus_fr": "Quadriceps, ischio-jambiers, fessiers, mollets" },
+      { "day_order": 3, "name_fr": "Haut du corps B", "focus_fr": "Pectoraux, dos, épaules, bras (orienté volume)" },
+      { "day_order": 4, "name_fr": "Bas du corps B", "focus_fr": "Charnière de hanche, fessiers, ischios, mollets" }
+    ]
+  },
+  {
+    "id": "push-pull-legs",
+    "name_fr": "Push / Pull / Legs (PPL)",
+    "days_per_week_min": 3,
+    "days_per_week_max": 6,
+    "level": "intermediate",
+    "goal": "hypertrophy",
+    "summary_fr": "Trois types de séances : poussée (pectoraux/épaules/triceps), tirage (dos/biceps), jambes. Se cale sur 3 jours (fréquence 1) ou 6 jours (fréquence 2).",
+    "pros_fr": [
+      "Regroupe les muscles par fonction : peu de chevauchement, bonne récupération.",
+      "Modulable de 3 à 6 séances selon la disponibilité.",
+      "Permet un volume élevé par séance et par muscle en version 6 jours."
+    ],
+    "cons_fr": [
+      "En version 3 jours, chaque muscle n'est travaillé qu'une fois par semaine.",
+      "La version 6 jours est exigeante en temps et en récupération."
+    ],
+    "days": [
+      { "day_order": 1, "name_fr": "Push (poussée)", "focus_fr": "Pectoraux, deltoïdes, triceps" },
+      { "day_order": 2, "name_fr": "Pull (tirage)", "focus_fr": "Dos, deltoïde postérieur, biceps, avant-bras" },
+      { "day_order": 3, "name_fr": "Legs (jambes)", "focus_fr": "Quadriceps, ischio-jambiers, fessiers, mollets" }
+    ]
+  },
+  {
+    "id": "bro-split",
+    "name_fr": "Split par muscle (bro split)",
+    "days_per_week_min": 5,
+    "days_per_week_max": 5,
+    "level": "intermediate",
+    "goal": "hypertrophy",
+    "summary_fr": "Un grand groupe musculaire par séance, 5 jours par semaine. Volume maximal par muscle, mais fréquence d'une fois par semaine.",
+    "pros_fr": [
+      "Volume très élevé et focus total sur un muscle par séance.",
+      "Séances courtes et ciblées, populaires en bodybuilding.",
+      "Sensation de congestion marquée."
+    ],
+    "cons_fr": [
+      "Fréquence d'une seule fois par semaine par muscle (sous-optimale selon les données).",
+      "Une séance manquée prive le muscle concerné pour toute la semaine.",
+      "Moins efficace pour les débutants que les approches à fréquence plus élevée."
+    ],
+    "days": [
+      { "day_order": 1, "name_fr": "Pectoraux", "focus_fr": "Poussées horizontales et inclinées, écartés" },
+      { "day_order": 2, "name_fr": "Dos", "focus_fr": "Tirages verticaux et horizontaux, soulevés" },
+      { "day_order": 3, "name_fr": "Épaules", "focus_fr": "Développés, élévations latérales, oiseau" },
+      { "day_order": 4, "name_fr": "Bras", "focus_fr": "Biceps, triceps, avant-bras" },
+      { "day_order": 5, "name_fr": "Jambes", "focus_fr": "Squats, presses, ischios, mollets" }
+    ]
+  }
+]

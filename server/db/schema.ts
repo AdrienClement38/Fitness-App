@@ -1,0 +1,222 @@
+/**
+ * Schéma de base de données (Drizzle, dialecte PostgreSQL).
+ *
+ * Un seul dialecte partout : PostgreSQL en production (AlwaysData) et PGlite
+ * (Postgres embarqué) en local — aucune divergence SQLite/Postgres.
+ *
+ * Conventions :
+ *  - identifiants et énumérations en ANGLAIS (slugs stables), contenu en FR.
+ *  - les énums restent des `text` (valeurs contrôlées à la frontière par Zod au
+ *    seed) pour rester souples ; les listes (instructions, conseils…) sont des
+ *    colonnes `jsonb` typées `string[]`.
+ */
+import {
+  pgTable,
+  text,
+  integer,
+  boolean,
+  jsonb,
+  primaryKey,
+  index,
+} from 'drizzle-orm/pg-core';
+
+/* ------------------------------------------------------------------ */
+/*  Référentiels : anatomie                                           */
+/* ------------------------------------------------------------------ */
+
+export const muscleGroups = pgTable('muscle_groups', {
+  id: text('id').primaryKey(), // slug EN, ex: 'back'
+  nameFr: text('name_fr').notNull(),
+  region: text('region'), // 'upper' | 'lower' | 'core'
+  descriptionFr: text('description_fr'),
+});
+
+export const muscles = pgTable(
+  'muscles',
+  {
+    id: text('id').primaryKey(), // slug EN aligné sur le dataset, ex: 'lats'
+    nameFr: text('name_fr').notNull(),
+    nameEn: text('name_en'),
+    groupId: text('group_id')
+      .notNull()
+      .references(() => muscleGroups.id),
+    // Antagoniste : référence un autre muscle. Colonne simple (pas de FK Drizzle
+    // pour éviter l'auto-référence circulaire) — l'intégrité est validée au seed.
+    antagonistId: text('antagonist_id'),
+    functionFr: text('function_fr'),
+    anatomyFr: text('anatomy_fr'),
+    aliasesFr: jsonb('aliases_fr').$type<string[]>(),
+  },
+  (t) => [index('muscles_group_idx').on(t.groupId)],
+);
+
+/* ------------------------------------------------------------------ */
+/*  Référentiels : matériel & mouvement                               */
+/* ------------------------------------------------------------------ */
+
+export const equipment = pgTable('equipment', {
+  id: text('id').primaryKey(), // slug EN, ex: 'barbell'
+  nameFr: text('name_fr').notNull(),
+  category: text('category'), // 'free-weight'|'machine'|'bodyweight'|'accessory'|'cardio'
+  descriptionFr: text('description_fr'),
+});
+
+export const movementPatterns = pgTable('movement_patterns', {
+  id: text('id').primaryKey(), // ex: 'horizontal-push'
+  nameFr: text('name_fr').notNull(),
+  descriptionFr: text('description_fr'),
+});
+
+/* ------------------------------------------------------------------ */
+/*  Provenance / sources                                              */
+/* ------------------------------------------------------------------ */
+
+export const sources = pgTable('sources', {
+  id: text('id').primaryKey(),
+  title: text('title').notNull(),
+  authors: text('authors'),
+  year: integer('year'),
+  type: text('type').notNull(), // 'scientific'|'guideline'|'coach'|'dataset'|'book'
+  url: text('url'),
+  license: text('license'),
+  notesFr: text('notes_fr'),
+});
+
+/* ------------------------------------------------------------------ */
+/*  Exercices                                                         */
+/* ------------------------------------------------------------------ */
+
+export const exercises = pgTable(
+  'exercises',
+  {
+    id: text('id').primaryKey(), // slug EN normalisé, ex: 'barbell-bench-press-medium-grip'
+    nameEn: text('name_en').notNull(),
+    nameFr: text('name_fr'), // null = pas encore traduit (ossature)
+    aliasesFr: jsonb('aliases_fr').$type<string[]>(),
+    force: text('force'), // 'push'|'pull'|'static'|null
+    level: text('level').notNull(), // 'beginner'|'intermediate'|'advanced'
+    mechanic: text('mechanic'), // 'compound'|'isolation'|null
+    category: text('category').notNull(),
+    equipmentId: text('equipment_id').references(() => equipment.id),
+    movementPatternId: text('movement_pattern_id').references(() => movementPatterns.id),
+    instructionsEn: jsonb('instructions_en').$type<string[]>(),
+    instructionsFr: jsonb('instructions_fr').$type<string[]>(),
+    commonMistakesFr: jsonb('common_mistakes_fr').$type<string[]>(),
+    tipsFr: jsonb('tips_fr').$type<string[]>(),
+    contraindicationsFr: jsonb('contraindications_fr').$type<string[]>(),
+    tempo: text('tempo'),
+    images: jsonb('images').$type<string[]>(),
+    isEnriched: boolean('is_enriched').notNull().default(false),
+    sourceDataset: text('source_dataset').references(() => sources.id),
+  },
+  (t) => [
+    index('exercises_category_idx').on(t.category),
+    index('exercises_equipment_idx').on(t.equipmentId),
+    index('exercises_level_idx').on(t.level),
+    index('exercises_enriched_idx').on(t.isEnriched),
+  ],
+);
+
+// Lien exercice <-> muscle (many-to-many). Garantit que tout muscle cité existe.
+export const exerciseMuscles = pgTable(
+  'exercise_muscles',
+  {
+    exerciseId: text('exercise_id')
+      .notNull()
+      .references(() => exercises.id, {onDelete: 'cascade'}),
+    muscleId: text('muscle_id')
+      .notNull()
+      .references(() => muscles.id),
+    role: text('role').notNull(), // 'primary' | 'secondary'
+  },
+  (t) => [
+    primaryKey({columns: [t.exerciseId, t.muscleId, t.role]}),
+    index('exercise_muscles_muscle_idx').on(t.muscleId),
+    index('exercise_muscles_role_idx').on(t.role),
+  ],
+);
+
+/* ------------------------------------------------------------------ */
+/*  Savoir : principes, schémas de reps, volumes, splits              */
+/* ------------------------------------------------------------------ */
+
+export const trainingPrinciples = pgTable(
+  'training_principles',
+  {
+    id: text('id').primaryKey(),
+    titleFr: text('title_fr').notNull(),
+    category: text('category').notNull(),
+    summaryFr: text('summary_fr').notNull(),
+    detailFr: text('detail_fr'),
+    evidence: text('evidence'), // 'strong'|'moderate'|'limited'|'consensus'
+    practicalFr: jsonb('practical_fr').$type<string[]>(),
+  },
+  (t) => [index('training_principles_category_idx').on(t.category)],
+);
+
+export const principleSources = pgTable(
+  'principle_sources',
+  {
+    principleId: text('principle_id')
+      .notNull()
+      .references(() => trainingPrinciples.id, {onDelete: 'cascade'}),
+    sourceId: text('source_id')
+      .notNull()
+      .references(() => sources.id),
+  },
+  (t) => [primaryKey({columns: [t.principleId, t.sourceId]})],
+);
+
+export const repSchemes = pgTable('rep_schemes', {
+  id: text('id').primaryKey(),
+  goal: text('goal').notNull(), // 'strength'|'hypertrophy'|'endurance'|'power'
+  labelFr: text('label_fr').notNull(),
+  repsMin: integer('reps_min').notNull(),
+  repsMax: integer('reps_max').notNull(),
+  setsMin: integer('sets_min'),
+  setsMax: integer('sets_max'),
+  intensityPct1rmMin: integer('intensity_pct_1rm_min'),
+  intensityPct1rmMax: integer('intensity_pct_1rm_max'),
+  restSecondsMin: integer('rest_seconds_min'),
+  restSecondsMax: integer('rest_seconds_max'),
+  rirMin: integer('rir_min'),
+  rirMax: integer('rir_max'),
+  notesFr: text('notes_fr'),
+});
+
+export const muscleVolumeLandmarks = pgTable('muscle_volume_landmarks', {
+  muscleId: text('muscle_id')
+    .primaryKey()
+    .references(() => muscles.id),
+  mvSets: integer('mv_sets'),
+  mevSets: integer('mev_sets'),
+  mavSetsMin: integer('mav_sets_min'),
+  mavSetsMax: integer('mav_sets_max'),
+  mrvSets: integer('mrv_sets'),
+  notesFr: text('notes_fr'),
+});
+
+export const splits = pgTable('splits', {
+  id: text('id').primaryKey(),
+  nameFr: text('name_fr').notNull(),
+  daysPerWeekMin: integer('days_per_week_min'),
+  daysPerWeekMax: integer('days_per_week_max'),
+  level: text('level'),
+  goal: text('goal'),
+  summaryFr: text('summary_fr'),
+  prosFr: jsonb('pros_fr').$type<string[]>(),
+  consFr: jsonb('cons_fr').$type<string[]>(),
+});
+
+export const splitDays = pgTable(
+  'split_days',
+  {
+    splitId: text('split_id')
+      .notNull()
+      .references(() => splits.id, {onDelete: 'cascade'}),
+    dayOrder: integer('day_order').notNull(),
+    nameFr: text('name_fr').notNull(),
+    focusFr: text('focus_fr'),
+  },
+  (t) => [primaryKey({columns: [t.splitId, t.dayOrder]})],
+);

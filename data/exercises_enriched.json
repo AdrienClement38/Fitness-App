@@ -1,0 +1,930 @@
+[
+  {
+    "id": "barbell-bench-press-medium-grip",
+    "name_fr": "Développé couché à la barre",
+    "aliases_fr": ["Bench press", "Développé couché"],
+    "movement_pattern_id": "horizontal-push",
+    "tempo": "2-1-1-0",
+    "instructions_fr": [
+      "Allongé sur le banc, yeux sous la barre, pieds bien ancrés au sol, légère cambrure lombaire et omoplates serrées en arrière.",
+      "Saisis la barre un peu plus large que les épaules et dégage-la du support, bras tendus à la verticale.",
+      "Descends la barre de façon contrôlée jusqu'au bas des pectoraux, coudes à environ 45° du buste.",
+      "Pousse la barre vers le haut en ligne légèrement diagonale jusqu'à l'extension complète, sans verrouiller brutalement."
+    ],
+    "common_mistakes_fr": [
+      "Faire rebondir la barre sur la poitrine.",
+      "Écarter les coudes à 90°, ce qui fragilise les épaules.",
+      "Décoller les fessiers du banc pour soulever plus lourd."
+    ],
+    "tips_fr": [
+      "Garde les omoplates serrées et basses tout au long du mouvement.",
+      "Travaille avec un pareur (spotter) sur les charges lourdes.",
+      "La barre descend au niveau des mamelons, pas sur la gorge."
+    ],
+    "contraindications_fr": [
+      "Douleur antérieure d'épaule : réduis l'amplitude ou passe aux haltères.",
+      "Toujours utiliser des stop-chutes (safety bars) sans pareur."
+    ]
+  },
+  {
+    "id": "barbell-incline-bench-press-medium-grip",
+    "name_fr": "Développé incliné à la barre",
+    "aliases_fr": ["Incline bench", "Développé incliné"],
+    "movement_pattern_id": "horizontal-push",
+    "instructions_fr": [
+      "Règle le banc entre 30 et 45° d'inclinaison ; installe-toi omoplates serrées, pieds au sol.",
+      "Saisis la barre un peu plus large que les épaules et dégage-la, bras tendus.",
+      "Descends vers le haut des pectoraux (sous les clavicules), coudes légèrement rentrés.",
+      "Pousse jusqu'à l'extension des bras en gardant la trajectoire stable."
+    ],
+    "common_mistakes_fr": [
+      "Inclinaison trop forte (>45°) qui transforme l'exercice en développé épaules.",
+      "Descendre la barre trop bas vers le sternum.",
+      "Cambrer excessivement pour tricher en développé couché à plat."
+    ],
+    "tips_fr": [
+      "Cible le faisceau claviculaire (haut) des pectoraux, souvent en retard.",
+      "Une inclinaison de 30° suffit pour la plupart des pratiquants."
+    ],
+    "contraindications_fr": [
+      "Épaules sensibles : privilégie les haltères pour une trajectoire plus libre."
+    ]
+  },
+  {
+    "id": "dumbbell-bench-press",
+    "name_fr": "Développé couché aux haltères",
+    "aliases_fr": ["DB bench press"],
+    "movement_pattern_id": "horizontal-push",
+    "instructions_fr": [
+      "Assis sur le banc, haltères posés sur les cuisses ; allonge-toi en les ramenant au niveau de la poitrine d'un coup de genoux.",
+      "Omoplates serrées, pousse les haltères à la verticale, bras tendus.",
+      "Descends de façon contrôlée jusqu'au niveau des pectoraux, en ouvrant légèrement.",
+      "Pousse vers le haut en rapprochant légèrement les haltères, sans les cogner."
+    ],
+    "common_mistakes_fr": [
+      "Descendre les coudes trop bas sous la ligne du dos.",
+      "Trajectoire instable par manque de contrôle.",
+      "Cogner les haltères en haut au lieu de rester en tension."
+    ],
+    "tips_fr": [
+      "Plus grande amplitude qu'à la barre : excellent pour l'étirement des pectoraux.",
+      "Idéal pour corriger un déséquilibre droite/gauche."
+    ],
+    "contraindications_fr": [
+      "Maîtrise la prise des haltères lourds au démarrage et à la fin pour protéger les épaules."
+    ]
+  },
+  {
+    "id": "pushups",
+    "name_fr": "Pompes",
+    "aliases_fr": ["Push-ups"],
+    "movement_pattern_id": "horizontal-push",
+    "instructions_fr": [
+      "En appui sur les mains (un peu plus larges que les épaules) et les pointes de pieds, corps gainé et aligné.",
+      "Descends en pliant les coudes jusqu'à frôler le sol de la poitrine, coudes à ~45° du buste.",
+      "Pousse pour revenir bras tendus en gardant le gainage.",
+      "Garde la tête dans l'alignement du dos, regard vers le sol."
+    ],
+    "common_mistakes_fr": [
+      "Creuser le bas du dos par manque de gainage.",
+      "Amplitude partielle (ne pas descendre assez).",
+      "Coudes trop écartés (en T)."
+    ],
+    "tips_fr": [
+      "Trop facile : pieds surélevés ou lest sur le dos. Trop dur : appui sur les genoux.",
+      "Serre les fessiers et les abdos pour rester gainé."
+    ],
+    "contraindications_fr": [
+      "Douleur de poignet : utilise des poignées de pompes ou les poings."
+    ]
+  },
+  {
+    "id": "cable-crossover",
+    "name_fr": "Écarté à la poulie (crossover)",
+    "aliases_fr": ["Crossover", "Vis-à-vis"],
+    "movement_pattern_id": null,
+    "instructions_fr": [
+      "Poulies réglées en hauteur, une poignée dans chaque main, fais un pas en avant en fente légère, buste incliné.",
+      "Bras quasi tendus (léger pli au coude), ouverts en croix à hauteur d'épaules.",
+      "Ramène les mains l'une vers l'autre devant toi en arc de cercle, en contractant les pectoraux.",
+      "Reviens lentement à la position d'étirement sans relâcher la tension."
+    ],
+    "common_mistakes_fr": [
+      "Plier les coudes et transformer le mouvement en pressing.",
+      "Utiliser l'élan du buste.",
+      "Charge trop lourde qui casse la trajectoire."
+    ],
+    "tips_fr": [
+      "Exercice d'isolation et de finition : cherche la congestion, pas la charge maximale.",
+      "Varie la hauteur des poulies pour cibler le haut ou le bas des pectoraux."
+    ],
+    "contraindications_fr": [
+      "Épaule instable : limite l'amplitude d'étirement en arrière."
+    ]
+  },
+  {
+    "id": "barbell-deadlift",
+    "name_fr": "Soulevé de terre",
+    "aliases_fr": ["Deadlift", "Soulevé de terre classique"],
+    "movement_pattern_id": "hinge",
+    "tempo": "1-0-1-0",
+    "instructions_fr": [
+      "Pieds largeur de bassin sous la barre (au-dessus du milieu du pied), tibias proches de la barre.",
+      "Charnière de hanche : fléchis hanches et genoux pour saisir la barre, dos plat, poitrine sortie.",
+      "Gaine-toi, puis pousse dans le sol en tendant simultanément hanches et genoux, barre collée aux jambes.",
+      "Termine debout, hanches verrouillées, sans hyperextension lombaire ; redescends en poussant les fesses en arrière."
+    ],
+    "common_mistakes_fr": [
+      "Arrondir le bas du dos : la faute la plus dangereuse.",
+      "Démarrer les hanches trop hautes ou trop basses.",
+      "Tirer la barre loin du corps.",
+      "Hyperextension du dos en fin de mouvement."
+    ],
+    "tips_fr": [
+      "Imagine pousser le sol avec les pieds plutôt que tirer avec le dos.",
+      "Garde la barre en contact avec les jambes tout du long.",
+      "Prise mixte ou à crochet (hook grip) pour les charges lourdes."
+    ],
+    "contraindications_fr": [
+      "Hernie discale ou lombalgie aiguë : à proscrire ou à adapter avec un professionnel.",
+      "Maîtrise impérativement la technique à vide avant de charger."
+    ]
+  },
+  {
+    "id": "romanian-deadlift",
+    "name_fr": "Soulevé de terre roumain",
+    "aliases_fr": ["RDL", "Soulevé roumain"],
+    "movement_pattern_id": "hinge",
+    "instructions_fr": [
+      "Debout, barre tenue à hauteur des cuisses, pieds largeur de bassin, genoux très légèrement fléchis.",
+      "Pousse les hanches loin vers l'arrière en laissant la barre glisser le long des cuisses, dos plat.",
+      "Descends jusqu'à sentir un fort étirement des ischio-jambiers (barre vers mi-tibia), sans arrondir le dos.",
+      "Reviens en poussant les hanches vers l'avant, contraction des fessiers en haut."
+    ],
+    "common_mistakes_fr": [
+      "Plier les genoux comme un squat au lieu d'une charnière de hanche.",
+      "Arrondir le dos en cherchant à descendre trop bas.",
+      "Éloigner la barre des jambes."
+    ],
+    "tips_fr": [
+      "L'amplitude dépend de ta souplesse : descends tant que le dos reste plat.",
+      "Excellent pour les ischio-jambiers et les fessiers, et pour apprendre la charnière de hanche."
+    ],
+    "contraindications_fr": [
+      "Douleur lombaire : réduis l'amplitude et la charge."
+    ]
+  },
+  {
+    "id": "good-morning",
+    "name_fr": "Good morning",
+    "aliases_fr": ["Bonjour"],
+    "movement_pattern_id": "hinge",
+    "instructions_fr": [
+      "Barre posée sur le haut du dos (comme au squat), pieds largeur d'épaules, genoux légèrement fléchis.",
+      "Pousse les hanches vers l'arrière en inclinant le buste vers l'avant, dos plat.",
+      "Descends jusqu'à ce que le buste soit proche de l'horizontale, en gardant la tension dans les ischios.",
+      "Remonte en ramenant les hanches sous la barre."
+    ],
+    "common_mistakes_fr": [
+      "Charge trop lourde pour un mouvement exigeant techniquement.",
+      "Arrondir le dos.",
+      "Transformer en squat en pliant trop les genoux."
+    ],
+    "tips_fr": [
+      "Commence très léger : l'exercice est traître sur le bas du dos.",
+      "Garde le regard légèrement vers l'avant pour maintenir le dos neutre."
+    ],
+    "contraindications_fr": [
+      "Antécédents lombaires : à éviter ou encadrer.",
+      "Réserve-le aux pratiquants ayant une bonne maîtrise de la charnière de hanche."
+    ]
+  },
+  {
+    "id": "bent-over-barbell-row",
+    "name_fr": "Rowing barre, buste penché",
+    "aliases_fr": ["Rowing barre", "Bent-over row"],
+    "movement_pattern_id": "horizontal-pull",
+    "instructions_fr": [
+      "Debout, barre en main (prise pronation un peu plus large que les épaules), charnière de hanche jusqu'à incliner le buste vers 45° ou moins, dos plat.",
+      "Laisse pendre la barre bras tendus sous les épaules.",
+      "Tire la barre vers le bas du sternum / nombril en serrant les omoplates, coudes le long du corps.",
+      "Redescends de façon contrôlée sans arrondir le dos."
+    ],
+    "common_mistakes_fr": [
+      "Se redresser au fil des répétitions (élan).",
+      "Arrondir le dos.",
+      "Tirer avec les bras sans serrer les omoplates."
+    ],
+    "tips_fr": [
+      "Plus le buste est horizontal, plus le dos travaille (et plus c'est exigeant pour les lombaires).",
+      "Pense à ramener les coudes vers l'arrière, pas à \"tirer avec les mains\"."
+    ],
+    "contraindications_fr": [
+      "Lombaires fragiles : préfère le rowing à la poulie ou un appui (rowing buste appuyé)."
+    ]
+  },
+  {
+    "id": "seated-cable-rows",
+    "name_fr": "Tirage horizontal à la poulie (assis)",
+    "aliases_fr": ["Seated row", "Tirage horizontal"],
+    "movement_pattern_id": "horizontal-pull",
+    "instructions_fr": [
+      "Assis face à la poulie basse, pieds calés, genoux légèrement fléchis, saisis la poignée bras tendus.",
+      "Dos droit et poitrine sortie, tire la poignée vers le nombril en serrant les omoplates.",
+      "Marque une légère contraction, coudes le long du corps.",
+      "Reviens en contrôlant l'étirement, sans t'avachir vers l'avant."
+    ],
+    "common_mistakes_fr": [
+      "Tirer avec l'élan du buste (balancier avant-arrière).",
+      "Arrondir le dos en position d'étirement.",
+      "Hausser les épaules vers les oreilles."
+    ],
+    "tips_fr": [
+      "Garde le buste quasi immobile, ce sont les bras et le dos qui travaillent.",
+      "Varie la poignée (large, serrée, en V) pour cibler différemment le dos."
+    ],
+    "contraindications_fr": [
+      "Aucune majeure : exercice sûr et accessible aux débutants."
+    ]
+  },
+  {
+    "id": "pullups",
+    "name_fr": "Tractions (prise pronation)",
+    "aliases_fr": ["Pull-ups", "Tractions pronation"],
+    "movement_pattern_id": "vertical-pull",
+    "instructions_fr": [
+      "Suspendu à la barre, mains en pronation un peu plus larges que les épaules, bras tendus.",
+      "Gaine-toi et tire en amenant la poitrine vers la barre, coudes vers le bas et l'arrière.",
+      "Monte jusqu'à passer le menton au-dessus de la barre.",
+      "Redescends en contrôlant jusqu'à l'extension complète des bras."
+    ],
+    "common_mistakes_fr": [
+      "Amplitude partielle (ne pas tendre les bras en bas).",
+      "Se balancer / utiliser l'élan (kipping) en force pure.",
+      "Hausser les épaules au lieu d'abaisser les omoplates."
+    ],
+    "tips_fr": [
+      "Trop dur : utilise un élastique d'assistance ou la machine assistée.",
+      "Pense à \"abaisser les coudes\" pour engager le grand dorsal.",
+      "Prise pronation = plus de dos ; prise supination (chin-up) = plus de biceps."
+    ],
+    "contraindications_fr": [
+      "Douleur d'épaule ou de coude : limite l'amplitude ou passe au tirage vertical."
+    ]
+  },
+  {
+    "id": "chin-up",
+    "name_fr": "Tractions (prise supination)",
+    "aliases_fr": ["Chin-up", "Tractions supination"],
+    "movement_pattern_id": "vertical-pull",
+    "instructions_fr": [
+      "Suspendu à la barre, mains en supination (paumes vers toi) largeur d'épaules, bras tendus.",
+      "Tire en amenant la poitrine vers la barre, coudes serrés vers le bas.",
+      "Monte jusqu'à passer le menton au-dessus de la barre.",
+      "Redescends de façon contrôlée jusqu'aux bras tendus."
+    ],
+    "common_mistakes_fr": [
+      "Ne pas descendre complètement entre les répétitions.",
+      "Donner des coups de jambes pour s'aider.",
+      "Enrouler les épaules vers l'avant."
+    ],
+    "tips_fr": [
+      "Plus facile que la prise pronation et plus sollicitant pour les biceps.",
+      "Excellente alternative au curl pour des biceps costauds."
+    ],
+    "contraindications_fr": [
+      "Tendinite du coude : la supination peut gêner, teste prudemment."
+    ]
+  },
+  {
+    "id": "wide-grip-lat-pulldown",
+    "name_fr": "Tirage vertical poulie haute, prise large",
+    "aliases_fr": ["Lat pulldown", "Tirage nuque/poitrine"],
+    "movement_pattern_id": "vertical-pull",
+    "instructions_fr": [
+      "Assis à la machine, cuisses calées sous les rouleaux, saisis la barre en pronation, prise large.",
+      "Buste légèrement incliné vers l'arrière, poitrine sortie.",
+      "Tire la barre vers le haut de la poitrine en serrant les omoplates et en abaissant les coudes.",
+      "Reviens en contrôlant jusqu'à l'extension complète des bras vers le haut."
+    ],
+    "common_mistakes_fr": [
+      "Tirer la barre derrière la nuque (risqué pour les épaules).",
+      "S'incliner trop en arrière et transformer en tirage horizontal.",
+      "Utiliser l'élan du buste."
+    ],
+    "tips_fr": [
+      "Tire toujours la barre devant, vers le haut des pectoraux.",
+      "Idéal pour apprendre le mouvement de traction quand on ne fait pas encore de tractions strictes."
+    ],
+    "contraindications_fr": [
+      "Évite la version \"derrière la nuque\" si tu manques de mobilité d'épaule."
+    ]
+  },
+  {
+    "id": "barbell-shoulder-press",
+    "name_fr": "Développé militaire à la barre",
+    "aliases_fr": ["Overhead press", "OHP", "Développé militaire"],
+    "movement_pattern_id": "vertical-push",
+    "instructions_fr": [
+      "Debout, barre sur le haut des pectoraux, mains un peu plus larges que les épaules, coudes sous la barre.",
+      "Gaine abdos et fessiers, pousse la barre à la verticale au-dessus de la tête.",
+      "Quand la barre dépasse le front, rentre légèrement la tête pour la passer sous la barre.",
+      "Termine bras tendus, barre au-dessus de la nuque ; redescends de façon contrôlée vers les pectoraux."
+    ],
+    "common_mistakes_fr": [
+      "Cambrer excessivement le bas du dos pour pousser plus lourd.",
+      "Pousser la barre vers l'avant au lieu de la verticale.",
+      "Ne pas gainer le tronc."
+    ],
+    "tips_fr": [
+      "Serre les fessiers pour protéger le bas du dos.",
+      "La barre, la tête et les hanches doivent finir alignées verticalement."
+    ],
+    "contraindications_fr": [
+      "Conflit sous-acromial : préfère le développé aux haltères (trajectoire neutre).",
+      "Lombalgie : assieds-toi avec dossier pour soulager le dos."
+    ]
+  },
+  {
+    "id": "dumbbell-shoulder-press",
+    "name_fr": "Développé épaules aux haltères",
+    "aliases_fr": ["Développé Arnold (variante)", "Shoulder press haltères"],
+    "movement_pattern_id": "vertical-push",
+    "instructions_fr": [
+      "Assis (avec dossier) ou debout, un haltère dans chaque main au niveau des épaules, paumes vers l'avant.",
+      "Gaine le tronc et pousse les haltères à la verticale jusqu'à l'extension des bras.",
+      "Rapproche légèrement les haltères en haut sans les cogner.",
+      "Redescends de façon contrôlée jusqu'au niveau des oreilles."
+    ],
+    "common_mistakes_fr": [
+      "Descendre les coudes trop bas et forcer sur l'épaule.",
+      "Cambrer le dos.",
+      "Cogner les haltères en haut."
+    ],
+    "tips_fr": [
+      "Trajectoire plus libre et plus sûre pour les épaules qu'à la barre.",
+      "Le dossier incliné à ~80° aide à protéger le bas du dos."
+    ],
+    "contraindications_fr": [
+      "Épaule douloureuse : réduis l'amplitude ou la charge."
+    ]
+  },
+  {
+    "id": "push-press",
+    "name_fr": "Développé avec impulsion (push press)",
+    "aliases_fr": ["Push press"],
+    "movement_pattern_id": "vertical-push",
+    "instructions_fr": [
+      "Barre sur le haut des pectoraux comme au développé militaire, pieds largeur de bassin.",
+      "Fléchis légèrement les genoux (dip), buste droit.",
+      "Détends explosivement les jambes pour donner une impulsion à la barre, puis pousse avec les bras.",
+      "Termine bras tendus au-dessus de la tête ; redescends contrôlé vers les pectoraux."
+    ],
+    "common_mistakes_fr": [
+      "Dip trop profond ou trop lent (perte d'explosivité).",
+      "Incliner le buste vers l'avant pendant la flexion des jambes.",
+      "Pousser la barre vers l'avant."
+    ],
+    "tips_fr": [
+      "L'impulsion des jambes permet d'utiliser plus lourd qu'au strict.",
+      "Mouvement de puissance : privilégie la vitesse, pas l'échec musculaire."
+    ],
+    "contraindications_fr": [
+      "Demande une bonne coordination : à réserver après maîtrise du développé strict."
+    ]
+  },
+  {
+    "id": "side-lateral-raise",
+    "name_fr": "Élévations latérales",
+    "aliases_fr": ["Lateral raise", "Oiseau latéral"],
+    "movement_pattern_id": null,
+    "instructions_fr": [
+      "Debout, un haltère dans chaque main le long du corps, léger pli aux coudes.",
+      "Élève les bras sur les côtés jusqu'à l'horizontale (hauteur des épaules).",
+      "Le petit doigt légèrement plus haut que le pouce, comme si tu versais une carafe.",
+      "Redescends lentement en gardant la tension."
+    ],
+    "common_mistakes_fr": [
+      "Monter au-dessus de l'horizontale (les trapèzes prennent le relais).",
+      "Donner de l'élan avec le buste.",
+      "Charge trop lourde qui transforme le geste en mouvement saccadé."
+    ],
+    "tips_fr": [
+      "Mouvement d'isolation : reste léger et propre, c'est la largeur d'épaules.",
+      "Imagine mener le mouvement avec les coudes, pas avec les mains."
+    ],
+    "contraindications_fr": [
+      "Conflit d'épaule : limite la hauteur à 60-70° si douleur."
+    ]
+  },
+  {
+    "id": "face-pull",
+    "name_fr": "Face pull (tirage à la nuque)",
+    "aliases_fr": ["Face pull"],
+    "movement_pattern_id": "horizontal-pull",
+    "instructions_fr": [
+      "Poulie réglée à hauteur du visage, corde en prise neutre (pouces vers toi).",
+      "Recule pour mettre le câble en tension, bras tendus devant.",
+      "Tire la corde vers ton visage en écartant les mains, coudes hauts, en serrant les omoplates.",
+      "Reviens contrôlé sans enrouler les épaules vers l'avant."
+    ],
+    "common_mistakes_fr": [
+      "Charge trop lourde qui empêche d'écarter les mains.",
+      "Tirer vers la poitrine au lieu du visage.",
+      "Hausser les épaules."
+    ],
+    "tips_fr": [
+      "Excellent pour les deltoïdes postérieurs et la santé des épaules (équilibre les poussées).",
+      "Idéal en fin de séance, en séries longues (15-20 reps)."
+    ],
+    "contraindications_fr": [
+      "Aucune majeure : exercice de prévention recommandé."
+    ]
+  },
+  {
+    "id": "barbell-full-squat",
+    "name_fr": "Squat à la barre",
+    "aliases_fr": ["Back squat", "Squat barre", "Flexion sur jambes"],
+    "movement_pattern_id": "squat",
+    "tempo": "2-1-1-0",
+    "instructions_fr": [
+      "Barre posée sur le haut du dos (trapèzes), mains en prise solide, dégage la barre du rack et recule d'un pas.",
+      "Pieds largeur d'épaules, pointes légèrement vers l'extérieur, gaine le tronc.",
+      "Descends en poussant les hanches vers l'arrière et en fléchissant les genoux, dos neutre, jusqu'à cuisses au moins parallèles au sol.",
+      "Remonte en poussant dans le sol, genoux dans l'axe des pieds, jusqu'à l'extension complète."
+    ],
+    "common_mistakes_fr": [
+      "Genoux qui rentrent vers l'intérieur (valgus).",
+      "Talons qui décollent (manque de mobilité de cheville).",
+      "Arrondir le bas du dos en position basse (\"butt wink\" marqué).",
+      "Pencher excessivement le buste vers l'avant."
+    ],
+    "tips_fr": [
+      "Garde le poids sur l'ensemble du pied, talons ancrés.",
+      "Des chaussures à talon (ou petites cales) aident si la cheville manque de mobilité.",
+      "Utilise toujours les barres de sécurité du rack."
+    ],
+    "contraindications_fr": [
+      "Problèmes de genou ou de dos : réduis l'amplitude/charge ou passe à la presse.",
+      "Apprends la technique à la barre à vide avant de charger."
+    ]
+  },
+  {
+    "id": "front-barbell-squat",
+    "name_fr": "Squat avant (front squat)",
+    "aliases_fr": ["Front squat"],
+    "movement_pattern_id": "squat",
+    "instructions_fr": [
+      "Barre posée sur le devant des épaules (deltoïdes antérieurs), coudes hauts pointés vers l'avant.",
+      "Pieds largeur d'épaules, buste le plus droit possible.",
+      "Descends en fléchissant genoux et hanches, en gardant les coudes hauts et le tronc vertical.",
+      "Remonte en poussant dans le sol jusqu'à l'extension complète."
+    ],
+    "common_mistakes_fr": [
+      "Laisser tomber les coudes, ce qui fait basculer la barre vers l'avant.",
+      "Arrondir le haut du dos.",
+      "Talons qui décollent."
+    ],
+    "tips_fr": [
+      "Cible davantage les quadriceps et exige moins le bas du dos que le squat arrière.",
+      "Manque de mobilité de poignet : utilise une prise croisée (bras croisés)."
+    ],
+    "contraindications_fr": [
+      "Mobilité de poignet/épaule limitée : adapte la prise."
+    ]
+  },
+  {
+    "id": "leg-press",
+    "name_fr": "Presse à cuisses",
+    "aliases_fr": ["Leg press", "Presse"],
+    "movement_pattern_id": "squat",
+    "instructions_fr": [
+      "Installe-toi dans la machine, dos et bassin bien plaqués contre le dossier.",
+      "Pieds sur la plateforme largeur d'épaules, dégage les sécurités.",
+      "Fléchis les genoux pour descendre la plateforme vers toi jusqu'à ~90° (sans décoller les fesses).",
+      "Pousse jusqu'à une quasi-extension, sans verrouiller brutalement les genoux."
+    ],
+    "common_mistakes_fr": [
+      "Descendre trop bas et décoller le bassin (le bas du dos s'arrondit).",
+      "Verrouiller violemment les genoux en haut.",
+      "Genoux qui rentrent vers l'intérieur."
+    ],
+    "tips_fr": [
+      "Alternative plus sûre pour le dos quand le squat est difficile.",
+      "Pieds hauts sur la plateforme = plus de fessiers/ischios ; pieds bas = plus de quadriceps."
+    ],
+    "contraindications_fr": [
+      "Genoux sensibles : limite la flexion et évite le verrouillage."
+    ]
+  },
+  {
+    "id": "leg-extensions",
+    "name_fr": "Leg extension (extension des jambes)",
+    "aliases_fr": ["Leg extension"],
+    "movement_pattern_id": null,
+    "instructions_fr": [
+      "Assis à la machine, dos calé, le rouleau posé sur le bas des tibias (au-dessus des chevilles).",
+      "Règle l'axe de rotation au niveau du genou.",
+      "Tends les jambes en contractant les quadriceps jusqu'à l'extension complète.",
+      "Redescends lentement sans laisser la charge retomber."
+    ],
+    "common_mistakes_fr": [
+      "Donner de l'élan / claquer l'extension.",
+      "Laisser la charge redescendre sans contrôle.",
+      "Décoller les fessiers du siège."
+    ],
+    "tips_fr": [
+      "Marque une courte contraction en haut pour intensifier le travail des quadriceps.",
+      "Mouvement d'isolation idéal en complément des squats/presses."
+    ],
+    "contraindications_fr": [
+      "Douleur fémoro-patellaire : réduis l'amplitude haute et la charge."
+    ]
+  },
+  {
+    "id": "lying-leg-curls",
+    "name_fr": "Leg curl allongé",
+    "aliases_fr": ["Leg curl couché"],
+    "movement_pattern_id": null,
+    "instructions_fr": [
+      "Allongé sur le ventre à la machine, le rouleau au-dessus des talons (bas des mollets).",
+      "Saisis les poignées, bassin plaqué au support.",
+      "Fléchis les genoux pour amener les talons vers les fessiers en contractant les ischio-jambiers.",
+      "Redescends lentement sans relâcher complètement la tension."
+    ],
+    "common_mistakes_fr": [
+      "Décoller le bassin pour s'aider (cambrure).",
+      "Mouvement saccadé avec élan.",
+      "Amplitude partielle."
+    ],
+    "tips_fr": [
+      "Garde les hanches collées au banc pour isoler les ischios.",
+      "Complète le soulevé roumain par ce travail de flexion de genou."
+    ],
+    "contraindications_fr": [
+      "Crampes fréquentes aux ischios : échauffe-toi bien et reste progressif."
+    ]
+  },
+  {
+    "id": "seated-leg-curl",
+    "name_fr": "Leg curl assis",
+    "aliases_fr": ["Seated leg curl"],
+    "movement_pattern_id": null,
+    "instructions_fr": [
+      "Assis à la machine, dos calé, le rouleau posé sur l'arrière des chevilles, la cale sur les cuisses.",
+      "Fléchis les genoux pour ramener les talons sous le siège en contractant les ischio-jambiers.",
+      "Marque une courte contraction.",
+      "Reviens lentement à la position de départ."
+    ],
+    "common_mistakes_fr": [
+      "Avancer le bassin / décoller les cuisses.",
+      "Utiliser l'élan.",
+      "Amplitude trop courte."
+    ],
+    "tips_fr": [
+      "La position assise étire davantage les ischios : souvent ressenti comme plus efficace que la version allongée.",
+      "Contrôle bien la phase de retour (excentrique)."
+    ],
+    "contraindications_fr": [
+      "Aucune majeure : exercice sûr et guidé."
+    ]
+  },
+  {
+    "id": "barbell-walking-lunge",
+    "name_fr": "Fentes marchées à la barre",
+    "aliases_fr": ["Walking lunge", "Fentes marchées"],
+    "movement_pattern_id": "lunge",
+    "instructions_fr": [
+      "Barre sur le haut du dos (ou haltères dans les mains), tronc gainé et droit.",
+      "Fais un grand pas en avant et fléchis les deux genoux jusqu'à ce que le genou arrière frôle le sol.",
+      "Pousse sur le talon avant pour te relever et enchaîne en avançant l'autre jambe.",
+      "Avance ainsi en alternant les jambes, buste droit."
+    ],
+    "common_mistakes_fr": [
+      "Pas trop court qui projette le genou avant loin devant l'orteil.",
+      "Buste qui penche en avant.",
+      "Perte d'équilibre par manque de gainage."
+    ],
+    "tips_fr": [
+      "Regard devant et tronc droit pour garder l'équilibre.",
+      "Commence aux haltères avant de passer à la barre (équilibre plus facile)."
+    ],
+    "contraindications_fr": [
+      "Genou douloureux : réduis l'amplitude ou privilégie les exercices guidés.",
+      "Problème d'équilibre : tiens-toi près d'un appui."
+    ]
+  },
+  {
+    "id": "barbell-hip-thrust",
+    "name_fr": "Hip thrust à la barre",
+    "aliases_fr": ["Hip thrust", "Poussée de hanche"],
+    "movement_pattern_id": "hinge",
+    "instructions_fr": [
+      "Haut du dos (sous les omoplates) appuyé contre un banc, barre sur le pli des hanches (avec une protection).",
+      "Pieds à plat largeur de bassin, tibias verticaux en position haute.",
+      "Pousse dans les talons pour monter les hanches jusqu'à aligner épaules-hanches-genoux.",
+      "Contracte fort les fessiers en haut, puis redescends contrôlé."
+    ],
+    "common_mistakes_fr": [
+      "Hyperextension lombaire en haut au lieu de verrouiller par les fessiers.",
+      "Pieds trop loin ou trop près (tibias non verticaux en haut).",
+      "Amplitude partielle."
+    ],
+    "tips_fr": [
+      "Rentre le menton et les côtes pour éviter de cambrer le bas du dos.",
+      "Le meilleur exercice d'isolation relative pour les fessiers."
+    ],
+    "contraindications_fr": [
+      "Place toujours une mousse entre la barre et les hanches pour le confort."
+    ]
+  },
+  {
+    "id": "barbell-glute-bridge",
+    "name_fr": "Pont fessier à la barre",
+    "aliases_fr": ["Glute bridge"],
+    "movement_pattern_id": "hinge",
+    "instructions_fr": [
+      "Allongé au sol, genoux fléchis, pieds à plat, barre sur le pli des hanches (avec protection).",
+      "Pousse dans les talons pour soulever les hanches jusqu'à aligner le tronc.",
+      "Contracte les fessiers en haut.",
+      "Redescends les hanches de façon contrôlée sans poser complètement entre les répétitions."
+    ],
+    "common_mistakes_fr": [
+      "Cambrer le bas du dos au lieu de verrouiller les fessiers.",
+      "Pousser avec la pointe des pieds.",
+      "Amplitude partielle."
+    ],
+    "tips_fr": [
+      "Version au sol du hip thrust, plus accessible (amplitude moindre).",
+      "Idéal pour débuter le renforcement des fessiers."
+    ],
+    "contraindications_fr": [
+      "Aucune majeure ; protège les hanches sous la barre."
+    ]
+  },
+  {
+    "id": "standing-calf-raises",
+    "name_fr": "Extensions mollets debout",
+    "aliases_fr": ["Standing calf raise", "Mollets debout"],
+    "movement_pattern_id": null,
+    "instructions_fr": [
+      "Debout à la machine, épaules sous les cales, avant-pieds sur le repose-pied, talons dans le vide.",
+      "Jambes tendues (genoux non verrouillés), descends les talons le plus bas possible (étirement).",
+      "Monte sur la pointe des pieds le plus haut possible en contractant les mollets.",
+      "Redescends lentement en cherchant l'amplitude complète."
+    ],
+    "common_mistakes_fr": [
+      "Amplitude écourtée (le défaut n°1 sur les mollets).",
+      "Rebondir en bas avec l'élan.",
+      "Plier les genoux (ça déplace le travail vers le soléaire)."
+    ],
+    "tips_fr": [
+      "Jambes tendues = gastrocnémien (le \"jumeau\" visible).",
+      "Marque une pause en bas (étirement) et en haut (contraction)."
+    ],
+    "contraindications_fr": [
+      "Tendinite d'Achille : limite l'amplitude basse."
+    ]
+  },
+  {
+    "id": "seated-calf-raise",
+    "name_fr": "Extensions mollets assis",
+    "aliases_fr": ["Seated calf raise", "Mollets assis"],
+    "movement_pattern_id": null,
+    "instructions_fr": [
+      "Assis à la machine, cales sur le bas des cuisses (au-dessus des genoux), avant-pieds sur le repose-pied.",
+      "Descends les talons le plus bas possible (étirement).",
+      "Monte sur la pointe des pieds en contractant les mollets.",
+      "Redescends lentement, amplitude complète."
+    ],
+    "common_mistakes_fr": [
+      "Amplitude partielle.",
+      "Rythme trop rapide sans contrôle.",
+      "Charges excessives qui réduisent l'amplitude."
+    ],
+    "tips_fr": [
+      "Genou fléchi = cible le soléaire (sous le gastrocnémien), clé pour des mollets épais.",
+      "Complète idéalement le travail debout."
+    ],
+    "contraindications_fr": [
+      "Aucune majeure : exercice guidé et sûr."
+    ]
+  },
+  {
+    "id": "barbell-curl",
+    "name_fr": "Curl à la barre",
+    "aliases_fr": ["Barbell curl", "Curl biceps barre"],
+    "movement_pattern_id": null,
+    "instructions_fr": [
+      "Debout, barre tenue en supination (paumes vers le haut), largeur d'épaules, coudes le long du corps.",
+      "Fléchis les coudes pour monter la barre vers les épaules, coudes fixes.",
+      "Contracte les biceps en haut sans amener les coudes vers l'avant.",
+      "Redescends lentement jusqu'à l'extension des bras."
+    ],
+    "common_mistakes_fr": [
+      "Balancer le buste pour lancer la charge.",
+      "Avancer les coudes pour \"aider\" en haut.",
+      "Ne pas tendre les bras en bas."
+    ],
+    "tips_fr": [
+      "Garde les coudes \"vissés\" sur les côtés tout du long.",
+      "La barre EZ ménage les poignets si la barre droite gêne."
+    ],
+    "contraindications_fr": [
+      "Douleur de poignet : passe à la barre EZ ou aux haltères."
+    ]
+  },
+  {
+    "id": "dumbbell-bicep-curl",
+    "name_fr": "Curl aux haltères",
+    "aliases_fr": ["Dumbbell curl", "Curl haltères"],
+    "movement_pattern_id": null,
+    "instructions_fr": [
+      "Debout ou assis, un haltère dans chaque main bras tendus, paumes vers l'avant (ou neutres au départ).",
+      "Fléchis le coude pour monter l'haltère, en tournant la paume vers le haut (supination).",
+      "Contracte le biceps en haut, coude fixe.",
+      "Redescends lentement jusqu'à l'extension."
+    ],
+    "common_mistakes_fr": [
+      "Balancer le corps.",
+      "Monter les coudes vers l'avant.",
+      "Phase de descente bâclée."
+    ],
+    "tips_fr": [
+      "La supination (rotation du poignet) maximise la contraction du biceps.",
+      "En alterné, garde l'autre bras gainé et immobile."
+    ],
+    "contraindications_fr": [
+      "Aucune majeure : exercice d'isolation accessible."
+    ]
+  },
+  {
+    "id": "alternate-hammer-curl",
+    "name_fr": "Curl marteau alterné",
+    "aliases_fr": ["Hammer curl", "Curl marteau"],
+    "movement_pattern_id": null,
+    "instructions_fr": [
+      "Debout, un haltère dans chaque main, prise neutre (paumes face à face), bras tendus.",
+      "Fléchis un coude pour monter l'haltère sans tourner le poignet (prise marteau maintenue).",
+      "Contracte en haut, coude fixe le long du corps.",
+      "Redescends lentement et alterne avec l'autre bras."
+    ],
+    "common_mistakes_fr": [
+      "Tourner le poignet (ce n'est plus un curl marteau).",
+      "Donner de l'élan.",
+      "Avancer les coudes."
+    ],
+    "tips_fr": [
+      "Cible le brachial et le brachio-radial : épaissit le bras et renforce l'avant-bras.",
+      "Souvent plus confortable pour les poignets que le curl classique."
+    ],
+    "contraindications_fr": [
+      "Aucune majeure ; idéal si les poignets sont sensibles en supination."
+    ]
+  },
+  {
+    "id": "triceps-pushdown",
+    "name_fr": "Extension triceps à la poulie (pushdown)",
+    "aliases_fr": ["Triceps pushdown", "Poulie triceps"],
+    "movement_pattern_id": null,
+    "instructions_fr": [
+      "Face à la poulie haute, saisis la barre (ou la corde), coudes serrés le long du corps.",
+      "Buste légèrement penché, gaine-toi.",
+      "Tends les bras vers le bas en gardant les coudes fixes, jusqu'à extension complète.",
+      "Remonte lentement en contrôlant, sans écarter les coudes."
+    ],
+    "common_mistakes_fr": [
+      "Écarter les coudes du corps.",
+      "Utiliser l'élan du buste pour pousser.",
+      "Amplitude haute écourtée."
+    ],
+    "tips_fr": [
+      "Garde les coudes \"collés\" aux côtes : ce sont les triceps qui travaillent, pas le dos.",
+      "La corde permet d'écarter les mains en bas pour une contraction maximale."
+    ],
+    "contraindications_fr": [
+      "Tendinite du coude : réduis la charge et l'amplitude finale."
+    ]
+  },
+  {
+    "id": "dips-triceps-version",
+    "name_fr": "Dips (version triceps)",
+    "aliases_fr": ["Dips", "Répulsions aux barres parallèles"],
+    "movement_pattern_id": "vertical-push",
+    "instructions_fr": [
+      "Sur des barres parallèles, bras tendus, corps le plus vertical possible.",
+      "Descends en pliant les coudes vers l'arrière, le long du corps, buste droit.",
+      "Descends jusqu'à ce que les coudes atteignent environ 90°.",
+      "Pousse pour remonter jusqu'à l'extension des bras."
+    ],
+    "common_mistakes_fr": [
+      "Descendre trop bas et forcer sur l'épaule.",
+      "Pencher fortement le buste vers l'avant (transfère vers les pectoraux).",
+      "À-coups en bas."
+    ],
+    "tips_fr": [
+      "Buste vertical et coudes serrés pour cibler les triceps.",
+      "Trop dur : machine à dips assistée ou élastique ; trop facile : lest à la ceinture."
+    ],
+    "contraindications_fr": [
+      "Douleur antérieure d'épaule : limite la profondeur de descente.",
+      "Évite la descente complète si tu manques de mobilité d'épaule."
+    ]
+  },
+  {
+    "id": "plank",
+    "name_fr": "Gainage (planche)",
+    "aliases_fr": ["Plank", "Planche"],
+    "movement_pattern_id": "core-flexion",
+    "instructions_fr": [
+      "En appui sur les avant-bras (coudes sous les épaules) et les pointes de pieds.",
+      "Corps parfaitement aligné des talons à la tête, regard vers le sol.",
+      "Serre les abdos et les fessiers, rentre légèrement le bassin (rétroversion).",
+      "Maintiens la position en respirant calmement, sans creuser le dos."
+    ],
+    "common_mistakes_fr": [
+      "Creuser le bas du dos (bassin qui tombe).",
+      "Relever les fesses trop haut.",
+      "Bloquer sa respiration."
+    ],
+    "tips_fr": [
+      "Vise la qualité du gainage, pas la durée : 20-40 s parfaitement gainées valent mieux que 2 min affaissées.",
+      "Rends plus dur en rapprochant les coudes ou en surélevant les pieds."
+    ],
+    "contraindications_fr": [
+      "Douleur lombaire : assure-toi de bien rétroverser le bassin, ou passe au gainage sur les genoux."
+    ]
+  },
+  {
+    "id": "cable-crunch",
+    "name_fr": "Crunch à la poulie",
+    "aliases_fr": ["Cable crunch", "Crunch poulie haute"],
+    "movement_pattern_id": "core-flexion",
+    "instructions_fr": [
+      "À genoux face à la poulie haute, corde tenue de part et d'autre de la tête.",
+      "Hanches fixes, enroule le buste vers le bas en arrondissant le dos (flexion du tronc).",
+      "Cherche à rapprocher les côtes du bassin en contractant les abdos.",
+      "Reviens lentement à la position de départ sans relâcher la tension."
+    ],
+    "common_mistakes_fr": [
+      "Tirer avec les bras / le dos au lieu de fléchir le tronc.",
+      "Bouger les hanches (mouvement de \"révérence\" au lieu d'un crunch).",
+      "Amplitude partielle."
+    ],
+    "tips_fr": [
+      "Garde les mains fixes près de la tête : seul le tronc s'enroule.",
+      "Permet d'ajouter de la résistance progressive aux abdominaux."
+    ],
+    "contraindications_fr": [
+      "Gêne lombaire à la flexion répétée : privilégie le gainage."
+    ]
+  },
+  {
+    "id": "hanging-leg-raise",
+    "name_fr": "Relevé de jambes suspendu",
+    "aliases_fr": ["Hanging leg raise"],
+    "movement_pattern_id": "core-flexion",
+    "instructions_fr": [
+      "Suspendu à une barre fixe, bras tendus, corps gainé.",
+      "Sans balancer, relève les jambes (tendues ou genoux fléchis) vers l'horizontale ou plus haut.",
+      "Enroule légèrement le bassin en haut pour engager le bas des abdominaux.",
+      "Redescends lentement sans te balancer."
+    ],
+    "common_mistakes_fr": [
+      "Se balancer et utiliser l'élan.",
+      "Ne lever que les jambes sans enrouler le bassin (les fléchisseurs de hanche dominent).",
+      "Redescente non contrôlée."
+    ],
+    "tips_fr": [
+      "Genoux fléchis pour débuter, jambes tendues pour progresser.",
+      "Pense à \"enrouler\" le bassin vers le haut, pas seulement à monter les pieds."
+    ],
+    "contraindications_fr": [
+      "Grip ou épaules faibles : utilise des sangles ou un appui dorsal (chaise romaine)."
+    ]
+  },
+  {
+    "id": "russian-twist",
+    "name_fr": "Russian twist (rotation russe)",
+    "aliases_fr": ["Russian twist"],
+    "movement_pattern_id": "rotation",
+    "instructions_fr": [
+      "Assis au sol, genoux fléchis, buste incliné vers l'arrière (~45°), tronc gainé.",
+      "Mains jointes ou tenant un poids devant la poitrine, pieds au sol ou décollés.",
+      "Pivote le buste d'un côté puis de l'autre de façon contrôlée.",
+      "Garde le dos droit et le mouvement initié par les obliques."
+    ],
+    "common_mistakes_fr": [
+      "Arrondir le dos en se penchant en arrière.",
+      "Bouger seulement les bras sans tourner le tronc.",
+      "Aller trop vite au détriment du contrôle."
+    ],
+    "tips_fr": [
+      "Cible les obliques : contrôle la rotation, ne te précipite pas.",
+      "Décolle les pieds pour augmenter la difficulté."
+    ],
+    "contraindications_fr": [
+      "Lombalgie : la rotation chargée du tronc peut gêner, reste léger ou évite."
+    ]
+  }
+]

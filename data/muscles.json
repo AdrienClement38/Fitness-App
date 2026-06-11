@@ -1,0 +1,172 @@
+[
+  {
+    "id": "chest",
+    "name_fr": "Pectoraux",
+    "name_en": "Pectoralis",
+    "group_id": "chest",
+    "antagonist_id": "middle-back",
+    "function_fr": "Adduction et flexion horizontale du bras, rotation interne de l'épaule. Moteur principal des poussées horizontales (développé couché, pompes, dips).",
+    "anatomy_fr": "Grand pectoral en trois faisceaux : claviculaire/supérieur (ciblé en développé incliné), sterno-costal/moyen, et inférieur (ciblé en décliné et aux dips). Le petit pectoral se situe en profondeur.",
+    "aliases_fr": ["Pecs", "Grand pectoral", "Poitrine"]
+  },
+  {
+    "id": "lats",
+    "name_fr": "Grand dorsal",
+    "name_en": "Latissimus dorsi",
+    "group_id": "back",
+    "antagonist_id": "chest",
+    "function_fr": "Adduction, extension et rotation interne du bras : ramène le bras vers le tronc. Moteur des tractions, tirages verticaux et pull-over ; donne la largeur du dos (forme en V).",
+    "anatomy_fr": "Plus grand muscle du dos, du bas de la colonne et du bassin jusqu'à l'humérus. Travaillé surtout en tirage vertical pour la largeur ; les tirages horizontaux ciblent davantage le milieu du dos.",
+    "aliases_fr": ["Dorsaux", "Lats", "Grand dorsal"]
+  },
+  {
+    "id": "middle-back",
+    "name_fr": "Milieu du dos",
+    "name_en": "Middle back (rhomboids, mid-trapezius)",
+    "group_id": "back",
+    "antagonist_id": "chest",
+    "function_fr": "Rétraction des omoplates (rapprochement vers la colonne). Moteur des tirages horizontaux (rowing) et clé de la posture et de la santé des épaules.",
+    "anatomy_fr": "Rhomboïdes (grand et petit) et trapèze moyen, entre les omoplates. Ciblés par les rowings et les écartés inversés (deltoïde postérieur en synergie).",
+    "aliases_fr": ["Rhomboïdes", "Milieu du dos", "Trapèze moyen"]
+  },
+  {
+    "id": "lower-back",
+    "name_fr": "Bas du dos (lombaires)",
+    "name_en": "Lower back (erector spinae)",
+    "group_id": "back",
+    "antagonist_id": "abdominals",
+    "function_fr": "Extension et stabilisation de la colonne vertébrale. Maintient le dos droit sous charge : essentiel au soulevé de terre, good morning et à la posture.",
+    "anatomy_fr": "Érecteurs du rachis (ilio-costal, longissimus, épineux) le long de la colonne. Antagoniste des abdominaux, avec lesquels ils forment la sangle de gainage du tronc.",
+    "aliases_fr": ["Lombaires", "Érecteurs du rachis", "Spinaux"]
+  },
+  {
+    "id": "traps",
+    "name_fr": "Trapèzes",
+    "name_en": "Trapezius",
+    "group_id": "back",
+    "antagonist_id": null,
+    "function_fr": "Élévation (haussement), rétraction et rotation des omoplates ; soutien de la nuque et des épaules.",
+    "anatomy_fr": "Muscle triangulaire de la nuque au milieu du dos, en trois faisceaux : supérieur (shrugs), moyen et inférieur (rétraction et abaissement de l'omoplate).",
+    "aliases_fr": ["Traps", "Trapèze supérieur"]
+  },
+  {
+    "id": "shoulders",
+    "name_fr": "Épaules (deltoïdes)",
+    "name_en": "Deltoids",
+    "group_id": "shoulders",
+    "antagonist_id": "lats",
+    "function_fr": "Abduction et élévation du bras dans toutes les directions. Faisceau antérieur (poussée), latéral (élévations latérales, largeur), postérieur (écartés inversés).",
+    "anatomy_fr": "Deltoïde en trois faisceaux : antérieur (développés), latéral/moyen (élévations latérales — la largeur d'épaules), postérieur (oiseau). La coiffe des rotateurs (sus- et sous-épineux, petit rond, sous-scapulaire) stabilise en profondeur.",
+    "aliases_fr": ["Deltoïdes", "Delts", "Épaules"]
+  },
+  {
+    "id": "biceps",
+    "name_fr": "Biceps",
+    "name_en": "Biceps brachii",
+    "group_id": "arms",
+    "antagonist_id": "triceps",
+    "function_fr": "Flexion du coude et supination de l'avant-bras (paume vers le haut) ; participe à la flexion de l'épaule. Moteur des curls et acteur de tous les tirages.",
+    "anatomy_fr": "Biceps brachial à deux chefs (longue portion externe, courte portion interne), plus le brachial en profondeur et le brachio-radial. Prise supination = biceps ; prise marteau = brachial/brachio-radial.",
+    "aliases_fr": ["Biceps brachial"]
+  },
+  {
+    "id": "triceps",
+    "name_fr": "Triceps",
+    "name_en": "Triceps brachii",
+    "group_id": "arms",
+    "antagonist_id": "biceps",
+    "function_fr": "Extension du coude (moteur de toutes les poussées) ; la longue portion participe à l'extension de l'épaule. Environ deux tiers du volume du bras.",
+    "anatomy_fr": "Trois chefs : longue portion (interne, sollicitée bras au-dessus de la tête — extensions overhead), latérale (externe) et médiale. Travaillé en développés, dips et extensions.",
+    "aliases_fr": ["Triceps brachial"]
+  },
+  {
+    "id": "forearms",
+    "name_fr": "Avant-bras",
+    "name_en": "Forearms",
+    "group_id": "arms",
+    "antagonist_id": null,
+    "function_fr": "Flexion/extension du poignet et des doigts, prono-supination, et surtout force de préhension (grip). Sollicités dans tous les tirages, soulevés et portés.",
+    "anatomy_fr": "Fléchisseurs (face interne) et extenseurs (face externe) du poignet et des doigts, plus le brachio-radial. Renforcés par les curls de poignet, les portés (farmer's walk) et le travail de grip.",
+    "aliases_fr": ["Avant-bras", "Grip"]
+  },
+  {
+    "id": "abdominals",
+    "name_fr": "Abdominaux",
+    "name_en": "Abdominals",
+    "group_id": "core",
+    "antagonist_id": "lower-back",
+    "function_fr": "Flexion du tronc, antéversion du bassin, rotation/inclinaison et surtout stabilisation (anti-extension, anti-rotation). Protègent la colonne sous charge.",
+    "anatomy_fr": "Grand droit (les « tablettes »), obliques externes et internes (rotation/inclinaison) et transverse en profondeur (gainage, sangle abdominale). Transverse et obliques se travaillent surtout en gainage et anti-rotation.",
+    "aliases_fr": ["Abdos", "Sangle abdominale", "Core", "Grand droit"]
+  },
+  {
+    "id": "quadriceps",
+    "name_fr": "Quadriceps",
+    "name_en": "Quadriceps femoris",
+    "group_id": "legs",
+    "antagonist_id": "hamstrings",
+    "function_fr": "Extension du genou (moteur des squats, presses, fentes) ; le droit fémoral participe à la flexion de hanche. Plus gros groupe de la cuisse (face avant).",
+    "anatomy_fr": "Quatre chefs : droit fémoral (central, bi-articulaire), vaste latéral (externe), vaste médial (interne, la « goutte » au-dessus du genou) et vaste intermédiaire. Squat, presse, leg extension, fentes.",
+    "aliases_fr": ["Quadriceps", "Quadris", "Cuisses avant"]
+  },
+  {
+    "id": "hamstrings",
+    "name_fr": "Ischio-jambiers",
+    "name_en": "Hamstrings",
+    "group_id": "legs",
+    "antagonist_id": "quadriceps",
+    "function_fr": "Flexion du genou et extension de la hanche. Moteurs du soulevé de terre jambes tendues, leg curl et hip thrust ; clés en sprint et en prévention des blessures.",
+    "anatomy_fr": "Trois muscles à l'arrière de la cuisse : biceps fémoral (externe), semi-tendineux et semi-membraneux (internes). Bi-articulaires : travaillés en flexion de genou (leg curl) ET extension de hanche (soulevé roumain).",
+    "aliases_fr": ["Ischios", "Ischio-jambiers", "Cuisses arrière"]
+  },
+  {
+    "id": "glutes",
+    "name_fr": "Fessiers",
+    "name_en": "Gluteals",
+    "group_id": "legs",
+    "antagonist_id": null,
+    "function_fr": "Extension, abduction et rotation externe de la hanche. Moteur le plus puissant de l'extension de hanche : squat, soulevé de terre, hip thrust, montées.",
+    "anatomy_fr": "Grand fessier (le plus volumineux, extension de hanche), moyen et petit fessier (abduction et stabilisation latérale du bassin). Le moyen fessier est clé pour la stabilité du genou et du bassin.",
+    "aliases_fr": ["Fessiers", "Glutes", "Grand fessier"]
+  },
+  {
+    "id": "calves",
+    "name_fr": "Mollets",
+    "name_en": "Calves",
+    "group_id": "legs",
+    "antagonist_id": null,
+    "function_fr": "Flexion plantaire de la cheville (se mettre sur la pointe des pieds). Propulsion à la marche, la course et le saut.",
+    "anatomy_fr": "Triceps sural : gastrocnémien (les deux « jumeaux » superficiels, ciblés jambe tendue — mollet debout) et soléaire (profond, ciblé genou fléchi — mollet assis). Le tibial antérieur est l'antagoniste.",
+    "aliases_fr": ["Mollets", "Jumeaux", "Triceps sural"]
+  },
+  {
+    "id": "adductors",
+    "name_fr": "Adducteurs",
+    "name_en": "Hip adductors",
+    "group_id": "legs",
+    "antagonist_id": "abductors",
+    "function_fr": "Adduction de la hanche (rapprocher la cuisse de l'axe du corps) et stabilisation. Sollicités en squat large (sumo), fentes et machine à adducteurs.",
+    "anatomy_fr": "Face interne de la cuisse : grand, long et court adducteurs, pectiné et gracile. Travaillés par la machine adducteurs, le squat sumo et les fentes latérales.",
+    "aliases_fr": ["Adducteurs", "Intérieur des cuisses"]
+  },
+  {
+    "id": "abductors",
+    "name_fr": "Abducteurs",
+    "name_en": "Hip abductors",
+    "group_id": "legs",
+    "antagonist_id": "adductors",
+    "function_fr": "Abduction de la hanche (écarter la cuisse) et stabilisation latérale du bassin lors de la marche et des appuis sur une jambe.",
+    "anatomy_fr": "Surtout le moyen et le petit fessier et le tenseur du fascia lata, sur la face externe de la hanche. Travaillés par la machine abducteurs, les bandes élastiques et les mouvements unilatéraux.",
+    "aliases_fr": ["Abducteurs", "Extérieur des hanches"]
+  },
+  {
+    "id": "neck",
+    "name_fr": "Cou",
+    "name_en": "Neck",
+    "group_id": "neck",
+    "antagonist_id": null,
+    "function_fr": "Flexion, extension, inclinaison et rotation de la tête. Renforcé pour la posture et, en sports de contact, la prévention des commotions.",
+    "anatomy_fr": "Sterno-cléido-mastoïdien (flexion/rotation, sur les côtés), splénius et extenseurs cervicaux à l'arrière. Travaillé par des flexions/extensions contrôlées, souvent avec harnais.",
+    "aliases_fr": ["Nuque", "Cou", "Cervicales"]
+  }
+]

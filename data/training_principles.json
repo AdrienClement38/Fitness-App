@@ -1,0 +1,179 @@
+[
+  {
+    "id": "progressive-overload",
+    "title_fr": "Surcharge progressive",
+    "category": "progression",
+    "summary_fr": "Pour progresser, il faut augmenter régulièrement la contrainte imposée au muscle : charge, répétitions, séries, amplitude ou densité.",
+    "detail_fr": "Le corps s'adapte précisément à ce qu'on lui impose ; sans augmentation progressive de la demande, les gains stagnent. La charge n'est qu'un levier parmi d'autres : ajouter des répétitions, des séries, ralentir la phase excentrique, améliorer l'amplitude ou réduire les temps de repos surchargent aussi le muscle.",
+    "evidence": "strong",
+    "practical_fr": [
+      "Cherche à battre une performance précédente régulièrement (1 répétition ou 1 kg de plus).",
+      "Note tes séances : sans suivi, pas de surcharge maîtrisée.",
+      "Quand tu atteins le haut d'une fourchette de répétitions en technique propre, augmente la charge.",
+      "La progression ralentit avec l'expérience : elle se compte en mois, pas en séances, chez le confirmé."
+    ],
+    "sources": ["acsm-2009-progression", "nsca-essentials"]
+  },
+  {
+    "id": "training-volume",
+    "title_fr": "Volume d'entraînement",
+    "category": "volume",
+    "summary_fr": "Le volume — nombre de séries dures par muscle et par semaine — est le principal moteur de l'hypertrophie, selon une relation dose-réponse.",
+    "detail_fr": "La méta-analyse de Schoenfeld et al. (2017) montre que 10 séries et plus par muscle et par semaine produisent davantage d'hypertrophie que moins de 5, avec des gains croissants jusqu'à un seuil de rendement décroissant propre à chacun. La majorité des pratiquants progressent bien entre 10 et 20 séries par muscle et par semaine.",
+    "evidence": "strong",
+    "practical_fr": [
+      "Débutant : 8 à 12 séries par muscle et par semaine suffisent.",
+      "Intermédiaire : vise 12 à 20 séries par muscle et par semaine.",
+      "Augmente le volume progressivement sur un cycle, ne démarre pas au maximum.",
+      "Trop de volume sans récupération nuit autant que pas assez."
+    ],
+    "sources": ["schoenfeld-2017-volume", "rp-volume-landmarks"]
+  },
+  {
+    "id": "training-frequency",
+    "title_fr": "Fréquence",
+    "category": "frequency",
+    "summary_fr": "À volume égal, répartir le travail d'un muscle sur 2 séances par semaine ou plus est au moins aussi efficace et améliore la qualité d'exécution.",
+    "detail_fr": "Schoenfeld, Ogborn & Krieger (2016) : entraîner un muscle 2 fois par semaine tend à surpasser 1 fois quand le volume hebdomadaire est égalisé. L'intérêt principal est de fractionner un volume élevé en séances plus fraîches et plus qualitatives.",
+    "evidence": "moderate",
+    "practical_fr": [
+      "Entraîne chaque muscle au moins 2 fois par semaine si possible.",
+      "Plus le volume par muscle est élevé, plus il gagne à être fractionné.",
+      "La fréquence est un outil pour caser le volume, pas une fin en soi."
+    ],
+    "sources": ["schoenfeld-2016-frequency"]
+  },
+  {
+    "id": "training-intensity-load",
+    "title_fr": "Intensité de charge (continuum de répétitions)",
+    "category": "intensity",
+    "summary_fr": "L'hypertrophie est possible sur un large spectre de charges (environ 6 à 30+ répétitions) si les séries sont menées près de l'échec ; la force maximale exige des charges lourdes (≥ 80 % du 1RM).",
+    "detail_fr": "Schoenfeld et al. (2021) remettent en cause le continuum strict : à effort égal, charges modérées et légères produisent une hypertrophie comparable. En revanche, la force est spécifique à la charge — s'entraîner lourd reste indispensable. L'ACSM (2009) recommande des charges élevées et des mouvements polyarticulaires pour la force.",
+    "evidence": "strong",
+    "practical_fr": [
+      "Hypertrophie : 6 à 12 répétitions est pratique, mais 12 à 20+ fonctionne aussi si tu pousses près de l'échec.",
+      "Force : travaille majoritairement à 1 à 6 répétitions (≥ 80 % du 1RM).",
+      "Garde une majorité de polyarticulaires lourds, complète en isolation.",
+      "Le tonnage seul ne fait pas tout : c'est l'effort par série qui compte."
+    ],
+    "sources": ["schoenfeld-2021-loading", "acsm-2009-progression"]
+  },
+  {
+    "id": "proximity-to-failure",
+    "title_fr": "Proximité de l'échec (RIR / RPE)",
+    "category": "intensity",
+    "summary_fr": "L'hypertrophie demande des séries proches de l'échec (environ 0 à 3 répétitions en réserve) ; aller systématiquement à l'échec total fatigue sans bénéfice net.",
+    "detail_fr": "L'échelle RIR/RPE (Helms et al. 2016) quantifie l'effort : RPE 10 = échec (0 répétition en réserve), RPE 8 = 2 répétitions en réserve. Travailler à 1 à 3 RIR sur la plupart des séries offre le meilleur compromis stimulus/fatigue ; l'échec total est utile ponctuellement, surtout en isolation.",
+    "evidence": "moderate",
+    "practical_fr": [
+      "Vise 1 à 3 répétitions en réserve sur tes séries de travail.",
+      "Réserve l'échec total aux exercices d'isolation ou aux dernières séries.",
+      "Sur les gros polyarticulaires lourds, garde 1 à 2 répétitions en réserve pour la sécurité technique.",
+      "Plus tu t'entraînes près de l'échec, plus tu dois soigner la récupération."
+    ],
+    "sources": ["helms-2016-rir", "schoenfeld-2021-loading"]
+  },
+  {
+    "id": "rest-intervals",
+    "title_fr": "Temps de repos",
+    "category": "recovery",
+    "summary_fr": "Des repos de 2 à 3 minutes sur les exercices lourds et polyarticulaires préservent la performance ; 60 à 90 secondes suffisent souvent en isolation.",
+    "detail_fr": "Grgic et al. (2017/2018) : pour l'hypertrophie, 60 secondes à 3 minutes sont tous viables ; pour la force, des repos plus longs (≥ 2 à 3 minutes) sont préférables car ils maintiennent le tonnage. Des repos trop courts sur un gros mouvement font chuter les charges et le volume effectif.",
+    "evidence": "moderate",
+    "practical_fr": [
+      "Polyarticulaires lourds (squat, développé, soulevé) : 2 à 3 minutes, voire plus en force.",
+      "Exercices d'isolation : 60 à 90 secondes.",
+      "Ne sacrifie pas la charge pour raccourcir le repos.",
+      "Superséries antagonistes (biceps/triceps) pour gagner du temps sans perdre en performance."
+    ],
+    "sources": ["grgic-2018-rest-strength"]
+  },
+  {
+    "id": "technique-rom",
+    "title_fr": "Technique et amplitude",
+    "category": "technique",
+    "summary_fr": "Une exécution contrôlée sur une amplitude complète prime sur la charge : c'est elle qui cible le muscle et protège les articulations.",
+    "detail_fr": "Travailler en amplitude complète, en contrôlant la phase excentrique (négative), maximise le stimulus et limite les blessures. La charge ne doit jamais dégrader la trajectoire. La connexion muscle-esprit (se concentrer sur le muscle travaillé) aide surtout en isolation.",
+    "evidence": "consensus",
+    "practical_fr": [
+      "Maîtrise le mouvement à vide ou léger avant de charger.",
+      "Contrôle la descente (2 à 3 secondes), reste explosif à la montée.",
+      "Cherche l'amplitude complète, sauf contre-indication articulaire.",
+      "Si tu dois tricher pour finir une répétition, la série est terminée."
+    ],
+    "sources": ["nsca-essentials", "acsm-2009-progression"]
+  },
+  {
+    "id": "periodization",
+    "title_fr": "Périodisation et progression planifiée",
+    "category": "periodization",
+    "summary_fr": "Faire varier volume et intensité dans le temps, avec des phases de décharge, entretient la progression et évite stagnation et surmenage.",
+    "detail_fr": "Plutôt que de tout pousser au maximum en permanence, on planifie des blocs (par exemple accumulation de volume puis intensification), avec des semaines de décharge (deload) pour dissiper la fatigue. L'autorégulation par le RIR/RPE ajuste la charge à la forme du jour.",
+    "evidence": "moderate",
+    "practical_fr": [
+      "Monte le volume sur 4 à 6 semaines, puis place une semaine de décharge (environ la moitié du volume).",
+      "Alterne des phases plus lourdes (force) et plus volumineuses (hypertrophie).",
+      "Écoute les signaux : performances en baisse, sommeil dégradé, motivation en berne signalent une fatigue accumulée.",
+      "Change quelques exercices toutes les 6 à 12 semaines pour varier le stimulus."
+    ],
+    "sources": ["acsm-2009-progression", "helms-2016-rir", "rp-volume-landmarks"]
+  },
+  {
+    "id": "recovery-sleep-nutrition",
+    "title_fr": "Récupération, sommeil et nutrition",
+    "category": "recovery",
+    "summary_fr": "Le muscle se construit pendant la récupération : sommeil suffisant, apport en protéines et délai de 24 à 72 h avant de re-solliciter un muscle.",
+    "detail_fr": "L'entraînement crée le stimulus ; l'adaptation se fait au repos. Un sommeil de 7 à 9 heures, un apport protéique d'environ 1,6 à 2,2 g/kg/jour et une bonne gestion du stress conditionnent les gains autant que la séance elle-même.",
+    "evidence": "consensus",
+    "practical_fr": [
+      "Dors 7 à 9 heures : c'est le premier complément.",
+      "Vise environ 1,6 à 2,2 g de protéines par kg de poids de corps et par jour.",
+      "Laisse environ 48 h à un muscle avant de le retravailler lourd.",
+      "Une légère courbature est normale ; une douleur articulaire ou persistante ne l'est pas."
+    ],
+    "sources": ["nsca-essentials"]
+  },
+  {
+    "id": "warm-up",
+    "title_fr": "Échauffement",
+    "category": "technique",
+    "summary_fr": "Un échauffement général puis spécifique (séries montantes) prépare les articulations et améliore la performance des premières séries de travail.",
+    "detail_fr": "Quelques minutes d'activation cardiovasculaire, de la mobilité ciblée, puis des séries d'approche de plus en plus lourdes sur le premier exercice préparent le système nerveux et réduisent le risque de blessure, sans générer de fatigue.",
+    "evidence": "consensus",
+    "practical_fr": [
+      "5 à 10 minutes de cardio léger et de mobilité des zones travaillées.",
+      "Sur le premier gros exercice : 2 à 4 séries montantes vers la charge de travail.",
+      "Inutile d'échauffer lourdement chaque exercice d'isolation.",
+      "L'échauffement prépare, il ne doit pas épuiser."
+    ],
+    "sources": ["nsca-essentials", "acsm-2009-progression"]
+  },
+  {
+    "id": "specificity-said",
+    "title_fr": "Spécificité (principe SAID)",
+    "category": "progression",
+    "summary_fr": "Les adaptations sont spécifiques à la contrainte imposée : on progresse surtout sur ce qu'on entraîne précisément (mouvement, charge, vitesse).",
+    "detail_fr": "SAID signifie Specific Adaptation to Imposed Demands. Pour gagner en force sur un mouvement, il faut le pratiquer ; pour développer un muscle, il faut le cibler directement. Le transfert entre exercices existe mais reste partiel.",
+    "evidence": "consensus",
+    "practical_fr": [
+      "Définis ton objectif (force, volume, endurance) et choisis charges et répétitions en conséquence.",
+      "Pour progresser sur un exercice précis, pratique-le régulièrement.",
+      "Ne néglige pas un muscle en comptant uniquement sur le travail indirect."
+    ],
+    "sources": ["nsca-essentials", "acsm-2009-progression"]
+  },
+  {
+    "id": "individual-variation",
+    "title_fr": "Variabilité individuelle",
+    "category": "progression",
+    "summary_fr": "À programme égal, les réponses varient (génétique, récupération, mode de vie) : il faut individualiser et ajuster selon les résultats.",
+    "detail_fr": "Les fourchettes recommandées sont des points de départ, pas des lois. Le meilleur programme est celui qu'on suit, qu'on tolère et qui produit des résultats mesurables dans la durée. Le suivi (charges, mensurations, photos) guide les ajustements.",
+    "evidence": "consensus",
+    "practical_fr": [
+      "Teste un réglage pendant 4 à 8 semaines avant de juger.",
+      "Ajuste le volume selon ta récupération réelle, pas selon celle du voisin.",
+      "Garde ce qui marche pour toi, change ce qui stagne."
+    ],
+    "sources": ["rp-volume-landmarks", "nsca-essentials"]
+  }
+]

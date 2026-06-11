@@ -1,0 +1,52 @@
+[
+  {
+    "id": "squat",
+    "name_fr": "Squat (flexion des genoux)",
+    "description_fr": "Flexion simultanée des hanches et des genoux, tronc relativement vertical. Dominante quadriceps. Ex : squat, presse à cuisses, fente avant."
+  },
+  {
+    "id": "hinge",
+    "name_fr": "Charnière de hanche",
+    "description_fr": "Flexion-extension de hanche, genoux peu fléchis, dos neutre. Dominante chaîne postérieure (ischios, fessiers, lombaires). Ex : soulevé de terre, soulevé roumain, hip thrust, good morning."
+  },
+  {
+    "id": "lunge",
+    "name_fr": "Fente (unilatéral jambes)",
+    "description_fr": "Travail sur une jambe ou en position décalée. Force, équilibre et correction des asymétries. Ex : fentes, montées sur banc, split squat bulgare."
+  },
+  {
+    "id": "horizontal-push",
+    "name_fr": "Poussée horizontale",
+    "description_fr": "Pousser une charge devant soi. Pectoraux, deltoïde antérieur, triceps. Ex : développé couché, pompes, dips, développé à la machine."
+  },
+  {
+    "id": "vertical-push",
+    "name_fr": "Poussée verticale",
+    "description_fr": "Pousser une charge au-dessus de la tête. Deltoïdes, triceps, trapèzes. Ex : développé militaire, développé haltères, élévation au-dessus de la tête."
+  },
+  {
+    "id": "horizontal-pull",
+    "name_fr": "Tirage horizontal",
+    "description_fr": "Tirer une charge vers le tronc à l'horizontale. Milieu du dos, grand dorsal, biceps. Ex : rowing barre/haltère, tirage horizontal poulie, face pull."
+  },
+  {
+    "id": "vertical-pull",
+    "name_fr": "Tirage vertical",
+    "description_fr": "Tirer une charge du haut vers le bas. Grand dorsal, biceps, milieu du dos. Ex : tractions, tirage poulie haute (lat pulldown)."
+  },
+  {
+    "id": "carry",
+    "name_fr": "Porté / déplacement chargé",
+    "description_fr": "Se déplacer en tenant une charge. Gainage global, grip, trapèzes, jambes. Ex : farmer's walk, marche du fermier, suitcase carry."
+  },
+  {
+    "id": "rotation",
+    "name_fr": "Rotation / anti-rotation",
+    "description_fr": "Produire ou résister à une rotation du tronc. Obliques et stabilisateurs. Ex : wood chop à la poulie, Pallof press, russian twist."
+  },
+  {
+    "id": "core-flexion",
+    "name_fr": "Flexion / gainage du tronc",
+    "description_fr": "Fléchir le tronc ou résister à son extension. Grand droit et transverse. Ex : crunch, relevé de jambes, planche (gainage anti-extension)."
+  }
+]

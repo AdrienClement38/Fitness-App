@@ -1,0 +1,92 @@
+[
+  {
+    "id": "free-exercise-db",
+    "title": "free-exercise-db — base d'exercices open source",
+    "authors": "yuhonas et contributeurs ; données originales de Ollie Jennings (exercises.json)",
+    "year": null,
+    "type": "dataset",
+    "url": "https://github.com/yuhonas/free-exercise-db",
+    "license": "The Unlicense (domaine public)",
+    "notes_fr": "Ossature des 873 exercices (nom, force, niveau, mécanique, équipement, muscles, instructions EN, images). Restructuré à partir du jeu de données exercises.json."
+  },
+  {
+    "id": "schoenfeld-2017-volume",
+    "title": "Dose-response relationship between weekly resistance training volume and increases in muscle mass: A systematic review and meta-analysis",
+    "authors": "Schoenfeld BJ, Ogborn D, Krieger JW",
+    "year": 2017,
+    "type": "scientific",
+    "url": "https://www.researchgate.net/publication/305455324",
+    "license": null,
+    "notes_fr": "Journal of Sports Sciences. Relation dose-réponse volume → hypertrophie : 10+ séries/muscle/semaine > 5–9 > <5."
+  },
+  {
+    "id": "schoenfeld-2016-frequency",
+    "title": "Effects of Resistance Training Frequency on Measures of Muscle Hypertrophy: A Systematic Review and Meta-Analysis",
+    "authors": "Schoenfeld BJ, Ogborn D, Krieger JW",
+    "year": 2016,
+    "type": "scientific",
+    "url": "https://link.springer.com/article/10.1007/s40279-016-0543-8",
+    "license": null,
+    "notes_fr": "Sports Medicine 46:1689-1697. À volume égal, 2 séances/muscle/semaine ≥ 1 séance."
+  },
+  {
+    "id": "schoenfeld-2021-loading",
+    "title": "Loading Recommendations for Muscle Strength, Hypertrophy, and Local Endurance: A Re-Examination of the Repetition Continuum",
+    "authors": "Schoenfeld BJ, Grgic J, Van Every DW, Plotkin DL",
+    "year": 2021,
+    "type": "scientific",
+    "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7927075/",
+    "license": null,
+    "notes_fr": "Sports 9(2):32. L'hypertrophie survient sur un large spectre de charges si l'effort est proche de l'échec ; la force reste spécifique aux charges lourdes."
+  },
+  {
+    "id": "grgic-2018-rest-strength",
+    "title": "Effects of Rest Interval Duration in Resistance Training on Measures of Muscular Strength: A Systematic Review",
+    "authors": "Grgic J, Schoenfeld BJ, Skrepnik M, Davies TB, Mikulic P",
+    "year": 2018,
+    "type": "scientific",
+    "url": "https://www.semanticscholar.org/paper/953a5adf43cc59b5793958ea6a1c26d0031d1587",
+    "license": null,
+    "notes_fr": "Sports Medicine. Repos longs (≥2–3 min) préférables pour la force ; 60 s–3 min viables pour l'hypertrophie (Grgic et al. 2017)."
+  },
+  {
+    "id": "helms-2016-rir",
+    "title": "Application of the Repetitions in Reserve-Based Rating of Perceived Exertion Scale for Resistance Training",
+    "authors": "Helms ER, Cronin J, Storey A, Zourdos MC",
+    "year": 2016,
+    "type": "scientific",
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4961270/",
+    "license": null,
+    "notes_fr": "Strength and Conditioning Journal. Échelle RIR/RPE pour autoréguler l'effort : RPE 10 = échec (0 rep en réserve), RPE 8 = 2 reps en réserve."
+  },
+  {
+    "id": "acsm-2009-progression",
+    "title": "American College of Sports Medicine Position Stand: Progression Models in Resistance Training for Healthy Adults",
+    "authors": "American College of Sports Medicine (ACSM)",
+    "year": 2009,
+    "type": "guideline",
+    "url": "https://doi.org/10.1249/MSS.0b013e3181915670",
+    "license": null,
+    "notes_fr": "Medicine & Science in Sports & Exercise 41(3):687-708. Recommandations officielles : surcharge progressive, ordre des exercices, charges selon l'objectif."
+  },
+  {
+    "id": "rp-volume-landmarks",
+    "title": "Training Volume Landmarks for Muscle Growth (MV / MEV / MAV / MRV)",
+    "authors": "Renaissance Periodization — Israetel M et al.",
+    "year": null,
+    "type": "coach",
+    "url": "https://rpstrength.com/blogs/articles/training-volume-landmarks-muscle-growth",
+    "license": null,
+    "notes_fr": "Modèle de repères de volume hebdomadaire par muscle (consensus de coachs, valeurs indicatives à individualiser)."
+  },
+  {
+    "id": "nsca-essentials",
+    "title": "Essentials of Strength Training and Conditioning (4e édition)",
+    "authors": "Haff GG, Triplett NT (éd.) — National Strength and Conditioning Association (NSCA)",
+    "year": 2016,
+    "type": "book",
+    "url": "https://www.nsca.com/",
+    "license": null,
+    "notes_fr": "Ouvrage de référence de la NSCA : technique, programmation, physiologie de l'entraînement."
+  }
+]

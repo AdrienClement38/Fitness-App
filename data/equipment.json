@@ -1,0 +1,74 @@
+[
+  {
+    "id": "barbell",
+    "name_fr": "Barre",
+    "category": "free-weight",
+    "description_fr": "Barre olympique ou droite chargée de disques. Permet les plus grosses charges et la surcharge progressive fine."
+  },
+  {
+    "id": "dumbbell",
+    "name_fr": "Haltères",
+    "category": "free-weight",
+    "description_fr": "Poids libres tenus à une main. Travail unilatéral, grande amplitude et correction des déséquilibres."
+  },
+  {
+    "id": "kettlebell",
+    "name_fr": "Kettlebell",
+    "category": "free-weight",
+    "description_fr": "Poids en forme de boulet à poignée. Idéal pour les mouvements balistiques (swing) et le travail de gainage."
+  },
+  {
+    "id": "ez-bar",
+    "name_fr": "Barre EZ",
+    "category": "free-weight",
+    "description_fr": "Barre coudée qui ménage les poignets et les coudes sur les curls et les extensions triceps."
+  },
+  {
+    "id": "machine",
+    "name_fr": "Machine guidée",
+    "category": "machine",
+    "description_fr": "Mouvement guidé sur trajectoire fixe. Sécurisant, isole bien le muscle, idéal pour débuter ou finir une séance."
+  },
+  {
+    "id": "cable",
+    "name_fr": "Poulie / câble",
+    "category": "machine",
+    "description_fr": "Résistance constante via un câble. Tension continue sur toute l'amplitude et angles de travail variés."
+  },
+  {
+    "id": "bodyweight",
+    "name_fr": "Poids du corps",
+    "category": "bodyweight",
+    "description_fr": "Aucun matériel : on utilise son propre poids (pompes, tractions, squats, gainage). Accessible partout."
+  },
+  {
+    "id": "resistance-band",
+    "name_fr": "Élastique de résistance",
+    "category": "accessory",
+    "description_fr": "Bande élastique à résistance croissante. Échauffement, assistance aux tractions, travail à domicile."
+  },
+  {
+    "id": "medicine-ball",
+    "name_fr": "Médecine ball",
+    "category": "accessory",
+    "description_fr": "Ballon lesté pour les lancers, rotations et exercices de puissance (power)."
+  },
+  {
+    "id": "stability-ball",
+    "name_fr": "Swiss ball",
+    "category": "accessory",
+    "description_fr": "Gros ballon gonflable instable. Travail de gainage, de proprioception et d'abdominaux."
+  },
+  {
+    "id": "foam-roller",
+    "name_fr": "Rouleau de massage",
+    "category": "accessory",
+    "description_fr": "Rouleau pour l'auto-massage (foam rolling), la mobilité et la récupération."
+  },
+  {
+    "id": "other",
+    "name_fr": "Autre / divers",
+    "category": "accessory",
+    "description_fr": "Petit matériel divers non catégorisé (sangles TRX, roue abdominale, harnais, etc.)."
+  }
+]
