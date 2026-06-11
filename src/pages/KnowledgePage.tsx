@@ -1,14 +1,15 @@
 import {useState} from 'react';
-import {api, label, type Principle, type RepScheme, type Split, type VolumeLandmark} from '../lib/api';
+import {api, label, type Principle, type RepScheme, type Source, type Split, type VolumeLandmark} from '../lib/api';
 import {useFetch} from '../lib/useFetch';
 import {Badge, ErrorState, Loading} from '../components/ui';
 
-type Tab = 'principles' | 'reps' | 'volumes' | 'splits';
+type Tab = 'principles' | 'reps' | 'volumes' | 'splits' | 'sources';
 const TABS: {id: Tab; label: string}[] = [
   {id: 'principles', label: 'Principes'},
   {id: 'reps', label: 'Reps'},
   {id: 'volumes', label: 'Volumes'},
   {id: 'splits', label: 'Splits'},
+  {id: 'sources', label: 'Sources'},
 ];
 
 const evidenceTone = (e: string | null) =>
@@ -140,14 +141,53 @@ function Splits({items}: {items: Split[]}) {
   );
 }
 
+const sourceTone = (t: string) =>
+  t === 'scientific' ? 'emerald' : t === 'guideline' || t === 'book' ? 'indigo' : t === 'coach' ? 'amber' : 'slate';
+
+function Sources({items}: {items: Source[]}) {
+  return (
+    <div className="grid gap-3">
+      <p className="text-sm leading-relaxed text-slate-400">
+        Chaque donnée chiffrée de l'app est rattachée à l'une de ces sources : méta-analyses,
+        recommandations officielles, ouvrages de référence, coachs, et le jeu de données des exercices.
+      </p>
+      {items.map((s) => (
+        <div key={s.id} className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+          <div className="flex items-start justify-between gap-2">
+            <h3 className="font-semibold leading-snug">{s.title}</h3>
+            <Badge tone={sourceTone(s.type)}>{label('sourceType', s.type)}</Badge>
+          </div>
+          {(s.authors || s.year) && (
+            <p className="mt-1 text-sm text-slate-300">
+              {s.authors}
+              {s.authors && s.year ? ' · ' : ''}
+              {s.year ?? ''}
+            </p>
+          )}
+          {s.notesFr && <p className="mt-1 text-sm leading-relaxed text-slate-400">{s.notesFr}</p>}
+          <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
+            {s.license && <span className="text-slate-500">Licence : {s.license}</span>}
+            {s.url && (
+              <a href={s.url} target="_blank" rel="noreferrer" className="text-emerald-400 hover:underline">
+                Voir la source ↗
+              </a>
+            )}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function KnowledgePage() {
   const [tab, setTab] = useState<Tab>('principles');
   const principles = useFetch(() => api.principles(), []);
   const reps = useFetch(() => api.repSchemes(), []);
   const volumes = useFetch(() => api.volumeLandmarks(), []);
   const splits = useFetch(() => api.splits(), []);
+  const sources = useFetch(() => api.sources(), []);
 
-  const current = {principles, reps, volumes, splits}[tab];
+  const current = {principles, reps, volumes, splits, sources}[tab];
 
   return (
     <div>
@@ -174,6 +214,7 @@ export default function KnowledgePage() {
         {tab === 'reps' && reps.data && <RepSchemes items={reps.data} />}
         {tab === 'volumes' && volumes.data && <Volumes items={volumes.data} />}
         {tab === 'splits' && splits.data && <Splits items={splits.data} />}
+        {tab === 'sources' && sources.data && <Sources items={sources.data} />}
       </div>
     </div>
   );

@@ -112,6 +112,18 @@ export interface SourceRef {
   url: string | null;
 }
 
+/** Source complète (onglet Savoir > Sources). */
+export interface Source {
+  id: string;
+  title: string;
+  authors: string | null;
+  year: number | null;
+  type: string;
+  url: string | null;
+  license: string | null;
+  notesFr: string | null;
+}
+
 export interface Principle {
   id: string;
   titleFr: string;
@@ -172,6 +184,10 @@ export const LABELS = {
   } as Record<string, string>,
   goal: {strength: 'Force', hypertrophy: 'Hypertrophie', endurance: 'Endurance', power: 'Puissance'} as Record<string, string>,
   evidence: {strong: 'Preuve forte', moderate: 'Preuve modérée', limited: 'Preuve limitée', consensus: 'Consensus'} as Record<string, string>,
+  sourceType: {
+    scientific: 'Étude scientifique', guideline: 'Recommandation officielle',
+    coach: 'Coach', dataset: 'Jeu de données', book: 'Ouvrage',
+  } as Record<string, string>,
 };
 
 export const label = (kind: keyof typeof LABELS, value: string | null): string =>
@@ -211,5 +227,5 @@ export const api = {
   repSchemes: () => get<RepScheme[]>('/knowledge/rep-schemes'),
   volumeLandmarks: () => get<VolumeLandmark[]>('/knowledge/volume-landmarks'),
   splits: () => get<Split[]>('/knowledge/splits'),
-  sources: () => get<SourceRef[]>('/knowledge/sources'),
+  sources: () => get<Source[]>('/knowledge/sources'),
 };
