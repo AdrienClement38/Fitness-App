@@ -302,3 +302,19 @@ export const sessions = pgTable(
   },
   (t) => [index('sessions_user_idx').on(t.userId)],
 );
+
+// Stockage de synchronisation : données utilisateur en blobs JSONB, mergées côté client.
+export const syncItems = pgTable(
+  'sync_items',
+  {
+    userId: text('user_id')
+      .notNull()
+      .references(() => users.id, {onDelete: 'cascade'}),
+    kind: text('kind').notNull(), // 'workout-log' | 'my-program' | 'favorite'
+    itemId: text('item_id').notNull(),
+    data: jsonb('data'), // blob de l'entité (null si supprimée)
+    updatedAt: timestamp('updated_at', {withTimezone: true}).notNull(),
+    deleted: boolean('deleted').notNull().default(false),
+  },
+  (t) => [primaryKey({columns: [t.userId, t.kind, t.itemId]})],
+);

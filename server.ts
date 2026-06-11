@@ -8,6 +8,7 @@ import musclesRouter from './server/routes/muscles';
 import knowledgeRouter from './server/routes/knowledge';
 import programsRouter from './server/routes/programs';
 import authRouter from './server/routes/auth';
+import {attachSync} from './server/sync';
 import {migrateDb} from './server/db/client';
 
 const app = express();
@@ -59,9 +60,10 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, '0.0.0.0', () => {
+  const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`[Salle de sport] En écoute sur http://localhost:${PORT}`);
   });
+  attachSync(server);
 }
 
 startServer().catch((err) => {

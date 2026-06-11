@@ -58,11 +58,16 @@ export interface AuthUser {
   email: string;
 }
 
-/** Utilisateur courant déduit du cookie de session, ou null. */
-export async function getUserFromRequest(req: Request): Promise<AuthUser | null> {
-  const token = parseCookies(req.headers.cookie)[SESSION_COOKIE];
+/** Utilisateur déduit d'un en-tête Cookie (HTTP ou upgrade WebSocket), ou null. */
+export async function getAuthUserByCookie(cookieHeader: string | undefined): Promise<AuthUser | null> {
+  const token = parseCookies(cookieHeader)[SESSION_COOKIE];
   if (!token) return null;
   const sess = await getSessionWithUser(token);
   if (!sess || sess.expiresAt.getTime() < Date.now()) return null;
   return {id: sess.userId, email: sess.email};
+}
+
+/** Utilisateur courant déduit du cookie de session, ou null. */
+export async function getUserFromRequest(req: Request): Promise<AuthUser | null> {
+  return getAuthUserByCookie(req.headers.cookie);
 }
