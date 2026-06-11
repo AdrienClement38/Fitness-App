@@ -16,6 +16,7 @@ export interface ExerciseListItem {
   isEnriched: boolean;
   equipmentId: string | null;
   equipmentNameFr: string | null;
+  images: string[] | null;
   primaryMuscles: MuscleRef[];
 }
 
@@ -192,6 +193,11 @@ export const LABELS = {
 
 export const label = (kind: keyof typeof LABELS, value: string | null): string =>
   value ? (LABELS[kind][value] ?? value) : '';
+
+/** Images d'exécution (free-exercise-db, domaine public) servies depuis l'upstream. */
+export const EXERCISE_IMAGE_BASE =
+  'https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/';
+export const exerciseImageUrl = (path: string) => `${EXERCISE_IMAGE_BASE}${path}`;
 
 /* ---- Accès HTTP ------------------------------------------------------- */
 async function get<T>(path: string): Promise<T> {

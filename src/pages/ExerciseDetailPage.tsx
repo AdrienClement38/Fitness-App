@@ -1,6 +1,6 @@
 import {ArrowLeft} from 'lucide-react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
-import {api, label} from '../lib/api';
+import {api, exerciseImageUrl, label} from '../lib/api';
 import {useFetch} from '../lib/useFetch';
 import {Badge, ErrorState, Loading, SectionTitle} from '../components/ui';
 
@@ -50,6 +50,20 @@ export default function ExerciseDetailPage() {
         {ex.movementPatternNameFr && <Badge>{ex.movementPatternNameFr}</Badge>}
         {ex.tempo && <Badge tone="indigo">Tempo {ex.tempo}</Badge>}
       </div>
+
+      {ex.images && ex.images.length > 0 && (
+        <div className="mt-4 grid grid-cols-2 gap-2">
+          {ex.images.map((img, i) => (
+            <img
+              key={i}
+              src={exerciseImageUrl(img)}
+              alt={`${ex.nameFr ?? ex.nameEn} — position ${i + 1}`}
+              loading="lazy"
+              className="aspect-[4/3] w-full rounded-xl border border-slate-800 bg-slate-950 object-contain"
+            />
+          ))}
+        </div>
+      )}
 
       <SectionTitle>Muscles</SectionTitle>
       <div className="flex flex-wrap gap-1.5">

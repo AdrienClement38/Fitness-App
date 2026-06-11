@@ -80,6 +80,7 @@ export async function listExercises(f: ExerciseFilters) {
       isEnriched: exercises.isEnriched,
       equipmentId: exercises.equipmentId,
       equipmentNameFr: equipment.nameFr,
+      images: exercises.images,
     })
     .from(exercises)
     .leftJoin(equipment, eq(equipment.id, exercises.equipmentId))
