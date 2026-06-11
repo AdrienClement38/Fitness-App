@@ -1,7 +1,9 @@
-import {ArrowLeft, Trash2} from 'lucide-react';
+import {useEffect, useState} from 'react';
+import {ArrowLeft, Check, Plus, Trash2} from 'lucide-react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
-import {label} from '../lib/api';
+import {label, type ExerciseListItem} from '../lib/api';
 import {Badge, Empty} from '../components/ui';
+import ExercisePicker from '../components/ExercisePicker';
 import {
   getMyProgram,
   removeMyProgram,
@@ -32,6 +34,14 @@ export default function MyProgramPage() {
   useMyPrograms(); // s'abonne au store pour re-render à chaque édition
   const program = id ? getMyProgram(id) : undefined;
 
+  const [flash, setFlash] = useState(false); // indicateur "Enregistré" après une modif
+  const [pickerFor, setPickerFor] = useState<number | null>(null); // index de séance où ajouter un exo
+  useEffect(() => {
+    if (!flash) return;
+    const t = setTimeout(() => setFlash(false), 1300);
+    return () => clearTimeout(t);
+  }, [flash]);
+
   if (!program) {
     return (
       <div>
@@ -43,17 +53,37 @@ export default function MyProgramPage() {
     );
   }
 
-  // Édition immuable : on clone, on mute le brouillon, on enregistre.
+  // Édition immuable : on clone, on mute le brouillon, on enregistre, on signale.
   const patch = (mut: (draft: MyProgram) => void) => {
     const draft = structuredClone(program);
     mut(draft);
     updateMyProgram(draft);
+    setFlash(true);
   };
   const patchEx = (si: number, ei: number, p: Partial<MyProgramExercise>) =>
     patch((d) => {
       Object.assign(d.sessions[si].exercises[ei], p);
     });
-
+  const addExercise = (si: number, e: ExerciseListItem) => {
+    patch((d) =>
+      d.sessions[si].exercises.push({
+        exerciseId: e.id,
+        nameFr: e.nameFr,
+        nameEn: e.nameEn,
+        sets: 3,
+        repsMin: 8,
+        repsMax: 12,
+        restSeconds: 90,
+        notesFr: null,
+      }),
+    );
+    setPickerFor(null);
+  };
+  const addSession = () =>
+    patch((d) => d.sessions.push({nameFr: `Séance ${d.sessions.length + 1}`, focusFr: null, exercises: []}));
+  const removeSession = (si: number) => {
+    if (confirm(`Supprimer « ${program.sessions[si].nameFr} » ?`)) patch((d) => d.sessions.splice(si, 1));
+  };
   const del = () => {
     if (confirm(`Supprimer « ${program.nameFr} » ? Action définitive.`)) {
       removeMyProgram(program.id);
@@ -67,12 +97,13 @@ export default function MyProgramPage() {
         <button onClick={() => navigate('/programmes')} className="flex items-center gap-1 text-sm text-slate-400 hover:text-slate-200">
           <ArrowLeft className="h-4 w-4" /> Programmes
         </button>
-        <button
-          onClick={del}
-          className="flex items-center gap-1 rounded-lg px-2 py-1 text-sm text-red-400 hover:bg-red-950/40 hover:text-red-300"
+        <span
+          className={`flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium transition-colors ${
+            flash ? 'bg-emerald-500/20 text-emerald-300' : 'text-slate-500'
+          }`}
         >
-          <Trash2 className="h-4 w-4" /> Supprimer
-        </button>
+          <Check className="h-3.5 w-3.5" /> {flash ? 'Enregistré' : 'Enregistré auto'}
+        </span>
       </div>
 
       <input
@@ -86,19 +117,31 @@ export default function MyProgramPage() {
         {program.theme && <Badge tone="indigo">{label('theme', program.theme)}</Badge>}
         <Badge>Programme perso</Badge>
       </div>
-      <p className="mt-2 text-xs text-slate-500">Tes modifications sont enregistrées automatiquement sur cet appareil.</p>
+      <p className="mt-2 text-xs text-slate-500">
+        Tes modifications sont enregistrées automatiquement sur cet appareil. Quand tu as fini, clique « Terminé ».
+      </p>
 
       <div className="mt-4 grid gap-4">
         {program.sessions.map((s, si) => (
           <div key={si} className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
-            <input
-              value={s.nameFr}
-              onChange={(e) => patch((d) => (d.sessions[si].nameFr = e.target.value))}
-              aria-label="Nom de la séance"
-              className="w-full rounded-md border border-transparent bg-transparent font-semibold hover:border-slate-700 focus:border-emerald-500 focus:bg-slate-800 focus:outline-none"
-            />
+            <div className="flex items-center justify-between gap-2">
+              <input
+                value={s.nameFr}
+                onChange={(e) => patch((d) => (d.sessions[si].nameFr = e.target.value))}
+                aria-label="Nom de la séance"
+                className="min-w-0 flex-1 rounded-md border border-transparent bg-transparent font-semibold hover:border-slate-700 focus:border-emerald-500 focus:bg-slate-800 focus:outline-none"
+              />
+              <button
+                onClick={() => removeSession(si)}
+                aria-label="Supprimer la séance"
+                className="shrink-0 rounded-md p-1 text-slate-500 hover:bg-red-950/40 hover:text-red-300"
+              >
+                <Trash2 className="h-4 w-4" />
+              </button>
+            </div>
+
             {s.exercises.length === 0 ? (
-              <p className="mt-2 text-sm text-slate-500">Aucun exercice. (L'ajout arrive bientôt.)</p>
+              <p className="mt-2 text-sm text-slate-500">Aucun exercice. Ajoute-en un ci-dessous.</p>
             ) : (
               <div className="mt-2 divide-y divide-slate-800">
                 {s.exercises.map((e, ei) => (
@@ -132,9 +175,40 @@ export default function MyProgramPage() {
                 ))}
               </div>
             )}
+
+            <button
+              onClick={() => setPickerFor(si)}
+              className="mt-3 flex w-full items-center justify-center gap-1 rounded-lg border border-dashed border-slate-700 py-2 text-sm text-slate-300 hover:border-emerald-500/50 hover:text-emerald-300"
+            >
+              <Plus className="h-4 w-4" /> Ajouter un exercice
+            </button>
           </div>
         ))}
       </div>
+
+      <button
+        onClick={addSession}
+        className="mt-3 flex w-full items-center justify-center gap-1 rounded-xl border border-dashed border-slate-700 py-2.5 text-sm text-slate-300 hover:border-emerald-500/50 hover:text-emerald-300"
+      >
+        <Plus className="h-4 w-4" /> Ajouter une séance
+      </button>
+
+      <button
+        onClick={() => navigate('/programmes')}
+        className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500/20 px-4 py-2.5 text-sm font-semibold text-emerald-300 transition-colors hover:bg-emerald-500/30"
+      >
+        <Check className="h-4 w-4" /> Terminé
+      </button>
+      <button
+        onClick={del}
+        className="mt-2 flex w-full items-center justify-center gap-1 rounded-xl px-4 py-2 text-sm text-red-400 hover:bg-red-950/40 hover:text-red-300"
+      >
+        <Trash2 className="h-4 w-4" /> Supprimer ce programme
+      </button>
+
+      {pickerFor !== null && (
+        <ExercisePicker onPick={(e) => addExercise(pickerFor, e)} onClose={() => setPickerFor(null)} />
+      )}
     </div>
   );
 }

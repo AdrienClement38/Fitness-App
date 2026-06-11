@@ -1,7 +1,8 @@
 import {useEffect, useState} from 'react';
-import {Link} from 'react-router-dom';
+import {Plus} from 'lucide-react';
+import {Link, useNavigate} from 'react-router-dom';
 import {api, label} from '../lib/api';
-import {useMyPrograms} from '../lib/myPrograms';
+import {createEmptyProgram, useMyPrograms} from '../lib/myPrograms';
 import {useFetch} from '../lib/useFetch';
 import {Badge, Empty, ErrorState, Loading, SectionTitle} from '../components/ui';
 
@@ -14,6 +15,7 @@ const LEVELS = [
 export default function ProgramsPage() {
   const {data, error, loading} = useFetch(() => api.programs(), []);
   const mine = useMyPrograms();
+  const navigate = useNavigate();
   // Niveau choisi, mémorisé (l'utilisateur retrouve son niveau).
   const [level, setLevel] = useState(() => localStorage.getItem('program-level') || 'beginner');
   useEffect(() => {
@@ -29,9 +31,21 @@ export default function ProgramsPage() {
         Choisis ton niveau, puis un programme prêt à suivre. Chaque exercice renvoie à sa fiche.
       </p>
 
-      {mine.length > 0 && (
-        <section className="mt-4">
-          <SectionTitle>Mes programmes</SectionTitle>
+      <section className="mt-4">
+        <div className="mb-2 mt-6 flex items-center justify-between">
+          <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400">Mes programmes</h2>
+          <button
+            onClick={() => navigate(`/mes-programmes/${createEmptyProgram()}`)}
+            className="flex items-center gap-1 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-sm font-medium text-emerald-300 transition-colors hover:bg-emerald-500/20"
+          >
+            <Plus className="h-4 w-4" /> Créer
+          </button>
+        </div>
+        {mine.length === 0 ? (
+          <p className="rounded-xl border border-dashed border-slate-800 p-4 text-sm text-slate-500">
+            Aucun programme perso. Crée-en un de zéro avec « Créer », ou ouvre un programme du catalogue et clique « Dupliquer / personnaliser ».
+          </p>
+        ) : (
           <div className="grid gap-3">
             {mine.map((mp) => (
               <Link
@@ -50,9 +64,10 @@ export default function ProgramsPage() {
               </Link>
             ))}
           </div>
-          <SectionTitle>Catalogue par niveau</SectionTitle>
-        </section>
-      )}
+        )}
+      </section>
+
+      <SectionTitle>Catalogue par niveau</SectionTitle>
 
       <div className="mt-3 flex gap-1 rounded-xl bg-slate-900 p-1">
         {LEVELS.map((lv) => (
