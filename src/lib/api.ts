@@ -228,7 +228,8 @@ export const LABELS = {
   } as Record<string, string>,
   theme: {
     'full-body': 'Full Body', 'upper-lower': 'Haut / Bas', ppl: 'Push Pull Legs',
-    strength: 'Force', glutes: 'Fessiers', 'upper-body': 'Haut du corps', 'fat-loss': 'Perte de gras',
+    strength: 'Force', glutes: 'Fessiers', 'upper-body': 'Haut du corps',
+    'fat-loss': 'Perte de gras', split: 'Split par muscle',
   } as Record<string, string>,
 };
 

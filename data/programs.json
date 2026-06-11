@@ -377,5 +377,72 @@
         {"exercise_id": "triceps-pushdown", "sets": 3, "reps_min": 12, "reps_max": 15, "rest_seconds": 60}
       ]}
     ]
+  },
+  {
+    "id": "full-body-express",
+    "name_fr": "Full Body Express",
+    "theme": "full-body",
+    "level": "beginner",
+    "goal": "hypertrophy",
+    "days_per_week": 3,
+    "summary_fr": "Corps entier en 4 exercices par séance : rapide et efficace quand on a peu de temps. Parfait pour démarrer ou reprendre.",
+    "description_fr": "3 séances courtes (A, B, C) sur des jours non consécutifs. Que des mouvements de base, en 30 à 40 minutes.",
+    "sessions": [
+      {"day_order": 1, "name_fr": "Séance A", "focus_fr": "Corps entier", "exercises": [
+        {"exercise_id": "barbell-full-squat", "sets": 3, "reps_min": 8, "reps_max": 12, "rest_seconds": 120},
+        {"exercise_id": "barbell-bench-press-medium-grip", "sets": 3, "reps_min": 8, "reps_max": 12, "rest_seconds": 120},
+        {"exercise_id": "seated-cable-rows", "sets": 3, "reps_min": 10, "reps_max": 12, "rest_seconds": 90},
+        {"exercise_id": "plank", "sets": 3, "reps_min": 30, "reps_max": 45, "rest_seconds": 60, "notes_fr": "Maintien en secondes."}
+      ]},
+      {"day_order": 2, "name_fr": "Séance B", "focus_fr": "Corps entier", "exercises": [
+        {"exercise_id": "romanian-deadlift", "sets": 3, "reps_min": 8, "reps_max": 12, "rest_seconds": 120},
+        {"exercise_id": "dumbbell-shoulder-press", "sets": 3, "reps_min": 10, "reps_max": 12, "rest_seconds": 90},
+        {"exercise_id": "wide-grip-lat-pulldown", "sets": 3, "reps_min": 10, "reps_max": 12, "rest_seconds": 90},
+        {"exercise_id": "hanging-leg-raise", "sets": 3, "reps_min": 10, "reps_max": 15, "rest_seconds": 60}
+      ]},
+      {"day_order": 3, "name_fr": "Séance C", "focus_fr": "Corps entier", "exercises": [
+        {"exercise_id": "leg-press", "sets": 3, "reps_min": 12, "reps_max": 15, "rest_seconds": 120},
+        {"exercise_id": "dumbbell-bench-press", "sets": 3, "reps_min": 10, "reps_max": 12, "rest_seconds": 90},
+        {"exercise_id": "bent-over-barbell-row", "sets": 3, "reps_min": 10, "reps_max": 12, "rest_seconds": 90},
+        {"exercise_id": "side-lateral-raise", "sets": 3, "reps_min": 12, "reps_max": 15, "rest_seconds": 60}
+      ]}
+    ]
+  },
+  {
+    "id": "arnold-split",
+    "name_fr": "Arnold Split",
+    "theme": "split",
+    "level": "advanced",
+    "goal": "hypertrophy",
+    "days_per_week": 6,
+    "summary_fr": "Le split légendaire d'Arnold : Pecs/Dos, Épaules/Bras, Jambes, répété 2× par semaine. Volume très élevé pour pratiquants avancés.",
+    "description_fr": "6 séances/semaine. Les pectoraux et le dos sont travaillés ensemble en superset pour la congestion. Gère bien ta récupération.",
+    "sessions": [
+      {"day_order": 1, "name_fr": "Pectoraux & Dos", "focus_fr": "Pectoraux, dos", "exercises": [
+        {"exercise_id": "barbell-bench-press-medium-grip", "sets": 4, "reps_min": 8, "reps_max": 12, "rest_seconds": 120},
+        {"exercise_id": "barbell-incline-bench-press-medium-grip", "sets": 3, "reps_min": 8, "reps_max": 12, "rest_seconds": 120},
+        {"exercise_id": "pullups", "sets": 4, "reps_min": 8, "reps_max": 12, "rest_seconds": 120},
+        {"exercise_id": "bent-over-barbell-row", "sets": 4, "reps_min": 8, "reps_max": 12, "rest_seconds": 120},
+        {"exercise_id": "cable-crossover", "sets": 3, "reps_min": 12, "reps_max": 15, "rest_seconds": 60},
+        {"exercise_id": "wide-grip-lat-pulldown", "sets": 3, "reps_min": 10, "reps_max": 12, "rest_seconds": 90}
+      ]},
+      {"day_order": 2, "name_fr": "Épaules & Bras", "focus_fr": "Épaules, biceps, triceps", "exercises": [
+        {"exercise_id": "barbell-shoulder-press", "sets": 4, "reps_min": 8, "reps_max": 12, "rest_seconds": 120},
+        {"exercise_id": "side-lateral-raise", "sets": 4, "reps_min": 12, "reps_max": 20, "rest_seconds": 60},
+        {"exercise_id": "face-pull", "sets": 3, "reps_min": 15, "reps_max": 20, "rest_seconds": 60},
+        {"exercise_id": "barbell-curl", "sets": 4, "reps_min": 8, "reps_max": 12, "rest_seconds": 60},
+        {"exercise_id": "dips-triceps-version", "sets": 4, "reps_min": 8, "reps_max": 12, "rest_seconds": 90},
+        {"exercise_id": "alternate-hammer-curl", "sets": 3, "reps_min": 10, "reps_max": 12, "rest_seconds": 60},
+        {"exercise_id": "triceps-pushdown", "sets": 3, "reps_min": 12, "reps_max": 15, "rest_seconds": 60}
+      ]},
+      {"day_order": 3, "name_fr": "Jambes", "focus_fr": "Quadriceps, ischios, fessiers, mollets", "exercises": [
+        {"exercise_id": "barbell-full-squat", "sets": 4, "reps_min": 8, "reps_max": 12, "rest_seconds": 180},
+        {"exercise_id": "romanian-deadlift", "sets": 4, "reps_min": 8, "reps_max": 12, "rest_seconds": 150},
+        {"exercise_id": "leg-press", "sets": 4, "reps_min": 12, "reps_max": 15, "rest_seconds": 120},
+        {"exercise_id": "lying-leg-curls", "sets": 4, "reps_min": 10, "reps_max": 12, "rest_seconds": 90},
+        {"exercise_id": "standing-calf-raises", "sets": 5, "reps_min": 15, "reps_max": 20, "rest_seconds": 60},
+        {"exercise_id": "hanging-leg-raise", "sets": 4, "reps_min": 15, "reps_max": 20, "rest_seconds": 60}
+      ]}
+    ]
   }
 ]
