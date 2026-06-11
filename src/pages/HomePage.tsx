@@ -1,9 +1,11 @@
-import {Activity, BookOpen, Dumbbell, Search} from 'lucide-react';
+import {Activity, BookOpen, Dumbbell, HeartPulse, Leaf, Search} from 'lucide-react';
 import {useState, type FormEvent} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 
 const cards = [
   {to: '/exercices', icon: Dumbbell, title: 'Exercices', desc: '873 exercices, filtrables par muscle, matériel et niveau.'},
+  {to: '/cardio', icon: HeartPulse, title: 'Cardio', desc: 'Tapis, vélo, rameur — échauffement, endurance, récup active.'},
+  {to: '/recuperation', icon: Leaf, title: 'Récup & Mobilité', desc: 'Étirements et automassages, pour après la séance.'},
   {to: '/muscles', icon: Activity, title: 'Muscles', desc: 'Anatomie, fonctions et exercices ciblant chaque muscle.'},
   {to: '/savoir', icon: BookOpen, title: 'Savoir', desc: 'Volume, intensité, repos, splits — appuyés sur la science.'},
 ];
