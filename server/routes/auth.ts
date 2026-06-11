@@ -11,7 +11,15 @@ import {
   sessionExpiry,
   verifyPassword,
 } from '../auth';
-import {createSession, createUser, deleteSession, getUserByEmail} from '../repositories/userRepository';
+import {
+  createSession,
+  createUser,
+  deleteSession,
+  deleteUserSessions,
+  getUserByEmail,
+  getUserById,
+  updatePassword,
+} from '../repositories/userRepository';
 
 const router = Router();
 
@@ -79,6 +87,31 @@ router.get('/me', async (req, res) => {
   const user = await getUserFromRequest(req);
   if (!user) return res.status(401).json({error: 'Non connecté.'});
   return res.json(user);
+});
+
+const passwordChange = z.object({
+  currentPassword: z.string().min(1).max(200),
+  newPassword: z.string().min(8).max(200),
+});
+
+router.post('/change-password', async (req, res) => {
+  const auth = await getUserFromRequest(req);
+  if (!auth) return res.status(401).json({error: 'Non connecté.'});
+  const parsed = passwordChange.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({error: 'Nouveau mot de passe trop court (8 caractères minimum).'});
+
+  const user = await getUserById(auth.id);
+  if (!user || !(await verifyPassword(parsed.data.currentPassword, user.passwordHash))) {
+    return res.status(401).json({error: 'Mot de passe actuel incorrect.'});
+  }
+
+  await updatePassword(user.id, await hashPassword(parsed.data.newPassword));
+  // Révoque toutes les sessions (déconnecte les autres appareils) puis recrée celle-ci.
+  await deleteUserSessions(user.id);
+  const token = newToken();
+  await createSession(user.id, token, sessionExpiry());
+  res.cookie(SESSION_COOKIE, token, cookieOptions());
+  return res.json({ok: true});
 });
 
 export default router;

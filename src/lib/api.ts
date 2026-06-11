@@ -324,4 +324,6 @@ export const authApi = {
   register: (email: string, password: string) => post<AuthUser>('/auth/register', {email, password}),
   login: (email: string, password: string) => post<AuthUser>('/auth/login', {email, password}),
   logout: () => post<{ok: boolean}>('/auth/logout', {}),
+  changePassword: (currentPassword: string, newPassword: string) =>
+    post<{ok: boolean}>('/auth/change-password', {currentPassword, newPassword}),
 };

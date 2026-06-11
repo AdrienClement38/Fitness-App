@@ -33,3 +33,17 @@ export async function getSessionWithUser(token: string) {
 export async function deleteSession(token: string) {
   await db.delete(sessions).where(eq(sessions.token, token));
 }
+
+export async function getUserById(id: string) {
+  const [u] = await db.select().from(users).where(eq(users.id, id));
+  return u ?? null;
+}
+
+export async function updatePassword(id: string, passwordHash: string) {
+  await db.update(users).set({passwordHash}).where(eq(users.id, id));
+}
+
+/** Révoque toutes les sessions d'un utilisateur (ex. après changement de mot de passe). */
+export async function deleteUserSessions(userId: string) {
+  await db.delete(sessions).where(eq(sessions.userId, userId));
+}

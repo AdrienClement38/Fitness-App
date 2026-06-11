@@ -1,13 +1,92 @@
 import {useState, type FormEvent} from 'react';
+import {useNavigate} from 'react-router-dom';
 import {LogOut, User} from 'lucide-react';
-import {login, logout, register, useAuth} from '../lib/auth';
+import {changePassword, login, logout, register, useAuth} from '../lib/auth';
 import {Loading} from '../components/ui';
 
 const inputClass =
   'w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2.5 text-sm outline-none placeholder:text-slate-500 focus:border-emerald-500';
 
+function ChangePasswordForm() {
+  const [open, setOpen] = useState(false);
+  const [current, setCurrent] = useState('');
+  const [next, setNext] = useState('');
+  const [msg, setMsg] = useState<{type: 'ok' | 'err'; text: string} | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  const reset = () => {
+    setOpen(false);
+    setMsg(null);
+    setCurrent('');
+    setNext('');
+  };
+
+  const submit = async (e: FormEvent) => {
+    e.preventDefault();
+    setMsg(null);
+    setBusy(true);
+    try {
+      await changePassword(current, next);
+      setMsg({type: 'ok', text: 'Mot de passe changé. Tes autres appareils ont été déconnectés.'});
+      setCurrent('');
+      setNext('');
+    } catch (err) {
+      setMsg({type: 'err', text: err instanceof Error ? err.message : 'Une erreur est survenue.'});
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  if (!open) {
+    return (
+      <button onClick={() => setOpen(true)} className="mt-3 text-sm text-emerald-400 hover:underline">
+        Changer de mot de passe
+      </button>
+    );
+  }
+
+  return (
+    <form onSubmit={submit} className="mt-3 grid gap-3 rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+      <p className="text-sm font-semibold">Changer de mot de passe</p>
+      <input
+        type="password"
+        required
+        value={current}
+        onChange={(e) => setCurrent(e.target.value)}
+        placeholder="Mot de passe actuel"
+        autoComplete="current-password"
+        className={inputClass}
+      />
+      <input
+        type="password"
+        required
+        minLength={8}
+        value={next}
+        onChange={(e) => setNext(e.target.value)}
+        placeholder="Nouveau mot de passe (8 caractères min.)"
+        autoComplete="new-password"
+        className={inputClass}
+      />
+      {msg && <p className={`text-sm ${msg.type === 'ok' ? 'text-emerald-400' : 'text-red-400'}`}>{msg.text}</p>}
+      <div className="flex gap-2">
+        <button
+          type="submit"
+          disabled={busy}
+          className="flex-1 rounded-lg bg-emerald-500/20 py-2 text-sm font-semibold text-emerald-300 hover:bg-emerald-500/30 disabled:opacity-50"
+        >
+          {busy ? '…' : 'Valider'}
+        </button>
+        <button type="button" onClick={reset} className="rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800">
+          Annuler
+        </button>
+      </div>
+    </form>
+  );
+}
+
 export default function AccountPage() {
   const {user, loading} = useAuth();
+  const navigate = useNavigate();
   const [mode, setMode] = useState<'login' | 'register'>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -37,6 +116,9 @@ export default function AccountPage() {
             <LogOut className="h-4 w-4" /> Se déconnecter
           </button>
         </div>
+
+        <ChangePasswordForm />
+
         <p className="mt-3 text-xs text-slate-500">
           Bientôt : tes séances, programmes et favoris synchronisés sur tous tes appareils.
         </p>
@@ -51,6 +133,7 @@ export default function AccountPage() {
     try {
       if (mode === 'register') await register(email.trim(), password);
       else await login(email.trim(), password);
+      navigate('/'); // connecté -> retour à l'accueil
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Une erreur est survenue.');
     } finally {
