@@ -1,10 +1,11 @@
-import {Activity, BookOpen, ClipboardList, Dumbbell, Home} from 'lucide-react';
+import {Activity, BookOpen, ClipboardList, Dumbbell, Home, LineChart} from 'lucide-react';
 import {NavLink, Outlet} from 'react-router-dom';
 
 const tabs = [
   {to: '/', label: 'Accueil', icon: Home, end: true},
   {to: '/exercices', label: 'Exercices', icon: Dumbbell, end: false},
   {to: '/programmes', label: 'Programmes', icon: ClipboardList, end: false},
+  {to: '/suivi', label: 'Suivi', icon: LineChart, end: false},
   {to: '/muscles', label: 'Muscles', icon: Activity, end: false},
   {to: '/savoir', label: 'Savoir', icon: BookOpen, end: false},
 ];

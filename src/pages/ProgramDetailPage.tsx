@@ -1,7 +1,8 @@
-import {ArrowLeft, Copy} from 'lucide-react';
+import {ArrowLeft, Copy, Play} from 'lucide-react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
-import {api, label, type ProgramExerciseItem} from '../lib/api';
+import {api, label, type ProgramExerciseItem, type ProgramSession} from '../lib/api';
 import {duplicateProgram} from '../lib/myPrograms';
+import {startSession, useActiveWorkout} from '../lib/workoutLogs';
 import {useFetch} from '../lib/useFetch';
 import {Badge, ErrorState, Loading} from '../components/ui';
 
@@ -15,10 +16,28 @@ export default function ProgramDetailPage() {
   const {id} = useParams<{id: string}>();
   const navigate = useNavigate();
   const {data: p, error, loading} = useFetch(() => api.program(id!), [id]);
+  const active = useActiveWorkout();
 
   if (loading) return <Loading />;
   if (error) return <ErrorState message={error} />;
   if (!p) return null;
+
+  const start = (s: ProgramSession) => {
+    if (active && !confirm('Une séance est déjà en cours. La remplacer ?')) return;
+    startSession({
+      programName: p.nameFr,
+      sessionName: s.nameFr,
+      exercises: s.exercises.map((e) => ({
+        exerciseId: e.exerciseId,
+        nameFr: e.nameFr,
+        nameEn: e.nameEn,
+        sets: e.sets,
+        repsMin: e.repsMin,
+        repsMax: e.repsMax,
+      })),
+    });
+    navigate('/seance');
+  };
 
   return (
     <div>
@@ -70,6 +89,12 @@ export default function ProgramDetailPage() {
                 </div>
               ))}
             </div>
+            <button
+              onClick={() => start(s)}
+              className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-500/15 px-4 py-2 text-sm font-medium text-emerald-300 transition-colors hover:bg-emerald-500/25"
+            >
+              <Play className="h-4 w-4" /> Démarrer la séance
+            </button>
           </div>
         ))}
       </div>

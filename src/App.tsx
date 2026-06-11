@@ -8,6 +8,8 @@ import MuscleDetailPage from './pages/MuscleDetailPage';
 import ProgramsPage from './pages/ProgramsPage';
 import ProgramDetailPage from './pages/ProgramDetailPage';
 import MyProgramPage from './pages/MyProgramPage';
+import SuiviPage from './pages/SuiviPage';
+import WorkoutPage from './pages/WorkoutPage';
 import KnowledgePage from './pages/KnowledgePage';
 
 export default function App() {
@@ -22,6 +24,8 @@ export default function App() {
         <Route path="/programmes" element={<ProgramsPage />} />
         <Route path="/programmes/:id" element={<ProgramDetailPage />} />
         <Route path="/mes-programmes/:id" element={<MyProgramPage />} />
+        <Route path="/suivi" element={<SuiviPage />} />
+        <Route path="/seance" element={<WorkoutPage />} />
         <Route path="/savoir" element={<KnowledgePage />} />
       </Route>
     </Routes>
