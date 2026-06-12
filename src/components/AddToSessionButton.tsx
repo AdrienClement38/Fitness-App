@@ -85,13 +85,20 @@ function SessionPicker({ex, onClose}: {ex: AddableExercise; onClose: () => void}
                         return (
                           <button
                             key={si}
+                            disabled={already}
                             onClick={() => add(p.id, si, p.nameFr)}
-                            className="flex items-center justify-between gap-2 rounded-lg border border-slate-800 bg-slate-900/60 px-3 py-2.5 text-left text-sm transition-colors hover:border-emerald-500/50 hover:bg-slate-800/60"
+                            className={`flex items-center justify-between gap-2 rounded-lg border px-3 py-2.5 text-left text-sm transition-colors ${
+                              already
+                                ? 'cursor-default border-slate-800/60 bg-slate-900/30 text-slate-500'
+                                : 'border-slate-800 bg-slate-900/60 hover:border-emerald-500/50 hover:bg-slate-800/60'
+                            }`}
                           >
                             <span className="truncate font-medium">{s.nameFr}</span>
                             <span className="shrink-0 text-xs text-slate-500">
                               {already ? (
-                                <span className="text-emerald-400">déjà ajouté</span>
+                                <span className="flex items-center gap-1 text-emerald-400">
+                                  <Check className="h-3.5 w-3.5" /> déjà ajouté
+                                </span>
                               ) : (
                                 `${s.exercises.length} exo${s.exercises.length > 1 ? 's' : ''}`
                               )}
