@@ -1,5 +1,5 @@
 import {useState, type FormEvent} from 'react';
-import {Link, useNavigate} from 'react-router-dom';
+import {Link, useLocation, useNavigate} from 'react-router-dom';
 import {LogOut, User} from 'lucide-react';
 import {changePassword, deleteAccount, login, logout, register, useAuth} from '../lib/auth';
 import {useSyncConnected} from '../lib/sync';
@@ -180,6 +180,7 @@ function SyncStatus() {
 export default function AccountPage() {
   const {user, loading} = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [mode, setMode] = useState<'login' | 'register'>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -229,7 +230,8 @@ export default function AccountPage() {
     try {
       if (mode === 'register') await register(email.trim(), password);
       else await login(email.trim(), password);
-      navigate('/'); // connecté -> retour à l'accueil
+      // Connecté -> retour à la page demandée avant la redirection, sinon l'accueil.
+      navigate((location.state as {from?: string} | null)?.from ?? '/');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Une erreur est survenue.');
     } finally {
@@ -242,8 +244,8 @@ export default function AccountPage() {
       <h1 className="text-xl font-bold">{mode === 'login' ? 'Connexion' : 'Créer un compte'}</h1>
       <p className="mt-1 text-sm text-slate-400">
         {mode === 'login'
-          ? 'Connecte-toi pour synchroniser tes données sur tous tes appareils.'
-          : 'Un compte pour retrouver tes séances, programmes et favoris partout.'}
+          ? "L'application nécessite un compte. Connecte-toi pour accéder aux exercices, programmes et à ton suivi — synchronisés sur tous tes appareils."
+          : 'Crée ton compte (gratuit) pour accéder à l’application : tes séances, programmes et favoris te suivent partout.'}
       </p>
 
       <form onSubmit={submit} className="mt-4 grid gap-3">
