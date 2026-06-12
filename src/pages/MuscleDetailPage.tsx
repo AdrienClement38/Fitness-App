@@ -1,21 +1,30 @@
+import {useEffect, useState} from 'react';
 import {ArrowLeft, ArrowRight} from 'lucide-react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
-import {api, label, type ExerciseRef} from '../lib/api';
+import {api, type ExerciseRef} from '../lib/api';
 import {useFetch} from '../lib/useFetch';
 import {Badge, ErrorState, Loading, SectionTitle} from '../components/ui';
 import BodyMap from '../components/BodyMap';
 
+const LEVELS = [
+  {id: 'beginner', label: 'Débutant'},
+  {id: 'intermediate', label: 'Intermédiaire'},
+  {id: 'advanced', label: 'Avancé'},
+];
+
 function ExerciseLinks({items}: {items: ExerciseRef[]}) {
+  if (items.length === 0) {
+    return <p className="rounded-lg border border-dashed border-slate-800 p-3 text-sm text-slate-500">Aucun exercice à ce niveau pour ce muscle.</p>;
+  }
   return (
     <div className="grid gap-2">
-      {items.slice(0, 20).map((e) => (
+      {items.map((e) => (
         <Link
           key={e.id}
           to={`/exercices/${e.id}`}
           className="flex items-center justify-between rounded-lg border border-slate-800 bg-slate-900/50 px-3 py-2 text-sm hover:border-slate-700 hover:bg-slate-900"
         >
           <span>{e.nameFr ?? e.nameEn}</span>
-          <Badge tone="emerald">{label('level', e.level)}</Badge>
         </Link>
       ))}
     </div>
@@ -26,10 +35,20 @@ export default function MuscleDetailPage() {
   const {id} = useParams<{id: string}>();
   const navigate = useNavigate();
   const {data: m, error, loading} = useFetch(() => api.muscle(id!), [id]);
+  // Même niveau mémorisé que la page Programmes (l'utilisateur a « son » niveau).
+  const [level, setLevel] = useState(() => localStorage.getItem('program-level') || 'beginner');
+  useEffect(() => {
+    localStorage.setItem('program-level', level);
+  }, [level]);
 
   if (loading) return <Loading />;
   if (error) return <ErrorState message={error} />;
   if (!m) return null;
+
+  const name = (e: ExerciseRef) => e.nameFr ?? e.nameEn;
+  const primaryAtLevel = m.primaryExercises
+    .filter((e) => e.level === level)
+    .sort((a, b) => name(a).localeCompare(name(b), 'fr'));
 
   const vl = m.volumeLandmark;
 
@@ -95,12 +114,24 @@ export default function MuscleDetailPage() {
         <ArrowRight className="h-4 w-4" />
       </Link>
 
-      {m.primaryExercises.length > 0 && (
-        <>
-          <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500">En principal</p>
-          <ExerciseLinks items={m.primaryExercises} />
-        </>
-      )}
+      <div className="mb-3 flex gap-1 rounded-xl bg-slate-900 p-1">
+        {LEVELS.map((lv) => (
+          <button
+            key={lv.id}
+            onClick={() => setLevel(lv.id)}
+            className={`flex-1 rounded-lg py-2 text-sm font-medium transition-colors ${
+              level === lv.id ? 'bg-emerald-500/20 text-emerald-300' : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            {lv.label}
+          </button>
+        ))}
+      </div>
+
+      <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
+        En principal ({primaryAtLevel.length})
+      </p>
+      <ExerciseLinks items={primaryAtLevel} />
     </div>
   );
 }
