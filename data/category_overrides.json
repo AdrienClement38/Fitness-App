@@ -1,0 +1,14 @@
+{
+  "_comment": "Corrections de catégorie sur le dataset upstream (free-exercise-db) : exercices classés 'stretching' qui sont en réalité du renforcement ou de la pliométrie (vérifié sur leurs instructions). Appliqué et validé par server/db/seed.ts (id existant + catégorie légale).",
+  "overrides": {
+    "scissor-kick": "strength",
+    "toe-touchers": "strength",
+    "lower-back-curl": "strength",
+    "superman": "strength",
+    "stomach-vacuum": "strength",
+    "crossover-reverse-lunge": "strength",
+    "sit-squats": "strength",
+    "frog-hops": "plyometrics",
+    "split-squats": "plyometrics"
+  }
+}

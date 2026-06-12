@@ -111,6 +111,8 @@ async function main() {
   const enrichedList = loadJson<Enriched[]>('exercises_enriched.json');
   const translationList = loadJsonOptional<Translation[]>('exercises_translations.json', []);
   const programs = loadJsonOptional<ProgramJson[]>('programs.json', []);
+  const categoryOverrides =
+    loadJsonOptional<{overrides?: Record<string, string>}>('category_overrides.json', {}).overrides ?? {};
   const dataset = JSON.parse(readFileSync(DATASET, 'utf-8')) as RawExercise[];
 
   const groupIds = new Set(muscleGroups.map((g) => g.id as string));
@@ -136,6 +138,12 @@ async function main() {
   const datasetSlugs = new Set(dataset.map((e) => slugify(e.id)));
   for (const eid of enriched.keys()) {
     if (!datasetSlugs.has(eid)) errors.push(`exercises_enriched.json : id '${eid}' ne correspond à aucun exercice`);
+  }
+
+  // Corrections de catégorie (faux étirements upstream), clé = slug d'exercice.
+  for (const [oid, cat] of Object.entries(categoryOverrides)) {
+    if (!datasetSlugs.has(oid)) errors.push(`category_overrides.json : id '${oid}' ne correspond à aucun exercice`);
+    if (!VALID_CATEGORY.has(cat)) errors.push(`category_overrides.json : catégorie illégale '${cat}' (exo '${oid}')`);
   }
 
   // Traductions (name_fr + instructions_fr), clé = slug de l'id brut du dataset.
@@ -164,7 +172,7 @@ async function main() {
     if (mechanic && !VALID_MECHANIC.has(mechanic)) errors.push(`exo '${id}' : mechanic illégale '${mechanic}'`);
     const level = LEVEL_MAP[ex.level];
     if (!level || !VALID_LEVEL.has(level)) errors.push(`exo '${id}' : level inconnu '${ex.level}'`);
-    const category = CATEGORY_MAP[ex.category] ?? ex.category;
+    const category = categoryOverrides[id] ?? CATEGORY_MAP[ex.category] ?? ex.category;
     if (!VALID_CATEGORY.has(category)) errors.push(`exo '${id}' : category inconnue '${ex.category}'`);
 
     let equipmentId: string | null = null;
@@ -359,7 +367,7 @@ async function main() {
 
   /* ---- Rapport ------------------------------------------------------ */
   console.log('SEED OK');
-  console.log(`  exercices        : ${exerciseRows.length}  (enrichis FR : ${nEnriched})`);
+  console.log(`  exercices        : ${exerciseRows.length}  (enrichis FR : ${nEnriched}, catégories corrigées : ${Object.keys(categoryOverrides).length})`);
   console.log(`  liens ex-muscle  : ${exerciseMuscleRows.length}`);
   console.log(`  muscles ${muscles.length} | groupes ${muscleGroups.length} | équipement ${equipment.length} | patterns ${patterns.length}`);
   console.log(`  sources ${sources.length} | principes ${principles.length} | rep_schemes ${repSchemes.length} | volumes ${volumeLandmarks.length} | splits ${splits.length}`);
