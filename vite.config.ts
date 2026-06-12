@@ -14,8 +14,8 @@ export default defineConfig(() => {
         registerType: 'autoUpdate',
         includeAssets: ['logo.png'],
         manifest: {
-          name: 'Salle de sport — exercices & entraînement',
-          short_name: 'Salle de sport',
+          name: 'Kinetic — exercices & entraînement',
+          short_name: 'Kinetic',
           description:
             'Bibliothèque d\'exercices de musculation : muscles, exécution, et savoir d\'entraînement sourcé. Utilisable hors-ligne.',
           lang: 'fr',
@@ -57,6 +57,22 @@ export default defineConfig(() => {
               options: {
                 cacheName: 'exercise-images',
                 expiration: {maxEntries: 500, maxAgeSeconds: 60 * 60 * 24 * 60},
+                cacheableResponse: {statuses: [0, 200]},
+              },
+            },
+            {
+              // Feuille de style Google Fonts (Inter + Space Grotesk).
+              urlPattern: ({url}) => url.origin === 'https://fonts.googleapis.com',
+              handler: 'StaleWhileRevalidate',
+              options: {cacheName: 'google-fonts-stylesheets'},
+            },
+            {
+              // Fichiers woff2 des polices : mis en cache -> dispo hors-ligne ensuite.
+              urlPattern: ({url}) => url.origin === 'https://fonts.gstatic.com',
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'google-fonts-webfonts',
+                expiration: {maxEntries: 20, maxAgeSeconds: 60 * 60 * 24 * 365},
                 cacheableResponse: {statuses: [0, 200]},
               },
             },

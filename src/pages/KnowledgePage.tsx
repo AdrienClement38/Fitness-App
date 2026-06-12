@@ -1,4 +1,5 @@
-import {useState} from 'react';
+import {useState, type ReactNode} from 'react';
+import {ChevronDown} from 'lucide-react';
 import {api, label, type Principle, type RepScheme, type Source, type Split, type VolumeLandmark} from '../lib/api';
 import {useFetch} from '../lib/useFetch';
 import {Badge, ErrorState, Loading} from '../components/ui';
@@ -22,20 +23,43 @@ function range(min: number | null, max: number | null, unit = '') {
   return `${min}–${max}${unit}`;
 }
 
+/** Carte dépliante (accordéon) : en-tête titre + badge cliquable, détail au clic. */
+function Collapsible({title, badge, defaultOpen = false, children}: {title: string; badge?: ReactNode; defaultOpen?: boolean; children: ReactNode}) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div className="overflow-hidden rounded-xl border border-slate-800 bg-slate-900/50">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        className="flex w-full items-center justify-between gap-3 p-4 text-left transition-colors hover:bg-slate-900"
+      >
+        <h3 className="font-semibold leading-snug">{title}</h3>
+        <span className="flex shrink-0 items-center gap-2">
+          {badge}
+          <ChevronDown className={`h-4 w-4 text-slate-500 transition-transform ${open ? 'rotate-180' : ''}`} />
+        </span>
+      </button>
+      {open && <div className="space-y-2 px-4 pb-4">{children}</div>}
+    </div>
+  );
+}
+
 function Principles({items}: {items: Principle[]}) {
   return (
     <div className="grid gap-3">
-      {items.map((p) => (
-        <div key={p.id} className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
-          <div className="flex items-start justify-between gap-2">
-            <h3 className="font-semibold">{p.titleFr}</h3>
-            {p.evidence && <Badge tone={evidenceTone(p.evidence)}>{label('evidence', p.evidence)}</Badge>}
-          </div>
-          <p className="mt-1 text-sm leading-relaxed text-slate-300">{p.summaryFr}</p>
+      {items.map((p, i) => (
+        <Collapsible
+          key={p.id}
+          title={p.titleFr}
+          defaultOpen={i === 0}
+          badge={p.evidence ? <Badge tone={evidenceTone(p.evidence)}>{label('evidence', p.evidence)}</Badge> : undefined}
+        >
+          <p className="text-sm leading-relaxed text-slate-300">{p.summaryFr}</p>
           {p.practicalFr && p.practicalFr.length > 0 && (
-            <ul className="mt-2 space-y-1">
-              {p.practicalFr.map((it, i) => (
-                <li key={i} className="flex gap-2 text-sm text-slate-400">
+            <ul className="space-y-1">
+              {p.practicalFr.map((it, idx) => (
+                <li key={idx} className="flex gap-2 text-sm text-slate-400">
                   <span className="text-emerald-400">•</span>
                   {it}
                 </li>
@@ -43,11 +67,11 @@ function Principles({items}: {items: Principle[]}) {
             </ul>
           )}
           {p.sources.length > 0 && (
-            <p className="mt-2 text-xs text-slate-500">
+            <p className="text-xs text-slate-500">
               Sources : {p.sources.map((s) => `${s.authors ?? s.title}${s.year ? ` (${s.year})` : ''}`).join(' ; ')}
             </p>
           )}
-        </div>
+        </Collapsible>
       ))}
     </div>
   );
@@ -151,21 +175,22 @@ function Sources({items}: {items: Source[]}) {
         Chaque donnée chiffrée de l'app est rattachée à l'une de ces sources : méta-analyses,
         recommandations officielles, ouvrages de référence, coachs, et le jeu de données des exercices.
       </p>
-      {items.map((s) => (
-        <div key={s.id} className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
-          <div className="flex items-start justify-between gap-2">
-            <h3 className="font-semibold leading-snug">{s.title}</h3>
-            <Badge tone={sourceTone(s.type)}>{label('sourceType', s.type)}</Badge>
-          </div>
+      {items.map((s, i) => (
+        <Collapsible
+          key={s.id}
+          title={s.title}
+          defaultOpen={i === 0}
+          badge={<Badge tone={sourceTone(s.type)}>{label('sourceType', s.type)}</Badge>}
+        >
           {(s.authors || s.year) && (
-            <p className="mt-1 text-sm text-slate-300">
+            <p className="text-sm text-slate-300">
               {s.authors}
               {s.authors && s.year ? ' · ' : ''}
               {s.year ?? ''}
             </p>
           )}
-          {s.notesFr && <p className="mt-1 text-sm leading-relaxed text-slate-400">{s.notesFr}</p>}
-          <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
+          {s.notesFr && <p className="text-sm leading-relaxed text-slate-400">{s.notesFr}</p>}
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
             {s.license && <span className="text-slate-500">Licence : {s.license}</span>}
             {s.url && (
               <a href={s.url} target="_blank" rel="noreferrer" className="text-emerald-400 hover:underline">
@@ -173,7 +198,7 @@ function Sources({items}: {items: Source[]}) {
               </a>
             )}
           </div>
-        </div>
+        </Collapsible>
       ))}
     </div>
   );

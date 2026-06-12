@@ -63,12 +63,12 @@ async function startServer() {
   }
 
   const server = app.listen(PORT, HOST, () => {
-    console.log(`[Salle de sport] En écoute sur http://${HOST}:${PORT}`);
+    console.log(`[Kinetic] En écoute sur http://${HOST}:${PORT}`);
   });
   attachSync(server);
 }
 
 startServer().catch((err) => {
-  console.error('[Salle de sport] Échec du démarrage :', err);
+  console.error('[Kinetic] Échec du démarrage :', err);
   process.exit(1);
 });

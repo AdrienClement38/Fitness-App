@@ -1,4 +1,4 @@
-# Salle de sport
+# Kinetic
 
 Application web (PWA) d'exercices de musculation et de savoir d'entraînement,
 pensée pour un usage **mobile à la salle** et un hébergement **léger** sur la
