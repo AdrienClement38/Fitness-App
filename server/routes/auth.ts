@@ -33,6 +33,11 @@ const credentials = z.object({
 const attempts = new Map<string, {count: number; reset: number}>();
 function rateLimited(key: string, max = 10, windowMs = 15 * 60 * 1000): boolean {
   const now = Date.now();
+  // Éviction opportuniste des fenêtres expirées : borne la mémoire même sous un
+  // spray d'IP variées (sinon la Map croît sans limite).
+  if (attempts.size > 5000) {
+    for (const [k, v] of attempts) if (v.reset < now) attempts.delete(k);
+  }
   const e = attempts.get(key);
   if (!e || e.reset < now) {
     attempts.set(key, {count: 1, reset: now + windowMs});

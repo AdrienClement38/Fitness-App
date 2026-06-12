@@ -1,8 +1,6 @@
 import {ArrowLeft} from 'lucide-react';
 import {Link, useNavigate} from 'react-router-dom';
 
-const TODO = ({children}: {children: string}) => <span className="text-amber-400">[{children}]</span>;
-
 function Section({title, children}: {title: string; children: React.ReactNode}) {
   return (
     <section className="mt-5">
@@ -23,17 +21,15 @@ export default function LegalPage() {
 
       <Section title="Éditeur">
         <p>
-          <TODO>À compléter : nom / raison sociale, statut juridique</TODO>
+          <strong>AC</strong>
         </p>
         <p>
-          Contact : <TODO>À compléter : email</TODO>
+          Contact : adrienc.tech@gmail.com
         </p>
       </Section>
 
       <Section title="Directeur de la publication">
-        <p>
-          <TODO>À compléter : nom</TODO>
-        </p>
+        <p>AC</p>
       </Section>
 
       <Section title="Hébergeur">

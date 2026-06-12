@@ -13,6 +13,22 @@ let database: NodePgDatabase<typeof schema>;
 let migrateFn: () => Promise<void>;
 
 /**
+ * TLS pour la connexion Postgres. AlwaysData présente un certificat valide
+ * (TLS 1.3) → on vérifie le certificat (`ssl: true`). Désactivé pour un Postgres
+ * local (localhost) ou via `DATABASE_SSL=disable` (parité locale sans TLS).
+ */
+function pgSsl(connectionString: string): boolean {
+  if (process.env.DATABASE_SSL === 'disable') return false;
+  try {
+    const host = new URL(connectionString).hostname;
+    if (host === 'localhost' || host === '127.0.0.1' || host === '::1') return false;
+  } catch {
+    /* URL non standard : on laisse pg gérer */
+  }
+  return true;
+}
+
+/**
  * Instance Drizzle unique + sa fonction de migration (même connexion).
  *  - `DATABASE_URL` défini (prod AlwaysData) → PostgreSQL via `pg`.
  *  - sinon (dev/test) → PGlite (Postgres embarqué, fichier local), chargé À LA
@@ -20,7 +36,7 @@ let migrateFn: () => Promise<void>;
  *    (`npm install --omit=dev`) pour garder le serveur léger.
  */
 if (process.env.DATABASE_URL) {
-  const pool = new Pool({connectionString: process.env.DATABASE_URL, max: 4});
+  const pool = new Pool({connectionString: process.env.DATABASE_URL, max: 4, ssl: pgSsl(process.env.DATABASE_URL)});
   const d = drizzlePg(pool, {schema});
   database = d;
   migrateFn = () => migratePg(d, {migrationsFolder: MIGRATIONS_FOLDER});

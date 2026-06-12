@@ -28,9 +28,16 @@ Admin → **Web → Sites** → Ajouter :
   ```
   NODE_ENV=production
   DATABASE_URL=postgresql://utilisateur:motdepasse@postgresql-compte.alwaysdata.net:5432/compte_gym
+  DATA_ENCRYPTION_KEY=<32 octets en base64>
   ```
   (Ne PAS définir PORT ni IP : AlwaysData les injecte, le serveur les lit.)
+- **`DATA_ENCRYPTION_KEY`** chiffre au repos les blobs `sync_items` (AES-256-GCM).
+  Générer : `node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"`.
+  Mettre la valeur ici (panel = durable) ou dans le `.env` serveur. **À sauvegarder** :
+  clé perdue → blobs serveur illisibles (l'app ne plante pas, chaque appareil
+  repousse sa copie locale au prochain sync). Variable absente → stockage en clair.
 - HTTPS : automatique (certificat AlwaysData). WebSocket : passe par leur proxy.
+  Connexion Postgres : **TLS vérifié** automatiquement (hôte distant ≠ localhost).
 
 ## 2. Artefacts à déployer
 
@@ -117,3 +124,5 @@ plus tard si besoin.
 - Cookies de session `HttpOnly; Secure; SameSite=Lax` en production.
 - Le serveur écoute sur `process.env.IP`/`process.env.PORT` quand AlwaysData les fournit.
 - PGlite n'est PAS chargé quand `DATABASE_URL` est défini (devDependency, absente en prod).
+- Connexion Postgres en **TLS vérifié** (`ssl: true`) hors localhost ; `DATABASE_SSL=disable` pour s'en passer.
+- Blobs `sync_items` **chiffrés au repos** (AES-256-GCM) si `DATA_ENCRYPTION_KEY` est défini.

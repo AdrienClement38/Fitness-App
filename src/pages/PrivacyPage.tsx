@@ -1,8 +1,6 @@
 import {ArrowLeft} from 'lucide-react';
 import {useNavigate} from 'react-router-dom';
 
-const TODO = ({children}: {children: string}) => <span className="text-amber-400">[{children}]</span>;
-
 function Section({title, children}: {title: string; children: React.ReactNode}) {
   return (
     <section className="mt-5">
@@ -26,7 +24,7 @@ export default function PrivacyPage() {
 
       <Section title="Responsable du traitement">
         <p>
-          <TODO>À compléter : nom / raison sociale et email de contact du responsable</TODO>.
+          <strong>AC</strong>. Pour toute question relative à tes données : adrienc.tech@gmail.com.
         </p>
       </Section>
 
@@ -81,13 +79,13 @@ export default function PrivacyPage() {
           <li>Rectification : modifie ton mot de passe depuis « Mon compte ».</li>
           <li>Effacement : bouton « Supprimer mon compte » dans « Mon compte ».</li>
           <li>
-            Autres demandes : <TODO>À compléter : email de contact</TODO>.
+            Autres demandes : adrienc.tech@gmail.com.
           </li>
         </ul>
       </Section>
 
       <p className="mt-6 text-xs text-slate-500">
-        Dernière mise à jour : <TODO>date</TODO>. Modèle à faire relire avant l'ouverture au public.
+        Dernière mise à jour : 12 juin 2026.
       </p>
     </div>
   );
