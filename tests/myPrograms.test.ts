@@ -4,7 +4,7 @@
  * en mémoire dans les tests (localStorage absent → try/catch silencieux).
  */
 import {describe, it, expect} from 'vitest';
-import {addExerciseToSession, createEmptyProgram, getMyProgram, type AddableExercise} from '../src/lib/myPrograms';
+import {addExerciseToNewSession, addExerciseToSession, createEmptyProgram, getMyProgram, type AddableExercise} from '../src/lib/myPrograms';
 
 const BENCH: AddableExercise = {
   id: 'bench-press',
@@ -50,6 +50,17 @@ describe('addExerciseToSession', () => {
     addExerciseToSession(id, 0, {...BENCH, id: 'squat', nameFr: 'Squat'});
     const ids = getMyProgram(id)!.sessions[0].exercises.map((e) => e.exerciseId);
     expect(ids).toEqual(['bench-press', 'squat']);
+  });
+
+  it('addExerciseToNewSession crée une nouvelle séance contenant l’exercice', () => {
+    const id = createEmptyProgram('Test new');
+    const before = getMyProgram(id)!.sessions.length;
+    const name = addExerciseToNewSession(id, BENCH);
+    expect(name).toBe(`Séance ${before + 1}`);
+    const sessions = getMyProgram(id)!.sessions;
+    expect(sessions).toHaveLength(before + 1);
+    expect(sessions[before].exercises.map((e) => e.exerciseId)).toEqual(['bench-press']);
+    expect(addExerciseToNewSession('inconnu', BENCH)).toBeNull();
   });
 
   it('retourne null si le programme ou l’index de séance est introuvable', () => {

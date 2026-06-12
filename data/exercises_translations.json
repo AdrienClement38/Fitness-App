@@ -3688,7 +3688,12 @@
   {
     "id": "Iron_Cross",
     "name_fr": "Croix de fer",
-    "instructions_fr": []
+    "instructions_fr": [
+      "Tiens un haltère dans chaque main, bras le long du corps, pieds écartés à la largeur des épaules.",
+      "Fléchis légèrement les genoux et la hanche en amenant les haltères devant tes cuisses.",
+      "Remonte en tendant les jambes et écarte les bras tendus sur les côtés jusqu'à la hauteur des épaules, paumes vers le bas (position en croix).",
+      "Reviens en contrôlant à la position de départ. Garde le dos droit et les abdominaux gainés tout au long du mouvement."
+    ]
   },
   {
     "id": "Iron_Crosses_stretch",
@@ -5086,7 +5091,12 @@
   {
     "id": "One-Arm_Kettlebell_Swings",
     "name_fr": "Balancés kettlebell un bras",
-    "instructions_fr": []
+    "instructions_fr": [
+      "Place le kettlebell au sol entre tes pieds, écartés un peu plus que la largeur des épaules.",
+      "Charnière de hanche : penche le buste vers l'avant, dos plat, et saisis la poignée d'une seule main.",
+      "Balance le kettlebell vers l'arrière entre tes jambes, puis projette les hanches vers l'avant pour le propulser jusqu'à hauteur de poitrine, bras tendu.",
+      "Laisse-le redescendre en réamorçant la charnière de hanche. Le mouvement vient des hanches, pas du bras ; garde les abdominaux et le dos gainés."
+    ]
   },
   {
     "id": "One-Arm_Long_Bar_Row",
@@ -5807,7 +5817,12 @@
   {
     "id": "Push_Press",
     "name_fr": "Développé poussé (Push Press)",
-    "instructions_fr": []
+    "instructions_fr": [
+      "Place la barre sur le haut de la poitrine, mains un peu plus larges que les épaules, coudes hauts.",
+      "Fléchis légèrement les genoux (petite flexion explosive), puis tends les jambes d'un coup pour donner de l'élan à la barre.",
+      "Profite de cet élan pour pousser la barre au-dessus de la tête jusqu'au verrouillage des bras.",
+      "Ramène la barre sur la poitrine en contrôlant. Gaine les abdominaux et garde le buste droit : c'est l'impulsion des jambes qui aide les épaules."
+    ]
   },
   {
     "id": "Push_Press_-_Behind_the_Neck",
@@ -6794,7 +6809,12 @@
   {
     "id": "Side_Bridge",
     "name_fr": "Gainage latéral",
-    "instructions_fr": []
+    "instructions_fr": [
+      "Allonge-toi sur le côté, en appui sur l'avant-bras, le coude à l'aplomb de l'épaule, jambes tendues l'une sur l'autre.",
+      "Décolle le bassin pour aligner chevilles, hanches et épaules : le corps forme une ligne droite.",
+      "Maintiens la position en gainant les abdominaux et les obliques, sans laisser les hanches descendre.",
+      "Respire calmement, tiens la durée prévue, puis change de côté."
+    ]
   },
   {
     "id": "Side_Hop-Sprint",
@@ -6808,7 +6828,12 @@
   {
     "id": "Side_Jackknife",
     "name_fr": "Crunch latéral en couteau de poche",
-    "instructions_fr": []
+    "instructions_fr": [
+      "Allonge-toi sur le côté, jambes tendues l'une sur l'autre, la main du dessous au sol et celle du dessus derrière la tête.",
+      "Contracte les obliques pour rapprocher en même temps le buste et les jambes vers le haut (mouvement en V sur le côté).",
+      "Marque un temps en haut en serrant les obliques.",
+      "Redescends en contrôlant, sans relâcher complètement. Fais le nombre de répétitions prévu, puis change de côté."
+    ]
   },
   {
     "id": "Side_Lateral_Raise",

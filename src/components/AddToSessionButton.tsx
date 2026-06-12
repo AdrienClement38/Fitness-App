@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {Check, ClipboardList, ListPlus, Plus, X} from 'lucide-react';
-import {addExerciseToSession, createEmptyProgram, useMyPrograms, type AddableExercise} from '../lib/myPrograms';
+import {addExerciseToNewSession, addExerciseToSession, createEmptyProgram, useMyPrograms, type AddableExercise} from '../lib/myPrograms';
 
 /**
  * Bouton « Ajouter à une séance » + sélecteur (programme perso -> séance).
@@ -39,6 +39,10 @@ function SessionPicker({ex, onClose}: {ex: AddableExercise; onClose: () => void}
     if (sessionName) setAdded(`${sessionName} · ${programName}`);
   };
   const createAndAdd = () => add(createEmptyProgram(), 0, 'Mon programme');
+  const addNew = (programId: string, programName: string) => {
+    const sessionName = addExerciseToNewSession(programId, ex);
+    if (sessionName) setAdded(`${sessionName} · ${programName}`);
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-slate-950/80 p-3 backdrop-blur-sm" onClick={onClose}>
@@ -79,40 +83,48 @@ function SessionPicker({ex, onClose}: {ex: AddableExercise; onClose: () => void}
                     <ClipboardList className="h-4 w-4 shrink-0 text-emerald-400" />
                     <span className="truncate">{p.nameFr}</span>
                   </p>
-                  {p.sessions.length === 0 ? (
-                    <p className="text-xs text-slate-500">Aucune séance.</p>
-                  ) : (
-                    <div className="grid gap-1.5">
-                      {p.sessions.map((s, si) => {
-                        const already = s.exercises.some((e) => e.exerciseId === ex.id);
-                        return (
-                          <button
-                            key={si}
-                            disabled={already}
-                            onClick={() => add(p.id, si, p.nameFr)}
-                            className={`flex items-center justify-between gap-2 rounded-lg border px-3 py-2.5 text-left text-sm transition-colors ${
-                              already
-                                ? 'cursor-default border-slate-800/60 bg-slate-900/30 text-slate-500'
-                                : 'border-slate-800 bg-slate-900/60 hover:border-emerald-500/50 hover:bg-slate-800/60'
-                            }`}
-                          >
-                            <span className="truncate font-medium">{s.nameFr}</span>
-                            <span className="shrink-0 text-xs text-slate-500">
-                              {already ? (
-                                <span className="flex items-center gap-1 text-emerald-400">
-                                  <Check className="h-3.5 w-3.5" /> déjà ajouté
-                                </span>
-                              ) : (
-                                `${s.exercises.length} exo${s.exercises.length > 1 ? 's' : ''}`
-                              )}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  )}
+                  <div className="grid gap-1.5">
+                    {p.sessions.map((s, si) => {
+                      const already = s.exercises.some((e) => e.exerciseId === ex.id);
+                      return (
+                        <button
+                          key={si}
+                          disabled={already}
+                          onClick={() => add(p.id, si, p.nameFr)}
+                          className={`flex items-center justify-between gap-2 rounded-lg border px-3 py-2.5 text-left text-sm transition-colors ${
+                            already
+                              ? 'cursor-default border-slate-800/60 bg-slate-900/30 text-slate-500'
+                              : 'border-slate-800 bg-slate-900/60 hover:border-emerald-500/50 hover:bg-slate-800/60'
+                          }`}
+                        >
+                          <span className="truncate font-medium">{s.nameFr}</span>
+                          <span className="shrink-0 text-xs text-slate-500">
+                            {already ? (
+                              <span className="flex items-center gap-1 text-emerald-400">
+                                <Check className="h-3.5 w-3.5" /> déjà ajouté
+                              </span>
+                            ) : (
+                              `${s.exercises.length} exo${s.exercises.length > 1 ? 's' : ''}`
+                            )}
+                          </span>
+                        </button>
+                      );
+                    })}
+                    <button
+                      onClick={() => addNew(p.id, p.nameFr)}
+                      className="flex items-center gap-1.5 rounded-lg border border-dashed border-slate-700 px-3 py-2 text-left text-sm text-slate-400 transition-colors hover:border-emerald-500/50 hover:text-emerald-300"
+                    >
+                      <Plus className="h-4 w-4 shrink-0" /> Nouvelle séance
+                    </button>
+                  </div>
                 </div>
               ))}
+              <button
+                onClick={createAndAdd}
+                className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-dashed border-emerald-700/50 px-3 py-2.5 text-sm font-medium text-emerald-300 transition-colors hover:bg-emerald-500/10"
+              >
+                <Plus className="h-4 w-4" /> Nouveau programme
+              </button>
             </div>
           )}
         </div>

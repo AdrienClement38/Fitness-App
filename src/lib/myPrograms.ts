@@ -155,19 +155,10 @@ export interface AddableExercise {
   equipmentId: string | null;
 }
 
-/**
- * Ajoute un exercice EN FIN d'une séance (ciblée par index) d'un programme perso,
- * avec des valeurs de prescription par défaut selon le mode de saisie. Persiste et
- * synchronise via updateMyProgram. Retourne le nom de la séance, ou null si la cible
- * (programme ou index de séance) est introuvable.
- */
-export function addExerciseToSession(programId: string, sessionIndex: number, ex: AddableExercise): string | null {
-  const program = getMyProgram(programId);
-  const session = program?.sessions[sessionIndex];
-  if (!program || !session) return null;
+/** Construit une entrée d'exercice avec les défauts de prescription selon le mode de saisie. */
+function buildEntry(ex: AddableExercise): MyProgramExercise {
   const def = ADD_DEFAULTS[measureKind(ex)];
-  const draft = structuredClone(program);
-  draft.sessions[sessionIndex].exercises.push({
+  return {
     exerciseId: ex.id,
     nameFr: ex.nameFr,
     nameEn: ex.nameEn,
@@ -179,9 +170,33 @@ export function addExerciseToSession(programId: string, sessionIndex: number, ex
     repsMax: def.max,
     restSeconds: def.rest,
     notesFr: null,
-  });
+  };
+}
+
+/**
+ * Ajoute un exercice EN FIN d'une séance (ciblée par index) d'un programme perso.
+ * Persiste + synchronise via updateMyProgram. Retourne le nom de la séance, ou null
+ * si la cible (programme ou index de séance) est introuvable.
+ */
+export function addExerciseToSession(programId: string, sessionIndex: number, ex: AddableExercise): string | null {
+  const program = getMyProgram(programId);
+  const session = program?.sessions[sessionIndex];
+  if (!program || !session) return null;
+  const draft = structuredClone(program);
+  draft.sessions[sessionIndex].exercises.push(buildEntry(ex));
   updateMyProgram(draft);
   return session.nameFr;
+}
+
+/** Crée une NOUVELLE séance dans le programme et y ajoute l'exercice. Retourne le nom de la séance. */
+export function addExerciseToNewSession(programId: string, ex: AddableExercise): string | null {
+  const program = getMyProgram(programId);
+  if (!program) return null;
+  const draft = structuredClone(program);
+  const name = `Séance ${draft.sessions.length + 1}`;
+  draft.sessions.push({nameFr: name, focusFr: null, exercises: [buildEntry(ex)]});
+  updateMyProgram(draft);
+  return name;
 }
 
 export function updateMyProgram(updated: MyProgram) {
