@@ -12,6 +12,8 @@ export interface LoggedSet {
   weight: number | null;
   reps: number | null;
   done: boolean;
+  doneAtIso?: string | null; // horodatage de fin de série (stats poids · série · temps)
+  restTakenSeconds?: number | null; // repos réellement pris APRÈS cette série
 }
 export interface LoggedExercise {
   exerciseId: string;
@@ -19,7 +21,15 @@ export interface LoggedExercise {
   nameEn: string;
   targetReps: string; // objectif affiché : reps, secondes ou minutes selon kind
   kind: MeasureKind; // mode de saisie (load / bodyweight / duration / cardio)
+  restSeconds: number | null; // repos prescrit entre les séries
   sets: LoggedSet[];
+}
+/** Repos en cours (le compte à rebours survit à un reload : tout est horodaté). */
+export interface RestState {
+  ei: number; // index de l'exercice
+  si: number; // index de la série qui vient d'être faite
+  startedIso: string;
+  targetSeconds: number;
 }
 export interface WorkoutLog {
   id: string;
@@ -28,6 +38,7 @@ export interface WorkoutLog {
   programName: string | null;
   sessionName: string;
   exercises: LoggedExercise[];
+  rest?: RestState | null; // séance active uniquement
   updatedAt?: string; // pour la sync (last-write-wins)
 }
 
@@ -43,6 +54,7 @@ export interface SessionSeed {
     sets: number | null;
     repsMin: number | null;
     repsMax: number | null;
+    restSeconds: number | null;
   }[];
 }
 
@@ -153,6 +165,7 @@ export function startSession(seed: SessionSeed): string {
         nameEn: e.nameEn,
         targetReps: repsLabel(e.repsMin, e.repsMax),
         kind: e.kind,
+        restSeconds: e.restSeconds,
         sets: Array.from({length: count}, () => ({weight: w, reps: e.repsMin, done: false})),
       };
     }),
@@ -168,11 +181,53 @@ export function updateActive(mut: (draft: WorkoutLog) => void) {
   saveActive(draft);
 }
 
+const DEFAULT_REST_SECONDS = 90;
+
+/**
+ * Coche une série : marquée faite (horodatée) + démarre le repos prescrit.
+ * Décocher annule l'horodatage, le repos mesuré, et le minuteur s'il portait
+ * sur cette série.
+ */
+export function toggleSetDone(ei: number, si: number) {
+  updateActive((d) => {
+    const ex = d.exercises[ei];
+    const s = ex?.sets[si];
+    if (!s) return;
+    if (s.done) {
+      s.done = false;
+      s.doneAtIso = null;
+      s.restTakenSeconds = null;
+      if (d.rest && d.rest.ei === ei && d.rest.si === si) d.rest = null;
+    } else {
+      s.done = true;
+      s.doneAtIso = new Date().toISOString();
+      d.rest = {ei, si, startedIso: s.doneAtIso, targetSeconds: ex.restSeconds ?? DEFAULT_REST_SECONDS};
+    }
+  });
+}
+
+/** Ajuste le repos en cours (± secondes, plancher 5 s). */
+export function adjustRest(deltaSeconds: number) {
+  updateActive((d) => {
+    if (d.rest) d.rest.targetSeconds = Math.max(5, d.rest.targetSeconds + deltaSeconds);
+  });
+}
+
+/** Termine le repos : enregistre le repos réellement pris sur la série concernée. */
+export function finishRest() {
+  updateActive((d) => {
+    if (!d.rest) return;
+    const s = d.exercises[d.rest.ei]?.sets[d.rest.si];
+    if (s) s.restTakenSeconds = Math.max(0, Math.round((Date.now() - new Date(d.rest.startedIso).getTime()) / 1000));
+    d.rest = null;
+  });
+}
+
 /** Termine la séance active -> bascule dans l'historique. */
 export function finishActive() {
   if (!active) return;
   const at = new Date().toISOString();
-  const finished: WorkoutLog = {...structuredClone(active), finishedIso: at, updatedAt: at};
+  const finished: WorkoutLog = {...structuredClone(active), finishedIso: at, updatedAt: at, rest: null};
   saveHistory([finished, ...history]);
   saveActive(null);
   pushItems([{kind: KIND, itemId: finished.id, data: finished, updatedAt: at, deleted: false}]);

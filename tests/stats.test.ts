@@ -3,15 +3,15 @@
  * 1RM estimé, agrégation des records, progression et volume hebdomadaire.
  */
 import {describe, expect, it} from 'vitest';
-import {epley1RM, exerciseStats, progression, summary, weeklyVolume} from '../src/lib/stats';
-import type {WorkoutLog} from '../src/lib/workoutLogs';
+import {avgRestSeconds, durationMinutes, epley1RM, exerciseStats, progression, summary, weeklyVolume} from '../src/lib/stats';
+import type {LoggedSet, WorkoutLog} from '../src/lib/workoutLogs';
 
-const set = (weight: number | null, reps: number | null, done = true) => ({weight, reps, done});
-const bench = (sets: ReturnType<typeof set>[]) => ({
-  exerciseId: 'bench', nameFr: 'Développé', nameEn: 'Bench', targetReps: '8', kind: 'load' as const, sets,
+const set = (weight: number | null, reps: number | null, done = true): LoggedSet => ({weight, reps, done});
+const bench = (sets: LoggedSet[]) => ({
+  exerciseId: 'bench', nameFr: 'Développé', nameEn: 'Bench', targetReps: '8', kind: 'load' as const, restSeconds: null, sets,
 });
-const plank = (sets: ReturnType<typeof set>[]) => ({
-  exerciseId: 'plank', nameFr: 'Gainage', nameEn: 'Plank', targetReps: '30', kind: 'duration' as const, sets,
+const plank = (sets: LoggedSet[]) => ({
+  exerciseId: 'plank', nameFr: 'Gainage', nameEn: 'Plank', targetReps: '30', kind: 'duration' as const, restSeconds: null, sets,
 });
 const log = (id: string, dateIso: string, exercises: WorkoutLog['exercises']): WorkoutLog => ({
   id, startedIso: dateIso, finishedIso: dateIso, programName: 'P', sessionName: 'S', exercises,
@@ -72,8 +72,8 @@ describe('progression', () => {
 });
 
 describe('mode poids du corps (bodyweight)', () => {
-  const bw = (sets: ReturnType<typeof set>[]) => ({
-    exerciseId: 'pushups', nameFr: 'Pompes', nameEn: 'Pushups', targetReps: '10', kind: 'bodyweight' as const, sets,
+  const bw = (sets: LoggedSet[]) => ({
+    exerciseId: 'pushups', nameFr: 'Pompes', nameEn: 'Pushups', targetReps: '10', kind: 'bodyweight' as const, restSeconds: null, sets,
   });
   const h: WorkoutLog[] = [
     log('p2', '2026-06-11T18:00:00.000Z', [bw([set(null, 20), set(null, 18)])]),
@@ -92,6 +92,27 @@ describe('mode poids du corps (bodyweight)', () => {
     const {points, kind} = progression(h, 'pushups');
     expect(kind).toBe('bodyweight');
     expect(points.map((p) => p.value)).toEqual([15, 20]);
+  });
+});
+
+describe('durée de séance & repos mesuré', () => {
+  it('durée en minutes (arrondie) et repos moyen pris', () => {
+    const l: WorkoutLog = {
+      id: 'd1',
+      startedIso: '2026-06-11T18:00:00.000Z',
+      finishedIso: '2026-06-11T18:40:30.000Z',
+      programName: null,
+      sessionName: 'S',
+      exercises: [bench([{...set(60, 8), restTakenSeconds: 60}, {...set(60, 8), restTakenSeconds: 90}, set(60, 8)])],
+    };
+    expect(durationMinutes(l)).toBe(41); // 40 min 30 s arrondi
+    expect(avgRestSeconds(l)).toBe(75); // (60+90)/2, la série sans mesure est ignorée
+  });
+
+  it('null si durée nulle ou repos jamais mesuré', () => {
+    const l = log('d2', '2026-06-11T18:00:00.000Z', [bench([set(60, 8)])]);
+    expect(durationMinutes(l)).toBe(null); // started === finished
+    expect(avgRestSeconds(l)).toBe(null);
   });
 });
 

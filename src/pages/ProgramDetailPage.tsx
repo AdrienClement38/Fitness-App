@@ -41,6 +41,7 @@ export default function ProgramDetailPage() {
         sets: e.sets,
         repsMin: e.repsMin,
         repsMax: e.repsMax,
+        restSeconds: e.restSeconds,
       })),
     });
     navigate('/seance');

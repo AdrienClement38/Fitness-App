@@ -122,6 +122,26 @@ export function weeklyVolume(logs: WorkoutLog[]): WeekVolume[] {
     .sort((a, b) => (a.weekStartIso < b.weekStartIso ? -1 : 1));
 }
 
+/** Durée de la séance en minutes (null si non terminée ou incohérente). */
+export function durationMinutes(log: WorkoutLog): number | null {
+  if (!log.finishedIso) return null;
+  const ms = new Date(log.finishedIso).getTime() - new Date(log.startedIso).getTime();
+  if (!Number.isFinite(ms) || ms <= 0) return null;
+  return Math.round(ms / 60000);
+}
+
+/** Repos moyen réellement pris entre les séries (secondes), null si jamais mesuré. */
+export function avgRestSeconds(log: WorkoutLog): number | null {
+  const vals: number[] = [];
+  for (const ex of log.exercises) {
+    for (const s of ex.sets) {
+      if (s.done && s.restTakenSeconds != null) vals.push(s.restTakenSeconds);
+    }
+  }
+  if (vals.length === 0) return null;
+  return Math.round(vals.reduce((a, b) => a + b) / vals.length);
+}
+
 export function summary(logs: WorkoutLog[]): {sessions: number; thisWeek: number; totalVolume: number} {
   let totalVolume = 0;
   for (const log of logs) {

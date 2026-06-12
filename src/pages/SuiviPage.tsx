@@ -2,7 +2,7 @@ import {useMemo, useState} from 'react';
 import {Play, Trash2} from 'lucide-react';
 import {Link} from 'react-router-dom';
 import {deleteLog, logVolume, setsDone, useActiveWorkout, useWorkoutHistory} from '../lib/workoutLogs';
-import {exerciseStats, progression, summary, weeklyVolume, type ExerciseStat} from '../lib/stats';
+import {avgRestSeconds, durationMinutes, exerciseStats, progression, summary, weeklyVolume, type ExerciseStat} from '../lib/stats';
 import type {MeasureKind} from '../lib/api';
 import {BarChart, LineChart} from '../components/Charts';
 import {Badge, Empty, SectionTitle} from '../components/ui';
@@ -141,6 +141,8 @@ export default function SuiviPage() {
           <div className="grid gap-3">
             {history.map((log) => {
               const vol = logVolume(log);
+              const dur = durationMinutes(log);
+              const avgRest = avgRestSeconds(log);
               return (
                 <div key={log.id} className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
                   <div className="flex items-start justify-between gap-2">
@@ -165,6 +167,8 @@ export default function SuiviPage() {
                     <Badge>{log.exercises.length} exos</Badge>
                     <Badge tone="emerald">{setsDone(log)} séries faites</Badge>
                     {vol > 0 && <Badge tone="indigo">{vol.toLocaleString('fr-FR')} kg de volume</Badge>}
+                    {dur != null && <Badge>{dur} min</Badge>}
+                    {avgRest != null && <Badge tone="amber">repos ~{avgRest}s</Badge>}
                   </div>
                 </div>
               );

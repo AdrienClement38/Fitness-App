@@ -1,9 +1,13 @@
-import {Check, Plus, X} from 'lucide-react';
+import {useEffect, useRef, useState} from 'react';
+import {Check, Minus, Plus, Timer, X} from 'lucide-react';
 import {Link, useNavigate} from 'react-router-dom';
 import {
   abandonActive,
+  adjustRest,
   finishActive,
+  finishRest,
   setsDone,
+  toggleSetDone,
   updateActive,
   useActiveWorkout,
   type LoggedSet,
@@ -34,9 +38,36 @@ function NumCell({
   );
 }
 
+const mmss = (s: number) => `${Math.floor(Math.max(0, s) / 60)}:${String(Math.max(0, s) % 60).padStart(2, '0')}`;
+
 export default function WorkoutPage() {
   const navigate = useNavigate();
   const w = useActiveWorkout();
+
+  // Tique chaque seconde pendant la séance : horloge + compte à rebours du repos.
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    if (!w) return;
+    const t = setInterval(() => setTick((n) => n + 1), 1000);
+    return () => clearInterval(t);
+  }, [!!w]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const now = Date.now();
+  const rest = w?.rest ?? null;
+  const remaining = rest ? rest.targetSeconds - Math.floor((now - Date.parse(rest.startedIso)) / 1000) : null;
+
+  // Vibre (mobile) au moment précis où le repos se termine.
+  const prevRemaining = useRef<number | null>(null);
+  useEffect(() => {
+    if (remaining != null && remaining <= 0 && prevRemaining.current != null && prevRemaining.current > 0) {
+      try {
+        navigator.vibrate?.([200, 100, 200]);
+      } catch {
+        /* non supporté */
+      }
+    }
+    prevRemaining.current = remaining;
+  });
 
   if (!w) {
     return (
@@ -65,10 +96,12 @@ export default function WorkoutPage() {
   const removeSet = (ei: number, si: number) =>
     updateActive((d) => {
       d.exercises[ei].sets.splice(si, 1);
+      if (d.rest && d.rest.ei === ei && d.rest.si === si) d.rest = null;
     });
 
   const total = w.exercises.reduce((a, e) => a + e.sets.length, 0);
   const done = setsDone(w);
+  const elapsedMin = Math.max(0, Math.floor((now - Date.parse(w.startedIso)) / 60000));
 
   const finish = () => {
     finishActive();
@@ -81,13 +114,17 @@ export default function WorkoutPage() {
     }
   };
 
+  const restingExo = rest ? w.exercises[rest.ei] : null;
+  const restOver = remaining != null && remaining <= 0;
+  const restPct = rest ? Math.max(0, Math.min(100, ((rest.targetSeconds - Math.max(0, remaining ?? 0)) / rest.targetSeconds) * 100)) : 0;
+
   return (
-    <div>
+    <div className={rest ? 'pb-32' : ''}>
       <div className="rounded-xl border border-emerald-900/40 bg-emerald-950/20 p-4">
         <h1 className="text-lg font-bold">{w.sessionName}</h1>
         {w.programName && <p className="text-sm text-slate-400">{w.programName}</p>}
         <p className="mt-1 text-xs font-medium text-emerald-300">
-          {done} / {total} séries faites
+          {done} / {total} séries faites · {elapsedMin} min
         </p>
       </div>
 
@@ -108,6 +145,7 @@ export default function WorkoutPage() {
                 {e.targetReps && (
                   <span className="shrink-0 text-xs text-slate-500">
                     objectif {e.targetReps} {objUnit}
+                    {e.restSeconds ? ` · repos ${e.restSeconds}s` : ''}
                   </span>
                 )}
               </div>
@@ -126,7 +164,12 @@ export default function WorkoutPage() {
                 <span />
               </div>
               {e.sets.map((s, si) => (
-                <div key={si} className={`mt-1.5 ${cols} rounded-md ${s.done ? 'bg-emerald-500/10' : ''}`}>
+                <div
+                  key={si}
+                  className={`mt-1.5 ${cols} rounded-md ${
+                    rest && rest.ei === ei && rest.si === si ? 'bg-amber-500/10' : s.done ? 'bg-emerald-500/10' : ''
+                  }`}
+                >
                   <span className="text-center text-sm text-slate-500">{si + 1}</span>
                   {load ? (
                     <>
@@ -137,8 +180,8 @@ export default function WorkoutPage() {
                     <NumCell value={s.reps} onChange={(v) => setField(ei, si, {reps: v})} step={e.kind === 'duration' ? 5 : 1} placeholder={valLabel} />
                   )}
                   <button
-                    onClick={() => setField(ei, si, {done: !s.done})}
-                    aria-label="Série faite"
+                    onClick={() => toggleSetDone(ei, si)}
+                    aria-label="Série faite (lance le repos)"
                     className={`mx-auto flex h-7 w-7 items-center justify-center rounded-full border transition-colors ${
                       s.done ? 'border-emerald-500 bg-emerald-500 text-slate-950' : 'border-slate-600 text-transparent hover:border-emerald-500'
                     }`}
@@ -167,6 +210,68 @@ export default function WorkoutPage() {
       <button onClick={abandon} className="mt-2 w-full rounded-xl px-4 py-2 text-sm text-slate-500 hover:text-red-300">
         Abandonner
       </button>
+
+      {/* Minuteur de repos : barre flottante au-dessus de la nav. */}
+      {rest && (
+        <div className="fixed inset-x-0 bottom-16 z-10 px-4">
+          <div
+            className={`mx-auto max-w-2xl rounded-2xl border p-3 shadow-xl backdrop-blur ${
+              restOver ? 'border-emerald-500/60 bg-emerald-950/95' : 'border-slate-700 bg-slate-900/95'
+            }`}
+          >
+            {restOver ? (
+              <div className="flex items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="animate-pulse font-semibold text-emerald-300">Repos terminé !</p>
+                  <p className="truncate text-xs text-slate-400">Reprends : {restingExo?.nameFr ?? restingExo?.nameEn}</p>
+                </div>
+                <button
+                  onClick={() => finishRest()}
+                  className="shrink-0 rounded-xl bg-emerald-500 px-4 py-2.5 text-sm font-bold text-slate-950 hover:bg-emerald-400"
+                >
+                  Reprendre la série
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center justify-between gap-2">
+                  <div className="min-w-0">
+                    <p className="flex items-center gap-1 truncate text-xs text-slate-400">
+                      <Timer className="h-3.5 w-3.5 shrink-0" /> Repos · {restingExo?.nameFr ?? restingExo?.nameEn}
+                    </p>
+                    <p className="text-2xl font-bold tabular-nums">{mmss(remaining ?? 0)}</p>
+                  </div>
+                  <div className="flex shrink-0 items-center gap-1.5">
+                    <button
+                      onClick={() => adjustRest(-15)}
+                      className="flex items-center gap-0.5 rounded-lg border border-slate-700 px-2 py-1.5 text-xs text-slate-300 hover:bg-slate-800"
+                    >
+                      <Minus className="h-3 w-3" />
+                      15s
+                    </button>
+                    <button
+                      onClick={() => adjustRest(15)}
+                      className="flex items-center gap-0.5 rounded-lg border border-slate-700 px-2 py-1.5 text-xs text-slate-300 hover:bg-slate-800"
+                    >
+                      <Plus className="h-3 w-3" />
+                      15s
+                    </button>
+                    <button
+                      onClick={() => finishRest()}
+                      className="rounded-lg bg-emerald-500/20 px-3 py-1.5 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/30"
+                    >
+                      Reprendre
+                    </button>
+                  </div>
+                </div>
+                <div className="mt-2 h-1 overflow-hidden rounded-full bg-slate-800">
+                  <div className="h-full bg-emerald-400 transition-[width] duration-1000 ease-linear" style={{width: `${restPct}%`}} />
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
