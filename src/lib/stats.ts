@@ -8,7 +8,7 @@ import type {MeasureKind} from './api';
 /** 1RM estimé (formule d'Epley) : charge max théorique pour 1 répétition. */
 export const epley1RM = (weight: number, reps: number): number => weight * (1 + reps / 30);
 
-const logDate = (l: WorkoutLog): string => l.finishedIso ?? l.startedIso;
+const logDate = (l: WorkoutLog): string => l.finishedIso ?? l.startedIso ?? '';
 
 /** Clé de semaine (lundi, AAAA-MM-JJ) d'une date ISO. */
 function weekKey(iso: string): string {
@@ -124,7 +124,7 @@ export function weeklyVolume(logs: WorkoutLog[]): WeekVolume[] {
 
 /** Durée de la séance en minutes (null si non terminée ou incohérente). */
 export function durationMinutes(log: WorkoutLog): number | null {
-  if (!log.finishedIso) return null;
+  if (!log.finishedIso || !log.startedIso) return null;
   const ms = new Date(log.finishedIso).getTime() - new Date(log.startedIso).getTime();
   if (!Number.isFinite(ms) || ms <= 0) return null;
   return Math.round(ms / 60000);

@@ -1,5 +1,5 @@
 import {useEffect, useRef, useState} from 'react';
-import {Check, Minus, Plus, Timer, X} from 'lucide-react';
+import {Check, Minus, Play, Plus, Timer, X} from 'lucide-react';
 import {Link, useNavigate} from 'react-router-dom';
 import {
   abandonActive,
@@ -7,6 +7,7 @@ import {
   finishActive,
   finishRest,
   setsDone,
+  startChrono,
   toggleSetDone,
   updateActive,
   useActiveWorkout,
@@ -39,6 +40,16 @@ function NumCell({
 }
 
 const mmss = (s: number) => `${Math.floor(Math.max(0, s) / 60)}:${String(Math.max(0, s) % 60).padStart(2, '0')}`;
+
+/** Chrono de séance : H:MM:SS au-delà d'une heure, sinon M:SS. */
+const hms = (s: number) => {
+  s = Math.max(0, Math.floor(s));
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const sec = s % 60;
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return h > 0 ? `${h}:${pad(m)}:${pad(sec)}` : `${m}:${pad(sec)}`;
+};
 
 export default function WorkoutPage() {
   const navigate = useNavigate();
@@ -101,8 +112,10 @@ export default function WorkoutPage() {
 
   const total = w.exercises.reduce((a, e) => a + e.sets.length, 0);
   const done = setsDone(w);
-  const elapsedMin = Math.max(0, Math.floor((now - Date.parse(w.startedIso)) / 60000));
+  const started = w.startedIso != null;
+  const elapsedSec = w.startedIso ? Math.max(0, Math.floor((now - Date.parse(w.startedIso)) / 1000)) : 0;
 
+  const start = () => startChrono();
   const finish = () => {
     finishActive();
     navigate('/suivi');
@@ -123,9 +136,25 @@ export default function WorkoutPage() {
       <div className="rounded-xl border border-emerald-900/40 bg-emerald-950/20 p-4">
         <h1 className="text-lg font-bold">{w.sessionName}</h1>
         {w.programName && <p className="text-sm text-slate-400">{w.programName}</p>}
-        <p className="mt-1 text-xs font-medium text-emerald-300">
-          {done} / {total} séries faites · {elapsedMin} min
-        </p>
+        {started ? (
+          <p className="mt-2 flex items-center gap-2 font-semibold text-emerald-300">
+            <Timer className="h-5 w-5 shrink-0" />
+            <span className="text-2xl tabular-nums">{hms(elapsedSec)}</span>
+            <span className="text-xs font-medium text-slate-400">· {done}/{total} séries faites</span>
+          </p>
+        ) : (
+          <>
+            <p className="mt-1 text-xs text-slate-400">
+              {w.exercises.length} exercices · {total} séries prévues. Renseigne tes charges, puis lance le chrono.
+            </p>
+            <button
+              onClick={start}
+              className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-500 px-4 py-2.5 text-sm font-bold text-slate-950 hover:bg-emerald-400"
+            >
+              <Play className="h-4 w-4" /> Commencer la séance
+            </button>
+          </>
+        )}
       </div>
 
       <div className="mt-4 grid gap-4">
@@ -201,14 +230,23 @@ export default function WorkoutPage() {
         })}
       </div>
 
-      <button
-        onClick={finish}
-        className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500/20 px-4 py-3 text-sm font-semibold text-emerald-300 hover:bg-emerald-500/30"
-      >
-        <Check className="h-4 w-4" /> Terminer la séance
-      </button>
+      {started ? (
+        <button
+          onClick={finish}
+          className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500/20 px-4 py-3 text-sm font-semibold text-emerald-300 hover:bg-emerald-500/30"
+        >
+          <Check className="h-4 w-4" /> Terminer la séance
+        </button>
+      ) : (
+        <button
+          onClick={start}
+          className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-700/50 px-4 py-3 text-sm font-semibold text-emerald-300 hover:bg-emerald-500/10"
+        >
+          <Play className="h-4 w-4" /> Commencer la séance
+        </button>
+      )}
       <button onClick={abandon} className="mt-2 w-full rounded-xl px-4 py-2 text-sm text-slate-500 hover:text-red-300">
-        Abandonner
+        {started ? 'Abandonner' : 'Quitter'}
       </button>
 
       {/* Minuteur de repos : barre flottante au-dessus de la nav. */}

@@ -33,7 +33,7 @@ export interface RestState {
 }
 export interface WorkoutLog {
   id: string;
-  startedIso: string;
+  startedIso: string | null; // null tant que le chrono n'est pas lancé (« Commencer la séance »)
   finishedIso: string | null;
   programName: string | null;
   sessionName: string;
@@ -152,7 +152,7 @@ export function startSession(seed: SessionSeed): string {
   const id = genId();
   const log: WorkoutLog = {
     id,
-    startedIso: new Date().toISOString(),
+    startedIso: null, // le chrono démarre via « Commencer la séance »
     finishedIso: null,
     programName: seed.programName,
     sessionName: seed.sessionName,
@@ -181,6 +181,13 @@ export function updateActive(mut: (draft: WorkoutLog) => void) {
   saveActive(draft);
 }
 
+/** Lance le chrono de la séance (bouton « Commencer la séance »). Idempotent. */
+export function startChrono() {
+  updateActive((d) => {
+    if (!d.startedIso) d.startedIso = new Date().toISOString();
+  });
+}
+
 const DEFAULT_REST_SECONDS = 90;
 
 /**
@@ -201,6 +208,7 @@ export function toggleSetDone(ei: number, si: number) {
     } else {
       s.done = true;
       s.doneAtIso = new Date().toISOString();
+      if (!d.startedIso) d.startedIso = s.doneAtIso; // filet : démarre le chrono s'il a été oublié
       d.rest = {ei, si, startedIso: s.doneAtIso, targetSeconds: ex.restSeconds ?? DEFAULT_REST_SECONDS};
     }
   });
@@ -227,7 +235,9 @@ export function finishRest() {
 export function finishActive() {
   if (!active) return;
   const at = new Date().toISOString();
-  const finished: WorkoutLog = {...structuredClone(active), finishedIso: at, updatedAt: at, rest: null};
+  // Chrono jamais lancé → durée bornée à 0 (start = fin).
+  const startedIso = active.startedIso ?? at;
+  const finished: WorkoutLog = {...structuredClone(active), startedIso, finishedIso: at, updatedAt: at, rest: null};
   saveHistory([finished, ...history]);
   saveActive(null);
   pushItems([{kind: KIND, itemId: finished.id, data: finished, updatedAt: at, deleted: false}]);
@@ -268,7 +278,7 @@ export function useWorkoutHistory(): WorkoutLog[] {
 }
 
 /* ---- Synchronisation (last-write-wins par updatedAt + tombstones) ------ */
-const logAt = (l: WorkoutLog) => l.updatedAt ?? l.finishedIso ?? l.startedIso;
+const logAt = (l: WorkoutLog) => l.updatedAt ?? l.finishedIso ?? l.startedIso ?? '';
 
 function snapshot(): SyncItem[] {
   const items: SyncItem[] = history.map((l) => ({kind: KIND, itemId: l.id, data: l, updatedAt: logAt(l), deleted: false}));
