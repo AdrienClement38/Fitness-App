@@ -1,0 +1,76 @@
+name: CI & Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# Un seul déploiement à la fois (annule le précédent si on repush vite).
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  ci:
+    name: Lint · Test · Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+
+  deploy:
+    name: Déploiement AlwaysData
+    needs: ci
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    env:
+      SSH_HOST: ssh-fitnessapp.alwaysdata.net
+      SSH_USER: fitnessapp
+      REMOTE_DIR: salle-de-sport
+      SITE_URL: https://fitnessapp.alwaysdata.net
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Build (front + sw.js + server.cjs)
+        run: npm run build
+
+      - name: Configurer la clé SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts 2>/dev/null
+
+      - name: Envoyer les artefacts (rsync)
+        run: |
+          RSH="ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes"
+          # --delete sur dist : on retire les vieux assets hashés. Migrations idem (append-only mais propre).
+          rsync -az --delete -e "$RSH" dist/                  "$SSH_USER@$SSH_HOST:$REMOTE_DIR/dist/"
+          rsync -az --delete -e "$RSH" server/db/migrations/  "$SSH_USER@$SSH_HOST:$REMOTE_DIR/server/db/migrations/"
+          rsync -az          -e "$RSH" package.json package-lock.json "$SSH_USER@$SSH_HOST:$REMOTE_DIR/"
+
+      - name: Installer le runtime + redémarrer
+        run: |
+          # Deps runtime seulement (ni Vite, ni React, ni PGlite) puis on tue le node :
+          # AlwaysData relance l'upstream avec le nouveau code à la prochaine requête.
+          # Les migrations Drizzle s'appliquent au démarrage (migrateDb).
+          ssh -i ~/.ssh/deploy_key "$SSH_USER@$SSH_HOST" \
+            "cd $REMOTE_DIR && npm install --omit=dev --no-audit --no-fund && (pkill -x node || true)"
+
+      - name: Réveiller le site et vérifier
+        run: |
+          sleep 3
+          curl -fsS --retry 6 --retry-delay 3 "$SITE_URL/api/programs" > /dev/null
+          echo "✅ $SITE_URL répond (déploiement OK)"

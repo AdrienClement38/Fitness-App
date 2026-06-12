@@ -78,8 +78,37 @@ Vérifications post-déploiement :
 3. re-seed seulement si `data/` a changé ;
 4. redémarrer le site (panel ou API AlwaysData).
 
-Étape suivante envisageable : automatiser via GitHub Actions (build → rsync SSH →
-restart via l'API AlwaysData), comme sur Co-Tripper.
+## CI/CD automatique (GitHub Actions)
+
+Workflow : `.github/workflows/deploy.yml`. À chaque **push sur `main`** :
+1. **CI** : `npm ci` → `typecheck` → `test` (Vitest) → `build`.
+2. **Deploy** (si CI verte) : build, puis **rsync** de `dist/` + `server/db/migrations/`
+   + `package.json`/`lock` vers `~/salle-de-sport`, `npm install --omit=dev`, puis `pkill -x node`
+   (AlwaysData relance l'upstream avec le nouveau code à la 1ʳᵉ requête ; les migrations Drizzle
+   s'appliquent au démarrage). Une requête de réveil + vérif termine le job.
+
+Les **pull requests** ne lancent que la CI (pas le deploy).
+
+### Secret à configurer (une fois)
+GitHub → repo → **Settings → Secrets and variables → Actions → New repository secret** :
+- **`SSH_PRIVATE_KEY`** = le contenu **intégral** de la clé privée de déploiement
+  (`~/.ssh/alwaysdata_salle` côté poste local — la clé publique est déjà dans
+  `~/.ssh/authorized_keys` du serveur). Ne jamais committer cette clé.
+
+Host (`ssh-fitnessapp.alwaysdata.net`) et user (`fitnessapp`) sont en clair dans le workflow
+(non sensibles). Le `.env` serveur (NODE_ENV + DATABASE_URL) reste sur le serveur, hors CI.
+
+### Ce que la CI ne fait PAS
+- **Pas de seed** automatique (le seed vide+recharge la bibliothèque ; il ne touche pas aux comptes
+  ni à la sync, mais inutile à chaque deploy). Re-seeder seulement quand `data/` change, **depuis le
+  poste local** : `DATABASE_URL=... npm run db:seed`.
+- Les **migrations de schéma** (`server/db/migrations/`) sont envoyées par le deploy et appliquées
+  automatiquement au redémarrage du serveur — rien à faire manuellement.
+
+### Restart plus « propre » (option)
+`pkill -x node` marche (relance à la demande). Pour un redémarrage explicite sans coupure, on peut
+passer par l'**API AlwaysData** (`PATCH .../v1/site/<id>/` avec un token API en secret) — à ajouter
+plus tard si besoin.
 
 ## Notes de parité (validées en local contre un vrai PostgreSQL)
 
