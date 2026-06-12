@@ -4,7 +4,7 @@
  * programme curated puis éditables. Store réactif (useSyncExternalStore).
  */
 import {useSyncExternalStore} from 'react';
-import type {ProgramDetail} from './api';
+import {measureKind, type MeasureKind, type ProgramDetail} from './api';
 import {pushItems, registerCollection, type SyncItem} from './sync';
 import {mergeCollection} from './syncMerge';
 
@@ -135,6 +135,53 @@ export function createEmptyProgram(name = 'Mon programme'): string {
   commit([...list, p]);
   pushProgram(p);
   return id;
+}
+
+/** Valeurs de prescription par défaut à l'ajout d'un exercice, selon son mode de saisie. */
+const ADD_DEFAULTS: Record<MeasureKind, {sets: number; min: number; max: number; rest: number}> = {
+  load: {sets: 3, min: 8, max: 12, rest: 90},
+  bodyweight: {sets: 3, min: 10, max: 15, rest: 60},
+  duration: {sets: 3, min: 30, max: 45, rest: 60},
+  cardio: {sets: 1, min: 15, max: 20, rest: 0},
+};
+
+/** Données minimales d'un exercice pour l'ajouter à une séance (liste OU fiche détail). */
+export interface AddableExercise {
+  id: string;
+  nameFr: string | null;
+  nameEn: string;
+  force: string | null;
+  category: string | null;
+  equipmentId: string | null;
+}
+
+/**
+ * Ajoute un exercice EN FIN d'une séance (ciblée par index) d'un programme perso,
+ * avec des valeurs de prescription par défaut selon le mode de saisie. Persiste et
+ * synchronise via updateMyProgram. Retourne le nom de la séance, ou null si la cible
+ * (programme ou index de séance) est introuvable.
+ */
+export function addExerciseToSession(programId: string, sessionIndex: number, ex: AddableExercise): string | null {
+  const program = getMyProgram(programId);
+  const session = program?.sessions[sessionIndex];
+  if (!program || !session) return null;
+  const def = ADD_DEFAULTS[measureKind(ex)];
+  const draft = structuredClone(program);
+  draft.sessions[sessionIndex].exercises.push({
+    exerciseId: ex.id,
+    nameFr: ex.nameFr,
+    nameEn: ex.nameEn,
+    force: ex.force,
+    category: ex.category,
+    equipmentId: ex.equipmentId,
+    sets: def.sets,
+    repsMin: def.min,
+    repsMax: def.max,
+    restSeconds: def.rest,
+    notesFr: null,
+  });
+  updateMyProgram(draft);
+  return session.nameFr;
 }
 
 export function updateMyProgram(updated: MyProgram) {

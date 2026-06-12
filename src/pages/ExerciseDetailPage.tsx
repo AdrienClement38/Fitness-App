@@ -4,6 +4,7 @@ import {api, exerciseImageUrl, label} from '../lib/api';
 import {useFetch} from '../lib/useFetch';
 import {Badge, ErrorState, Loading, SectionTitle} from '../components/ui';
 import FavoriteButton from '../components/FavoriteButton';
+import AddToSessionButton from '../components/AddToSessionButton';
 import BodyMap from '../components/BodyMap';
 
 function List({items, tone}: {items: string[]; tone?: 'amber' | 'slate'}) {
@@ -57,6 +58,8 @@ export default function ExerciseDetailPage() {
         {ex.movementPatternNameFr && <Badge>{ex.movementPatternNameFr}</Badge>}
         {ex.tempo && <Badge tone="indigo">Tempo {ex.tempo}</Badge>}
       </div>
+
+      <AddToSessionButton ex={ex} />
 
       {ex.images && ex.images.length > 0 && (
         <div className="mt-4">

@@ -1,10 +1,11 @@
 import {useEffect, useState} from 'react';
 import {ArrowLeft, Check, Plus, Trash2} from 'lucide-react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
-import {label, measureKind, type ExerciseListItem, type MeasureKind} from '../lib/api';
+import {label, measureKind, type ExerciseListItem} from '../lib/api';
 import {Badge, Empty} from '../components/ui';
 import ExercisePicker from '../components/ExercisePicker';
 import {
+  addExerciseToSession,
   getMyProgram,
   removeMyProgram,
   updateMyProgram,
@@ -12,14 +13,6 @@ import {
   type MyProgram,
   type MyProgramExercise,
 } from '../lib/myPrograms';
-
-/** Valeurs par défaut à l'ajout d'un exercice, selon son mode de saisie. */
-const DEFAULTS: Record<MeasureKind, {sets: number; min: number; max: number; rest: number}> = {
-  load: {sets: 3, min: 8, max: 12, rest: 90},
-  bodyweight: {sets: 3, min: 10, max: 15, rest: 60},
-  duration: {sets: 3, min: 30, max: 45, rest: 60},
-  cardio: {sets: 1, min: 15, max: 20, rest: 0},
-};
 
 /** Libellé du champ « répétitions » selon le mode (reps / durée). */
 const repLabel = (e: {category: string | null; force: string | null; equipmentId: string | null}): string => {
@@ -79,22 +72,8 @@ export default function MyProgramPage() {
       Object.assign(d.sessions[si].exercises[ei], p);
     });
   const addExercise = (si: number, e: ExerciseListItem) => {
-    const def = DEFAULTS[measureKind(e)];
-    patch((d) =>
-      d.sessions[si].exercises.push({
-        exerciseId: e.id,
-        nameFr: e.nameFr,
-        nameEn: e.nameEn,
-        force: e.force,
-        category: e.category,
-        equipmentId: e.equipmentId,
-        sets: def.sets,
-        repsMin: def.min,
-        repsMax: def.max,
-        restSeconds: def.rest,
-        notesFr: null,
-      }),
-    );
+    addExerciseToSession(program.id, si, e);
+    setFlash(true);
     setPickerFor(null);
   };
   const addSession = () =>
