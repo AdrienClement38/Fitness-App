@@ -1,6 +1,6 @@
 /** Accès données « comptes » : utilisateurs et sessions serveur. */
 import {randomUUID} from 'node:crypto';
-import {eq} from 'drizzle-orm';
+import {eq, lt} from 'drizzle-orm';
 import {db, schema} from '../db/client';
 
 const {users, sessions} = schema;
@@ -51,4 +51,9 @@ export async function deleteUserSessions(userId: string) {
 /** Suppression du compte (RGPD). Les sessions (et données liées) tombent en cascade. */
 export async function deleteUser(id: string) {
   await db.delete(users).where(eq(users.id, id));
+}
+
+/** Purge les sessions expirées (croissance bornée de la table). Best-effort. */
+export async function deleteExpiredSessions() {
+  await db.delete(sessions).where(lt(sessions.expiresAt, new Date()));
 }

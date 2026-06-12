@@ -4,13 +4,44 @@
  * utilisateur dans un « salon », persiste les blobs (last-write-wins) et
  * rediffuse aux autres appareils. Tout le merge se fait côté client.
  */
-import type {Server} from 'node:http';
+import type {IncomingMessage, Server} from 'node:http';
 import {WebSocket, WebSocketServer} from 'ws';
+import {z} from 'zod';
 import {getAuthUserByCookie} from './auth';
 import {listItems, upsertItems, type SyncItem} from './repositories/syncRepository';
 
 // userId -> connexions ouvertes (un salon par utilisateur).
 const rooms = new Map<string, Set<WebSocket>>();
+
+// Validation des items entrants : borne la taille et rejette les dates invalides
+// (qui empoisonneraient le last-write-wins). `data` reste un blob libre.
+const incomingItem = z.object({
+  kind: z.string().min(1).max(64),
+  itemId: z.string().min(1).max(256),
+  data: z.unknown(),
+  updatedAt: z.string().refine((s) => !Number.isNaN(Date.parse(s)), 'date invalide'),
+  deleted: z.boolean(),
+});
+const pushMessage = z.object({type: z.literal('push'), items: z.array(incomingItem).max(10000)});
+
+/** Même origine (ou dev local) : refuse un handshake WS cross-site (CSWSH). */
+function originAllowed(req: IncomingMessage): boolean {
+  const origin = req.headers.origin;
+  if (!origin) return true; // client non-navigateur : pas de cookie cross-site possible
+  let oHost: string;
+  try {
+    oHost = new URL(origin).host;
+  } catch {
+    return false;
+  }
+  if (oHost === req.headers.host) return true; // même origine (le cas du PWA)
+  if (/^(localhost|127\.0\.0\.1)(:\d+)?$/.test(oHost)) return true; // dev (Vite)
+  const allow = (process.env.ALLOWED_WS_ORIGINS || '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+  return allow.includes(origin) || allow.includes(oHost);
+}
 
 function join(userId: string, ws: WebSocket) {
   let set = rooms.get(userId);
@@ -35,8 +66,23 @@ function broadcast(userId: string, from: WebSocket, payload: unknown) {
   }
 }
 
+/** Ferme les sockets d'un utilisateur (révocation : changement de mdp / suppression). */
+export function closeUserSockets(userId: string) {
+  const set = rooms.get(userId);
+  if (!set) return;
+  for (const ws of [...set]) {
+    try {
+      ws.close(4001, 'session revoked');
+    } catch {
+      /* ignore */
+    }
+  }
+}
+
 export function attachSync(server: Server) {
-  const wss = new WebSocketServer({noServer: true});
+  // maxPayload borne la RAM : un message > 4 Mio est rejeté (sinon défaut 100 Mio,
+  // tenable sur 256 Mo). Couvre largement le snapshot complet d'un gros historique.
+  const wss = new WebSocketServer({noServer: true, maxPayload: 4 * 1024 * 1024});
 
   // On ne capte que /ws : les autres upgrades (HMR de Vite en dev) passent.
   server.on('upgrade', (req, socket, head) => {
@@ -47,6 +93,10 @@ export function attachSync(server: Server) {
       pathname = '';
     }
     if (pathname !== '/ws') return;
+    if (!originAllowed(req)) {
+      socket.destroy();
+      return;
+    }
     wss.handleUpgrade(req, socket, head, (ws) => wss.emit('connection', ws, req));
   });
 
@@ -61,17 +111,32 @@ export function attachSync(server: Server) {
     ws.send(JSON.stringify({type: 'ready'}));
 
     ws.on('message', async (raw) => {
-      let msg: {type?: string; items?: SyncItem[]};
+      let msg: unknown;
       try {
         msg = JSON.parse(raw.toString());
       } catch {
         return;
       }
-      if (msg.type === 'pull') {
-        ws.send(JSON.stringify({type: 'items', items: await listItems(userId)}));
-      } else if (msg.type === 'push' && Array.isArray(msg.items)) {
-        await upsertItems(userId, msg.items);
-        broadcast(userId, ws, {type: 'items', items: msg.items});
+      const type = (msg as {type?: unknown}).type;
+      try {
+        if (type === 'pull') {
+          ws.send(JSON.stringify({type: 'items', items: await listItems(userId)}));
+        } else if (type === 'push') {
+          const parsed = pushMessage.safeParse(msg);
+          if (!parsed.success || parsed.data.items.length === 0) return;
+          const items: SyncItem[] = parsed.data.items.map((it) => ({
+            kind: it.kind,
+            itemId: it.itemId,
+            data: it.data ?? null,
+            updatedAt: it.updatedAt,
+            deleted: it.deleted,
+          }));
+          await upsertItems(userId, items);
+          broadcast(userId, ws, {type: 'items', items});
+        }
+      } catch (err) {
+        // Une erreur (DB, etc.) ne doit jamais tuer le process : on isole ce message.
+        console.error('[sync] message error:', (err as Error).message);
       }
     });
 

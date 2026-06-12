@@ -57,12 +57,17 @@ function isEnvelope(v: unknown): v is Envelope {
 /**
  * Chiffre une valeur JSON pour le stockage. Sans clé configurée → renvoie la
  * valeur telle quelle (clair). `null`/`undefined` → `null` (rien à chiffrer).
+ *
+ * `aad` (données additionnelles authentifiées, ici `userId\0kind\0itemId`) est
+ * liée au chiffré sans être chiffrée : un blob ne peut pas être déplacé vers une
+ * autre ligne (autre user/clé) sans faire échouer le déchiffrement.
  */
-export function encryptData(value: unknown): unknown {
+export function encryptData(value: unknown, aad?: string): unknown {
   if (value === null || value === undefined) return null;
   if (!KEY) return value;
   const iv = randomBytes(12);
   const cipher = createCipheriv('aes-256-gcm', KEY, iv);
+  if (aad) cipher.setAAD(Buffer.from(aad, 'utf8'));
   const plaintext = Buffer.from(JSON.stringify(value), 'utf8');
   const ct = Buffer.concat([cipher.update(plaintext), cipher.final()]);
   const tag = cipher.getAuthTag();
@@ -79,7 +84,7 @@ export function encryptData(value: unknown): unknown {
  * d'enveloppe) est renvoyée telle quelle ; une enveloppe illisible (clé absente
  * ou mauvaise, corruption) renvoie `null` plutôt qu'une exception.
  */
-export function decryptData(stored: unknown): unknown {
+export function decryptData(stored: unknown, aad?: string): unknown {
   if (stored === null || stored === undefined) return null;
   if (!isEnvelope(stored)) return stored; // clair (écrit sans clé, ou dev local)
   if (!KEY) return null; // blob chiffré mais aucune clé pour le lire
@@ -88,6 +93,7 @@ export function decryptData(stored: unknown): unknown {
     const tag = Buffer.from(stored.tag, 'base64');
     const ct = Buffer.from(stored.ct, 'base64');
     const decipher = createDecipheriv('aes-256-gcm', KEY, iv);
+    if (aad) decipher.setAAD(Buffer.from(aad, 'utf8'));
     decipher.setAuthTag(tag);
     const out = Buffer.concat([decipher.update(ct), decipher.final()]);
     return JSON.parse(out.toString('utf8'));

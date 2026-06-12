@@ -14,6 +14,7 @@ import {
 import {
   createSession,
   createUser,
+  deleteExpiredSessions,
   deleteSession,
   deleteUser,
   deleteUserSessions,
@@ -21,6 +22,7 @@ import {
   getUserById,
   updatePassword,
 } from '../repositories/userRepository';
+import {closeUserSockets} from '../sync';
 
 const router = Router();
 
@@ -63,6 +65,7 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
   if (rateLimited(`login:${req.ip}`)) return res.status(429).json({error: 'Trop de tentatives. Réessaie dans quelques minutes.'});
+  void deleteExpiredSessions().catch(() => {}); // purge best-effort, ne bloque pas le login
   const parsed = credentials.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({error: 'Email ou mot de passe invalide.'});
   const email = parsed.data.email.trim().toLowerCase();
@@ -114,6 +117,7 @@ router.post('/change-password', async (req, res) => {
   await updatePassword(user.id, await hashPassword(parsed.data.newPassword));
   // Révoque toutes les sessions (déconnecte les autres appareils) puis recrée celle-ci.
   await deleteUserSessions(user.id);
+  closeUserSockets(user.id); // ferme aussi les canaux temps réel des sessions révoquées
   const token = newToken();
   await createSession(user.id, token, sessionExpiry());
   res.cookie(SESSION_COOKIE, token, cookieOptions());
@@ -134,6 +138,7 @@ router.post('/delete-account', async (req, res) => {
   }
 
   await deleteUser(user.id); // efface le compte + ses sessions/données (cascade)
+  closeUserSockets(user.id); // ferme les canaux temps réel du compte supprimé
   res.clearCookie(SESSION_COOKIE, {path: '/'});
   return res.json({ok: true});
 });

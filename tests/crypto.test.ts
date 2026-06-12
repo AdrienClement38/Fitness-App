@@ -72,3 +72,19 @@ describe('crypto — sans clé (dev / PGlite local)', () => {
     expect(noKey.decryptData(enc)).toBeNull();
   });
 });
+
+describe('crypto — AAD (liaison à la ligne user/kind/item)', () => {
+  it('round-trip avec la même AAD', async () => {
+    const c = await loadWithKey('passphrase-aad');
+    const enc = c.encryptData(SAMPLE, 'u1 workout-log id1');
+    expect(c.decryptData(enc, 'u1 workout-log id1')).toEqual(SAMPLE);
+  });
+
+  it('AAD différente → null (blob déplacé vers une autre ligne)', async () => {
+    const c = await loadWithKey('passphrase-aad');
+    const enc = c.encryptData(SAMPLE, 'u1 workout-log id1');
+    expect(c.decryptData(enc, 'u2 workout-log id1')).toBeNull(); // autre utilisateur
+    expect(c.decryptData(enc, 'u1 favorite id1')).toBeNull(); // autre kind
+    expect(c.decryptData(enc)).toBeNull(); // AAD manquante
+  });
+});
