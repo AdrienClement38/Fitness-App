@@ -13,6 +13,8 @@ import {migrateDb} from './server/db/client';
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3003;
+// AlwaysData fournit l'adresse d'écoute via IP (sinon : toutes interfaces).
+const HOST = process.env.IP || '0.0.0.0';
 
 // Derrière le reverse-proxy d'AlwaysData : IP cliente réelle.
 app.set('trust proxy', 1);
@@ -60,8 +62,8 @@ async function startServer() {
     });
   }
 
-  const server = app.listen(PORT, '0.0.0.0', () => {
-    console.log(`[Salle de sport] En écoute sur http://localhost:${PORT}`);
+  const server = app.listen(PORT, HOST, () => {
+    console.log(`[Salle de sport] En écoute sur http://${HOST}:${PORT}`);
   });
   attachSync(server);
 }

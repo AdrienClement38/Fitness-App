@@ -1,10 +1,8 @@
 import {drizzle as drizzlePg, type NodePgDatabase} from 'drizzle-orm/node-postgres';
-import {drizzle as drizzlePglite} from 'drizzle-orm/pglite';
 import {migrate as migratePg} from 'drizzle-orm/node-postgres/migrator';
-import {migrate as migratePglite} from 'drizzle-orm/pglite/migrator';
+import {createRequire} from 'node:module';
 import {mkdirSync} from 'node:fs';
 import {Pool} from 'pg';
-import {PGlite} from '@electric-sql/pglite';
 import * as schema from './schema';
 
 /** Dossier de persistance de la base locale (PGlite). Surchargé par `PGLITE_DIR` (tests). */
@@ -17,7 +15,9 @@ let migrateFn: () => Promise<void>;
 /**
  * Instance Drizzle unique + sa fonction de migration (même connexion).
  *  - `DATABASE_URL` défini (prod AlwaysData) → PostgreSQL via `pg`.
- *  - sinon (dev/test) → PGlite (Postgres embarqué, fichier local).
+ *  - sinon (dev/test) → PGlite (Postgres embarqué, fichier local), chargé À LA
+ *    DEMANDE : c'est une devDependency, absente des node_modules de prod
+ *    (`npm install --omit=dev`) pour garder le serveur léger.
  */
 if (process.env.DATABASE_URL) {
   const pool = new Pool({connectionString: process.env.DATABASE_URL, max: 4});
@@ -25,6 +25,12 @@ if (process.env.DATABASE_URL) {
   database = d;
   migrateFn = () => migratePg(d, {migrationsFolder: MIGRATIONS_FOLDER});
 } else {
+  // `__filename` existe en CJS (bundle esbuild), `import.meta.url` en ESM (tsx/vitest).
+  const req = createRequire(typeof __filename !== 'undefined' ? __filename : import.meta.url);
+  const {PGlite} = req('@electric-sql/pglite') as typeof import('@electric-sql/pglite');
+  const {drizzle: drizzlePglite} = req('drizzle-orm/pglite') as typeof import('drizzle-orm/pglite');
+  const {migrate: migratePglite} = req('drizzle-orm/pglite/migrator') as typeof import('drizzle-orm/pglite/migrator');
+
   mkdirSync(LOCAL_DB_DIR, {recursive: true});
   const client = new PGlite(LOCAL_DB_DIR);
   const d = drizzlePglite(client, {schema});
