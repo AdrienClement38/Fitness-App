@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {getExerciseById, getFacets, listExercises} from '../repositories/exerciseRepository';
+import {getExerciseById, getFacets, listExercises, stretchSuggestionsFor} from '../repositories/exerciseRepository';
 
 const router = Router();
 
@@ -12,6 +12,17 @@ router.get('/facets', async (_req, res) => {
     res.json(await getFacets());
   } catch (err) {
     console.error('[exercises/facets]', err);
+    res.status(500).json({error: 'Erreur serveur.'});
+  }
+});
+
+// GET /api/exercises/stretch-suggestions?ids=... — étirements ciblant les muscles travaillés.
+router.get('/stretch-suggestions', async (req, res) => {
+  try {
+    const ids = q(req.query.ids)?.split(',').map((s) => s.trim()).filter(Boolean).slice(0, 60) ?? [];
+    res.json({items: await stretchSuggestionsFor(ids)});
+  } catch (err) {
+    console.error('[exercises/stretch-suggestions]', err);
     res.status(500).json({error: 'Erreur serveur.'});
   }
 });

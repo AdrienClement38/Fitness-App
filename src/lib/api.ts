@@ -302,6 +302,8 @@ export const api = {
     return get<ExercisesResponse>(`/exercises${qs ? `?${qs}` : ''}`);
   },
   exercise: (id: string) => get<ExerciseDetail>(`/exercises/${encodeURIComponent(id)}`),
+  stretchSuggestions: (ids: string[]) =>
+    get<{items: ExerciseListItem[]}>(`/exercises/stretch-suggestions?ids=${encodeURIComponent(ids.join(','))}`),
   facets: () => get<Facets>('/exercises/facets'),
   muscles: () => get<MuscleListItem[]>('/muscles'),
   muscle: (id: string) => get<MuscleDetail>(`/muscles/${encodeURIComponent(id)}`),

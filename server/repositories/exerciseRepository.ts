@@ -141,6 +141,56 @@ export async function getExerciseById(id: string) {
   };
 }
 
+/**
+ * Étirements suggérés en fin de séance : on cible les muscles travaillés par les
+ * exercices effectués, puis on classe les étirements (category = 'stretching') par
+ * nombre de muscles couverts. Léger : 3 requêtes bornées, appelé 1× par séance finie.
+ */
+export async function stretchSuggestionsFor(exerciseIds: string[], limit = 6) {
+  if (exerciseIds.length === 0) return [];
+  // 1) muscles travaillés (tous rôles) par la séance
+  const worked = await db
+    .select({muscleId: exerciseMuscles.muscleId})
+    .from(exerciseMuscles)
+    .where(inArray(exerciseMuscles.exerciseId, exerciseIds));
+  const workedMuscles = [...new Set(worked.map((r) => r.muscleId))];
+  if (workedMuscles.length === 0) return [];
+
+  // 2) étirements classés par nombre de muscles travaillés couverts
+  const ranked = await db
+    .select({id: exerciseMuscles.exerciseId})
+    .from(exerciseMuscles)
+    .innerJoin(exercises, eq(exercises.id, exerciseMuscles.exerciseId))
+    .where(and(eq(exercises.category, 'stretching'), inArray(exerciseMuscles.muscleId, workedMuscles)))
+    .groupBy(exerciseMuscles.exerciseId)
+    .orderBy(sql`count(distinct ${exerciseMuscles.muscleId}) desc`)
+    .limit(limit + exerciseIds.length);
+  const stretchIds = ranked.map((r) => r.id).filter((id) => !exerciseIds.includes(id)).slice(0, limit);
+  if (stretchIds.length === 0) return [];
+
+  // 3) données complètes (réordonnées par pertinence)
+  const rows = await db
+    .select({
+      id: exercises.id,
+      nameFr: exercises.nameFr,
+      nameEn: exercises.nameEn,
+      level: exercises.level,
+      category: exercises.category,
+      force: exercises.force,
+      mechanic: exercises.mechanic,
+      isEnriched: exercises.isEnriched,
+      equipmentId: exercises.equipmentId,
+      equipmentNameFr: equipment.nameFr,
+      images: exercises.images,
+    })
+    .from(exercises)
+    .leftJoin(equipment, eq(equipment.id, exercises.equipmentId))
+    .where(inArray(exercises.id, stretchIds));
+  const byExercise = await primaryMusclesFor(stretchIds);
+  const byId = new Map(rows.map((r) => [r.id, {...r, primaryMuscles: byExercise.get(r.id) ?? []}]));
+  return stretchIds.map((id) => byId.get(id)).filter((x): x is NonNullable<typeof x> => Boolean(x));
+}
+
 /** Valeurs disponibles pour les filtres (muscles & matériel depuis la base). */
 export async function getFacets() {
   const [muscleList, equipmentList] = await Promise.all([

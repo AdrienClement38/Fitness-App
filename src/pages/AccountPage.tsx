@@ -4,6 +4,7 @@ import {Download, LogOut, User} from 'lucide-react';
 import {changePassword, deleteAccount, login, logout, register, useAuth} from '../lib/auth';
 import {useSyncConnected} from '../lib/sync';
 import {exportMyData} from '../lib/exportData';
+import {setStretchSuggestions, useStretchSuggestions} from '../lib/settings';
 import {Loading} from '../components/ui';
 
 const inputClass =
@@ -182,6 +183,21 @@ function SyncStatus() {
   );
 }
 
+function StretchPref() {
+  const on = useStretchSuggestions();
+  return (
+    <label className="mt-3 flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+      <span className="text-sm text-slate-300">Suggérer des étirements à la fin de mes séances</span>
+      <input
+        type="checkbox"
+        checked={on}
+        onChange={(e) => setStretchSuggestions(e.target.checked)}
+        className="h-5 w-5 shrink-0 accent-emerald-500"
+      />
+    </label>
+  );
+}
+
 export default function AccountPage() {
   const {user, loading} = useAuth();
   const navigate = useNavigate();
@@ -216,6 +232,8 @@ export default function AccountPage() {
             <LogOut className="h-4 w-4" /> Se déconnecter
           </button>
         </div>
+
+        <StretchPref />
 
         <button
           onClick={() => exportMyData(user.email)}
