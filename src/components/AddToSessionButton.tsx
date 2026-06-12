@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {Check, ListPlus, Plus, X} from 'lucide-react';
+import {Check, ClipboardList, ListPlus, Plus, X} from 'lucide-react';
 import {addExerciseToSession, createEmptyProgram, useMyPrograms, type AddableExercise} from '../lib/myPrograms';
 
 /**
@@ -72,12 +72,15 @@ function SessionPicker({ex, onClose}: {ex: AddableExercise; onClose: () => void}
               </button>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3">
               {programs.map((p) => (
-                <div key={p.id}>
-                  <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500">{p.nameFr}</p>
+                <div key={p.id} className="rounded-xl border border-slate-700/70 bg-slate-800/20 p-3">
+                  <p className="mb-2 flex items-center gap-1.5 text-sm font-semibold text-slate-100">
+                    <ClipboardList className="h-4 w-4 shrink-0 text-emerald-400" />
+                    <span className="truncate">{p.nameFr}</span>
+                  </p>
                   {p.sessions.length === 0 ? (
-                    <p className="text-xs text-slate-600">Aucune séance.</p>
+                    <p className="text-xs text-slate-500">Aucune séance.</p>
                   ) : (
                     <div className="grid gap-1.5">
                       {p.sessions.map((s, si) => {
