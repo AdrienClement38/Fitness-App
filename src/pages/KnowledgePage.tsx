@@ -32,13 +32,13 @@ function Collapsible({title, badge, defaultOpen = false, children}: {title: stri
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
-        className="flex w-full items-center justify-between gap-3 p-4 text-left transition-colors hover:bg-slate-900"
+        className="flex w-full items-start justify-between gap-3 p-4 text-left transition-colors hover:bg-slate-900"
       >
-        <h3 className="font-semibold leading-snug">{title}</h3>
-        <span className="flex shrink-0 items-center gap-2">
-          {badge}
-          <ChevronDown className={`h-4 w-4 text-slate-500 transition-transform ${open ? 'rotate-180' : ''}`} />
+        <span className="min-w-0 flex-1">
+          <h3 className="font-semibold leading-snug">{title}</h3>
+          {badge && <span className="mt-2 block">{badge}</span>}
         </span>
+        <ChevronDown className={`mt-0.5 h-5 w-5 shrink-0 text-slate-500 transition-transform ${open ? 'rotate-180' : ''}`} />
       </button>
       {open && <div className="space-y-2 px-4 pb-4">{children}</div>}
     </div>
