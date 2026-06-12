@@ -28,8 +28,8 @@ export default function HomePage() {
   return (
     <div>
       <div className="flex flex-col items-center text-center">
-        <Logo className="h-24 w-24" />
-        <h1 className="mt-3 text-2xl font-bold tracking-tight">Ta salle, dans ta poche</h1>
+        <Logo className="h-32 w-32 ring-2 ring-white/25" />
+        <h1 className="mt-4 text-2xl font-bold tracking-tight">Ta salle, dans ta poche</h1>
         <p className="mt-1 text-slate-400">Tes entraînements, tes programmes, et une bibliothèque complète.</p>
       </div>
 
