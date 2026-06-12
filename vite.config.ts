@@ -14,8 +14,8 @@ export default defineConfig(() => {
         registerType: 'autoUpdate',
         includeAssets: ['logo.png'],
         manifest: {
-          name: 'Kinetic — exercices & entraînement',
-          short_name: 'Kinetic',
+          name: 'AC-KINETIK — exercices & entraînement',
+          short_name: 'AC-KINETIK',
           description:
             'Bibliothèque d\'exercices de musculation : muscles, exécution, et savoir d\'entraînement sourcé. Utilisable hors-ligne.',
           lang: 'fr',
