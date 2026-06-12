@@ -21,15 +21,13 @@ export default function LegalPage() {
 
       <Section title="Éditeur">
         <p>
-          <strong>AC</strong>
+          <strong>Adrien Clément</strong>
         </p>
-        <p>
-          Contact : adrienc.tech@gmail.com
-        </p>
+        <p>Contact : adrienc.tech@gmail.com</p>
       </Section>
 
       <Section title="Directeur de la publication">
-        <p>AC</p>
+        <p>Adrien Clément</p>
       </Section>
 
       <Section title="Hébergeur">
@@ -38,10 +36,22 @@ export default function LegalPage() {
         <p>alwaysdata.com</p>
       </Section>
 
-      <Section title="Contenu">
+      <Section title="Contenu et sources">
         <p>
-          Les données d'exercices proviennent de <strong>free-exercise-db</strong> (domaine public). Le reste du contenu
-          est édité par l'éditeur ci-dessus.
+          Les exercices et leurs images proviennent de <strong>free-exercise-db</strong> (données libres de droit,
+          domaine public). Le savoir d'entraînement (principes, volumes, schémas de répétitions) s'appuie sur des{' '}
+          <strong>ressources scientifiques et des recommandations reconnues</strong>, référencées dans l'onglet
+          « Savoir ». Le reste du contenu est édité par l'éditeur ci-dessus.
+        </p>
+      </Section>
+
+      <Section title="Avertissement — santé">
+        <p>
+          AC-KINETIK est un outil d'information et de suivi d'entraînement : <strong>il ne remplace pas l'avis d'un
+          professionnel de santé</strong>. Avant de commencer un programme d'exercices, demande l'avis d'un médecin,
+          en particulier en cas de problème de santé, de blessure, de grossesse, ou si tu reprends le sport. Tu
+          pratiques sous ta seule responsabilité ; l'éditeur ne saurait être tenu responsable d'une blessure ou d'un
+          dommage lié à l'utilisation de l'application.
         </p>
       </Section>
 
@@ -49,6 +59,10 @@ export default function LegalPage() {
         Voir aussi la{' '}
         <Link to="/confidentialite" className="text-emerald-400 hover:underline">
           politique de confidentialité
+        </Link>{' '}
+        et les{' '}
+        <Link to="/cgu" className="text-emerald-400 hover:underline">
+          conditions d'utilisation
         </Link>
         .
       </p>

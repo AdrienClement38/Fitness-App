@@ -24,7 +24,7 @@ export default function PrivacyPage() {
 
       <Section title="Responsable du traitement">
         <p>
-          <strong>AC</strong>. Pour toute question relative à tes données : adrienc.tech@gmail.com.
+          <strong>Adrien Clément</strong>. Pour toute question relative à tes données : adrienc.tech@gmail.com.
         </p>
       </Section>
 

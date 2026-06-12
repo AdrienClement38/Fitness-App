@@ -1,8 +1,9 @@
 import {useState, type FormEvent} from 'react';
 import {Link, useLocation, useNavigate} from 'react-router-dom';
-import {LogOut, User} from 'lucide-react';
+import {Download, LogOut, User} from 'lucide-react';
 import {changePassword, deleteAccount, login, logout, register, useAuth} from '../lib/auth';
 import {useSyncConnected} from '../lib/sync';
+import {exportMyData} from '../lib/exportData';
 import {Loading} from '../components/ui';
 
 const inputClass =
@@ -163,6 +164,10 @@ function LegalLinks() {
       <Link to="/mentions-legales" className="hover:text-slate-300">
         Mentions légales
       </Link>
+      {' · '}
+      <Link to="/cgu" className="hover:text-slate-300">
+        CGU
+      </Link>
     </p>
   );
 }
@@ -211,6 +216,13 @@ export default function AccountPage() {
             <LogOut className="h-4 w-4" /> Se déconnecter
           </button>
         </div>
+
+        <button
+          onClick={() => exportMyData(user.email)}
+          className="mt-3 flex items-center gap-1.5 text-sm text-emerald-400 hover:underline"
+        >
+          <Download className="h-4 w-4" /> Exporter mes données (JSON)
+        </button>
 
         <ChangePasswordForm />
         <DeleteAccountForm />
@@ -289,12 +301,20 @@ export default function AccountPage() {
       </button>
 
       {mode === 'register' && (
-        <p className="mt-3 text-xs text-slate-500">
-          En créant un compte, tu acceptes notre{' '}
+        <p className="mt-3 text-xs leading-relaxed text-slate-500">
+          En créant un compte, tu acceptes les{' '}
+          <Link to="/cgu" className="text-emerald-400 hover:underline">
+            conditions d'utilisation
+          </Link>{' '}
+          et la{' '}
           <Link to="/confidentialite" className="text-emerald-400 hover:underline">
             politique de confidentialité
           </Link>
-          .
+          , et tu reconnais que l'app ne remplace pas un avis médical (
+          <Link to="/mentions-legales" className="text-emerald-400 hover:underline">
+            avertissement santé
+          </Link>
+          ).
         </p>
       )}
       <LegalLinks />

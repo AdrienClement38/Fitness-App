@@ -16,6 +16,7 @@ import KnowledgePage from './pages/KnowledgePage';
 import AccountPage from './pages/AccountPage';
 import PrivacyPage from './pages/PrivacyPage';
 import LegalPage from './pages/LegalPage';
+import TermsPage from './pages/TermsPage';
 import CategoryBrowse from './components/CategoryBrowse';
 import {Loading} from './components/ui';
 import {useAuth} from './lib/auth';
@@ -50,6 +51,7 @@ export default function App() {
         <Route path="/compte" element={<AccountPage />} />
         <Route path="/confidentialite" element={<PrivacyPage />} />
         <Route path="/mentions-legales" element={<LegalPage />} />
+        <Route path="/cgu" element={<TermsPage />} />
 
         {/* Tout le reste exige un compte. */}
         <Route element={<Protected />}>
