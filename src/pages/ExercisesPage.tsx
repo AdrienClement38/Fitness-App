@@ -7,6 +7,15 @@ import {useFetch} from '../lib/useFetch';
 import ExerciseCard from '../components/ExerciseCard';
 import {Empty, ErrorState, Loading} from '../components/ui';
 
+// Niveau : sélecteur segmenté (même style que Programmes / Muscles), + « Tous »
+// car la page exercices est une page de parcours (on veut pouvoir tout voir).
+const LEVELS = [
+  {id: '', label: 'Tous'},
+  {id: 'beginner', label: 'Débutant'},
+  {id: 'intermediate', label: 'Intermédiaire'},
+  {id: 'advanced', label: 'Avancé'},
+];
+
 export default function ExercisesPage() {
   const [params, setParams] = useSearchParams();
   const val = (k: string) => params.get(k) ?? '';
@@ -24,7 +33,6 @@ export default function ExercisesPage() {
         equipment: val('equipment') || undefined,
         level: val('level') || undefined,
         category: val('category') || undefined,
-        force: val('force') || undefined,
         ids: favActive ? (favorites.length ? favorites.join(',') : '__none__') : undefined,
         page,
       }),
@@ -63,6 +71,23 @@ export default function ExercisesPage() {
         className="w-full rounded-xl border border-slate-800 bg-slate-900 px-4 py-3 text-sm outline-none placeholder:text-slate-500 focus:border-emerald-500/60"
       />
 
+      {/* Niveau en haut : sélecteur segmenté (cohérent avec Programmes / Muscles). */}
+      <div className="mt-3 flex gap-1 rounded-xl bg-slate-900 p-1">
+        {LEVELS.map((lv) => (
+          <button
+            key={lv.id || 'all'}
+            type="button"
+            onClick={() => setParam('level', lv.id)}
+            className={`flex-1 rounded-lg py-2 text-sm font-medium transition-colors ${
+              val('level') === lv.id ? 'bg-emerald-500/20 text-emerald-300' : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            {lv.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Filtres : Favoris · Type · Matériel · Muscles. */}
       <div className="mt-3 flex flex-wrap gap-2">
         <button
           type="button"
@@ -76,10 +101,10 @@ export default function ExercisesPage() {
           <Heart size={15} className={favActive ? 'fill-rose-400 text-rose-400' : ''} />
           Favoris{favCount ? ` (${favCount})` : ''}
         </button>
-        <select className={selectClass} value={val('muscle')} onChange={(e) => setParam('muscle', e.target.value)}>
-          <option value="">Tous les muscles</option>
-          {facets.data?.muscles.map((m) => (
-            <option key={m.id} value={m.id}>{m.nameFr}</option>
+        <select className={selectClass} value={val('category')} onChange={(e) => setParam('category', e.target.value)}>
+          <option value="">Tous types</option>
+          {facets.data?.categories.map((c) => (
+            <option key={c} value={c}>{label('category', c)}</option>
           ))}
         </select>
         <select className={selectClass} value={val('equipment')} onChange={(e) => setParam('equipment', e.target.value)}>
@@ -88,22 +113,10 @@ export default function ExercisesPage() {
             <option key={eq.id} value={eq.id}>{eq.nameFr}</option>
           ))}
         </select>
-        <select className={selectClass} value={val('level')} onChange={(e) => setParam('level', e.target.value)}>
-          <option value="">Tous niveaux</option>
-          {facets.data?.levels.map((lv) => (
-            <option key={lv} value={lv}>{label('level', lv)}</option>
-          ))}
-        </select>
-        <select className={selectClass} value={val('category')} onChange={(e) => setParam('category', e.target.value)}>
-          <option value="">Toutes catégories</option>
-          {facets.data?.categories.map((c) => (
-            <option key={c} value={c}>{label('category', c)}</option>
-          ))}
-        </select>
-        <select className={selectClass} value={val('force')} onChange={(e) => setParam('force', e.target.value)}>
-          <option value="">Tout type</option>
-          {facets.data?.forces.map((f) => (
-            <option key={f} value={f}>{label('force', f)}</option>
+        <select className={selectClass} value={val('muscle')} onChange={(e) => setParam('muscle', e.target.value)}>
+          <option value="">Tous les muscles</option>
+          {facets.data?.muscles.map((m) => (
+            <option key={m.id} value={m.id}>{m.nameFr}</option>
           ))}
         </select>
       </div>

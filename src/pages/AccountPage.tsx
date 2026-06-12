@@ -216,7 +216,7 @@ export default function AccountPage() {
         <DeleteAccountForm />
 
         <p className="mt-3 text-xs text-slate-500">
-          Bientôt : tes séances, programmes et favoris synchronisés sur tous tes appareils.
+          Tes séances, programmes et favoris sont synchronisés sur tous tes appareils.
         </p>
         <LegalLinks />
       </div>
