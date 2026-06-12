@@ -1,6 +1,7 @@
 import {Activity, BookOpen, ClipboardList, Dumbbell, Home, LineChart, User} from 'lucide-react';
 import {NavLink, Outlet} from 'react-router-dom';
 import {useAuth} from '../lib/auth';
+import Logo from './Logo';
 
 const tabs = [
   {to: '/', label: 'Accueil', icon: Home, end: true},
@@ -17,7 +18,7 @@ export default function Layout() {
     <div className="mx-auto flex min-h-screen max-w-2xl flex-col">
       <header className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-800/80 bg-slate-950/90 px-4 py-3 backdrop-blur">
         <NavLink to="/" className="flex items-center gap-2">
-          <Dumbbell className="h-5 w-5 text-emerald-400" />
+          <Logo className="h-8 w-8" />
           <span className="text-lg font-bold tracking-tight">Salle de sport</span>
         </NavLink>
         <NavLink

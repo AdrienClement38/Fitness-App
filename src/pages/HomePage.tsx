@@ -4,6 +4,7 @@ import {Link, useNavigate} from 'react-router-dom';
 import {useActiveWorkout, useWorkoutHistory} from '../lib/workoutLogs';
 import {useMyPrograms} from '../lib/myPrograms';
 import {summary} from '../lib/stats';
+import Logo from '../components/Logo';
 
 // Accès unique à l'accueil (le cardio, lui, est un exercice -> onglet Exercices).
 const browseCards = [
@@ -26,8 +27,11 @@ export default function HomePage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold tracking-tight">Ta salle, dans ta poche</h1>
-      <p className="mt-1 text-slate-400">Tes entraînements, tes programmes, et une bibliothèque complète.</p>
+      <div className="flex flex-col items-center text-center">
+        <Logo className="h-24 w-24" />
+        <h1 className="mt-3 text-2xl font-bold tracking-tight">Ta salle, dans ta poche</h1>
+        <p className="mt-1 text-slate-400">Tes entraînements, tes programmes, et une bibliothèque complète.</p>
+      </div>
 
       <form onSubmit={submit} className="relative mt-4">
         <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />

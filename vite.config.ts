@@ -12,7 +12,7 @@ export default defineConfig(() => {
       tailwindcss(),
       VitePWA({
         registerType: 'autoUpdate',
-        includeAssets: ['pwa-icon.svg'],
+        includeAssets: ['logo.png'],
         manifest: {
           name: 'Salle de sport — exercices & entraînement',
           short_name: 'Salle de sport',
@@ -25,8 +25,8 @@ export default defineConfig(() => {
           orientation: 'portrait',
           start_url: '/',
           icons: [
-            {src: 'pwa-icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any'},
-            {src: 'pwa-icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'maskable'},
+            {src: 'logo.png', sizes: '512x512', type: 'image/png', purpose: 'any'},
+            {src: 'logo.png', sizes: '512x512', type: 'image/png', purpose: 'maskable'},
           ],
         },
         workbox: {

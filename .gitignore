@@ -9,3 +9,6 @@ dist/
 # Python (ancien build ETL — conservé tant que non supprimé)
 etl/__pycache__/
 __pycache__/
+
+# Images sources lourdes (le logo découpé/optimisé est versionné dans public/)
+img/
