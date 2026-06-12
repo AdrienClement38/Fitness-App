@@ -39,5 +39,5 @@ export function Empty({label}: {label: string}) {
 }
 
 export function SectionTitle({children}: {children: ReactNode}) {
-  return <h2 className="mb-2 mt-6 text-sm font-semibold uppercase tracking-wide text-slate-400">{children}</h2>;
+  return <h2 className="mb-2 mt-6 font-heading text-lg uppercase tracking-wider text-slate-300">{children}</h2>;
 }

@@ -33,7 +33,7 @@ export default function ProgramsPage() {
 
       <section className="mt-4">
         <div className="mb-2 mt-6 flex items-center justify-between">
-          <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400">Mes programmes</h2>
+          <h2 className="font-heading text-lg uppercase tracking-wider text-slate-300">Mes programmes</h2>
           <button
             onClick={() => navigate(`/mes-programmes/${createEmptyProgram()}/modifier`)}
             className="flex items-center gap-1 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-sm font-medium text-emerald-300 transition-colors hover:bg-emerald-500/20"
