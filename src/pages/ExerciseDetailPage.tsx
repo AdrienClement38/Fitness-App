@@ -1,4 +1,5 @@
-import {ArrowLeft, Play} from 'lucide-react';
+import {useEffect, useState} from 'react';
+import {ArrowLeft, ChevronLeft, ChevronRight, Play, X} from 'lucide-react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
 import {api, exerciseImageUrl, label} from '../lib/api';
 import {useFetch} from '../lib/useFetch';
@@ -26,6 +27,7 @@ export default function ExerciseDetailPage() {
   const navigate = useNavigate();
   const {data: ex, error, loading} = useFetch(() => api.exercise(id!), [id]);
   const active = useActiveWorkout();
+  const [zoom, setZoom] = useState<number | null>(null); // index de l'image agrandie (lightbox)
 
   if (loading) return <Loading />;
   if (error) return <ErrorState message={error} />;
@@ -79,13 +81,20 @@ export default function ExerciseDetailPage() {
         <div className="mt-4">
           <div className="grid grid-cols-2 gap-2">
             {ex.images.map((img, i) => (
-              <img
+              <button
                 key={i}
-                src={exerciseImageUrl(img)}
-                alt={`${ex.nameFr ?? ex.nameEn} — position ${i + 1}`}
-                loading="lazy"
-                className="aspect-[4/3] w-full rounded-xl border border-slate-800 bg-slate-950 object-contain"
-              />
+                type="button"
+                onClick={() => setZoom(i)}
+                aria-label={`Agrandir l'image ${i + 1}`}
+                className="aspect-[4/3] w-full cursor-zoom-in overflow-hidden rounded-xl border border-slate-800 bg-slate-950"
+              >
+                <img
+                  src={exerciseImageUrl(img)}
+                  alt={`${ex.nameFr ?? ex.nameEn} — position ${i + 1}`}
+                  loading="lazy"
+                  className="h-full w-full object-contain"
+                />
+              </button>
             ))}
           </div>
           <p className="mt-1.5 text-xs text-slate-500">
@@ -159,6 +168,94 @@ export default function ExerciseDetailPage() {
         <>
           <SectionTitle>Contre-indications</SectionTitle>
           <List items={ex.contraindicationsFr} tone="amber" />
+        </>
+      )}
+
+      {zoom !== null && ex.images && (
+        <ImageLightbox
+          images={ex.images}
+          alt={ex.nameFr ?? ex.nameEn}
+          index={zoom}
+          onClose={() => setZoom(null)}
+          onIndex={(i) => setZoom(i)}
+        />
+      )}
+    </div>
+  );
+}
+
+/** Plein écran : image d'exercice agrandie, navigable (flèches / clavier), fermable. */
+function ImageLightbox({
+  images,
+  alt,
+  index,
+  onClose,
+  onIndex,
+}: {
+  images: string[];
+  alt: string;
+  index: number;
+  onClose: () => void;
+  onIndex: (i: number) => void;
+}) {
+  const multi = images.length > 1;
+  const go = (delta: number) => onIndex((index + delta + images.length) % images.length);
+
+  // Échap pour fermer, flèches pour naviguer, et on bloque le scroll de fond.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+      else if (multi && e.key === 'ArrowRight') go(1);
+      else if (multi && e.key === 'ArrowLeft') go(-1);
+    };
+    document.addEventListener('keydown', onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  });
+
+  return (
+    <div className="fixed inset-0 z-50 flex flex-col bg-slate-950/95 backdrop-blur-sm" onClick={onClose}>
+      <div className="flex items-center justify-between px-4 py-3">
+        <span className="text-sm font-medium text-slate-400">{multi ? `${index + 1} / ${images.length}` : ''}</span>
+        <button onClick={onClose} aria-label="Fermer" className="rounded-md p-1.5 text-slate-300 hover:bg-slate-800">
+          <X className="h-6 w-6" />
+        </button>
+      </div>
+      <div className="flex flex-1 items-center justify-center px-3 pb-8">
+        {/* Clic sur l'image : ne ferme pas. Clic n'importe où ailleurs (fond, marges) : ferme. */}
+        <img
+          src={exerciseImageUrl(images[index])}
+          alt={alt}
+          onClick={(e) => e.stopPropagation()}
+          className="max-h-full max-w-full rounded-lg object-contain"
+        />
+      </div>
+      {multi && (
+        <>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              go(-1);
+            }}
+            aria-label="Image précédente"
+            className="absolute left-2 top-1/2 -translate-y-1/2 rounded-full bg-slate-900/70 p-2 text-slate-200 hover:bg-slate-800"
+          >
+            <ChevronLeft className="h-6 w-6" />
+          </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              go(1);
+            }}
+            aria-label="Image suivante"
+            className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-slate-900/70 p-2 text-slate-200 hover:bg-slate-800"
+          >
+            <ChevronRight className="h-6 w-6" />
+          </button>
         </>
       )}
     </div>
