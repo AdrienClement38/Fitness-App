@@ -1,10 +1,11 @@
-import {ArrowLeft} from 'lucide-react';
+import {ArrowLeft, Play} from 'lucide-react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
 import {api, exerciseImageUrl, label} from '../lib/api';
 import {useFetch} from '../lib/useFetch';
 import {Badge, ErrorState, Loading, SectionTitle} from '../components/ui';
 import FavoriteButton from '../components/FavoriteButton';
 import AddToSessionButton from '../components/AddToSessionButton';
+import {startQuickSession, useActiveWorkout} from '../lib/workoutLogs';
 import BodyMap from '../components/BodyMap';
 
 function List({items, tone}: {items: string[]; tone?: 'amber' | 'slate'}) {
@@ -24,10 +25,17 @@ export default function ExerciseDetailPage() {
   const {id} = useParams<{id: string}>();
   const navigate = useNavigate();
   const {data: ex, error, loading} = useFetch(() => api.exercise(id!), [id]);
+  const active = useActiveWorkout();
 
   if (loading) return <Loading />;
   if (error) return <ErrorState message={error} />;
   if (!ex) return null;
+
+  const quickStart = () => {
+    if (active && !confirm('Une séance est déjà en cours. La remplacer par cet exercice ?')) return;
+    startQuickSession({id: ex.id, nameFr: ex.nameFr, nameEn: ex.nameEn, force: ex.force, category: ex.category, equipmentId: ex.equipmentId});
+    navigate('/seance');
+  };
 
   const instructions = ex.instructionsFr ?? ex.instructionsEn ?? [];
   const instructionsAreFr = Boolean(ex.instructionsFr);
@@ -59,6 +67,12 @@ export default function ExerciseDetailPage() {
         {ex.tempo && <Badge tone="indigo">Tempo {ex.tempo}</Badge>}
       </div>
 
+      <button
+        onClick={quickStart}
+        className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-500 px-4 py-2.5 text-sm font-bold text-slate-950 hover:bg-emerald-400"
+      >
+        <Play className="h-4 w-4" /> Faire maintenant
+      </button>
       <AddToSessionButton ex={ex} />
 
       {ex.images && ex.images.length > 0 && (

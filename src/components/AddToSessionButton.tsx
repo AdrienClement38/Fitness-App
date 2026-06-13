@@ -3,7 +3,7 @@ import {Check, ClipboardList, ListPlus, Plus, X} from 'lucide-react';
 import {addExerciseToNewSession, addExerciseToSession, createEmptyProgram, useMyPrograms, type AddableExercise} from '../lib/myPrograms';
 
 /**
- * Bouton « Ajouter à une séance » + sélecteur (programme perso -> séance).
+ * Bouton « Ajouter à un programme » + sélecteur (programme perso -> séance).
  * Calqué sur l'overlay d'ExercisePicker ; l'écriture passe par addExerciseToSession
  * (défauts de prescription + persistance + synchro gérés dans le store).
  */
@@ -16,7 +16,7 @@ export default function AddToSessionButton({ex}: {ex: AddableExercise}) {
         onClick={() => setOpen(true)}
         className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-2.5 text-sm font-semibold text-emerald-300 transition-colors hover:bg-emerald-500/20"
       >
-        <ListPlus className="h-4 w-4" /> Ajouter à une séance
+        <ListPlus className="h-4 w-4" /> Ajouter à un programme
       </button>
       {open && <SessionPicker ex={ex} onClose={() => setOpen(false)} />}
     </>
@@ -51,7 +51,7 @@ function SessionPicker({ex, onClose}: {ex: AddableExercise; onClose: () => void}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between gap-2">
-          <h3 className="font-semibold">Ajouter à une séance</h3>
+          <h3 className="font-semibold">Ajouter à un programme</h3>
           <button onClick={onClose} aria-label="Fermer" className="rounded-md p-1 text-slate-400 hover:bg-slate-800 hover:text-slate-200">
             <X className="h-5 w-5" />
           </button>

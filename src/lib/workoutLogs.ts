@@ -5,7 +5,7 @@
  * Le poids est pré-rempli depuis la dernière fois (progression). Zéro backend.
  */
 import {useSyncExternalStore} from 'react';
-import type {MeasureKind} from './api';
+import {measureKind, type MeasureKind} from './api';
 import {pushItems, registerCollection, type SyncItem} from './sync';
 
 export interface LoggedSet {
@@ -172,6 +172,36 @@ export function startSession(seed: SessionSeed): string {
   };
   saveActive(log);
   return id;
+}
+
+/** Défauts de prescription pour une séance one-shot, selon le mode de saisie. */
+const QUICK_DEFAULTS: Record<MeasureKind, {sets: number; min: number; max: number; rest: number}> = {
+  load: {sets: 3, min: 8, max: 12, rest: 90},
+  bodyweight: {sets: 3, min: 10, max: 15, rest: 60},
+  duration: {sets: 3, min: 30, max: 45, rest: 60},
+  cardio: {sets: 1, min: 15, max: 20, rest: 0},
+};
+
+export interface QuickExercise {
+  id: string;
+  nameFr: string | null;
+  nameEn: string;
+  force: string | null;
+  category: string | null;
+  equipmentId: string | null;
+}
+
+/** Démarre une séance « one-shot » avec un seul exercice (hors programme). Retourne l'id. */
+export function startQuickSession(ex: QuickExercise): string {
+  const kind = measureKind(ex);
+  const d = QUICK_DEFAULTS[kind];
+  return startSession({
+    programName: null,
+    sessionName: ex.nameFr ?? ex.nameEn,
+    exercises: [
+      {exerciseId: ex.id, nameFr: ex.nameFr, nameEn: ex.nameEn, kind, sets: d.sets, repsMin: d.min, repsMax: d.max, restSeconds: d.rest},
+    ],
+  });
 }
 
 export function updateActive(mut: (draft: WorkoutLog) => void) {
