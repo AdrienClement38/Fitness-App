@@ -14,10 +14,6 @@ import {
   type LoggedSet,
 } from '../lib/workoutLogs';
 import {stretchSuggestionsEnabled} from '../lib/settings';
-import {api} from '../lib/api';
-import {useFetch} from '../lib/useFetch';
-import ExerciseCard from '../components/ExerciseCard';
-import {Loading} from '../components/ui';
 
 function NumCell({
   value,
@@ -56,46 +52,12 @@ const hms = (s: number) => {
   return h > 0 ? `${h}:${pad(m)}:${pad(sec)}` : `${m}:${pad(sec)}`;
 };
 
-/** Écran de fin de séance : étirements suggérés pour les muscles travaillés. */
-function PostSessionStretches({exerciseIds, onDone}: {exerciseIds: string[]; onDone: () => void}) {
-  const {data, loading} = useFetch(() => api.stretchSuggestions(exerciseIds), [exerciseIds.join(',')]);
-  const stretches = data?.items ?? [];
-  return (
-    <div>
-      <div className="rounded-xl border border-emerald-900/40 bg-emerald-950/20 p-4 text-center">
-        <Check className="mx-auto h-7 w-7 text-emerald-400" />
-        <h1 className="mt-1 text-lg font-bold">Séance terminée</h1>
-        <p className="mt-1 text-sm text-slate-400">Bien joué. Quelques étirements pour les muscles travaillés :</p>
-      </div>
-      {loading && <Loading />}
-      {!loading && stretches.length > 0 && (
-        <div className="mt-4 grid gap-2.5">
-          {stretches.map((ex) => (
-            <ExerciseCard key={ex.id} ex={ex} />
-          ))}
-        </div>
-      )}
-      {!loading && stretches.length === 0 && (
-        <p className="mt-4 text-center text-sm text-slate-500">Pas de suggestion d'étirement cette fois.</p>
-      )}
-      <button
-        onClick={onDone}
-        className="mt-6 w-full rounded-xl bg-emerald-500/20 px-4 py-3 text-sm font-semibold text-emerald-300 hover:bg-emerald-500/30"
-      >
-        Voir mon suivi
-      </button>
-    </div>
-  );
-}
-
 export default function WorkoutPage() {
   const navigate = useNavigate();
   const w = useActiveWorkout();
 
   // Tique chaque seconde pendant la séance : horloge + compte à rebours du repos.
   const [, setTick] = useState(0);
-  // Séance terminée → écran d'étirements (les ids des exos travaillés).
-  const [finishedIds, setFinishedIds] = useState<string[] | null>(null);
   useEffect(() => {
     if (!w) return;
     const t = setInterval(() => setTick((n) => n + 1), 1000);
@@ -118,10 +80,6 @@ export default function WorkoutPage() {
     }
     prevRemaining.current = remaining;
   });
-
-  if (finishedIds) {
-    return <PostSessionStretches exerciseIds={finishedIds} onDone={() => navigate('/suivi')} />;
-  }
 
   if (!w) {
     return (
@@ -162,7 +120,7 @@ export default function WorkoutPage() {
   const finish = () => {
     const ids = [...new Set(w.exercises.map((e) => e.exerciseId))];
     finishActive();
-    if (stretchSuggestionsEnabled()) setFinishedIds(ids);
+    if (stretchSuggestionsEnabled()) navigate(`/seance/fin?ids=${encodeURIComponent(ids.join(','))}`);
     else navigate('/suivi');
   };
   const abandon = () => {

@@ -12,6 +12,7 @@ import MyProgramPage from './pages/MyProgramPage';
 import MyProgramDetailPage from './pages/MyProgramDetailPage';
 import SuiviPage from './pages/SuiviPage';
 import WorkoutPage from './pages/WorkoutPage';
+import PostSessionPage from './pages/PostSessionPage';
 import KnowledgePage from './pages/KnowledgePage';
 import AccountPage from './pages/AccountPage';
 import PrivacyPage from './pages/PrivacyPage';
@@ -66,6 +67,7 @@ export default function App() {
           <Route path="/mes-programmes/:id/modifier" element={<MyProgramPage />} />
           <Route path="/suivi" element={<SuiviPage />} />
           <Route path="/seance" element={<WorkoutPage />} />
+          <Route path="/seance/fin" element={<PostSessionPage />} />
           <Route
             path="/cardio"
             element={
