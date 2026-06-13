@@ -233,22 +233,19 @@ export default function WorkoutPage() {
         })}
       </div>
 
-      {started ? (
+      {/* « Commencer » n'existe qu'en haut. Ici, une fois lancé, on garde « Terminer ». */}
+      {started && (
         <button
           onClick={finish}
           className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-500/20 px-4 py-3 text-sm font-semibold text-emerald-300 hover:bg-emerald-500/30"
         >
           <Check className="h-4 w-4" /> Terminer la séance
         </button>
-      ) : (
-        <button
-          onClick={start}
-          className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl border border-emerald-700/50 px-4 py-3 text-sm font-semibold text-emerald-300 hover:bg-emerald-500/10"
-        >
-          <Play className="h-4 w-4" /> Commencer la séance
-        </button>
       )}
-      <button onClick={abandon} className="mt-2 w-full rounded-xl px-4 py-2 text-sm text-slate-500 hover:text-red-300">
+      <button
+        onClick={abandon}
+        className={`${started ? 'mt-2' : 'mt-6'} w-full rounded-xl px-4 py-2 text-sm text-slate-500 hover:text-red-300`}
+      >
         {started ? 'Abandonner' : 'Quitter'}
       </button>
 
