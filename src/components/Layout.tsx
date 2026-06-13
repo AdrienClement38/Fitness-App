@@ -1,5 +1,6 @@
+import {useLayoutEffect} from 'react';
 import {Activity, BookOpen, ClipboardList, Dumbbell, Home, LineChart, User} from 'lucide-react';
-import {NavLink, Outlet} from 'react-router-dom';
+import {NavLink, Outlet, useLocation, useNavigationType} from 'react-router-dom';
 import {useAuth} from '../lib/auth';
 import Logo from './Logo';
 
@@ -14,6 +15,15 @@ const tabs = [
 
 export default function Layout() {
   const {user} = useAuth();
+  const {pathname} = useLocation();
+  const navType = useNavigationType();
+  // Remet la vue en haut sur une navigation « avant » (ex. ouvrir une fiche exercice
+  // depuis une liste scrollée). On laisse le navigateur restaurer la position sur
+  // retour/avance (POP) pour ne pas perdre l'endroit où on en était dans une liste.
+  useLayoutEffect(() => {
+    if (navType !== 'POP') window.scrollTo(0, 0);
+  }, [pathname, navType]);
+
   return (
     <div className="mx-auto flex min-h-screen max-w-2xl flex-col">
       <header className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-800/80 bg-slate-950/90 px-4 py-3 backdrop-blur">
