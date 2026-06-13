@@ -14,6 +14,7 @@ export interface MyProgramExercise {
   nameEn: string;
   force: string | null;
   category: string | null;
+  measureKind?: string | null; // mode de saisie figé à l'ajout (absent sur les entrées pré-migration)
   equipmentId: string | null;
   sets: number | null;
   repsMin: number | null;
@@ -114,6 +115,7 @@ export function duplicateProgram(source: ProgramDetail): string {
         nameEn: e.nameEn,
         force: e.force,
         category: e.category,
+        measureKind: e.measureKind,
         equipmentId: e.equipmentId,
         sets: e.sets,
         repsMin: e.repsMin,
@@ -152,6 +154,7 @@ export interface AddableExercise {
   nameEn: string;
   force: string | null;
   category: string | null;
+  measureKind?: string | null;
   equipmentId: string | null;
 }
 
@@ -164,6 +167,7 @@ function buildEntry(ex: AddableExercise): MyProgramExercise {
     nameEn: ex.nameEn,
     force: ex.force,
     category: ex.category,
+    measureKind: ex.measureKind ?? null,
     equipmentId: ex.equipmentId,
     sets: def.sets,
     repsMin: def.min,

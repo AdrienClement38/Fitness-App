@@ -35,7 +35,7 @@ export default function ExerciseDetailPage() {
 
   const quickStart = () => {
     if (active && !confirm('Une séance est déjà en cours. La remplacer par cet exercice ?')) return;
-    startQuickSession({id: ex.id, nameFr: ex.nameFr, nameEn: ex.nameEn, force: ex.force, category: ex.category, equipmentId: ex.equipmentId});
+    startQuickSession({id: ex.id, nameFr: ex.nameFr, nameEn: ex.nameEn, force: ex.force, category: ex.category, measureKind: ex.measureKind, equipmentId: ex.equipmentId});
     navigate('/seance');
   };
 

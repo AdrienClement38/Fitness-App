@@ -11,6 +11,7 @@ export interface ExerciseListItem {
   nameEn: string;
   level: string;
   category: string;
+  measureKind: MeasureKind | null;
   force: string | null;
   mechanic: string | null;
   isEnriched: boolean;
@@ -37,6 +38,7 @@ export interface ExerciseDetail {
   level: string;
   mechanic: string | null;
   category: string;
+  measureKind: MeasureKind | null;
   equipmentId: string | null;
   equipmentNameFr: string | null;
   movementPatternId: string | null;
@@ -192,6 +194,7 @@ export interface ProgramExerciseItem {
   level: string;
   force: string | null;
   category: string | null;
+  measureKind: MeasureKind | null;
   equipmentId: string | null;
   sets: number | null;
   repsMin: number | null;
@@ -239,19 +242,39 @@ export const LABELS = {
 export const label = (kind: keyof typeof LABELS, value: string | null): string =>
   value ? (LABELS[kind][value] ?? value) : '';
 
-/** Mode de saisie d'un exercice (déduit de la catégorie / force / matériel). */
+/** Mode de saisie d'un exercice. */
 export type MeasureKind = 'load' | 'bodyweight' | 'duration' | 'cardio';
 
+const FREE_WEIGHT = new Set(['barbell', 'dumbbell', 'kettlebell', 'ez-bar']);
+const NO_LOAD_ACCESSORY = new Set(['resistance-band', 'medicine-ball', 'stability-ball', 'other']);
+
 /**
- * - cardio    : tapis, vélo… → durée (min)
- * - duration  : gainage, isométrie, étirements → durée (s)
- * - bodyweight: poids du corps (abdos, pompes, tractions) → reps seules
- * - load      : charge externe → poids × reps
+ * Mode de saisie :
+ *  - cardio    : tapis, vélo… → durée (min)
+ *  - duration  : gainage, isométrie, étirements, portés/traînés → durée (chrono)
+ *  - bodyweight: poids du corps / accessoire sans charge chiffrable → reps seules
+ *  - load      : charge externe → poids × reps
+ *
+ * On utilise EN PRIORITÉ la valeur stockée en base (`measureKind`, curée au seed
+ * via deriveMeasureKind + data/measure_kind_overrides.json). À défaut (données
+ * pré-migration), on retombe sur la même règle heuristique — GARDER SYNCHRO avec
+ * deriveMeasureKind() de server/db/seed.ts.
  */
-export function measureKind(ex: {category?: string | null; force?: string | null; equipmentId?: string | null}): MeasureKind {
-  if (ex.category === 'cardio') return 'cardio';
-  if (ex.category === 'stretching' || ex.force === 'static') return 'duration';
-  if (ex.equipmentId === 'bodyweight') return 'bodyweight';
+export function measureKind(ex: {
+  category?: string | null;
+  force?: string | null;
+  equipmentId?: string | null;
+  measureKind?: string | null;
+}): MeasureKind {
+  if (ex.measureKind) return ex.measureKind as MeasureKind;
+  const cat = ex.category;
+  const equip = ex.equipmentId ?? null;
+  if (cat === 'cardio') return 'cardio';
+  if (cat === 'stretching' || ex.force === 'static' || equip === 'foam-roller') return 'duration';
+  if (cat === 'plyometrics') return equip && FREE_WEIGHT.has(equip) ? 'load' : 'bodyweight';
+  if (cat === 'powerlifting' || cat === 'olympic_weightlifting') return 'load';
+  if (equip === null || equip === 'bodyweight') return 'bodyweight';
+  if (NO_LOAD_ACCESSORY.has(equip)) return 'bodyweight';
   return 'load';
 }
 

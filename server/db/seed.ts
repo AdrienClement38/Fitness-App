@@ -42,6 +42,31 @@ const VALID_CATEGORY = new Set([
   'strength', 'stretching', 'plyometrics', 'powerlifting',
   'olympic_weightlifting', 'strongman', 'cardio',
 ]);
+const VALID_MEASURE_KIND = new Set(['load', 'bodyweight', 'duration', 'cardio']);
+const FREE_WEIGHT = new Set(['barbell', 'dumbbell', 'kettlebell', 'ez-bar']);
+const NO_LOAD_ACCESSORY = new Set(['resistance-band', 'medicine-ball', 'stability-ball', 'other']);
+
+/**
+ * Mode de saisie d'un exercice, deduit de categorie / force / materiel. Regle de
+ * base, surchargeable par data/measure_kind_overrides.json (exceptions curees).
+ * IMPORTANT : garder synchro avec le fallback client measureKind() (src/lib/api.ts).
+ *  - cardio                              -> cardio (min)
+ *  - stretching / isometrie / foam-roll  -> duration (chrono : temps)
+ *  - pliometrie (sauts/lancers)          -> reps  (sauf charge libre = load)
+ *  - powerlifting / halterophilie        -> load  (barre chargee)
+ *  - sans materiel / poids du corps      -> reps
+ *  - accessoire sans charge chiffrable   -> reps  (elastique, swiss/med ball, divers)
+ *  - barre/halteres/kettlebell/machine   -> load
+ */
+function deriveMeasureKind(category: string, force: string | null, equipmentId: string | null): string {
+  if (category === 'cardio') return 'cardio';
+  if (category === 'stretching' || force === 'static' || equipmentId === 'foam-roller') return 'duration';
+  if (category === 'plyometrics') return equipmentId && FREE_WEIGHT.has(equipmentId) ? 'load' : 'bodyweight';
+  if (category === 'powerlifting' || category === 'olympic_weightlifting') return 'load';
+  if (equipmentId === null || equipmentId === 'bodyweight') return 'bodyweight';
+  if (NO_LOAD_ACCESSORY.has(equipmentId)) return 'bodyweight';
+  return 'load';
+}
 
 /* ---- Types des fichiers source ---------------------------------------- */
 interface RawExercise {
@@ -113,6 +138,8 @@ async function main() {
   const programs = loadJsonOptional<ProgramJson[]>('programs.json', []);
   const categoryOverrides =
     loadJsonOptional<{overrides?: Record<string, string>}>('category_overrides.json', {}).overrides ?? {};
+  const measureKindOverrides =
+    loadJsonOptional<{overrides?: Record<string, string>}>('measure_kind_overrides.json', {}).overrides ?? {};
   const dataset = JSON.parse(readFileSync(DATASET, 'utf-8')) as RawExercise[];
 
   const groupIds = new Set(muscleGroups.map((g) => g.id as string));
@@ -144,6 +171,10 @@ async function main() {
   for (const [oid, cat] of Object.entries(categoryOverrides)) {
     if (!datasetSlugs.has(oid)) errors.push(`category_overrides.json : id '${oid}' ne correspond à aucun exercice`);
     if (!VALID_CATEGORY.has(cat)) errors.push(`category_overrides.json : catégorie illégale '${cat}' (exo '${oid}')`);
+  }
+  for (const [oid, mk] of Object.entries(measureKindOverrides)) {
+    if (!datasetSlugs.has(oid)) errors.push(`measure_kind_overrides.json : id '${oid}' ne correspond à aucun exercice`);
+    if (!VALID_MEASURE_KIND.has(mk)) errors.push(`measure_kind_overrides.json : valeur illégale '${mk}' (exo '${oid}')`);
   }
 
   // Traductions (name_fr + instructions_fr), clé = slug de l'id brut du dataset.
@@ -188,6 +219,8 @@ async function main() {
     const isEnriched = Boolean(enr?.instructions_fr || enr?.name_fr || tr?.instructions_fr || tr?.name_fr);
     if (isEnriched) nEnriched++;
 
+    const measureKind = measureKindOverrides[id] ?? deriveMeasureKind(category, force ?? null, equipmentId);
+
     exerciseRows.push({
       id,
       nameEn: ex.name,
@@ -197,6 +230,7 @@ async function main() {
       level: level ?? 'beginner',
       mechanic: mechanic ?? null,
       category,
+      measureKind,
       equipmentId,
       movementPatternId: mp,
       instructionsEn: ex.instructions ?? null,
@@ -366,8 +400,14 @@ async function main() {
   if (splitDayRows.length) await db.insert(schema.splitDays).values(splitDayRows);
 
   /* ---- Rapport ------------------------------------------------------ */
+  const kindCounts = exerciseRows.reduce<Record<string, number>>((m, r) => {
+    const k = (r.measureKind as string) ?? '?';
+    m[k] = (m[k] ?? 0) + 1;
+    return m;
+  }, {});
   console.log('SEED OK');
   console.log(`  exercices        : ${exerciseRows.length}  (enrichis FR : ${nEnriched}, catégories corrigées : ${Object.keys(categoryOverrides).length})`);
+  console.log(`  modes de saisie  : ${JSON.stringify(kindCounts)}  (overrides : ${Object.keys(measureKindOverrides).length})`);
   console.log(`  liens ex-muscle  : ${exerciseMuscleRows.length}`);
   console.log(`  muscles ${muscles.length} | groupes ${muscleGroups.length} | équipement ${equipment.length} | patterns ${patterns.length}`);
   console.log(`  sources ${sources.length} | principes ${principles.length} | rep_schemes ${repSchemes.length} | volumes ${volumeLandmarks.length} | splits ${splits.length}`);

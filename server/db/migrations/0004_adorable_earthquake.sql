@@ -1,0 +1,1 @@
+ALTER TABLE "exercises" ADD COLUMN "measure_kind" text;

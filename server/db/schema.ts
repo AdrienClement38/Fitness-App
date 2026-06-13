@@ -98,6 +98,10 @@ export const exercises = pgTable(
     level: text('level').notNull(), // 'beginner'|'intermediate'|'advanced'
     mechanic: text('mechanic'), // 'compound'|'isolation'|null
     category: text('category').notNull(),
+    // Mode de saisie : 'load' (kg x reps) | 'bodyweight' (reps) | 'duration' (chrono) | 'cardio' (min).
+    // Calcule au seed (deriveMeasureKind + data/measure_kind_overrides.json). Nullable : le client
+    // retombe sur l'heuristique si absent (donnees pre-migration).
+    measureKind: text('measure_kind'),
     equipmentId: text('equipment_id').references(() => equipment.id),
     movementPatternId: text('movement_pattern_id').references(() => movementPatterns.id),
     instructionsEn: jsonb('instructions_en').$type<string[]>(),

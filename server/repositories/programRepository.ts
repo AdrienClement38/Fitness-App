@@ -42,6 +42,7 @@ export async function getProgramById(id: string) {
       level: exercises.level,
       force: exercises.force,
       category: exercises.category,
+      measureKind: exercises.measureKind,
       equipmentId: exercises.equipmentId,
       sets: programExercises.sets,
       repsMin: programExercises.repsMin,

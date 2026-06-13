@@ -190,6 +190,7 @@ export interface QuickExercise {
   nameEn: string;
   force: string | null;
   category: string | null;
+  measureKind?: string | null;
   equipmentId: string | null;
 }
 
