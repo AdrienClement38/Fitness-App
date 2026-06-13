@@ -7,6 +7,8 @@
 import {useSyncExternalStore} from 'react';
 import {measureKind, type MeasureKind} from './api';
 import {pushItems, registerCollection, type SyncItem} from './sync';
+import {partitionLogsByAge} from './stats';
+import {captureLogs} from './records';
 
 export interface LoggedSet {
   weight: number | null;
@@ -271,6 +273,7 @@ export function finishActive() {
   saveHistory([finished, ...history]);
   saveActive(null);
   pushItems([{kind: KIND, itemId: finished.id, data: finished, updatedAt: at, deleted: false}]);
+  pruneOldLogs();
 }
 
 export function abandonActive() {
@@ -283,6 +286,27 @@ export function deleteLog(id: string) {
   saveTombstones();
   saveHistory(history.filter((l) => l.id !== id));
   pushItems([{kind: KIND, itemId: id, data: null, updatedAt: at, deleted: true}]);
+}
+
+const RETENTION_DAYS = 90;
+
+/**
+ * Purge les séances de plus de ~3 mois : leurs records sont d'abord PRÉSERVÉS
+ * (captureLogs -> store de records all-time), puis elles sont supprimées
+ * localement + tombstone de sync (pour que le serveur les libère aussi). Ne
+ * touche jamais une séance sans date. Appelée au démarrage et à chaque fin de séance.
+ */
+export function pruneOldLogs(maxAgeDays = RETENTION_DAYS) {
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - maxAgeDays);
+  const {fresh, expired} = partitionLogsByAge(history, cutoff.toISOString());
+  if (expired.length === 0) return;
+  captureLogs(expired); // préserve les records AVANT suppression
+  const at = new Date().toISOString();
+  for (const l of expired) tombstones[l.id] = at;
+  saveTombstones();
+  saveHistory(fresh);
+  pushItems(expired.map((l) => ({kind: KIND, itemId: l.id, data: null, updatedAt: at, deleted: true})));
 }
 
 /** Volume total d'une séance (somme poids × reps des séries faites). */
@@ -347,3 +371,6 @@ function applyRemote(items: SyncItem[]) {
 }
 
 registerCollection(KIND, {snapshot, applyRemote});
+
+// Purge au démarrage (et après chaque séance terminée) : borne le stockage/sync à ~3 mois.
+pruneOldLogs();

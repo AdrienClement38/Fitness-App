@@ -1,5 +1,5 @@
 /** Graphiques SVG minimalistes, sans dépendance : graduations + infobulle au survol/touché. */
-import {useState, type PointerEvent as ReactPointerEvent} from 'react';
+import {useLayoutEffect, useRef, useState, type PointerEvent as ReactPointerEvent} from 'react';
 
 interface Point {
   label: string;
@@ -34,19 +34,42 @@ const fmtTick = (v: number) => {
   return Number.isInteger(v) ? String(v) : v.toFixed(1);
 };
 
+const LINE_PAD_L = 24;
+const LINE_PAD_R = 8;
+const LINE_BASE_INNER = 288; // innerW par défaut -> W = 320 (responsive, pleine largeur, comme avant)
+const LINE_STEP = 48; // largeur par point une fois en mode scroll
+
+/**
+ * Géométrie horizontale de la courbe. Sous ~8 points elle reste en pleine
+ * largeur (W = 320, responsive). Au-delà, le canevas s'élargit de LINE_STEP par
+ * point et devient scrollable -> on peut remonter dans le temps en glissant.
+ */
+export function lineLayout(n: number): {W: number; innerW: number; scroll: boolean} {
+  const innerW = Math.max(LINE_BASE_INNER, (n - 1) * LINE_STEP);
+  return {W: LINE_PAD_L + innerW + LINE_PAD_R, innerW, scroll: innerW > LINE_BASE_INNER};
+}
+
 export function LineChart({data, unit = ''}: {data: Point[]; unit?: string}) {
   const [active, setActive] = useState<number | null>(null);
-  const W = 320;
+  const scrollRef = useRef<HTMLDivElement>(null);
   const H = 160;
-  const padL = 24;
-  const padR = 8;
+  const padL = LINE_PAD_L;
+  const padR = LINE_PAD_R;
   const padT = 16;
   const padB = 20;
+  const {W, innerW, scroll} = lineLayout(data.length);
+
+  // Mode scroll : afficher d'emblée le plus récent (à droite) ; scroller vers la
+  // gauche = remonter dans le temps. Pas de `active` en dép -> le survol ne reset pas.
+  useLayoutEffect(() => {
+    const el = scrollRef.current;
+    if (el) el.scrollLeft = el.scrollWidth;
+  }, [W, data.length, data[data.length - 1]?.label]);
+
   if (data.length === 0) return null;
 
   const vals = data.map((d) => d.value);
   const {niceMin, niceMax, ticks} = niceScale(Math.min(...vals), Math.max(...vals));
-  const innerW = W - padL - padR;
   const innerH = H - padT - padB;
   const X = (i: number) => (data.length === 1 ? padL + innerW / 2 : padL + (i / (data.length - 1)) * innerW);
   const Y = (v: number) => padT + innerH - ((v - niceMin) / (niceMax - niceMin)) * innerH;
@@ -62,8 +85,15 @@ export function LineChart({data, unit = ''}: {data: Point[]; unit?: string}) {
   };
   const a = active != null ? data[active] : null;
 
-  return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="w-full touch-pan-y select-none" role="img" aria-label="Courbe de progression">
+  const chart = (
+    <svg
+      viewBox={`0 0 ${W} ${H}`}
+      width={scroll ? W : undefined}
+      height={scroll ? H : undefined}
+      className={scroll ? 'block select-none' : 'w-full touch-pan-y select-none'}
+      role="img"
+      aria-label="Courbe de progression"
+    >
       <defs>
         <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#34d399" stopOpacity="0.25" />
@@ -136,6 +166,15 @@ export function LineChart({data, unit = ''}: {data: Point[]; unit?: string}) {
         onPointerLeave={() => setActive(null)}
       />
     </svg>
+  );
+
+  // Au-delà du seuil, on enferme la courbe (large) dans un conteneur scrollable horizontalement.
+  return scroll ? (
+    <div ref={scrollRef} className="overflow-x-auto">
+      {chart}
+    </div>
+  ) : (
+    chart
   );
 }
 

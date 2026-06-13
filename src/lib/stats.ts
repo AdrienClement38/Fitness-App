@@ -155,3 +155,143 @@ export function summary(logs: WorkoutLog[]): {sessions: number; thisWeek: number
   const thisWeek = logs.filter((l) => weekKey(logDate(l)) === nowWeek).length;
   return {sessions: logs.length, thisWeek, totalVolume: Math.round(totalVolume)};
 }
+
+/* ---- Records persistants (survivent à la purge des vieilles séances) ------ */
+
+/**
+ * Résumé compact d'un record all-time pour un exercice. Stocké à part de
+ * l'historique (cf. records.ts) pour SURVIVRE à la purge des séances > 3 mois.
+ */
+export interface ExerciseRecord {
+  exerciseId: string;
+  name: string;
+  kind: MeasureKind;
+  heaviest: {weight: number; reps: number} | null;
+  best1RM: number | null;
+  bestValue: number | null;
+  lastDateIso: string;
+  updatedAt: string; // pour la sync (last-write-wins, mais la fusion garde le meilleur)
+}
+
+const maxNullable = (a: number | null, b: number | null): number | null => (a == null ? b : b == null ? a : Math.max(a, b));
+function betterHeaviest(
+  a: {weight: number; reps: number} | null,
+  b: {weight: number; reps: number} | null,
+): {weight: number; reps: number} | null {
+  if (!a) return b;
+  if (!b) return a;
+  return b.weight > a.weight ? b : a;
+}
+
+/**
+ * Replie les meilleures perfs de `logs` dans une COPIE de `base` (pur, immuable).
+ * Monotone : un record ne baisse jamais. `at` horodate les exercices touchés.
+ */
+export function foldRecords(base: Record<string, ExerciseRecord>, logs: WorkoutLog[], at: string): Record<string, ExerciseRecord> {
+  const out: Record<string, ExerciseRecord> = {};
+  for (const k of Object.keys(base)) out[k] = {...base[k], heaviest: base[k].heaviest ? {...base[k].heaviest} : null};
+  for (const log of logs) {
+    const date = logDate(log);
+    for (const ex of log.exercises) {
+      const done = ex.sets.filter((s) => s.done);
+      if (done.length === 0) continue;
+      let r = out[ex.exerciseId];
+      if (!r) {
+        r = {exerciseId: ex.exerciseId, name: ex.nameFr ?? ex.nameEn, kind: ex.kind, heaviest: null, best1RM: null, bestValue: null, lastDateIso: date, updatedAt: at};
+        out[ex.exerciseId] = r;
+      }
+      if (date > r.lastDateIso) r.lastDateIso = date;
+      for (const s of done) {
+        if (ex.kind === 'load') {
+          if (s.weight != null && s.reps != null) {
+            const e = Math.round(epley1RM(s.weight, s.reps) * 10) / 10;
+            if (r.best1RM == null || e > r.best1RM) r.best1RM = e;
+            if (r.heaviest == null || s.weight > r.heaviest.weight) r.heaviest = {weight: s.weight, reps: s.reps};
+          }
+        } else if (s.reps != null && (r.bestValue == null || s.reps > r.bestValue)) {
+          r.bestValue = s.reps;
+        }
+      }
+      r.updatedAt = at;
+    }
+  }
+  return out;
+}
+
+/** Fusionne deux records du même exercice en gardant le meilleur de chaque champ (commutatif, idempotent). */
+export function betterRecord(a: ExerciseRecord | undefined, b: ExerciseRecord): ExerciseRecord {
+  if (!a) return b;
+  return {
+    exerciseId: a.exerciseId,
+    name: a.name || b.name,
+    kind: a.kind,
+    heaviest: betterHeaviest(a.heaviest, b.heaviest),
+    best1RM: maxNullable(a.best1RM, b.best1RM),
+    bestValue: maxNullable(a.bestValue, b.bestValue),
+    lastDateIso: a.lastDateIso > b.lastDateIso ? a.lastDateIso : b.lastDateIso,
+    updatedAt: a.updatedAt > b.updatedAt ? a.updatedAt : b.updatedAt,
+  };
+}
+
+export interface DisplayRecord {
+  exerciseId: string;
+  name: string;
+  kind: MeasureKind;
+  heaviest: {weight: number; reps: number} | null;
+  best1RM: number | null;
+  bestValue: number | null;
+  lastDateIso: string;
+  sessions: number;
+}
+
+/**
+ * Records affichés = meilleur entre l'historique courant et le store persistant
+ * (qui retient les séances purgées). Tri : fréquence décroissante puis récence.
+ */
+export function combineRecords(historyStats: ExerciseStat[], store: ExerciseRecord[]): DisplayRecord[] {
+  const map = new Map<string, DisplayRecord>();
+  const fold = (r: {
+    exerciseId: string;
+    name: string;
+    kind: MeasureKind;
+    heaviest: {weight: number; reps: number} | null;
+    best1RM: number | null;
+    bestValue: number | null;
+    lastDateIso: string;
+    sessions?: number;
+  }) => {
+    const cur = map.get(r.exerciseId);
+    if (!cur) {
+      map.set(r.exerciseId, {exerciseId: r.exerciseId, name: r.name, kind: r.kind, heaviest: r.heaviest, best1RM: r.best1RM, bestValue: r.bestValue, lastDateIso: r.lastDateIso, sessions: r.sessions ?? 0});
+      return;
+    }
+    map.set(r.exerciseId, {
+      exerciseId: cur.exerciseId,
+      name: cur.name || r.name,
+      kind: cur.kind,
+      heaviest: betterHeaviest(cur.heaviest, r.heaviest),
+      best1RM: maxNullable(cur.best1RM, r.best1RM),
+      bestValue: maxNullable(cur.bestValue, r.bestValue),
+      lastDateIso: cur.lastDateIso > r.lastDateIso ? cur.lastDateIso : r.lastDateIso,
+      sessions: Math.max(cur.sessions, r.sessions ?? 0),
+    });
+  };
+  for (const s of historyStats) fold(s);
+  for (const r of store) fold(r);
+  return [...map.values()].sort((a, b) => b.sessions - a.sessions || (a.lastDateIso < b.lastDateIso ? 1 : -1));
+}
+
+/**
+ * Sépare les séances à garder (récentes) de celles à purger (date < cutoff).
+ * Les séances sans date ne sont JAMAIS purgées (filet de sécurité).
+ */
+export function partitionLogsByAge(logs: WorkoutLog[], cutoffIso: string): {fresh: WorkoutLog[]; expired: WorkoutLog[]} {
+  const fresh: WorkoutLog[] = [];
+  const expired: WorkoutLog[] = [];
+  for (const l of logs) {
+    const d = l.finishedIso ?? l.startedIso ?? '';
+    if (d !== '' && d < cutoffIso) expired.push(l);
+    else fresh.push(l);
+  }
+  return {fresh, expired};
+}

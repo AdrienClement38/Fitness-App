@@ -26,6 +26,7 @@ import {connect, disconnect} from './lib/sync';
 import './lib/workoutLogs';
 import './lib/myPrograms';
 import './lib/favorites';
+import './lib/records';
 
 /** Garde d'accès : l'app exige d'être connecté (sauf /compte + pages légales). */
 function Protected() {

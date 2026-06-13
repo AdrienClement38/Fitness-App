@@ -2,7 +2,8 @@ import {useMemo, useState} from 'react';
 import {Play, Trash2} from 'lucide-react';
 import {Link} from 'react-router-dom';
 import {deleteLog, logVolume, setsDone, useActiveWorkout, useWorkoutHistory} from '../lib/workoutLogs';
-import {durationMinutes, exerciseStats, progression, summary, weeklyVolume, type ExerciseStat} from '../lib/stats';
+import {combineRecords, durationMinutes, exerciseStats, progression, summary, weeklyVolume} from '../lib/stats';
+import {useRecords} from '../lib/records';
 import type {MeasureKind} from '../lib/api';
 import {BarChart, LineChart} from '../components/Charts';
 import {Badge, Empty, SectionTitle} from '../components/ui';
@@ -19,7 +20,7 @@ const progCaption = (k: MeasureKind): string =>
       : k === 'duration'
         ? 'Meilleure durée par séance (secondes)'
         : 'Meilleure durée par séance (minutes)';
-const recordLabel = (s: ExerciseStat): string => {
+const recordLabel = (s: {kind: MeasureKind; heaviest: {weight: number; reps: number} | null; bestValue: number | null}): string => {
   if (s.kind === 'load') return s.heaviest ? `${s.heaviest.weight} kg × ${s.heaviest.reps}` : '–';
   if (s.bestValue == null) return '–';
   return `${s.bestValue}${s.kind === 'duration' ? ' s' : s.kind === 'cardio' ? ' min' : ' reps'}`;
@@ -41,11 +42,21 @@ export default function SuiviPage() {
   const stats = useMemo(() => exerciseStats(history), [history]);
   const sum = useMemo(() => summary(history), [history]);
   const weeks = useMemo(() => weeklyVolume(history), [history]);
+  // Records all-time : meilleur entre l'historique courant et le store persistant (qui retient les séances purgées).
+  const storeRecords = useRecords();
+  const records = useMemo(() => combineRecords(stats, storeRecords), [stats, storeRecords]);
 
   const chartable = stats.filter((s) => s.sessions >= 2);
   const [exId, setExId] = useState('');
   const selected = exId || chartable[0]?.exerciseId || '';
   const prog = useMemo(() => (selected ? progression(history, selected) : {points: [], kind: 'load' as const}), [history, selected]);
+  // Le graphique couvre les 3 derniers mois (= la rétention). Beaucoup de points -> scroll horizontal (cf. LineChart).
+  const since3moIso = useMemo(() => {
+    const d = new Date();
+    d.setMonth(d.getMonth() - 3);
+    return d.toISOString();
+  }, []);
+  const windowPoints = useMemo(() => prog.points.filter((p) => p.dateIso >= since3moIso), [prog.points, since3moIso]);
 
   return (
     <div>
@@ -99,23 +110,25 @@ export default function SuiviPage() {
                 ))}
               </select>
               <div className="mt-3 rounded-xl border border-slate-800 bg-slate-900/50 p-3">
-                {prog.points.length >= 2 ? (
+                {windowPoints.length >= 2 ? (
                   <>
-                    <LineChart data={prog.points.map((p) => ({label: fmtShort(p.dateIso), value: p.value}))} unit={progUnit(prog.kind)} />
-                    <p className="mt-1 text-center text-xs text-slate-500">{progCaption(prog.kind)}</p>
+                    <LineChart data={windowPoints.map((p) => ({label: fmtShort(p.dateIso), value: p.value}))} unit={progUnit(prog.kind)} />
+                    <p className="mt-1 text-center text-xs text-slate-500">
+                      {progCaption(prog.kind)} · 3 derniers mois{windowPoints.length > 7 ? ' · glisse pour remonter' : ''}
+                    </p>
                   </>
                 ) : (
-                  <p className="py-6 text-center text-sm text-slate-500">Loggue au moins 2 séances de cet exercice pour voir la courbe.</p>
+                  <p className="py-6 text-center text-sm text-slate-500">Pas assez de séances sur les 3 derniers mois pour tracer la courbe.</p>
                 )}
               </div>
             </section>
           )}
 
-          {/* Records */}
+          {/* Records (all-time : la meilleure perf est écrasée quand elle est battue). 5 visibles, scroll pour le reste. */}
           <section>
             <SectionTitle>Records</SectionTitle>
-            <div className="grid gap-2">
-              {stats.slice(0, 8).map((s) => (
+            <div className="grid max-h-72 gap-2 overflow-y-auto pr-1">
+              {records.map((s) => (
                 <div key={s.exerciseId} className="flex items-center justify-between gap-3 rounded-lg border border-slate-800 bg-slate-900/50 p-3">
                   <Link to={`/exercices/${s.exerciseId}`} className="min-w-0 flex-1 truncate text-sm hover:text-emerald-300">
                     {s.name}
@@ -136,9 +149,9 @@ export default function SuiviPage() {
             </section>
           )}
 
-          {/* Historique */}
+          {/* Historique : 5 visibles, scroll pour le reste. */}
           <SectionTitle>Historique</SectionTitle>
-          <div className="grid gap-3">
+          <div className="grid max-h-[36rem] gap-3 overflow-y-auto pr-1">
             {history.map((log) => {
               const vol = logVolume(log);
               const dur = durationMinutes(log);
