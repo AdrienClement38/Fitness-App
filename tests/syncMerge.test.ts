@@ -71,6 +71,32 @@ describe('mergeCollection', () => {
     expect(items.get('a')?.v).toBe(7);
     expect(tombs.has('a')).toBe(false);
   });
+
+  // Plancher de tombstone (cf. workoutLogs : borne la croissance du blob de sync).
+  it('plancher : ignore une suppression très ancienne déjà absente en local', () => {
+    const {items, tombs} = fresh();
+    const floor = '2026-01-01T00:00:00.000Z';
+    const r = mergeCollection(items, tombs, [item('vieux', '2025-06-01T00:00:00.000Z', {deleted: true})], at, floor);
+    expect(tombs.has('vieux')).toBe(false); // pas de tombstone éternel
+    expect(r.tombstonesChanged).toBe(false);
+  });
+
+  it('plancher : pose quand même un tombstone récent (au-dessus du plancher)', () => {
+    const {items, tombs} = fresh();
+    const floor = '2026-01-01T00:00:00.000Z';
+    mergeCollection(items, tombs, [item('recent', '2026-03-01T00:00:00.000Z', {deleted: true})], at, floor);
+    expect(tombs.get('recent')).toBe('2026-03-01T00:00:00.000Z');
+  });
+
+  it('plancher : n efface pas un item local existant (suppression réelle même ancienne)', () => {
+    const {items, tombs} = fresh();
+    const floor = '2026-01-01T00:00:00.000Z';
+    items.set('a', doc('a', '2024-01-01T00:00:00.000Z', 1)); // local plus ancien que le plancher
+    const r = mergeCollection(items, tombs, [item('a', '2025-06-01T00:00:00.000Z', {deleted: true})], at, floor);
+    expect(items.has('a')).toBe(false); // supprimé : le delete (2025-06) > local (2024-01)
+    expect(tombs.get('a')).toBe('2025-06-01T00:00:00.000Z');
+    expect(r.itemsChanged).toBe(true);
+  });
 });
 
 describe('mergeFavorites', () => {

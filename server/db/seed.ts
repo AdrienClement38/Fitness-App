@@ -1,7 +1,5 @@
 /**
- * Seed de la bibliothèque d'entraînement.
- *
- * Port TypeScript de l'ancien `etl/build.py` :
+ * Seed de la bibliothèque d'entraînement. Charge, mappe, valide puis insère :
  *   1. charge les connaissances FR (`data/*.json`) + l'ossature des 873 exos
  *      (`etl/sources/free-exercise-db.exercises.json`) ;
  *   2. mappe le vocabulaire du dataset (équipement, muscles, niveau, catégorie),
@@ -17,6 +15,7 @@ import {existsSync, readFileSync} from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {db, migrateDb, schema} from './client';
+import {deriveMeasureKind} from '../../src/lib/measureKindRule';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const DATA = path.join(ROOT, 'data');
@@ -43,30 +42,8 @@ const VALID_CATEGORY = new Set([
   'olympic_weightlifting', 'strongman', 'cardio',
 ]);
 const VALID_MEASURE_KIND = new Set(['load', 'bodyweight', 'duration', 'cardio']);
-const FREE_WEIGHT = new Set(['barbell', 'dumbbell', 'kettlebell', 'ez-bar']);
-const NO_LOAD_ACCESSORY = new Set(['resistance-band', 'medicine-ball', 'stability-ball', 'other']);
-
-/**
- * Mode de saisie d'un exercice, deduit de categorie / force / materiel. Regle de
- * base, surchargeable par data/measure_kind_overrides.json (exceptions curees).
- * IMPORTANT : garder synchro avec le fallback client measureKind() (src/lib/api.ts).
- *  - cardio                              -> cardio (min)
- *  - stretching / isometrie / foam-roll  -> duration (chrono : temps)
- *  - pliometrie (sauts/lancers)          -> reps  (sauf charge libre = load)
- *  - powerlifting / halterophilie        -> load  (barre chargee)
- *  - sans materiel / poids du corps      -> reps
- *  - accessoire sans charge chiffrable   -> reps  (elastique, swiss/med ball, divers)
- *  - barre/halteres/kettlebell/machine   -> load
- */
-function deriveMeasureKind(category: string, force: string | null, equipmentId: string | null): string {
-  if (category === 'cardio') return 'cardio';
-  if (category === 'stretching' || force === 'static' || equipmentId === 'foam-roller') return 'duration';
-  if (category === 'plyometrics') return equipmentId && FREE_WEIGHT.has(equipmentId) ? 'load' : 'bodyweight';
-  if (category === 'powerlifting' || category === 'olympic_weightlifting') return 'load';
-  if (equipmentId === null || equipmentId === 'bodyweight') return 'bodyweight';
-  if (NO_LOAD_ACCESSORY.has(equipmentId)) return 'bodyweight';
-  return 'load';
-}
+// La règle deriveMeasureKind est PARTAGÉE (src/lib/measureKindRule.ts), surchargée
+// ensuite par data/measure_kind_overrides.json. Importée en tête de fichier.
 
 /* ---- Types des fichiers source ---------------------------------------- */
 interface RawExercise {

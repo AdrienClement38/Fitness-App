@@ -2,6 +2,7 @@ import {useEffect, useRef, useState} from 'react';
 import {ChevronLeft, ChevronRight, Dumbbell, Search, X} from 'lucide-react';
 import {api, exerciseImageUrl, label, type ExerciseListItem, type Facets} from '../lib/api';
 import {useFetch} from '../lib/useFetch';
+import {useModalDismiss} from '../lib/useModalDismiss';
 import {Badge} from './ui';
 
 /**
@@ -16,6 +17,7 @@ export default function ExercisePicker({
   onPick: (e: ExerciseListItem) => void;
   onClose: () => void;
 }) {
+  useModalDismiss(onClose); // Échap pour fermer + verrou du scroll de fond
   const [q, setQ] = useState('');
   const [muscle, setMuscle] = useState('');
   const [level, setLevel] = useState('');
@@ -66,11 +68,14 @@ export default function ExercisePicker({
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-slate-950/80 p-3 backdrop-blur-sm" onClick={onClose}>
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="exercise-picker-title"
         className="mx-auto flex max-h-[90vh] w-full max-w-lg flex-col rounded-xl border border-slate-800 bg-slate-900 p-4 shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between">
-          <h3 className="font-semibold">Ajouter un exercice</h3>
+          <h3 id="exercise-picker-title" className="font-semibold">Ajouter un exercice</h3>
           <button onClick={onClose} aria-label="Fermer" className="rounded-md p-1 text-slate-400 hover:bg-slate-800 hover:text-slate-200">
             <X className="h-5 w-5" />
           </button>

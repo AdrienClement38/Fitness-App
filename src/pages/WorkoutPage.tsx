@@ -166,8 +166,8 @@ export default function WorkoutPage() {
           const valLabel = e.kind === 'duration' ? 'durée (s)' : e.kind === 'cardio' ? 'durée (min)' : 'reps';
           const objUnit = e.kind === 'duration' ? 's' : e.kind === 'cardio' ? 'min' : 'reps';
           const cols = load
-            ? 'grid grid-cols-[1.5rem_1fr_1fr_2.5rem_1.5rem] items-center gap-2'
-            : 'grid grid-cols-[1.5rem_1fr_2.5rem_1.5rem] items-center gap-2';
+            ? 'grid grid-cols-[1.5rem_1fr_1fr_2.5rem_2rem] items-center gap-2'
+            : 'grid grid-cols-[1.5rem_1fr_2.5rem_2rem] items-center gap-2';
           return (
             <div key={ei} className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
               <div className="flex items-baseline justify-between gap-2">
@@ -214,13 +214,17 @@ export default function WorkoutPage() {
                   <button
                     onClick={() => toggleSetDone(ei, si)}
                     aria-label="Série faite (lance le repos)"
-                    className={`mx-auto flex h-7 w-7 items-center justify-center rounded-full border transition-colors ${
+                    className={`mx-auto flex h-9 w-9 items-center justify-center rounded-full border transition-colors ${
                       s.done ? 'border-emerald-500 bg-emerald-500 text-slate-950' : 'border-slate-600 text-transparent hover:border-emerald-500'
                     }`}
                   >
                     <Check className="h-4 w-4" />
                   </button>
-                  <button onClick={() => removeSet(ei, si)} aria-label="Retirer la série" className="text-slate-600 hover:text-red-300">
+                  <button
+                    onClick={() => removeSet(ei, si)}
+                    aria-label="Retirer la série"
+                    className="mx-auto flex h-8 w-8 items-center justify-center rounded-md text-slate-600 hover:bg-red-950/40 hover:text-red-300"
+                  >
                     <X className="h-4 w-4" />
                   </button>
                 </div>

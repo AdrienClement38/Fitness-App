@@ -5,8 +5,9 @@
  * Le poids est pré-rempli depuis la dernière fois (progression). Zéro backend.
  */
 import {useSyncExternalStore} from 'react';
-import {measureKind, type MeasureKind} from './api';
+import {measureKind, PRESCRIPTION_DEFAULTS, type ExerciseSeedInput, type MeasureKind} from './api';
 import {pushItems, registerCollection, type SyncItem} from './sync';
+import {mergeCollection} from './syncMerge';
 import {partitionLogsByAge} from './stats';
 import {captureLogs} from './records';
 
@@ -89,7 +90,7 @@ function readT(): Record<string, string> {
 
 let history = readH();
 let active = readA();
-const tombstones = readT();
+let tombstones = readT();
 const listeners = new Set<() => void>();
 
 function subscribe(cb: () => void) {
@@ -176,28 +177,13 @@ export function startSession(seed: SessionSeed): string {
   return id;
 }
 
-/** Défauts de prescription pour une séance one-shot, selon le mode de saisie. */
-const QUICK_DEFAULTS: Record<MeasureKind, {sets: number; min: number; max: number; rest: number}> = {
-  load: {sets: 3, min: 8, max: 12, rest: 90},
-  bodyweight: {sets: 3, min: 10, max: 15, rest: 60},
-  duration: {sets: 3, min: 30, max: 45, rest: 60},
-  cardio: {sets: 1, min: 15, max: 20, rest: 0},
-};
-
-export interface QuickExercise {
-  id: string;
-  nameFr: string | null;
-  nameEn: string;
-  force: string | null;
-  category: string | null;
-  measureKind?: string | null;
-  equipmentId: string | null;
-}
+/** Exercice « one-shot » (séance d'un seul exercice, hors programme). */
+export type QuickExercise = ExerciseSeedInput;
 
 /** Démarre une séance « one-shot » avec un seul exercice (hors programme). Retourne l'id. */
 export function startQuickSession(ex: QuickExercise): string {
   const kind = measureKind(ex);
-  const d = QUICK_DEFAULTS[kind];
+  const d = PRESCRIPTION_DEFAULTS[kind];
   return startSession({
     programName: null,
     sessionName: ex.nameFr ?? ex.nameEn,
@@ -290,24 +276,43 @@ export function deleteLog(id: string) {
 }
 
 const RETENTION_DAYS = 90;
+// Au-delà d'un an, une séance supprimée n'existe plus nulle part (toutes les apps
+// l'ont purgée depuis longtemps) : on lâche son tombstone pour borner le blob de sync.
+const TOMBSTONE_TTL_DAYS = 365;
+function tombstoneFloor(): string {
+  const d = new Date();
+  d.setDate(d.getDate() - TOMBSTONE_TTL_DAYS);
+  return d.toISOString();
+}
 
 /**
  * Purge les séances de plus de ~3 mois : leurs records sont d'abord PRÉSERVÉS
  * (captureLogs -> store de records all-time), puis elles sont supprimées
- * localement + tombstone de sync (pour que le serveur les libère aussi). Ne
- * touche jamais une séance sans date. Appelée au démarrage et à chaque fin de séance.
+ * localement + tombstone de sync (pour que le serveur les libère aussi). Purge
+ * AUSSI les tombstones de plus d'un an (sinon croissance monotone du blob de sync).
+ * Ne touche jamais une séance sans date. Appelée au démarrage et à chaque fin de séance.
  */
 export function pruneOldLogs(maxAgeDays = RETENTION_DAYS) {
+  let tombChanged = false;
+  const floor = tombstoneFloor();
+  for (const [id, at] of Object.entries(tombstones)) {
+    if (at < floor) {
+      delete tombstones[id];
+      tombChanged = true;
+    }
+  }
   const cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - maxAgeDays);
   const {fresh, expired} = partitionLogsByAge(history, cutoff.toISOString());
-  if (expired.length === 0) return;
-  captureLogs(expired); // préserve les records AVANT suppression
-  const at = new Date().toISOString();
-  for (const l of expired) tombstones[l.id] = at;
-  saveTombstones();
-  saveHistory(fresh);
-  pushItems(expired.map((l) => ({kind: KIND, itemId: l.id, data: null, updatedAt: at, deleted: true})));
+  if (expired.length > 0) {
+    captureLogs(expired); // préserve les records AVANT suppression
+    const at = new Date().toISOString();
+    for (const l of expired) tombstones[l.id] = at;
+    tombChanged = true;
+    saveHistory(fresh);
+    pushItems(expired.map((l) => ({kind: KIND, itemId: l.id, data: null, updatedAt: at, deleted: true})));
+  }
+  if (tombChanged) saveTombstones();
 }
 
 /** Volume total d'une séance (somme poids × reps des séries faites). */
@@ -344,31 +349,15 @@ function snapshot(): SyncItem[] {
 }
 
 function applyRemote(items: SyncItem[]) {
+  // Même logique LWW + tombstones que les autres collections (helper partagé testé).
   const byId = new Map(history.map((l) => [l.id, l]));
-  let histChanged = false;
-  let tombChanged = false;
-  for (const it of items) {
-    const local = byId.get(it.itemId);
-    const localAt = local ? logAt(local) : tombstones[it.itemId];
-    if (localAt && localAt >= it.updatedAt) continue; // le nôtre est aussi récent ou plus
-    if (it.deleted) {
-      if (local) {
-        byId.delete(it.itemId);
-        histChanged = true;
-      }
-      tombstones[it.itemId] = it.updatedAt;
-      tombChanged = true;
-    } else {
-      byId.set(it.itemId, it.data as WorkoutLog);
-      histChanged = true;
-      if (tombstones[it.itemId]) {
-        delete tombstones[it.itemId];
-        tombChanged = true;
-      }
-    }
+  const tomb = new Map(Object.entries(tombstones));
+  const {itemsChanged, tombstonesChanged} = mergeCollection(byId, tomb, items, logAt, tombstoneFloor());
+  if (tombstonesChanged) {
+    tombstones = Object.fromEntries(tomb);
+    saveTombstones();
   }
-  if (tombChanged) saveTombstones();
-  if (histChanged) saveHistory([...byId.values()].sort((a, b) => (logAt(a) < logAt(b) ? 1 : -1)));
+  if (itemsChanged) saveHistory([...byId.values()].sort((a, b) => (logAt(a) < logAt(b) ? 1 : -1)));
 }
 
 registerCollection(KIND, {snapshot, applyRemote});

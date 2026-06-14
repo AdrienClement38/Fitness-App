@@ -1,6 +1,7 @@
 import {useEffect, useState} from 'react';
 import {Check, ClipboardList, ListPlus, Plus, X} from 'lucide-react';
 import {addExerciseToNewSession, addExerciseToSession, createEmptyProgram, useMyPrograms, type AddableExercise} from '../lib/myPrograms';
+import {useModalDismiss} from '../lib/useModalDismiss';
 
 /**
  * Bouton « Ajouter à un programme » + sélecteur (programme perso -> séance).
@@ -24,6 +25,7 @@ export default function AddToSessionButton({ex}: {ex: AddableExercise}) {
 }
 
 function SessionPicker({ex, onClose}: {ex: AddableExercise; onClose: () => void}) {
+  useModalDismiss(onClose); // Échap pour fermer + verrou du scroll de fond
   const programs = useMyPrograms();
   const [added, setAdded] = useState<string | null>(null);
 
@@ -47,11 +49,14 @@ function SessionPicker({ex, onClose}: {ex: AddableExercise; onClose: () => void}
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-slate-950/80 p-3 backdrop-blur-sm" onClick={onClose}>
       <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="session-picker-title"
         className="mx-auto flex max-h-[90vh] w-full max-w-lg flex-col rounded-xl border border-slate-800 bg-slate-900 p-4 shadow-xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between gap-2">
-          <h3 className="font-semibold">Ajouter à un programme</h3>
+          <h3 id="session-picker-title" className="font-semibold">Ajouter à un programme</h3>
           <button onClick={onClose} aria-label="Fermer" className="rounded-md p-1 text-slate-400 hover:bg-slate-800 hover:text-slate-200">
             <X className="h-5 w-5" />
           </button>

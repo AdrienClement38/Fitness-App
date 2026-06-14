@@ -92,7 +92,7 @@ export function LineChart({data, unit = ''}: {data: Point[]; unit?: string}) {
       height={scroll ? H : undefined}
       className={scroll ? 'block select-none' : 'w-full touch-pan-y select-none'}
       role="img"
-      aria-label="Courbe de progression"
+      aria-label={`Courbe de progression, dernière valeur ${last.value}${unit}`}
     >
       <defs>
         <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
@@ -198,7 +198,7 @@ export function BarChart({data, unit = ''}: {data: Point[]; unit?: string}) {
   const a = active != null ? data[active] : null;
 
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} className="w-full select-none" role="img" aria-label="Volume par semaine">
+    <svg viewBox={`0 0 ${W} ${H}`} className="w-full select-none" role="img" aria-label={`Volume par semaine, dernière ${data[data.length - 1].value.toLocaleString('fr-FR')}${unit}`}>
       {ticks.map((t) => (
         <g key={t}>
           <line x1={padL} y1={Y(t)} x2={W - padR} y2={Y(t)} stroke="#1e293b" strokeWidth="0.5" />

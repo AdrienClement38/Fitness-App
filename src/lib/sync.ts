@@ -7,6 +7,8 @@
  */
 import {useSyncExternalStore} from 'react';
 
+// Contrat de fil client<->serveur. À garder IDENTIQUE à SyncItem de
+// server/repositories/syncRepository.ts (validé au runtime par le schéma Zod de server/sync.ts).
 export interface SyncItem {
   kind: string;
   itemId: string;

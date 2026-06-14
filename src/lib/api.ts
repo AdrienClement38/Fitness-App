@@ -1,4 +1,5 @@
 /** Client API typé. Same-origin : l'app et l'API sont servies par le même Express. */
+import {deriveMeasureKind, type MeasureKind} from './measureKindRule';
 
 export interface MuscleRef {
   id: string;
@@ -242,23 +243,13 @@ export const LABELS = {
 export const label = (kind: keyof typeof LABELS, value: string | null): string =>
   value ? (LABELS[kind][value] ?? value) : '';
 
-/** Mode de saisie d'un exercice. */
-export type MeasureKind = 'load' | 'bodyweight' | 'duration' | 'cardio';
-
-const FREE_WEIGHT = new Set(['barbell', 'dumbbell', 'kettlebell', 'ez-bar']);
-const NO_LOAD_ACCESSORY = new Set(['resistance-band', 'medicine-ball', 'stability-ball', 'other']);
+/** Mode de saisie d'un exercice (type réexporté depuis la règle partagée). */
+export type {MeasureKind};
 
 /**
- * Mode de saisie :
- *  - cardio    : tapis, vélo… → durée (min)
- *  - duration  : gainage, isométrie, étirements, portés/traînés → durée (chrono)
- *  - bodyweight: poids du corps / accessoire sans charge chiffrable → reps seules
- *  - load      : charge externe → poids × reps
- *
- * On utilise EN PRIORITÉ la valeur stockée en base (`measureKind`, curée au seed
- * via deriveMeasureKind + data/measure_kind_overrides.json). À défaut (données
- * pré-migration), on retombe sur la même règle heuristique — GARDER SYNCHRO avec
- * deriveMeasureKind() de server/db/seed.ts.
+ * Mode de saisie d'un exercice. Valeur STOCKÉE en base prioritaire (curée au seed
+ * via measure_kind_overrides.json) ; à défaut (données pré-migration), fallback sur
+ * la règle PARTAGÉE deriveMeasureKind (src/lib/measureKindRule.ts) — une seule source.
  */
 export function measureKind(ex: {
   category?: string | null;
@@ -267,16 +258,27 @@ export function measureKind(ex: {
   measureKind?: string | null;
 }): MeasureKind {
   if (ex.measureKind) return ex.measureKind as MeasureKind;
-  const cat = ex.category;
-  const equip = ex.equipmentId ?? null;
-  if (cat === 'cardio') return 'cardio';
-  if (cat === 'stretching' || ex.force === 'static' || equip === 'foam-roller') return 'duration';
-  if (cat === 'plyometrics') return equip && FREE_WEIGHT.has(equip) ? 'load' : 'bodyweight';
-  if (cat === 'powerlifting' || cat === 'olympic_weightlifting') return 'load';
-  if (equip === null || equip === 'bodyweight') return 'bodyweight';
-  if (NO_LOAD_ACCESSORY.has(equip)) return 'bodyweight';
-  return 'load';
+  return deriveMeasureKind(ex.category ?? null, ex.force ?? null, ex.equipmentId ?? null);
 }
+
+/** Entrée minimale d'un exercice pour démarrer/ajouter une séance (liste OU fiche détail). */
+export interface ExerciseSeedInput {
+  id: string;
+  nameFr: string | null;
+  nameEn: string;
+  force: string | null;
+  category: string | null;
+  measureKind?: string | null;
+  equipmentId: string | null;
+}
+
+/** Défauts de prescription (séries · reps/durée · repos) selon le mode de saisie. */
+export const PRESCRIPTION_DEFAULTS: Record<MeasureKind, {sets: number; min: number; max: number; rest: number}> = {
+  load: {sets: 3, min: 8, max: 12, rest: 90},
+  bodyweight: {sets: 3, min: 10, max: 15, rest: 60},
+  duration: {sets: 3, min: 30, max: 45, rest: 60},
+  cardio: {sets: 1, min: 15, max: 20, rest: 0},
+};
 
 /** Unité de la « valeur » d'une série selon le mode (vide = reps). */
 export const KIND_UNIT: Record<MeasureKind, string> = {load: '', bodyweight: '', duration: 's', cardio: 'min'};

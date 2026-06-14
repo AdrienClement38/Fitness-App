@@ -4,7 +4,7 @@
  * programme curated puis éditables. Store réactif (useSyncExternalStore).
  */
 import {useSyncExternalStore} from 'react';
-import {measureKind, type MeasureKind, type ProgramDetail} from './api';
+import {measureKind, PRESCRIPTION_DEFAULTS, type ExerciseSeedInput, type ProgramDetail} from './api';
 import {pushItems, registerCollection, type SyncItem} from './sync';
 import {mergeCollection} from './syncMerge';
 
@@ -139,28 +139,12 @@ export function createEmptyProgram(name = 'Mon programme'): string {
   return id;
 }
 
-/** Valeurs de prescription par défaut à l'ajout d'un exercice, selon son mode de saisie. */
-const ADD_DEFAULTS: Record<MeasureKind, {sets: number; min: number; max: number; rest: number}> = {
-  load: {sets: 3, min: 8, max: 12, rest: 90},
-  bodyweight: {sets: 3, min: 10, max: 15, rest: 60},
-  duration: {sets: 3, min: 30, max: 45, rest: 60},
-  cardio: {sets: 1, min: 15, max: 20, rest: 0},
-};
-
 /** Données minimales d'un exercice pour l'ajouter à une séance (liste OU fiche détail). */
-export interface AddableExercise {
-  id: string;
-  nameFr: string | null;
-  nameEn: string;
-  force: string | null;
-  category: string | null;
-  measureKind?: string | null;
-  equipmentId: string | null;
-}
+export type AddableExercise = ExerciseSeedInput;
 
 /** Construit une entrée d'exercice avec les défauts de prescription selon le mode de saisie. */
 function buildEntry(ex: AddableExercise): MyProgramExercise {
-  const def = ADD_DEFAULTS[measureKind(ex)];
+  const def = PRESCRIPTION_DEFAULTS[measureKind(ex)];
   return {
     exerciseId: ex.id,
     nameFr: ex.nameFr,
@@ -203,7 +187,15 @@ export function addExerciseToNewSession(programId: string, ex: AddableExercise):
   return name;
 }
 
+/** Contenu d'un programme hors métadonnée de sync (pour détecter une vraie modif). */
+const contentKey = (p: MyProgram) => JSON.stringify({...p, updatedAt: undefined});
+
 export function updateMyProgram(updated: MyProgram) {
+  const current = list.find((p) => p.id === updated.id);
+  // No-op : si le contenu (hors updatedAt) n'a pas changé, on ne re-tamponne pas et on
+  // ne repousse pas -> évite d'écraser une édition distante par une modif fantôme et
+  // réduit le trafic. L'édition concurrente reste affichée en direct (store réactif).
+  if (current && contentKey(current) === contentKey(updated)) return;
   const stamped: MyProgram = {...updated, updatedAt: now()};
   commit(list.map((p) => (p.id === stamped.id ? stamped : p)));
   pushProgram(stamped);

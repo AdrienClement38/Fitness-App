@@ -106,6 +106,8 @@ const passwordChange = z.object({
 router.post('/change-password', async (req, res) => {
   const auth = await getUserFromRequest(req);
   if (!auth) return res.status(401).json({error: 'Non connecté.'});
+  // Borne les essais de vérification du mot de passe ACTUEL (clé sur l'utilisateur authentifié).
+  if (rateLimited(`pwck:${auth.id}`)) return res.status(429).json({error: 'Trop de tentatives. Réessaie dans quelques minutes.'});
   const parsed = passwordChange.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({error: 'Nouveau mot de passe trop court (8 caractères minimum).'});
 
@@ -129,6 +131,7 @@ const deleteAccount = z.object({password: z.string().min(1).max(200)});
 router.post('/delete-account', async (req, res) => {
   const auth = await getUserFromRequest(req);
   if (!auth) return res.status(401).json({error: 'Non connecté.'});
+  if (rateLimited(`pwck:${auth.id}`)) return res.status(429).json({error: 'Trop de tentatives. Réessaie dans quelques minutes.'});
   const parsed = deleteAccount.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({error: 'Mot de passe requis pour confirmer.'});
 
