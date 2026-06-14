@@ -2,6 +2,7 @@ import {Suspense, useLayoutEffect} from 'react';
 import {Activity, BookOpen, ClipboardList, Dumbbell, Home, LineChart, User} from 'lucide-react';
 import {NavLink, Outlet, useLocation, useNavigationType} from 'react-router-dom';
 import {useAuth} from '../lib/auth';
+import {useOnline} from '../lib/useOnline';
 import {Loading} from './ui';
 import Logo from './Logo';
 
@@ -16,6 +17,7 @@ const tabs = [
 
 export default function Layout() {
   const {user} = useAuth();
+  const online = useOnline();
   const {pathname} = useLocation();
   const navType = useNavigationType();
   // Remet la vue en haut sur une navigation « avant » (ex. ouvrir une fiche exercice
@@ -41,6 +43,12 @@ export default function Layout() {
           <span className="hidden sm:inline">{user ? 'Mon compte' : 'Se connecter'}</span>
         </NavLink>
       </header>
+
+      {!online && (
+        <div className="bg-amber-500/15 px-4 py-1.5 text-center text-xs font-medium text-amber-300">
+          Hors ligne — tes données et les pages déjà ouvertes restent disponibles.
+        </div>
+      )}
 
       <main className="flex-1 px-4 pb-24 pt-4">
         <Suspense fallback={<Loading />}>

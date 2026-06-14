@@ -26,6 +26,7 @@ export default function ExercisePicker({
   const [pageCount, setPageCount] = useState(1);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [netError, setNetError] = useState(false); // échec réseau ≠ zéro résultat
   const listRef = useRef<HTMLDivElement>(null);
 
   const facets = useFetch<Facets>(() => api.facets(), []);
@@ -45,9 +46,13 @@ export default function ExercisePicker({
           setItems(res.items);
           setPageCount(res.pageCount);
           setTotal(res.total);
+          setNetError(false);
         }
       } catch {
-        if (active) setItems([]);
+        if (active) {
+          setItems([]);
+          setNetError(true);
+        }
       } finally {
         if (active) setLoading(false);
       }
@@ -132,7 +137,12 @@ export default function ExercisePicker({
 
         <div ref={listRef} className="mt-3 flex-1 overflow-y-auto">
           {loading && <p className="py-8 text-center text-sm text-slate-500">Recherche…</p>}
-          {!loading && items.length === 0 && <p className="py-8 text-center text-sm text-slate-500">Aucun résultat avec ces filtres.</p>}
+          {!loading && netError && (
+            <p className="py-8 text-center text-sm text-amber-300">Connexion indisponible. Réessaie une fois en ligne.</p>
+          )}
+          {!loading && !netError && items.length === 0 && (
+            <p className="py-8 text-center text-sm text-slate-500">Aucun résultat avec ces filtres.</p>
+          )}
           {!loading && items.length > 0 && (
             <div className="grid grid-cols-2 gap-2">
               {items.map((e) => (
