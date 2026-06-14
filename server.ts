@@ -8,8 +8,11 @@ import musclesRouter from './server/routes/muscles';
 import knowledgeRouter from './server/routes/knowledge';
 import programsRouter from './server/routes/programs';
 import authRouter from './server/routes/auth';
+import adminRouter from './server/routes/admin';
 import {attachSync} from './server/sync';
 import {migrateDb} from './server/db/client';
+import {bootstrapAdmins} from './server/repositories/userRepository';
+import {adminEmails} from './server/auth';
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3003;
@@ -42,11 +45,16 @@ app.use('/api/muscles', musclesRouter);
 app.use('/api/knowledge', knowledgeRouter);
 app.use('/api/programs', programsRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/admin', adminRouter);
 
 async function startServer() {
   // Auto-migration au démarrage : la base (PostgreSQL en prod, PGlite en dev)
   // est mise à niveau avant de servir les requêtes.
   await migrateDb();
+
+  // Promotion des admin(s) déclarés dans ADMIN_EMAILS (idempotent).
+  const promoted = await bootstrapAdmins(adminEmails());
+  if (promoted.length) console.log(`[AC-KINETIK] Admin promu(s) : ${promoted.join(', ')}`);
 
   if (process.env.NODE_ENV !== 'production') {
     // Import dynamique : Vite n'est chargé qu'en dev, le bundle de prod

@@ -3,6 +3,7 @@ import {Router} from 'express';
 import {z} from 'zod';
 import {
   SESSION_COOKIE,
+  adminEmails,
   cookieOptions,
   getUserFromRequest,
   hashPassword,
@@ -20,6 +21,7 @@ import {
   deleteUserSessions,
   getUserByEmail,
   getUserById,
+  setUserRole,
   updatePassword,
 } from '../repositories/userRepository';
 import {closeUserSockets} from '../sync';
@@ -57,10 +59,13 @@ router.post('/register', async (req, res) => {
   if (await getUserByEmail(email)) return res.status(409).json({error: 'Un compte existe déjà avec cet email.'});
 
   const user = await createUser(email, await hashPassword(parsed.data.password));
+  // Auto-promotion si l'email est déclaré admin (ADMIN_EMAILS) : pas besoin de redémarrer.
+  const role: 'user' | 'admin' = adminEmails().includes(email) ? 'admin' : 'user';
+  if (role !== user.role) await setUserRole(user.id, role);
   const token = newToken();
   await createSession(user.id, token, sessionExpiry());
   res.cookie(SESSION_COOKIE, token, cookieOptions());
-  return res.status(201).json({id: user.id, email: user.email});
+  return res.status(201).json({id: user.id, email: user.email, role});
 });
 
 router.post('/login', async (req, res) => {
@@ -82,7 +87,7 @@ router.post('/login', async (req, res) => {
   const token = newToken();
   await createSession(user.id, token, sessionExpiry());
   res.cookie(SESSION_COOKIE, token, cookieOptions());
-  return res.json({id: user.id, email: user.email});
+  return res.json({id: user.id, email: user.email, role: user.role});
 });
 
 router.post('/logout', async (req, res) => {

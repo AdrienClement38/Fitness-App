@@ -1,6 +1,6 @@
 import {useState, type FormEvent} from 'react';
 import {Link, useLocation, useNavigate} from 'react-router-dom';
-import {Download, LogOut, User} from 'lucide-react';
+import {Download, LogOut, Shield, User} from 'lucide-react';
 import {changePassword, deleteAccount, login, logout, register, useAuth} from '../lib/auth';
 import {useSyncConnected} from '../lib/sync';
 import {exportMyData} from '../lib/exportData';
@@ -232,6 +232,18 @@ export default function AccountPage() {
             <LogOut className="h-4 w-4" /> Se déconnecter
           </button>
         </div>
+
+        {user.role === 'admin' && (
+          <Link
+            to="/admin"
+            className="mt-3 flex items-center justify-between gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-4 text-sm font-semibold text-emerald-300 transition-colors hover:bg-emerald-500/20"
+          >
+            <span className="flex items-center gap-2">
+              <Shield className="h-4 w-4" /> Administration
+            </span>
+            <span className="text-xs font-normal text-emerald-300/70">Gérer les comptes</span>
+          </Link>
+        )}
 
         <StretchPref />
 

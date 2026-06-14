@@ -31,6 +31,7 @@ const PrivacyPage = lazy(() => import('./pages/PrivacyPage'));
 const LegalPage = lazy(() => import('./pages/LegalPage'));
 const TermsPage = lazy(() => import('./pages/TermsPage'));
 const CategoryBrowse = lazy(() => import('./components/CategoryBrowse'));
+const AdminPage = lazy(() => import('./pages/AdminPage'));
 
 /** Garde d'accès : l'app exige d'être connecté (sauf /compte + pages légales). */
 function Protected() {
@@ -94,6 +95,7 @@ export default function App() {
             }
           />
           <Route path="/savoir" element={<KnowledgePage />} />
+          <Route path="/admin" element={<AdminPage />} />
         </Route>
       </Route>
     </Routes>

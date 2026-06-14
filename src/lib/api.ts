@@ -306,6 +306,13 @@ async function post<T>(path: string, body: unknown): Promise<T> {
   return data as T;
 }
 
+async function del<T>(path: string): Promise<T> {
+  const res = await fetch(`/api${path}`, {method: 'DELETE'});
+  const data = await res.json().catch(() => null);
+  if (!res.ok) throw new Error((data && data.error) || `Erreur ${res.status}`);
+  return data as T;
+}
+
 export interface ExerciseQuery {
   search?: string;
   muscle?: string;
@@ -344,6 +351,7 @@ export const api = {
 export interface AuthUser {
   id: string;
   email: string;
+  role?: string; // 'user' | 'admin' (optionnel : compatible cache pré-migration)
 }
 
 export const authApi = {
@@ -354,4 +362,22 @@ export const authApi = {
   changePassword: (currentPassword: string, newPassword: string) =>
     post<{ok: boolean}>('/auth/change-password', {currentPassword, newPassword}),
   deleteAccount: (password: string) => post<{ok: boolean}>('/auth/delete-account', {password}),
+};
+
+/** Administration : un compte de la liste (infos de compte uniquement). */
+export interface AdminUser {
+  id: string;
+  email: string;
+  role: string;
+  createdAt: string;
+  workoutLogs: number;
+  myPrograms: number;
+}
+
+export const adminApi = {
+  users: () => get<AdminUser[]>('/admin/users'),
+  deleteUser: (id: string) => del<{ok: boolean}>(`/admin/users/${encodeURIComponent(id)}`),
+  setRole: (id: string, role: 'user' | 'admin') =>
+    post<{ok: boolean; role: string}>(`/admin/users/${encodeURIComponent(id)}/role`, {role}),
+  resetPassword: (id: string) => post<{tempPassword: string}>(`/admin/users/${encodeURIComponent(id)}/reset-password`, {}),
 };

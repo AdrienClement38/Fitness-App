@@ -290,6 +290,7 @@ export const users = pgTable('users', {
   id: text('id').primaryKey(), // 'u-<uuid>'
   email: text('email').notNull().unique(),
   passwordHash: text('password_hash').notNull(), // scrypt : 'saltHex:hashHex'
+  role: text('role').notNull().default('user'), // 'user' | 'admin'
   createdAt: timestamp('created_at', {withTimezone: true}).notNull().defaultNow(),
 });
 

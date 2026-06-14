@@ -1,9 +1,9 @@
 /** Accès données « comptes » : utilisateurs et sessions serveur. */
 import {randomUUID} from 'node:crypto';
-import {eq, lt} from 'drizzle-orm';
+import {and, count, eq, inArray, lt, ne} from 'drizzle-orm';
 import {db, schema} from '../db/client';
 
-const {users, sessions} = schema;
+const {users, sessions, syncItems} = schema;
 
 export async function getUserByEmail(email: string) {
   const [u] = await db.select().from(users).where(eq(users.email, email));
@@ -23,7 +23,7 @@ export async function createSession(userId: string, token: string, expiresAt: Da
 /** Session + email de l'utilisateur, en une requête (pour la résolution du cookie). */
 export async function getSessionWithUser(token: string) {
   const [row] = await db
-    .select({userId: sessions.userId, expiresAt: sessions.expiresAt, email: users.email})
+    .select({userId: sessions.userId, expiresAt: sessions.expiresAt, email: users.email, role: users.role})
     .from(sessions)
     .innerJoin(users, eq(users.id, sessions.userId))
     .where(eq(sessions.token, token));
@@ -56,4 +56,52 @@ export async function deleteUser(id: string) {
 /** Purge les sessions expirées (croissance bornée de la table). Best-effort. */
 export async function deleteExpiredSessions() {
   await db.delete(sessions).where(lt(sessions.expiresAt, new Date()));
+}
+
+/* ---- Administration (rôles + gestion des comptes) --------------------- */
+
+/** Promeut en admin les comptes dont l'email est dans ADMIN_EMAILS (au démarrage). Retourne les emails promus. */
+export async function bootstrapAdmins(emails: string[]): Promise<string[]> {
+  if (emails.length === 0) return [];
+  const res = await db
+    .update(users)
+    .set({role: 'admin'})
+    .where(and(inArray(users.email, emails), ne(users.role, 'admin')))
+    .returning({email: users.email});
+  return res.map((r) => r.email);
+}
+
+/** Change le rôle d'un utilisateur. */
+export async function setUserRole(id: string, role: 'user' | 'admin') {
+  await db.update(users).set({role}).where(eq(users.id, id));
+}
+
+/**
+ * Liste des comptes pour l'admin : infos de COMPTE uniquement (jamais le contenu
+ * privé synchronisé) + compteurs de séances/programmes synchronisés (engagement).
+ */
+export async function listUsersWithCounts() {
+  const us = await db
+    .select({id: users.id, email: users.email, role: users.role, createdAt: users.createdAt})
+    .from(users)
+    .orderBy(users.createdAt);
+  const counts = await db
+    .select({userId: syncItems.userId, kind: syncItems.kind, n: count()})
+    .from(syncItems)
+    .where(eq(syncItems.deleted, false))
+    .groupBy(syncItems.userId, syncItems.kind);
+  const byUser = new Map<string, Record<string, number>>();
+  for (const c of counts) {
+    const m = byUser.get(c.userId) ?? {};
+    m[c.kind] = Number(c.n);
+    byUser.set(c.userId, m);
+  }
+  return us.map((u) => ({
+    id: u.id,
+    email: u.email,
+    role: u.role,
+    createdAt: u.createdAt.toISOString(),
+    workoutLogs: byUser.get(u.id)?.['workout-log'] ?? 0,
+    myPrograms: byUser.get(u.id)?.['my-program'] ?? 0,
+  }));
 }

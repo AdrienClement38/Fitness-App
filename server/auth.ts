@@ -42,6 +42,13 @@ export function cookieOptions() {
   };
 }
 
+/** Emails déclarés admin (variable d'env ADMIN_EMAILS, séparés par des virgules). */
+export const adminEmails = (): string[] =>
+  (process.env.ADMIN_EMAILS || '')
+    .split(',')
+    .map((s) => s.trim().toLowerCase())
+    .filter(Boolean);
+
 /** Parse l'en-tête Cookie (pas de dépendance cookie-parser). */
 export function parseCookies(header: string | undefined): Record<string, string> {
   const out: Record<string, string> = {};
@@ -56,6 +63,7 @@ export function parseCookies(header: string | undefined): Record<string, string>
 export interface AuthUser {
   id: string;
   email: string;
+  role: string; // 'user' | 'admin'
 }
 
 /** Utilisateur déduit d'un en-tête Cookie (HTTP ou upgrade WebSocket), ou null. */
@@ -64,7 +72,7 @@ export async function getAuthUserByCookie(cookieHeader: string | undefined): Pro
   if (!token) return null;
   const sess = await getSessionWithUser(token);
   if (!sess || sess.expiresAt.getTime() < Date.now()) return null;
-  return {id: sess.userId, email: sess.email};
+  return {id: sess.userId, email: sess.email, role: sess.role};
 }
 
 /** Utilisateur courant déduit du cookie de session, ou null. */
