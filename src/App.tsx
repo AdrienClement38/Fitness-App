@@ -1,24 +1,6 @@
-import {useEffect} from 'react';
+import {lazy, useEffect} from 'react';
 import {Navigate, Outlet, Route, Routes, useLocation} from 'react-router-dom';
 import Layout from './components/Layout';
-import HomePage from './pages/HomePage';
-import ExercisesPage from './pages/ExercisesPage';
-import ExerciseDetailPage from './pages/ExerciseDetailPage';
-import MusclesPage from './pages/MusclesPage';
-import MuscleDetailPage from './pages/MuscleDetailPage';
-import ProgramsPage from './pages/ProgramsPage';
-import ProgramDetailPage from './pages/ProgramDetailPage';
-import MyProgramPage from './pages/MyProgramPage';
-import MyProgramDetailPage from './pages/MyProgramDetailPage';
-import SuiviPage from './pages/SuiviPage';
-import WorkoutPage from './pages/WorkoutPage';
-import PostSessionPage from './pages/PostSessionPage';
-import KnowledgePage from './pages/KnowledgePage';
-import AccountPage from './pages/AccountPage';
-import PrivacyPage from './pages/PrivacyPage';
-import LegalPage from './pages/LegalPage';
-import TermsPage from './pages/TermsPage';
-import CategoryBrowse from './components/CategoryBrowse';
 import {Loading} from './components/ui';
 import {useAuth} from './lib/auth';
 import {connect, disconnect} from './lib/sync';
@@ -27,6 +9,28 @@ import './lib/workoutLogs';
 import './lib/myPrograms';
 import './lib/favorites';
 import './lib/records';
+
+// Pages en chargement différé (code-splitting) : le bundle initial = la coquille
+// (Layout, router, auth). Chaque page — et ses libs lourdes, ex. le body-map — arrive
+// dans son propre chunk au 1er accès. Le <Suspense> est dans Layout : la coquille reste.
+const HomePage = lazy(() => import('./pages/HomePage'));
+const ExercisesPage = lazy(() => import('./pages/ExercisesPage'));
+const ExerciseDetailPage = lazy(() => import('./pages/ExerciseDetailPage'));
+const MusclesPage = lazy(() => import('./pages/MusclesPage'));
+const MuscleDetailPage = lazy(() => import('./pages/MuscleDetailPage'));
+const ProgramsPage = lazy(() => import('./pages/ProgramsPage'));
+const ProgramDetailPage = lazy(() => import('./pages/ProgramDetailPage'));
+const MyProgramPage = lazy(() => import('./pages/MyProgramPage'));
+const MyProgramDetailPage = lazy(() => import('./pages/MyProgramDetailPage'));
+const SuiviPage = lazy(() => import('./pages/SuiviPage'));
+const WorkoutPage = lazy(() => import('./pages/WorkoutPage'));
+const PostSessionPage = lazy(() => import('./pages/PostSessionPage'));
+const KnowledgePage = lazy(() => import('./pages/KnowledgePage'));
+const AccountPage = lazy(() => import('./pages/AccountPage'));
+const PrivacyPage = lazy(() => import('./pages/PrivacyPage'));
+const LegalPage = lazy(() => import('./pages/LegalPage'));
+const TermsPage = lazy(() => import('./pages/TermsPage'));
+const CategoryBrowse = lazy(() => import('./components/CategoryBrowse'));
 
 /** Garde d'accès : l'app exige d'être connecté (sauf /compte + pages légales). */
 function Protected() {

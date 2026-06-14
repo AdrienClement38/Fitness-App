@@ -1,7 +1,8 @@
-import {useLayoutEffect} from 'react';
+import {Suspense, useLayoutEffect} from 'react';
 import {Activity, BookOpen, ClipboardList, Dumbbell, Home, LineChart, User} from 'lucide-react';
 import {NavLink, Outlet, useLocation, useNavigationType} from 'react-router-dom';
 import {useAuth} from '../lib/auth';
+import {Loading} from './ui';
 import Logo from './Logo';
 
 const tabs = [
@@ -42,7 +43,9 @@ export default function Layout() {
       </header>
 
       <main className="flex-1 px-4 pb-24 pt-4">
-        <Outlet />
+        <Suspense fallback={<Loading />}>
+          <Outlet />
+        </Suspense>
       </main>
 
       {user && (
