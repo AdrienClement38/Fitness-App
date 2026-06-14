@@ -86,6 +86,7 @@ export default function AdminPage() {
                 <p className="flex flex-wrap items-center gap-2 font-semibold">
                   <span className="min-w-0 break-all">{u.email}</span>
                   {u.role === 'admin' && <Badge tone="emerald">Admin</Badge>}
+                  {!u.emailVerified && <Badge tone="amber">Non vérifié</Badge>}
                   {u.id === user.id && <Badge>toi</Badge>}
                 </p>
                 <p className="mt-0.5 text-xs text-slate-500">Inscrit le {fmtDate(u.createdAt)}</p>

@@ -64,6 +64,7 @@ export interface AuthUser {
   id: string;
   email: string;
   role: string; // 'user' | 'admin'
+  emailVerified: boolean;
 }
 
 /** Utilisateur déduit d'un en-tête Cookie (HTTP ou upgrade WebSocket), ou null. */
@@ -72,7 +73,7 @@ export async function getAuthUserByCookie(cookieHeader: string | undefined): Pro
   if (!token) return null;
   const sess = await getSessionWithUser(token);
   if (!sess || sess.expiresAt.getTime() < Date.now()) return null;
-  return {id: sess.userId, email: sess.email, role: sess.role};
+  return {id: sess.userId, email: sess.email, role: sess.role, emailVerified: sess.emailVerified};
 }
 
 /** Utilisateur courant déduit du cookie de session, ou null. */

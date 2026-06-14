@@ -352,6 +352,7 @@ export interface AuthUser {
   id: string;
   email: string;
   role?: string; // 'user' | 'admin' (optionnel : compatible cache pré-migration)
+  emailVerified?: boolean;
 }
 
 export const authApi = {
@@ -362,6 +363,8 @@ export const authApi = {
   changePassword: (currentPassword: string, newPassword: string) =>
     post<{ok: boolean}>('/auth/change-password', {currentPassword, newPassword}),
   deleteAccount: (password: string) => post<{ok: boolean}>('/auth/delete-account', {password}),
+  verifyEmail: (token: string) => post<{ok: boolean}>('/auth/verify-email', {token}),
+  resendVerification: () => post<{ok: boolean; alreadyVerified?: boolean}>('/auth/resend-verification', {}),
 };
 
 /** Administration : un compte de la liste (infos de compte uniquement). */
@@ -369,6 +372,7 @@ export interface AdminUser {
   id: string;
   email: string;
   role: string;
+  emailVerified: boolean;
   createdAt: string;
   workoutLogs: number;
   myPrograms: number;

@@ -4,6 +4,7 @@ import {NavLink, Outlet, useLocation, useNavigationType} from 'react-router-dom'
 import {useAuth} from '../lib/auth';
 import {useOnline} from '../lib/useOnline';
 import {Loading} from './ui';
+import EmailVerifyBanner from './EmailVerifyBanner';
 import Logo from './Logo';
 
 const tabs = [
@@ -49,6 +50,7 @@ export default function Layout() {
           Hors ligne — tes données et les pages déjà ouvertes restent disponibles.
         </div>
       )}
+      <EmailVerifyBanner />
 
       <main className="flex-1 px-4 pb-24 pt-4">
         <Suspense fallback={<Loading />}>

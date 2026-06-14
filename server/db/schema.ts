@@ -291,6 +291,9 @@ export const users = pgTable('users', {
   email: text('email').notNull().unique(),
   passwordHash: text('password_hash').notNull(), // scrypt : 'saltHex:hashHex'
   role: text('role').notNull().default('user'), // 'user' | 'admin'
+  emailVerified: boolean('email_verified').notNull().default(false),
+  verifyToken: text('verify_token'), // jeton de confirmation d'email (null une fois vérifié)
+  verifyExpires: timestamp('verify_expires', {withTimezone: true}),
   createdAt: timestamp('created_at', {withTimezone: true}).notNull().defaultNow(),
 });
 

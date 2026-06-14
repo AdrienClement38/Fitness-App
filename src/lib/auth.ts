@@ -82,6 +82,22 @@ export async function deleteAccount(password: string) {
   set({user: null, loading: false});
 }
 
+/** Re-synchronise l'utilisateur depuis le serveur (ex. après confirmation d'email). */
+export async function refreshUser() {
+  try {
+    const u = await authApi.me();
+    cacheUser(u);
+    set({user: u, loading: false});
+  } catch {
+    /* panne réseau : on conserve l'état courant */
+  }
+}
+
+/** Renvoie l'email de confirmation (utilisateur connecté non vérifié). */
+export function resendVerification() {
+  return authApi.resendVerification();
+}
+
 export function useAuth(): AuthState {
   return useSyncExternalStore(subscribe, () => state, () => state);
 }

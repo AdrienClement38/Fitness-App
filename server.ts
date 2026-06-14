@@ -11,7 +11,7 @@ import authRouter from './server/routes/auth';
 import adminRouter from './server/routes/admin';
 import {attachSync} from './server/sync';
 import {migrateDb} from './server/db/client';
-import {bootstrapAdmins} from './server/repositories/userRepository';
+import {bootstrapAdmins, deleteUnverifiedBefore} from './server/repositories/userRepository';
 import {adminEmails} from './server/auth';
 
 const app = express();
@@ -55,6 +55,10 @@ async function startServer() {
   // Promotion des admin(s) déclarés dans ADMIN_EMAILS (idempotent).
   const promoted = await bootstrapAdmins(adminEmails());
   if (promoted.length) console.log(`[AC-KINETIK] Admin promu(s) : ${promoted.join(', ')}`);
+
+  // Nettoyage anti-bots : supprime les comptes jamais confirmés de plus de 7 jours.
+  const purged = await deleteUnverifiedBefore(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000));
+  if (purged) console.log(`[AC-KINETIK] ${purged} compte(s) non confirmé(s) purgé(s)`);
 
   if (process.env.NODE_ENV !== 'production') {
     // Import dynamique : Vite n'est chargé qu'en dev, le bundle de prod

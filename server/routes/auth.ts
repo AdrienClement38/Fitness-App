@@ -22,9 +22,16 @@ import {
   getUserByEmail,
   getUserById,
   setUserRole,
+  setVerifyToken,
   updatePassword,
+  verifyEmailByToken,
 } from '../repositories/userRepository';
+import {sendVerificationEmail} from '../email';
 import {closeUserSockets} from '../sync';
+
+const VERIFY_TTL_MS = 24 * 60 * 60 * 1000; // 24 h
+const appBase = (req: {protocol: string; get: (h: string) => string | undefined}) =>
+  process.env.APP_URL || `${req.protocol}://${req.get('host')}`;
 
 const router = Router();
 
@@ -58,14 +65,20 @@ router.post('/register', async (req, res) => {
   const email = parsed.data.email.trim().toLowerCase();
   if (await getUserByEmail(email)) return res.status(409).json({error: 'Un compte existe déjà avec cet email.'});
 
-  const user = await createUser(email, await hashPassword(parsed.data.password));
+  // Jeton de confirmation d'email (24 h) -> le compte est créé NON vérifié.
+  const verifyToken = newToken();
+  const user = await createUser(email, await hashPassword(parsed.data.password), verifyToken, new Date(Date.now() + VERIFY_TTL_MS));
   // Auto-promotion si l'email est déclaré admin (ADMIN_EMAILS) : pas besoin de redémarrer.
   const role: 'user' | 'admin' = adminEmails().includes(email) ? 'admin' : 'user';
   if (role !== user.role) await setUserRole(user.id, role);
+  // Envoi best-effort : une panne SMTP ne doit pas bloquer l'inscription (renvoi possible depuis le compte).
+  sendVerificationEmail(email, `${appBase(req)}/verifier-email?token=${verifyToken}`).catch((e) =>
+    console.error('[email] envoi confirmation échoué :', (e as Error).message),
+  );
   const token = newToken();
   await createSession(user.id, token, sessionExpiry());
   res.cookie(SESSION_COOKIE, token, cookieOptions());
-  return res.status(201).json({id: user.id, email: user.email, role});
+  return res.status(201).json({id: user.id, email: user.email, role, emailVerified: false});
 });
 
 router.post('/login', async (req, res) => {
@@ -87,7 +100,31 @@ router.post('/login', async (req, res) => {
   const token = newToken();
   await createSession(user.id, token, sessionExpiry());
   res.cookie(SESSION_COOKIE, token, cookieOptions());
-  return res.json({id: user.id, email: user.email, role: user.role});
+  return res.json({id: user.id, email: user.email, role: user.role, emailVerified: user.emailVerified});
+});
+
+const verifyBody = z.object({token: z.string().min(1).max(256)});
+// Public : le lien de l'email peut être ouvert sur un appareil non connecté.
+router.post('/verify-email', async (req, res) => {
+  const parsed = verifyBody.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({error: 'Jeton manquant.'});
+  const status = await verifyEmailByToken(parsed.data.token);
+  if (status === 'ok') return res.json({ok: true});
+  return res.status(400).json({error: status === 'expired' ? 'Lien expiré.' : 'Lien invalide ou déjà utilisé.'});
+});
+
+// Renvoi de l'email de confirmation (utilisateur connecté, non vérifié).
+router.post('/resend-verification', async (req, res) => {
+  const auth = await getUserFromRequest(req);
+  if (!auth) return res.status(401).json({error: 'Non connecté.'});
+  if (auth.emailVerified) return res.json({ok: true, alreadyVerified: true});
+  if (rateLimited(`verif:${auth.id}`, 5)) return res.status(429).json({error: 'Trop de demandes. Réessaie dans quelques minutes.'});
+  const verifyToken = newToken();
+  await setVerifyToken(auth.id, verifyToken, new Date(Date.now() + VERIFY_TTL_MS));
+  await sendVerificationEmail(auth.email, `${appBase(req)}/verifier-email?token=${verifyToken}`).catch((e) =>
+    console.error('[email] renvoi confirmation échoué :', (e as Error).message),
+  );
+  return res.json({ok: true});
 });
 
 router.post('/logout', async (req, res) => {

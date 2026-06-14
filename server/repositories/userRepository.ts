@@ -10,9 +10,12 @@ export async function getUserByEmail(email: string) {
   return u ?? null;
 }
 
-export async function createUser(email: string, passwordHash: string) {
+export async function createUser(email: string, passwordHash: string, verifyToken?: string, verifyExpires?: Date) {
   const id = `u-${randomUUID()}`;
-  const [u] = await db.insert(users).values({id, email, passwordHash}).returning();
+  const [u] = await db
+    .insert(users)
+    .values({id, email, passwordHash, verifyToken: verifyToken ?? null, verifyExpires: verifyExpires ?? null})
+    .returning();
   return u;
 }
 
@@ -23,7 +26,7 @@ export async function createSession(userId: string, token: string, expiresAt: Da
 /** Session + email de l'utilisateur, en une requête (pour la résolution du cookie). */
 export async function getSessionWithUser(token: string) {
   const [row] = await db
-    .select({userId: sessions.userId, expiresAt: sessions.expiresAt, email: users.email, role: users.role})
+    .select({userId: sessions.userId, expiresAt: sessions.expiresAt, email: users.email, role: users.role, emailVerified: users.emailVerified})
     .from(sessions)
     .innerJoin(users, eq(users.id, sessions.userId))
     .where(eq(sessions.token, token));
@@ -58,6 +61,31 @@ export async function deleteExpiredSessions() {
   await db.delete(sessions).where(lt(sessions.expiresAt, new Date()));
 }
 
+/* ---- Confirmation d'email -------------------------------------------- */
+
+/** Valide un email à partir de son jeton (single-use). */
+export async function verifyEmailByToken(token: string): Promise<'ok' | 'expired' | 'invalid'> {
+  const [u] = await db.select().from(users).where(eq(users.verifyToken, token));
+  if (!u) return 'invalid'; // jeton inconnu ou déjà consommé
+  if (!u.verifyExpires || u.verifyExpires.getTime() < Date.now()) return 'expired';
+  await db.update(users).set({emailVerified: true, verifyToken: null, verifyExpires: null}).where(eq(users.id, u.id));
+  return 'ok';
+}
+
+/** (Re)génère le jeton de confirmation d'un utilisateur (renvoi d'email). */
+export async function setVerifyToken(id: string, token: string, expires: Date) {
+  await db.update(users).set({verifyToken: token, verifyExpires: expires}).where(eq(users.id, id));
+}
+
+/** Purge les comptes jamais confirmés créés avant `date` (anti-bots). Retourne le nombre supprimé. */
+export async function deleteUnverifiedBefore(date: Date): Promise<number> {
+  const res = await db
+    .delete(users)
+    .where(and(eq(users.emailVerified, false), lt(users.createdAt, date)))
+    .returning({id: users.id});
+  return res.length;
+}
+
 /* ---- Administration (rôles + gestion des comptes) --------------------- */
 
 /** Promeut en admin les comptes dont l'email est dans ADMIN_EMAILS (au démarrage). Retourne les emails promus. */
@@ -82,7 +110,7 @@ export async function setUserRole(id: string, role: 'user' | 'admin') {
  */
 export async function listUsersWithCounts() {
   const us = await db
-    .select({id: users.id, email: users.email, role: users.role, createdAt: users.createdAt})
+    .select({id: users.id, email: users.email, role: users.role, emailVerified: users.emailVerified, createdAt: users.createdAt})
     .from(users)
     .orderBy(users.createdAt);
   const counts = await db
@@ -100,6 +128,7 @@ export async function listUsersWithCounts() {
     id: u.id,
     email: u.email,
     role: u.role,
+    emailVerified: u.emailVerified,
     createdAt: u.createdAt.toISOString(),
     workoutLogs: byUser.get(u.id)?.['workout-log'] ?? 0,
     myPrograms: byUser.get(u.id)?.['my-program'] ?? 0,
