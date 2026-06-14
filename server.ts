@@ -11,7 +11,7 @@ import authRouter from './server/routes/auth';
 import adminRouter from './server/routes/admin';
 import {attachSync} from './server/sync';
 import {migrateDb} from './server/db/client';
-import {bootstrapAdmins, deleteUnverifiedBefore} from './server/repositories/userRepository';
+import {bootstrapAdmins, deleteUnverifiedBefore, grandfatherExistingUsers} from './server/repositories/userRepository';
 import {adminEmails} from './server/auth';
 
 const app = express();
@@ -56,7 +56,10 @@ async function startServer() {
   const promoted = await bootstrapAdmins(adminEmails());
   if (promoted.length) console.log(`[AC-KINETIK] Admin promu(s) : ${promoted.join(', ')}`);
 
-  // Nettoyage anti-bots : supprime les comptes jamais confirmés de plus de 7 jours.
+  // Comptes créés AVANT la confirmation d'email : régularisés (considérés vérifiés).
+  const regularized = await grandfatherExistingUsers();
+  if (regularized) console.log(`[AC-KINETIK] ${regularized} compte(s) historique(s) régularisé(s) (email réputé vérifié)`);
+  // Nettoyage anti-bots : comptes du nouveau flux jamais confirmés depuis > 7 jours.
   const purged = await deleteUnverifiedBefore(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000));
   if (purged) console.log(`[AC-KINETIK] ${purged} compte(s) non confirmé(s) purgé(s)`);
 

@@ -1,6 +1,6 @@
 /** Accès données « comptes » : utilisateurs et sessions serveur. */
 import {randomUUID} from 'node:crypto';
-import {and, count, eq, inArray, lt, ne} from 'drizzle-orm';
+import {and, count, eq, inArray, isNotNull, isNull, lt, ne} from 'drizzle-orm';
 import {db, schema} from '../db/client';
 
 const {users, sessions, syncItems} = schema;
@@ -77,11 +77,29 @@ export async function setVerifyToken(id: string, token: string, expires: Date) {
   await db.update(users).set({verifyToken: token, verifyExpires: expires}).where(eq(users.id, id));
 }
 
-/** Purge les comptes jamais confirmés créés avant `date` (anti-bots). Retourne le nombre supprimé. */
+/**
+ * Comptes existant AVANT la confirmation d'email (donc sans jeton) : considérés
+ * vérifiés (grandfather). Idempotent : un compte du nouveau flux a toujours un
+ * verify_token, donc n'est jamais touché. Retourne le nombre régularisé.
+ */
+export async function grandfatherExistingUsers(): Promise<number> {
+  const res = await db
+    .update(users)
+    .set({emailVerified: true})
+    .where(and(eq(users.emailVerified, false), isNull(users.verifyToken)))
+    .returning({id: users.id});
+  return res.length;
+}
+
+/**
+ * Purge les comptes jamais confirmés créés avant `date` (anti-bots). On ne supprime
+ * QUE les comptes issus du flux de confirmation (verify_token non nul) -> jamais les
+ * comptes historiques régularisés. Retourne le nombre supprimé.
+ */
 export async function deleteUnverifiedBefore(date: Date): Promise<number> {
   const res = await db
     .delete(users)
-    .where(and(eq(users.emailVerified, false), lt(users.createdAt, date)))
+    .where(and(eq(users.emailVerified, false), isNotNull(users.verifyToken), lt(users.createdAt, date)))
     .returning({id: users.id});
   return res.length;
 }
