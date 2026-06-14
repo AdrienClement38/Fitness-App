@@ -3,6 +3,7 @@ import {Navigate} from 'react-router-dom';
 import {adminApi, type AdminUser} from '../lib/api';
 import {useAuth} from '../lib/auth';
 import {Badge, ErrorState, Loading} from '../components/ui';
+import SmtpSettings from '../components/SmtpSettings';
 
 const fmtDate = (iso: string) => new Date(iso).toLocaleDateString('fr-FR', {day: 'numeric', month: 'short', year: 'numeric'});
 
@@ -124,6 +125,8 @@ export default function AdminPage() {
           ))}
         </div>
       )}
+
+      <SmtpSettings />
     </div>
   );
 }

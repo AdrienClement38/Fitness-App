@@ -15,6 +15,7 @@ import {
   setUserRole,
   updatePassword,
 } from '../repositories/userRepository';
+import {configForTest, saveSmtpConfig, sendTestEmail, smtpStatus} from '../email';
 import {closeUserSockets} from '../sync';
 
 const router = Router();
@@ -62,6 +63,56 @@ router.post('/users/:id/reset-password', async (req, res) => {
   await deleteUserSessions(target.id); // déconnecte l'utilisateur de partout
   closeUserSockets(target.id);
   return res.json({tempPassword}); // à transmettre à l'utilisateur ; il le changera ensuite
+});
+
+/* ---- Paramètres applicatifs : SMTP (envoi d'emails) ------------------- */
+
+// État de la config SMTP — JAMAIS le mot de passe (juste son existence + provenance).
+router.get('/settings/smtp', async (_req, res) => {
+  res.json(await smtpStatus());
+});
+
+const smtpBody = z.object({
+  host: z.string().trim().min(1).max(200),
+  port: z.coerce.number().int().min(1).max(65535),
+  user: z.string().trim().min(1).max(200),
+  from: z.string().trim().max(200).optional(),
+  pass: z.string().max(400).optional(), // vide => on conserve le mot de passe déjà stocké
+});
+
+// Enregistre la config SMTP (mot de passe chiffré au repos). Renvoie l'état (masqué).
+router.post('/settings/smtp', async (req, res) => {
+  const parsed = smtpBody.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({error: 'Configuration SMTP invalide.'});
+  await saveSmtpConfig(parsed.data);
+  return res.json(await smtpStatus());
+});
+
+const testBody = z.object({
+  host: z.string().trim().min(1).max(200).optional(),
+  port: z.coerce.number().int().min(1).max(65535).optional(),
+  user: z.string().trim().min(1).max(200).optional(),
+  from: z.string().trim().max(200).optional(),
+  pass: z.string().max(400).optional(),
+  to: z.string().trim().email().max(200).optional(),
+});
+
+// Envoie un email de test (config du formulaire si fournie, sinon effective) vers
+// l'adresse demandée, à défaut celle de l'admin. Remonte l'erreur SMTP pour le diagnostic.
+router.post('/settings/test-email', async (req, res) => {
+  const admin = res.locals.admin as AuthUser;
+  const parsed = testBody.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({error: 'Données de test invalides.'});
+  const {to, ...cfg} = parsed.data;
+  const config = await configForTest(cfg);
+  if (!config) return res.status(400).json({error: 'Configuration SMTP incomplète (hôte, utilisateur et mot de passe requis).'});
+  const dest = to || admin.email;
+  try {
+    await sendTestEmail(config, dest);
+    return res.json({ok: true, to: dest});
+  } catch (e) {
+    return res.status(502).json({error: e instanceof Error ? e.message : "Échec de l'envoi du test."});
+  }
 });
 
 export default router;

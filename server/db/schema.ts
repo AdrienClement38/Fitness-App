@@ -311,6 +311,15 @@ export const sessions = pgTable(
   (t) => [index('sessions_user_idx').on(t.userId)],
 );
 
+// Paramètres applicatifs (clé -> valeur JSON). Configuration éditable par l'admin
+// sans redéploiement : ex. SMTP. Le mot de passe SMTP y est chiffré au repos
+// (enveloppe AES-256-GCM, cf. crypto.ts) et n'est JAMAIS renvoyé au client.
+export const appSettings = pgTable('app_settings', {
+  key: text('key').primaryKey(),
+  value: jsonb('value'),
+  updatedAt: timestamp('updated_at', {withTimezone: true}).notNull().defaultNow(),
+});
+
 // Stockage de synchronisation : données utilisateur en blobs JSONB, mergées côté client.
 export const syncItems = pgTable(
   'sync_items',

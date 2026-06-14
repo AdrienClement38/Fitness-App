@@ -50,6 +50,13 @@
       "when": 1781470098586,
       "tag": "0006_uneven_betty_ross",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1781471723092,
+      "tag": "0007_omniscient_nextwave",
+      "breakpoints": true
     }
   ]
 }

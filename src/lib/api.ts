@@ -378,10 +378,34 @@ export interface AdminUser {
   myPrograms: number;
 }
 
+/** État de la config SMTP côté admin (jamais le mot de passe en clair). */
+export interface SmtpStatus {
+  host: string;
+  port: number;
+  user: string;
+  from: string;
+  hasPass: boolean; // un mot de passe est stocké
+  source: 'db' | 'env' | 'none'; // d'où vient la config réellement utilisée
+  envFallback: boolean; // des variables d'env SMTP existent (repli)
+}
+
+/** Champs éditables de la config SMTP. `pass` vide = conserver le mot de passe stocké. */
+export interface SmtpInput {
+  host: string;
+  port: number;
+  user: string;
+  from?: string;
+  pass?: string;
+}
+
 export const adminApi = {
   users: () => get<AdminUser[]>('/admin/users'),
   deleteUser: (id: string) => del<{ok: boolean}>(`/admin/users/${encodeURIComponent(id)}`),
   setRole: (id: string, role: 'user' | 'admin') =>
     post<{ok: boolean; role: string}>(`/admin/users/${encodeURIComponent(id)}/role`, {role}),
   resetPassword: (id: string) => post<{tempPassword: string}>(`/admin/users/${encodeURIComponent(id)}/reset-password`, {}),
+  smtp: () => get<SmtpStatus>('/admin/settings/smtp'),
+  saveSmtp: (input: SmtpInput) => post<SmtpStatus>('/admin/settings/smtp', input),
+  testEmail: (input: Partial<SmtpInput> & {to?: string}) =>
+    post<{ok: boolean; to: string}>('/admin/settings/test-email', input),
 };
