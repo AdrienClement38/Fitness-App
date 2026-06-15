@@ -5,6 +5,7 @@ import {useAuth} from '../lib/auth';
 import {Badge, ErrorState, Loading} from '../components/ui';
 import SmtpSettings from '../components/SmtpSettings';
 import AppSettings from '../components/AppSettings';
+import AdminDashboard from '../components/AdminDashboard';
 
 const fmtDate = (iso: string) => new Date(iso).toLocaleDateString('fr-FR', {day: 'numeric', month: 'short', year: 'numeric'});
 
@@ -63,6 +64,8 @@ export default function AdminPage() {
       <p className="mt-1 text-sm text-slate-400">
         Gestion des comptes inscrits. Tu vois les infos de compte, jamais les données privées des utilisateurs.
       </p>
+
+      <AdminDashboard />
 
       {error && <div className="mt-4"><ErrorState message={error} /></div>}
 

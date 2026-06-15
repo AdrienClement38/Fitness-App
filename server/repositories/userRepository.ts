@@ -1,6 +1,6 @@
 /** Accès données « comptes » : utilisateurs et sessions serveur. */
 import {randomUUID} from 'node:crypto';
-import {and, count, eq, inArray, isNotNull, isNull, lt, ne} from 'drizzle-orm';
+import {and, count, desc, eq, inArray, isNotNull, isNull, lt, ne, sql} from 'drizzle-orm';
 import {db, schema} from '../db/client';
 
 const {users, sessions, syncItems} = schema;
@@ -151,4 +151,61 @@ export async function listUsersWithCounts() {
     workoutLogs: byUser.get(u.id)?.['workout-log'] ?? 0,
     myPrograms: byUser.get(u.id)?.['my-program'] ?? 0,
   }));
+}
+
+/**
+ * Statistiques d'usage pour le tableau de bord admin : agrégats de comptes et de
+ * contenu synchronisé (jamais de données privées), via des `count(*) filter` en une
+ * passe. Les comptes sont castés en int4 (sinon bigint -> string).
+ */
+export async function getAdminStats() {
+  const d7 = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+  const d30 = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+
+  const [u] = await db
+    .select({
+      total: sql<number>`count(*)::int`,
+      verified: sql<number>`(count(*) filter (where ${users.emailVerified}))::int`,
+      admins: sql<number>`(count(*) filter (where ${users.role} = 'admin'))::int`,
+      last7: sql<number>`(count(*) filter (where ${users.createdAt} >= ${d7}))::int`,
+      last30: sql<number>`(count(*) filter (where ${users.createdAt} >= ${d30}))::int`,
+    })
+    .from(users);
+
+  const [c] = await db
+    .select({
+      workoutLogs: sql<number>`(count(*) filter (where ${syncItems.kind} = 'workout-log'))::int`,
+      myPrograms: sql<number>`(count(*) filter (where ${syncItems.kind} = 'my-program'))::int`,
+      favorites: sql<number>`(count(*) filter (where ${syncItems.kind} = 'favorite'))::int`,
+    })
+    .from(syncItems)
+    .where(eq(syncItems.deleted, false));
+
+  const recent = await db
+    .select({email: users.email, createdAt: users.createdAt, emailVerified: users.emailVerified, role: users.role})
+    .from(users)
+    .orderBy(desc(users.createdAt))
+    .limit(5);
+
+  return {
+    users: {
+      total: u?.total ?? 0,
+      verified: u?.verified ?? 0,
+      unverified: (u?.total ?? 0) - (u?.verified ?? 0),
+      admins: u?.admins ?? 0,
+      last7: u?.last7 ?? 0,
+      last30: u?.last30 ?? 0,
+    },
+    content: {
+      workoutLogs: c?.workoutLogs ?? 0,
+      myPrograms: c?.myPrograms ?? 0,
+      favorites: c?.favorites ?? 0,
+    },
+    recentSignups: recent.map((r) => ({
+      email: r.email,
+      createdAt: r.createdAt.toISOString(),
+      emailVerified: r.emailVerified,
+      role: r.role,
+    })),
+  };
 }

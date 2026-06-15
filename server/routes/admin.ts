@@ -10,6 +10,7 @@ import {getUserFromRequest, hashPassword, newToken, type AuthUser} from '../auth
 import {
   deleteUser,
   deleteUserSessions,
+  getAdminStats,
   getUserById,
   listUsersWithCounts,
   setUserRole,
@@ -28,6 +29,10 @@ router.use(async (req, res, next) => {
   if (user.role !== 'admin') return res.status(403).json({error: "Accès réservé à l'administrateur."});
   res.locals.admin = user;
   next();
+});
+
+router.get('/stats', async (_req, res) => {
+  res.json(await getAdminStats());
 });
 
 router.get('/users', async (_req, res) => {

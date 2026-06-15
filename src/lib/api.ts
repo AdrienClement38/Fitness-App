@@ -407,7 +407,15 @@ export interface SmtpInput {
   pass?: string;
 }
 
+/** Statistiques d'usage du tableau de bord admin. */
+export interface AdminStats {
+  users: {total: number; verified: number; unverified: number; admins: number; last7: number; last30: number};
+  content: {workoutLogs: number; myPrograms: number; favorites: number};
+  recentSignups: {email: string; createdAt: string; emailVerified: boolean; role: string}[];
+}
+
 export const adminApi = {
+  stats: () => get<AdminStats>('/admin/stats'),
   users: () => get<AdminUser[]>('/admin/users'),
   deleteUser: (id: string) => del<{ok: boolean}>(`/admin/users/${encodeURIComponent(id)}`),
   setRole: (id: string, role: 'user' | 'admin') =>
