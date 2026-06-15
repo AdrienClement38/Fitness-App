@@ -2,6 +2,7 @@ import {useState, type FormEvent} from 'react';
 import {Link, useLocation, useNavigate} from 'react-router-dom';
 import {Download, LogOut, Shield, User} from 'lucide-react';
 import {changePassword, deleteAccount, login, logout, register, useAuth} from '../lib/auth';
+import {authApi} from '../lib/api';
 import {useSyncConnected} from '../lib/sync';
 import {exportMyData} from '../lib/exportData';
 import {setStretchSuggestions, useStretchSuggestions} from '../lib/settings';
@@ -198,11 +199,75 @@ function StretchPref() {
   );
 }
 
+/** « Mot de passe oublié » : demande un lien de réinitialisation par email. */
+function ForgotPasswordForm({onBack}: {onBack: () => void}) {
+  const [email, setEmail] = useState('');
+  const [sent, setSent] = useState(false);
+  const [busy, setBusy] = useState(false);
+
+  const submit = async (e: FormEvent) => {
+    e.preventDefault();
+    setBusy(true);
+    try {
+      await authApi.forgotPassword(email.trim());
+    } catch {
+      /* anti-énumération : même issue affichée quoi qu'il arrive */
+    } finally {
+      setBusy(false);
+      setSent(true);
+    }
+  };
+
+  return (
+    <div>
+      <h1 className="text-xl font-bold">Mot de passe oublié</h1>
+      {sent ? (
+        <>
+          <p className="mt-2 text-sm text-slate-400">
+            Si un compte existe avec cette adresse, un email avec un lien de réinitialisation vient d'être envoyé.
+            Pense à vérifier tes spams. Le lien expire dans 1 h.
+          </p>
+          <button onClick={onBack} className="mt-4 text-sm text-emerald-400 hover:underline">
+            Retour à la connexion
+          </button>
+        </>
+      ) : (
+        <>
+          <p className="mt-1 text-sm text-slate-400">
+            Entre ton adresse : on t'envoie un lien pour choisir un nouveau mot de passe.
+          </p>
+          <form onSubmit={submit} className="mt-4 grid gap-3">
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
+              autoComplete="email"
+              className={inputClass}
+            />
+            <button
+              type="submit"
+              disabled={busy}
+              className="rounded-lg bg-emerald-500/20 py-2.5 text-sm font-semibold text-emerald-300 transition-colors hover:bg-emerald-500/30 disabled:opacity-50"
+            >
+              {busy ? '…' : 'Envoyer le lien'}
+            </button>
+          </form>
+          <button onClick={onBack} className="mt-3 text-sm text-emerald-400 hover:underline">
+            Retour à la connexion
+          </button>
+        </>
+      )}
+    </div>
+  );
+}
+
 export default function AccountPage() {
   const {user, loading} = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const [mode, setMode] = useState<'login' | 'register'>('login');
+  const [mode, setMode] = useState<'login' | 'register' | 'forgot'>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [website, setWebsite] = useState(''); // honeypot anti-bot (reste vide pour un humain)
@@ -282,6 +347,8 @@ export default function AccountPage() {
     }
   };
 
+  if (mode === 'forgot') return <ForgotPasswordForm onBack={() => setMode('login')} />;
+
   return (
     <div>
       <h1 className="text-xl font-bold">{mode === 'login' ? 'Connexion' : 'Créer un compte'}</h1>
@@ -341,6 +408,18 @@ export default function AccountPage() {
       >
         {mode === 'login' ? 'Pas de compte ? En créer un' : 'Déjà un compte ? Se connecter'}
       </button>
+
+      {mode === 'login' && (
+        <button
+          onClick={() => {
+            setMode('forgot');
+            setError('');
+          }}
+          className="mt-2 block text-sm text-slate-400 hover:text-slate-200 hover:underline"
+        >
+          Mot de passe oublié ?
+        </button>
+      )}
 
       {mode === 'register' && (
         <p className="mt-3 text-xs leading-relaxed text-slate-500">

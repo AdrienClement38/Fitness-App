@@ -77,6 +77,26 @@ export async function setVerifyToken(id: string, token: string, expires: Date) {
   await db.update(users).set({verifyToken: token, verifyExpires: expires}).where(eq(users.id, id));
 }
 
+/* ---- Réinitialisation de mot de passe par email ----------------------- */
+
+/** Pose un jeton de réinitialisation (single-use, expiration courte). */
+export async function setResetToken(id: string, token: string, expires: Date) {
+  await db.update(users).set({resetToken: token, resetExpires: expires}).where(eq(users.id, id));
+}
+
+/**
+ * Consomme un jeton de réinit : applique le nouveau hash et efface le jeton (single-use).
+ * Renvoie l'état + l'userId (pour que la route révoque les sessions). Jeton inconnu/déjà
+ * utilisé -> 'invalid' ; expiré -> 'expired'.
+ */
+export async function consumeResetToken(token: string, newHash: string): Promise<{status: 'ok' | 'expired' | 'invalid'; userId?: string}> {
+  const [u] = await db.select().from(users).where(eq(users.resetToken, token));
+  if (!u) return {status: 'invalid'};
+  if (!u.resetExpires || u.resetExpires.getTime() < Date.now()) return {status: 'expired'};
+  await db.update(users).set({passwordHash: newHash, resetToken: null, resetExpires: null}).where(eq(users.id, u.id));
+  return {status: 'ok', userId: u.id};
+}
+
 /**
  * Comptes existant AVANT la confirmation d'email (donc sans jeton) : considérés
  * vérifiés (grandfather). Idempotent : un compte du nouveau flux a toujours un

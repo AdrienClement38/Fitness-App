@@ -374,6 +374,8 @@ export const authApi = {
   deleteAccount: (password: string) => post<{ok: boolean}>('/auth/delete-account', {password}),
   verifyEmail: (token: string) => post<{ok: boolean}>('/auth/verify-email', {token}),
   resendVerification: () => post<{ok: boolean; alreadyVerified?: boolean}>('/auth/resend-verification', {}),
+  forgotPassword: (email: string) => post<{ok: boolean}>('/auth/forgot-password', {email}),
+  resetPassword: (token: string, newPassword: string) => post<{ok: boolean}>('/auth/reset-password', {token, newPassword}),
 };
 
 /** Administration : un compte de la liste (infos de compte uniquement). */

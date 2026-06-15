@@ -294,6 +294,8 @@ export const users = pgTable('users', {
   emailVerified: boolean('email_verified').notNull().default(false),
   verifyToken: text('verify_token'), // jeton de confirmation d'email (null une fois vérifié)
   verifyExpires: timestamp('verify_expires', {withTimezone: true}),
+  resetToken: text('reset_token'), // jeton de réinitialisation de mot de passe (single-use, 1 h)
+  resetExpires: timestamp('reset_expires', {withTimezone: true}),
   createdAt: timestamp('created_at', {withTimezone: true}).notNull().defaultNow(),
 });
 

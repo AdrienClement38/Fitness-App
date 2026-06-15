@@ -13,6 +13,7 @@ import {
   verifyPassword,
 } from '../auth';
 import {
+  consumeResetToken,
   createSession,
   createUser,
   deleteExpiredSessions,
@@ -21,16 +22,18 @@ import {
   deleteUserSessions,
   getUserByEmail,
   getUserById,
+  setResetToken,
   setUserRole,
   setVerifyToken,
   updatePassword,
   verifyEmailByToken,
 } from '../repositories/userRepository';
-import {sendVerificationEmail} from '../email';
+import {sendPasswordResetEmail, sendVerificationEmail} from '../email';
 import {isDisposableEmail} from '../disposableEmails';
 import {closeUserSockets} from '../sync';
 
 const VERIFY_TTL_MS = 24 * 60 * 60 * 1000; // 24 h
+const RESET_TTL_MS = 60 * 60 * 1000; // 1 h
 const appBase = (req: {protocol: string; get: (h: string) => string | undefined}) =>
   process.env.APP_URL || `${req.protocol}://${req.get('host')}`;
 
@@ -131,6 +134,42 @@ router.post('/resend-verification', async (req, res) => {
   await sendVerificationEmail(auth.email, `${appBase(req)}/verifier-email?token=${verifyToken}`).catch((e) =>
     console.error('[email] renvoi confirmation échoué :', (e as Error).message),
   );
+  return res.json({ok: true});
+});
+
+// Demande de réinitialisation. Anti-énumération : réponse identique qu'un compte
+// existe ou non. Rate-limité par IP ET par email (anti-spam d'une boîte victime).
+const forgotBody = z.object({email: z.string().email().max(200)});
+router.post('/forgot-password', async (req, res) => {
+  if (rateLimited(`forgot:${req.ip}`)) return res.status(429).json({error: 'Trop de demandes. Réessaie dans quelques minutes.'});
+  const parsed = forgotBody.safeParse(req.body);
+  if (!parsed.success) return res.json({ok: true});
+  const email = parsed.data.email.trim().toLowerCase();
+  if (rateLimited(`forgot-mail:${email}`, 3)) return res.json({ok: true});
+  const user = await getUserByEmail(email);
+  if (user) {
+    const resetToken = newToken();
+    await setResetToken(user.id, resetToken, new Date(Date.now() + RESET_TTL_MS));
+    sendPasswordResetEmail(email, `${appBase(req)}/reinitialiser-mot-de-passe?token=${resetToken}`).catch((e) =>
+      console.error('[email] envoi réinit échoué :', (e as Error).message),
+    );
+  }
+  return res.json({ok: true});
+});
+
+// Application d'un nouveau mot de passe via le jeton reçu par email (single-use).
+const resetBody = z.object({token: z.string().min(1).max(256), newPassword: z.string().min(8).max(200)});
+router.post('/reset-password', async (req, res) => {
+  const parsed = resetBody.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({error: 'Lien invalide ou mot de passe trop court (8 caractères minimum).'});
+  const {status, userId} = await consumeResetToken(parsed.data.token, await hashPassword(parsed.data.newPassword));
+  if (status !== 'ok') {
+    return res.status(400).json({error: status === 'expired' ? 'Lien expiré — refais une demande.' : 'Lien invalide ou déjà utilisé.'});
+  }
+  if (userId) {
+    await deleteUserSessions(userId); // déconnecte partout après changement de mot de passe
+    closeUserSockets(userId);
+  }
   return res.json({ok: true});
 });
 

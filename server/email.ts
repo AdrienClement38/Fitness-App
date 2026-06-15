@@ -243,6 +243,43 @@ export async function sendVerificationEmail(to: string, link: string): Promise<b
   return true;
 }
 
+/** Email de réinitialisation de mot de passe. Retourne true si réellement envoyé. */
+export async function sendPasswordResetEmail(to: string, link: string): Promise<boolean> {
+  const resolved = await resolveSmtp();
+  if (!resolved) {
+    console.log(`[email] SMTP non configuré — lien de réinitialisation pour ${to} :\n  ${link}`);
+    return false;
+  }
+  if (!withinDailyVerifyQuota()) {
+    console.warn(`[email] plafond quotidien atteint (${MAX_VERIFY_PER_DAY}/j) — réinit pour ${to} non envoyée (anti-abus).`);
+    return false;
+  }
+  const c = resolved.config;
+  await transportFor(c).sendMail({
+    from: fromAddr(c),
+    to,
+    subject: 'Réinitialisation de ton mot de passe — AC-KINETIK',
+    text:
+      `Tu as demande a reinitialiser ton mot de passe AC-KINETIK.\n\n` +
+      `Choisis un nouveau mot de passe via ce lien :\n${link}\n\n` +
+      `Le lien expire dans 1 h. Si tu n'es pas a l'origine de cette demande, ignore cet email : ton mot de passe reste inchange.` +
+      footerText,
+    html:
+      `<div style="font-family:Arial,Helvetica,sans-serif;max-width:600px;margin:0 auto;color:#333">` +
+      `<h2 style="color:#333">Réinitialisation de mot de passe</h2>` +
+      `<p style="line-height:1.55">Tu as demandé à réinitialiser ton mot de passe AC-KINETIK. Choisis-en un nouveau :</p>` +
+      `<div style="background-color:#f9f9f9;padding:20px;border-radius:6px;margin:20px 0;text-align:center">` +
+      `<a href="${link}" style="display:inline-block;background-color:#059669;color:#ffffff;text-decoration:none;padding:13px 28px;border-radius:6px;font-weight:bold">Choisir un nouveau mot de passe</a>` +
+      `</div>` +
+      `<p style="font-size:13px;color:#777">Si le bouton ne fonctionne pas, copie ce lien dans ton navigateur :<br>` +
+      `<a href="${link}" style="color:#0f766e;word-break:break-all">${link}</a></p>` +
+      `<p style="font-size:13px;color:#777">Le lien expire dans 1 h. Si tu n'es pas à l'origine de cette demande, ignore cet email : ton mot de passe reste inchangé.</p>` +
+      footerHtml() +
+      `</div>`,
+  });
+  return true;
+}
+
 /** Envoie un email de test avec une config donnée (sans la persister). Lève en cas d'échec SMTP. */
 export async function sendTestEmail(c: SmtpConfig, to: string): Promise<void> {
   await transportFor(c).sendMail({
