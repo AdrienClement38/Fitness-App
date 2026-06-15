@@ -102,10 +102,10 @@ function fromAddr(c: SmtpConfig): string {
  * anti-spam s'en servent), calqué sur l'app planning qui n'atterrit pas en spam.
  */
 const footerHtml = () =>
-  `<hr style="border:none;border-top:1px solid #e2e8f0;margin:28px 0">` +
-  `<p style="font-size:12px;color:#64748b;line-height:1.6;margin:0">` +
+  `<hr style="border:none;border-top:1px solid #eee;margin:30px 0">` +
+  `<p style="font-size:12px;color:#777;line-height:1.55;margin:0">` +
   `${APP_NAME} — ton appli d'entraînement perso.<br>` +
-  `Message automatique, merci de ne pas répondre à cet email.</p>`;
+  `<em>Message automatique, merci de ne pas répondre à cet email.</em></p>`;
 const footerText = `\n\n--\n${APP_NAME} — ton appli d'entrainement perso. Message automatique, ne pas repondre.`;
 
 /* ---- Persistance (admin) --------------------------------------------- */
@@ -192,21 +192,25 @@ export async function sendVerificationEmail(to: string, link: string): Promise<b
   await transportFor(c).sendMail({
     from: fromAddr(c),
     to,
-    subject: 'Bienvenue sur AC-KINETIK — confirme ton adresse',
+    subject: 'Bienvenue sur AC-KINETIK',
     text:
-      `Bienvenue sur AC-KINETIK, ton appli d'entrainement perso.\n\n` +
-      `Pour securiser ton compte et activer toutes les fonctions, confirme ton adresse en ouvrant ce lien :\n${link}\n\n` +
+      `Bonjour,\n\nBienvenue sur AC-KINETIK, ton appli d'entrainement perso.\n\n` +
+      `Il ne reste qu'une etape : confirmer ton adresse pour securiser ton compte et synchroniser tes seances sur tous tes appareils.\n\n` +
+      `Confirme ton adresse en ouvrant ce lien :\n${link}\n\n` +
       `Le lien expire dans 24 h. Si tu n'es pas a l'origine de cette inscription, ignore simplement cet email.` +
       footerText,
+    // Formule calquee sur l'app planning (Arial, max-width 600, encart gris clair, bouton).
     html:
-      `<div style="font-family:Arial,Helvetica,sans-serif;max-width:560px;margin:0 auto;color:#0f172a">` +
-      `<h2 style="margin:0 0 12px">Bienvenue sur AC-KINETIK</h2>` +
-      `<p style="margin:0 0 16px;line-height:1.55">Ton appli d'entraînement perso. Pour sécuriser ton compte et activer toutes les fonctions, confirme ton adresse :</p>` +
-      `<p style="margin:0 0 22px">` +
-      `<a href="${link}" style="display:inline-block;background:#059669;color:#ffffff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:bold">Confirmer mon adresse</a></p>` +
-      `<p style="margin:0 0 4px;font-size:13px;color:#64748b">Si le bouton ne fonctionne pas, copie ce lien dans ton navigateur :</p>` +
-      `<p style="margin:0 0 16px;font-size:13px;word-break:break-all"><a href="${link}" style="color:#0f766e">${link}</a></p>` +
-      `<p style="margin:0;font-size:13px;color:#64748b">Le lien expire dans 24 h. Si tu n'es pas à l'origine de cette inscription, ignore simplement cet email.</p>` +
+      `<div style="font-family:Arial,Helvetica,sans-serif;max-width:600px;margin:0 auto;color:#333">` +
+      `<h2 style="color:#333">Bienvenue sur AC-KINETIK</h2>` +
+      `<p style="line-height:1.55">Ton appli d'entraînement perso. Il ne reste qu'une étape : confirmer ton adresse pour sécuriser ton compte et synchroniser tes séances sur tous tes appareils.</p>` +
+      `<div style="background-color:#f9f9f9;padding:20px;border-radius:6px;margin:20px 0;text-align:center">` +
+      `<p style="margin:0 0 16px;color:#555">Clique pour confirmer ton adresse :</p>` +
+      `<a href="${link}" style="display:inline-block;background-color:#059669;color:#ffffff;text-decoration:none;padding:13px 28px;border-radius:6px;font-weight:bold">Confirmer mon adresse</a>` +
+      `</div>` +
+      `<p style="font-size:13px;color:#777">Si le bouton ne fonctionne pas, copie ce lien dans ton navigateur :<br>` +
+      `<a href="${link}" style="color:#0f766e;word-break:break-all">${link}</a></p>` +
+      `<p style="font-size:13px;color:#777">Le lien expire dans 24 h. Si tu n'es pas à l'origine de cette inscription, ignore simplement cet email.</p>` +
       footerHtml() +
       `</div>`,
   });
@@ -221,9 +225,9 @@ export async function sendTestEmail(c: SmtpConfig, to: string): Promise<void> {
     subject: 'Test SMTP — AC-KINETIK',
     text: 'Si tu lis cet email, la configuration SMTP de AC-KINETIK fonctionne.' + footerText,
     html:
-      `<div style="font-family:Arial,Helvetica,sans-serif;max-width:560px;margin:0 auto;color:#0f172a">` +
-      `<p style="margin:0 0 8px">Si tu lis cet email, la configuration SMTP de <strong>AC-KINETIK</strong> fonctionne. ✅</p>` +
-      `<p style="margin:0;font-size:13px;color:#64748b">Email de test envoyé depuis la page d'administration.</p>` +
+      `<div style="font-family:Arial,Helvetica,sans-serif;max-width:600px;margin:0 auto;color:#333">` +
+      `<p>Si tu lis cet email, la configuration SMTP de <strong>AC-KINETIK</strong> fonctionne.</p>` +
+      `<p style="font-size:13px;color:#777">Email de test envoyé depuis la page d'administration.</p>` +
       footerHtml() +
       `</div>`,
   });
