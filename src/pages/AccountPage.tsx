@@ -205,6 +205,7 @@ export default function AccountPage() {
   const [mode, setMode] = useState<'login' | 'register'>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [website, setWebsite] = useState(''); // honeypot anti-bot (reste vide pour un humain)
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
 
@@ -270,7 +271,7 @@ export default function AccountPage() {
     setError('');
     setBusy(true);
     try {
-      if (mode === 'register') await register(email.trim(), password);
+      if (mode === 'register') await register(email.trim(), password, website);
       else await login(email.trim(), password);
       // Connecté -> retour à la page demandée avant la redirection, sinon l'accueil.
       navigate((location.state as {from?: string} | null)?.from ?? '/');
@@ -291,6 +292,17 @@ export default function AccountPage() {
       </p>
 
       <form onSubmit={submit} className="mt-4 grid gap-3">
+        {/* Honeypot anti-bot : hors écran, ignoré des humains, rempli par les bots -> inscription rejetée. */}
+        <div aria-hidden="true" style={{position: 'absolute', left: '-5000px'}}>
+          <input
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            name="website"
+            value={website}
+            onChange={(e) => setWebsite(e.target.value)}
+          />
+        </div>
         <input
           type="email"
           required

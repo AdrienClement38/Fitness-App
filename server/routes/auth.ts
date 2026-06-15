@@ -27,6 +27,7 @@ import {
   verifyEmailByToken,
 } from '../repositories/userRepository';
 import {sendVerificationEmail} from '../email';
+import {isDisposableEmail} from '../disposableEmails';
 import {closeUserSockets} from '../sync';
 
 const VERIFY_TTL_MS = 24 * 60 * 60 * 1000; // 24 h
@@ -60,9 +61,15 @@ function rateLimited(key: string, max = 10, windowMs = 15 * 60 * 1000): boolean 
 
 router.post('/register', async (req, res) => {
   if (rateLimited(`reg:${req.ip}`)) return res.status(429).json({error: 'Trop de tentatives. Réessaie dans quelques minutes.'});
+  // Honeypot : champ caché du formulaire que seuls les bots remplissent. Rempli -> on rejette.
+  if (typeof req.body?.website === 'string' && req.body.website.trim() !== '') {
+    return res.status(400).json({error: 'Inscription invalide.'});
+  }
   const parsed = credentials.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({error: 'Email invalide ou mot de passe trop court (8 caractères minimum).'});
   const email = parsed.data.email.trim().toLowerCase();
+  // Refus des adresses jetables (anti-bots / abus du quota d'envoi).
+  if (isDisposableEmail(email)) return res.status(400).json({error: 'Les adresses email jetables ne sont pas acceptées.'});
   if (await getUserByEmail(email)) return res.status(409).json({error: 'Un compte existe déjà avec cet email.'});
 
   // Jeton de confirmation d'email (24 h) -> le compte est créé NON vérifié.

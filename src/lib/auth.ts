@@ -63,8 +63,8 @@ export async function login(email: string, password: string) {
   cacheUser(u);
   set({user: u, loading: false});
 }
-export async function register(email: string, password: string) {
-  const u = await authApi.register(email, password);
+export async function register(email: string, password: string, website = '') {
+  const u = await authApi.register(email, password, website);
   cacheUser(u);
   set({user: u, loading: false});
 }

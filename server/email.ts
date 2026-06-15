@@ -108,6 +108,27 @@ const footerHtml = () =>
   `<em>Message automatique, merci de ne pas répondre à cet email.</em></p>`;
 const footerText = `\n\n--\n${APP_NAME} — ton appli d'entrainement perso. Message automatique, ne pas repondre.`;
 
+/**
+ * Plafond GLOBAL d'emails de confirmation par jour (garde-fou anti-abus : protège
+ * le quota du fournisseur SMTP, ex. Brevo 300/j). Compteur en mémoire (instance
+ * unique sur AlwaysData), reset quotidien. Surchargeable via MAX_VERIFY_EMAILS_PER_DAY.
+ * Au-delà du plafond, l'inscription marche quand même mais l'email n'est pas envoyé
+ * (renvoyable plus tard) — ainsi un bot ne peut jamais cramer tout le quota.
+ */
+const MAX_VERIFY_PER_DAY = Number(process.env.MAX_VERIFY_EMAILS_PER_DAY) || 150;
+let verifyDay = '';
+let verifySent = 0;
+function withinDailyVerifyQuota(): boolean {
+  const today = new Date().toISOString().slice(0, 10);
+  if (today !== verifyDay) {
+    verifyDay = today;
+    verifySent = 0;
+  }
+  if (verifySent >= MAX_VERIFY_PER_DAY) return false;
+  verifySent += 1;
+  return true;
+}
+
 /* ---- Persistance (admin) --------------------------------------------- */
 
 /**
@@ -186,6 +207,11 @@ export async function sendVerificationEmail(to: string, link: string): Promise<b
   const resolved = await resolveSmtp();
   if (!resolved) {
     console.log(`[email] SMTP non configuré — lien de confirmation pour ${to} :\n  ${link}`);
+    return false;
+  }
+  // Garde-fou anti-abus : ne jamais dépasser le quota quotidien (protège le fournisseur).
+  if (!withinDailyVerifyQuota()) {
+    console.warn(`[email] plafond quotidien atteint (${MAX_VERIFY_PER_DAY}/j) — confirmation pour ${to} non envoyée (anti-abus, renvoyable plus tard).`);
     return false;
   }
   const c = resolved.config;

@@ -357,7 +357,9 @@ export interface AuthUser {
 
 export const authApi = {
   me: () => get<AuthUser>('/auth/me'),
-  register: (email: string, password: string) => post<AuthUser>('/auth/register', {email, password}),
+  // `website` = honeypot anti-bot (champ caché ; vide pour un humain).
+  register: (email: string, password: string, website = '') =>
+    post<AuthUser>('/auth/register', {email, password, website}),
   login: (email: string, password: string) => post<AuthUser>('/auth/login', {email, password}),
   logout: () => post<{ok: boolean}>('/auth/logout', {}),
   changePassword: (currentPassword: string, newPassword: string) =>
