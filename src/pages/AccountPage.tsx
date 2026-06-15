@@ -389,6 +389,12 @@ export default function AccountPage() {
           autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
           className={inputClass}
         />
+        {mode === 'register' && (
+          <p className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs leading-relaxed text-amber-300/90">
+            📩 Après inscription, on t'envoie un email de confirmation. Il arrive souvent dans les{' '}
+            <strong>spams / indésirables</strong> — pense à l'y chercher et à le marquer « non spam », puis active ton compte.
+          </p>
+        )}
         {error && <p className="text-sm text-red-400">{error}</p>}
         <button
           type="submit"
