@@ -16,6 +16,7 @@ import {
   updatePassword,
 } from '../repositories/userRepository';
 import {clearSmtpConfig, configForTest, saveSmtpConfig, sendTestEmail, smtpStatus} from '../email';
+import {getAdminAppStatus, setAnnouncement, setMaintenance} from '../appStatus';
 import {closeUserSockets} from '../sync';
 
 const router = Router();
@@ -119,6 +120,32 @@ router.post('/settings/test-email', async (req, res) => {
   } catch (e) {
     return res.status(502).json({error: e instanceof Error ? e.message : "Échec de l'envoi du test."});
   }
+});
+
+/* ---- État applicatif : bandeau d'annonce + mode maintenance ----------- */
+
+router.get('/settings/app', (_req, res) => {
+  res.json(getAdminAppStatus());
+});
+
+const announcementBody = z.object({
+  message: z.string().max(500),
+  tone: z.enum(['info', 'warn']),
+  active: z.boolean(),
+});
+router.post('/settings/announcement', async (req, res) => {
+  const parsed = announcementBody.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({error: 'Annonce invalide.'});
+  await setAnnouncement(parsed.data);
+  return res.json(getAdminAppStatus());
+});
+
+const maintenanceBody = z.object({active: z.boolean(), message: z.string().max(500)});
+router.post('/settings/maintenance', async (req, res) => {
+  const parsed = maintenanceBody.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({error: 'Données invalides.'});
+  await setMaintenance(parsed.data);
+  return res.json(getAdminAppStatus());
 });
 
 export default router;

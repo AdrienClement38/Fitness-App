@@ -4,6 +4,7 @@ import {adminApi, type AdminUser} from '../lib/api';
 import {useAuth} from '../lib/auth';
 import {Badge, ErrorState, Loading} from '../components/ui';
 import SmtpSettings from '../components/SmtpSettings';
+import AppSettings from '../components/AppSettings';
 
 const fmtDate = (iso: string) => new Date(iso).toLocaleDateString('fr-FR', {day: 'numeric', month: 'short', year: 'numeric'});
 
@@ -126,6 +127,7 @@ export default function AdminPage() {
         </div>
       )}
 
+      <AppSettings />
       <SmtpSettings />
     </div>
   );

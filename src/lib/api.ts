@@ -346,7 +346,14 @@ export const api = {
   sources: () => get<Source[]>('/knowledge/sources'),
   programs: () => get<ProgramListItem[]>('/programs'),
   program: (id: string) => get<ProgramDetail>(`/programs/${encodeURIComponent(id)}`),
+  appStatus: () => get<PublicAppStatus>('/app-status'),
 };
+
+/** État applicatif public : bandeau d'annonce (si actif) + mode maintenance. */
+export interface PublicAppStatus {
+  announcement: {message: string; tone: 'info' | 'warn'} | null;
+  maintenance: {active: boolean; message: string};
+}
 
 export interface AuthUser {
   id: string;
@@ -411,4 +418,13 @@ export const adminApi = {
   deleteSmtp: () => del<SmtpStatus>('/admin/settings/smtp'),
   testEmail: (input: Partial<SmtpInput> & {to?: string}) =>
     post<{ok: boolean; to: string}>('/admin/settings/test-email', input),
+  appStatus: () => get<AdminAppStatus>('/admin/settings/app'),
+  setAnnouncement: (a: AdminAppStatus['announcement']) => post<AdminAppStatus>('/admin/settings/announcement', a),
+  setMaintenance: (m: AdminAppStatus['maintenance']) => post<AdminAppStatus>('/admin/settings/maintenance', m),
 };
+
+/** Vue admin de l'état applicatif (config complète et éditable). */
+export interface AdminAppStatus {
+  announcement: {message: string; tone: 'info' | 'warn'; active: boolean};
+  maintenance: {active: boolean; message: string};
+}

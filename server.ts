@@ -12,7 +12,9 @@ import adminRouter from './server/routes/admin';
 import {attachSync} from './server/sync';
 import {migrateDb} from './server/db/client';
 import {bootstrapAdmins, deleteUnverifiedBefore, grandfatherExistingUsers} from './server/repositories/userRepository';
-import {adminEmails} from './server/auth';
+import {adminEmails, getUserFromRequest} from './server/auth';
+import {getPublicAppStatus, isMaintenanceActive, loadAppStatus} from './server/appStatus';
+import type {NextFunction, Request, Response} from 'express';
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3003;
@@ -40,10 +42,25 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('/api/exercises', exercisesRouter);
-app.use('/api/muscles', musclesRouter);
-app.use('/api/knowledge', knowledgeRouter);
-app.use('/api/programs', programsRouter);
+// État applicatif public (bandeau d'annonce + mode maintenance) : lu par le client
+// au chargement. Toujours accessible, même en maintenance.
+app.get('/api/app-status', (_req, res) => res.json(getPublicAppStatus()));
+
+// Garde de maintenance : quand le mode est actif, les routes de DONNÉES sont coupées
+// pour tout le monde sauf l'admin. Auth/admin/app-status restent ouverts (l'admin doit
+// pouvoir se connecter et désactiver, le client doit pouvoir lire l'état). Court-circuit
+// immédiat (flag mémoire) hors maintenance → zéro surcoût en temps normal.
+async function maintenanceGuard(req: Request, res: Response, next: NextFunction) {
+  if (!isMaintenanceActive()) return next();
+  const user = await getUserFromRequest(req);
+  if (user?.role === 'admin') return next();
+  return res.status(503).json({error: 'maintenance', message: getPublicAppStatus().maintenance.message});
+}
+
+app.use('/api/exercises', maintenanceGuard, exercisesRouter);
+app.use('/api/muscles', maintenanceGuard, musclesRouter);
+app.use('/api/knowledge', maintenanceGuard, knowledgeRouter);
+app.use('/api/programs', maintenanceGuard, programsRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/admin', adminRouter);
 
@@ -62,6 +79,9 @@ async function startServer() {
   // Nettoyage anti-bots : comptes du nouveau flux jamais confirmés depuis > 7 jours.
   const purged = await deleteUnverifiedBefore(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000));
   if (purged) console.log(`[AC-KINETIK] ${purged} compte(s) non confirmé(s) purgé(s)`);
+
+  // État applicatif (annonce + maintenance) en cache mémoire.
+  await loadAppStatus();
 
   if (process.env.NODE_ENV !== 'production') {
     // Import dynamique : Vite n'est chargé qu'en dev, le bundle de prod
