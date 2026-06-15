@@ -406,6 +406,7 @@ export const adminApi = {
   resetPassword: (id: string) => post<{tempPassword: string}>(`/admin/users/${encodeURIComponent(id)}/reset-password`, {}),
   smtp: () => get<SmtpStatus>('/admin/settings/smtp'),
   saveSmtp: (input: SmtpInput) => post<SmtpStatus>('/admin/settings/smtp', input),
+  deleteSmtp: () => del<SmtpStatus>('/admin/settings/smtp'),
   testEmail: (input: Partial<SmtpInput> & {to?: string}) =>
     post<{ok: boolean; to: string}>('/admin/settings/test-email', input),
 };

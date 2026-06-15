@@ -16,7 +16,7 @@
  */
 import nodemailer, {type Transporter} from 'nodemailer';
 import {decryptData, encryptData} from './crypto';
-import {getSetting, setSetting} from './repositories/settingsRepository';
+import {deleteSetting, getSetting, setSetting} from './repositories/settingsRepository';
 
 export interface SmtpConfig {
   host: string;
@@ -105,6 +105,11 @@ export async function saveSmtpConfig(input: {host: string; port: number; user: s
   await setSetting(SMTP_KEY, value);
 }
 
+/** Supprime la config SMTP en base (retour au repli variables d'env / dev). */
+export async function clearSmtpConfig(): Promise<void> {
+  await deleteSetting(SMTP_KEY);
+}
+
 export interface SmtpStatus {
   host: string;
   port: number;
@@ -122,7 +127,7 @@ export async function smtpStatus(): Promise<SmtpStatus> {
   const resolved = await resolveSmtp();
   return {
     host: stored?.host ?? '',
-    port: Number(stored?.port) || 587,
+    port: Number(stored?.port) || 465, // défaut Gmail TLS (cf. config admin)
     user: stored?.user ?? '',
     from: stored?.from ?? '',
     hasPass: stored?.pass != null,

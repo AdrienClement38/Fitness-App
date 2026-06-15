@@ -15,7 +15,7 @@ import {
   setUserRole,
   updatePassword,
 } from '../repositories/userRepository';
-import {configForTest, saveSmtpConfig, sendTestEmail, smtpStatus} from '../email';
+import {clearSmtpConfig, configForTest, saveSmtpConfig, sendTestEmail, smtpStatus} from '../email';
 import {closeUserSockets} from '../sync';
 
 const router = Router();
@@ -88,6 +88,12 @@ router.post('/settings/smtp', async (req, res) => {
   return res.json(await smtpStatus());
 });
 
+// Supprime la config SMTP en base (retour au repli env / dev).
+router.delete('/settings/smtp', async (_req, res) => {
+  await clearSmtpConfig();
+  return res.json(await smtpStatus());
+});
+
 const testBody = z.object({
   host: z.string().trim().min(1).max(200).optional(),
   port: z.coerce.number().int().min(1).max(65535).optional(),
@@ -97,16 +103,16 @@ const testBody = z.object({
   to: z.string().trim().email().max(200).optional(),
 });
 
-// Envoie un email de test (config du formulaire si fournie, sinon effective) vers
-// l'adresse demandée, à défaut celle de l'admin. Remonte l'erreur SMTP pour le diagnostic.
+// Envoie un email de test (config du formulaire si fournie, sinon effective). Par
+// défaut le test s'envoie au compte émetteur lui-même (prouve qu'il sait envoyer).
+// Remonte l'erreur SMTP brute pour le diagnostic.
 router.post('/settings/test-email', async (req, res) => {
-  const admin = res.locals.admin as AuthUser;
   const parsed = testBody.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({error: 'Données de test invalides.'});
   const {to, ...cfg} = parsed.data;
   const config = await configForTest(cfg);
   if (!config) return res.status(400).json({error: 'Configuration SMTP incomplète (hôte, utilisateur et mot de passe requis).'});
-  const dest = to || admin.email;
+  const dest = to || config.user; // par défaut : l'adresse émettrice elle-même
   try {
     await sendTestEmail(config, dest);
     return res.json({ok: true, to: dest});

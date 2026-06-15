@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useState, type FormEvent} from 'react';
-import {Mail, Send} from 'lucide-react';
+import {ChevronDown, ChevronRight, Mail, Send} from 'lucide-react';
 import {adminApi, type SmtpStatus} from '../lib/api';
 import {Badge, Loading} from './ui';
 
@@ -8,33 +8,34 @@ const inputClass =
 const labelClass = 'mb-1 block text-xs font-medium text-slate-400';
 
 const SOURCE_LABEL: Record<SmtpStatus['source'], {text: string; tone: 'emerald' | 'amber' | 'slate'}> = {
-  db: {text: 'Active : configuration en base', tone: 'emerald'},
-  env: {text: 'Active : variables d’environnement', tone: 'amber'},
-  none: {text: 'Aucun envoi d’email configuré', tone: 'slate'},
+  db: {text: 'Connecté', tone: 'emerald'},
+  env: {text: 'Actif via variables d’environnement', tone: 'amber'},
+  none: {text: 'Non connecté', tone: 'slate'},
 };
 
 /**
- * Configuration SMTP éditable par l'admin (stockée en base, mot de passe chiffré
- * au repos et jamais réaffiché) + module de test d'envoi. Sans config, l'appli
- * marche quand même : le lien de confirmation part dans les logs serveur.
+ * Connexion email (Gmail) éditable par l'admin : adresse + mot de passe
+ * d'application en clair, serveur/port repliés sous « Configuration avancée ».
+ * Le mot de passe est chiffré au repos côté serveur et jamais réaffiché. Le test
+ * s'envoie au compte émetteur lui-même. Sans config, l'appli marche quand même
+ * (le lien de confirmation part dans les logs serveur).
  */
 export default function SmtpSettings() {
   const [status, setStatus] = useState<SmtpStatus | null>(null);
-  // Champs du formulaire (préremplis avec l'état stocké, sauf le mot de passe).
-  const [host, setHost] = useState('');
-  const [port, setPort] = useState(587);
   const [user, setUser] = useState('');
-  const [from, setFrom] = useState('');
   const [pass, setPass] = useState('');
-  const [testTo, setTestTo] = useState('');
-  const [busy, setBusy] = useState<'save' | 'test' | null>(null);
+  const [host, setHost] = useState('smtp.gmail.com');
+  const [port, setPort] = useState(465);
+  const [from, setFrom] = useState('');
+  const [advanced, setAdvanced] = useState(false);
+  const [busy, setBusy] = useState<'save' | 'test' | 'delete' | null>(null);
   const [msg, setMsg] = useState<{type: 'ok' | 'err'; text: string} | null>(null);
 
   const applyStatus = useCallback((s: SmtpStatus) => {
     setStatus(s);
-    setHost(s.host);
-    setPort(s.port || 587);
     setUser(s.user);
+    setHost(s.host || 'smtp.gmail.com');
+    setPort(s.port || 465);
     setFrom(s.from);
     setPass(''); // jamais réaffiché : vide = conserver l'existant
   }, []);
@@ -50,7 +51,7 @@ export default function SmtpSettings() {
     try {
       const s = await adminApi.saveSmtp({host, port, user, from: from || undefined, pass: pass || undefined});
       applyStatus(s);
-      setMsg({type: 'ok', text: 'Configuration enregistrée.'});
+      setMsg({type: 'ok', text: 'Connexion enregistrée.'});
     } catch (err) {
       setMsg({type: 'err', text: err instanceof Error ? err.message : 'Erreur'});
     } finally {
@@ -62,8 +63,8 @@ export default function SmtpSettings() {
     setBusy('test');
     setMsg(null);
     try {
-      const {to} = await adminApi.testEmail({host, port, user, from: from || undefined, pass: pass || undefined, to: testTo || undefined});
-      setMsg({type: 'ok', text: `Email de test envoyé à ${to}. Vérifie ta boîte (et les indésirables).`});
+      const {to} = await adminApi.testEmail({host, port, user, from: from || undefined, pass: pass || undefined});
+      setMsg({type: 'ok', text: `Email de test envoyé à ${to}. Vérifie la boîte de réception de ce compte (et les indésirables).`});
     } catch (err) {
       setMsg({type: 'err', text: err instanceof Error ? err.message : 'Échec du test'});
     } finally {
@@ -71,59 +72,45 @@ export default function SmtpSettings() {
     }
   };
 
-  const useGmail = () => {
-    setHost('smtp.gmail.com');
-    setPort(587);
+  const remove = async () => {
+    if (!confirm('Supprimer la connexion email ? Les emails ne partiront plus (le lien de confirmation retombera dans les logs serveur).')) return;
+    setBusy('delete');
+    setMsg(null);
+    try {
+      const s = await adminApi.deleteSmtp();
+      applyStatus(s);
+      setPass('');
+      setMsg({type: 'ok', text: 'Connexion supprimée.'});
+    } catch (err) {
+      setMsg({type: 'err', text: err instanceof Error ? err.message : 'Erreur'});
+    } finally {
+      setBusy(null);
+    }
   };
 
   if (status === null && !msg) return <Loading />;
 
   const src = status ? SOURCE_LABEL[status.source] : SOURCE_LABEL.none;
+  const connected = status?.source === 'db';
 
   return (
     <section className="mt-8 rounded-xl border border-slate-800 bg-slate-900/50 p-4">
       <div className="flex flex-wrap items-center gap-2">
         <Mail className="h-5 w-5 text-emerald-400" />
-        <h2 className="font-semibold">Envoi d’emails (SMTP)</h2>
+        <h2 className="font-semibold">Connexion email (Gmail)</h2>
         {status && <Badge tone={src.tone}>{src.text}</Badge>}
       </div>
       <p className="mt-1 text-sm text-slate-400">
-        Sert à confirmer les adresses à l’inscription. Avec Gmail : active la validation en deux étapes,
-        puis crée un « mot de passe d’application » et colle-le ci-dessous. Sans config, l’inscription
-        marche quand même (le lien part dans les logs serveur).
+        Connecte un compte Gmail existant pour que l’app envoie les emails de confirmation d’adresse.
+        Sans connexion, l’inscription marche quand même (le lien part dans les logs serveur).
       </p>
-      {status?.envFallback && status.source !== 'db' && (
-        <p className="mt-1 text-xs text-amber-300/80">
-          Des variables d’environnement SMTP sont présentes et servent de repli. Enregistrer une config ici les remplacera.
-        </p>
-      )}
 
-      <form onSubmit={save} className="mt-4 grid gap-3 sm:grid-cols-2">
-        <div className="sm:col-span-2">
-          <label className={labelClass}>Serveur SMTP (hôte)</label>
-          <input className={inputClass} value={host} onChange={(e) => setHost(e.target.value)} placeholder="smtp.gmail.com" required />
-          <button type="button" onClick={useGmail} className="mt-1 text-xs text-emerald-400 hover:underline">
-            Préremplir pour Gmail
-          </button>
-        </div>
+      <form onSubmit={save} className="mt-4 grid gap-3">
         <div>
-          <label className={labelClass}>Port</label>
-          <input
-            type="number"
-            className={inputClass}
-            value={port}
-            onChange={(e) => setPort(Number(e.target.value))}
-            placeholder="587"
-            min={1}
-            max={65535}
-            required
-          />
-          <p className="mt-1 text-xs text-slate-500">587 (STARTTLS) ou 465 (TLS)</p>
-        </div>
-        <div>
-          <label className={labelClass}>Utilisateur (adresse complète)</label>
+          <label className={labelClass}>Adresse Gmail du compte émetteur</label>
           <input
             className={inputClass}
+            type="email"
             value={user}
             onChange={(e) => setUser(e.target.value)}
             placeholder="moncompte@gmail.com"
@@ -132,47 +119,80 @@ export default function SmtpSettings() {
           />
         </div>
         <div>
-          <label className={labelClass}>Mot de passe {status?.hasPass && <span className="text-slate-500">(enregistré)</span>}</label>
+          <label className={labelClass}>
+            Mot de passe d’application {status?.hasPass && <span className="text-slate-500">(enregistré)</span>}
+          </label>
           <input
             type="password"
             className={inputClass}
             value={pass}
             onChange={(e) => setPass(e.target.value)}
-            placeholder={status?.hasPass ? '•••••••• (laisser vide pour conserver)' : 'Mot de passe d’application'}
+            placeholder={status?.hasPass ? '•••••••• (laisser vide pour conserver)' : 'abcd efgh ijkl mnop'}
             autoComplete="new-password"
           />
-        </div>
-        <div className="sm:col-span-2">
-          <label className={labelClass}>Expéditeur affiché (optionnel)</label>
-          <input
-            className={inputClass}
-            value={from}
-            onChange={(e) => setFrom(e.target.value)}
-            placeholder={user ? `AC-KINETIK <${user}>` : 'AC-KINETIK <moncompte@gmail.com>'}
-          />
+          <p className="mt-1 text-xs text-slate-500">
+            Pas ton mot de passe Gmail habituel : active la validation en 2 étapes, puis crée un{' '}
+            <a
+              href="https://myaccount.google.com/apppasswords"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-emerald-400 hover:underline"
+            >
+              mot de passe d’application
+            </a>{' '}
+            pour CE compte (colle-le sans les espaces).
+          </p>
         </div>
 
-        <div className="sm:col-span-2 flex flex-wrap items-center gap-2">
+        <button
+          type="button"
+          onClick={() => setAdvanced((v) => !v)}
+          className="flex items-center gap-1 text-xs text-slate-400 hover:text-slate-200"
+        >
+          {advanced ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+          Configuration avancée (serveur SMTP)
+        </button>
+
+        {advanced && (
+          <div className="grid gap-3 rounded-lg border border-slate-800 bg-slate-950/40 p-3 sm:grid-cols-2">
+            <div>
+              <label className={labelClass}>Serveur SMTP</label>
+              <input className={inputClass} value={host} onChange={(e) => setHost(e.target.value)} placeholder="smtp.gmail.com" required />
+            </div>
+            <div>
+              <label className={labelClass}>Port</label>
+              <input
+                type="number"
+                className={inputClass}
+                value={port}
+                onChange={(e) => setPort(Number(e.target.value))}
+                placeholder="465"
+                min={1}
+                max={65535}
+                required
+              />
+              <p className="mt-1 text-xs text-slate-500">465 (TLS) ou 587 (STARTTLS)</p>
+            </div>
+            <div className="sm:col-span-2">
+              <label className={labelClass}>Expéditeur affiché (optionnel)</label>
+              <input
+                className={inputClass}
+                value={from}
+                onChange={(e) => setFrom(e.target.value)}
+                placeholder={user ? `AC-KINETIK <${user}>` : 'AC-KINETIK <moncompte@gmail.com>'}
+              />
+            </div>
+          </div>
+        )}
+
+        <div className="mt-1 flex flex-wrap items-center gap-2">
           <button
             type="submit"
             disabled={busy !== null}
             className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500 disabled:opacity-40"
           >
-            {busy === 'save' ? 'Enregistrement…' : 'Enregistrer'}
+            {busy === 'save' ? 'Enregistrement…' : 'Enregistrer la connexion'}
           </button>
-        </div>
-      </form>
-
-      <div className="mt-5 border-t border-slate-800 pt-4">
-        <label className={labelClass}>Tester l’envoi</label>
-        <div className="flex flex-wrap items-end gap-2">
-          <input
-            className={`${inputClass} max-w-xs flex-1`}
-            type="email"
-            value={testTo}
-            onChange={(e) => setTestTo(e.target.value)}
-            placeholder="Destinataire (par défaut : ton adresse)"
-          />
           <button
             type="button"
             onClick={test}
@@ -180,17 +200,28 @@ export default function SmtpSettings() {
             className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800 disabled:opacity-40"
           >
             <Send className="h-4 w-4" />
-            {busy === 'test' ? 'Envoi…' : 'Envoyer un test'}
+            {busy === 'test' ? 'Envoi…' : 'Tester la connexion'}
           </button>
+          {connected && (
+            <button
+              type="button"
+              onClick={remove}
+              disabled={busy !== null}
+              className="ml-auto text-xs text-red-400 hover:underline disabled:opacity-40"
+            >
+              {busy === 'delete' ? 'Suppression…' : 'Supprimer la configuration'}
+            </button>
+          )}
         </div>
-        <p className="mt-1 text-xs text-slate-500">
-          Le test utilise les valeurs du formulaire ci-dessus (mot de passe enregistré si laissé vide).
-        </p>
-      </div>
+      </form>
+
+      <p className="mt-3 text-xs text-slate-500">
+        Le test envoie un email à l’adresse émettrice elle-même (utilise les valeurs ci-dessus, mot de passe enregistré si laissé vide).
+      </p>
 
       {msg && (
         <div
-          className={`mt-4 rounded-lg border p-3 text-sm ${
+          className={`mt-3 rounded-lg border p-3 text-sm ${
             msg.type === 'ok'
               ? 'border-emerald-700/50 bg-emerald-950/30 text-emerald-300'
               : 'border-red-900/50 bg-red-950/30 text-red-300'

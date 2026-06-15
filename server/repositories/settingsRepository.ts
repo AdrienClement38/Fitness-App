@@ -22,3 +22,8 @@ export async function setSetting(key: string, value: unknown): Promise<void> {
     .values({key, value, updatedAt: new Date()})
     .onConflictDoUpdate({target: appSettings.key, set: {value, updatedAt: new Date()}});
 }
+
+/** Supprime un paramètre (retour au repli env/dev). No-op si absent. */
+export async function deleteSetting(key: string): Promise<void> {
+  await db.delete(appSettings).where(eq(appSettings.key, key));
+}
