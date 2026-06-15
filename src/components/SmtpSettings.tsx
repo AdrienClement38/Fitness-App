@@ -14,11 +14,10 @@ const SOURCE_LABEL: Record<SmtpStatus['source'], {text: string; tone: 'emerald' 
 };
 
 /**
- * Connexion email (Gmail) éditable par l'admin : adresse + mot de passe
- * d'application en clair, serveur/port repliés sous « Configuration avancée ».
- * Le mot de passe est chiffré au repos côté serveur et jamais réaffiché. Le test
- * s'envoie au compte émetteur lui-même. Sans config, l'appli marche quand même
- * (le lien de confirmation part dans les logs serveur).
+ * Connexion email (SMTP) éditable par l'admin — neutre vis-à-vis du fournisseur
+ * (Gmail, Brevo, etc.) : login + mot de passe/clé, serveur/port repliés sous
+ * « Configuration avancée ». Le secret est chiffré au repos côté serveur et jamais
+ * réaffiché. Module de test avec destinataire optionnel (par défaut l'émetteur).
  */
 export default function SmtpSettings() {
   const [status, setStatus] = useState<SmtpStatus | null>(null);
@@ -27,6 +26,7 @@ export default function SmtpSettings() {
   const [host, setHost] = useState('smtp.gmail.com');
   const [port, setPort] = useState(465);
   const [from, setFrom] = useState('');
+  const [testTo, setTestTo] = useState('');
   const [advanced, setAdvanced] = useState(false);
   const [busy, setBusy] = useState<'save' | 'test' | 'delete' | null>(null);
   const [msg, setMsg] = useState<{type: 'ok' | 'err'; text: string} | null>(null);
@@ -63,8 +63,8 @@ export default function SmtpSettings() {
     setBusy('test');
     setMsg(null);
     try {
-      const {to} = await adminApi.testEmail({host, port, user, from: from || undefined, pass: pass || undefined});
-      setMsg({type: 'ok', text: `Email de test envoyé à ${to}. Vérifie la boîte de réception de ce compte (et les indésirables).`});
+      const {to} = await adminApi.testEmail({host, port, user, from: from || undefined, pass: pass || undefined, to: testTo || undefined});
+      setMsg({type: 'ok', text: `Email de test envoyé à ${to}. Vérifie la boîte de réception (et les indésirables).`});
     } catch (err) {
       setMsg({type: 'err', text: err instanceof Error ? err.message : 'Échec du test'});
     } finally {
@@ -97,50 +97,49 @@ export default function SmtpSettings() {
     <section className="mt-8 rounded-xl border border-slate-800 bg-slate-900/50 p-4">
       <div className="flex flex-wrap items-center gap-2">
         <Mail className="h-5 w-5 text-emerald-400" />
-        <h2 className="font-semibold">Connexion email (Gmail)</h2>
+        <h2 className="font-semibold">Connexion email (SMTP)</h2>
         {status && <Badge tone={src.tone}>{src.text}</Badge>}
       </div>
       <p className="mt-1 text-sm text-slate-400">
-        Connecte un compte Gmail existant pour que l’app envoie les emails de confirmation d’adresse.
-        Sans connexion, l’inscription marche quand même (le lien part dans les logs serveur).
+        Connecte un compte d’envoi (Gmail, Brevo, ou tout autre SMTP) pour les emails de confirmation et de
+        réinitialisation. Sans connexion, l’inscription marche quand même (le lien part dans les logs serveur).
       </p>
 
       <form onSubmit={save} className="mt-4 grid gap-3">
         <div>
-          <label className={labelClass}>Adresse Gmail du compte émetteur</label>
+          <label className={labelClass}>Utilisateur SMTP (login)</label>
           <input
             className={inputClass}
-            type="email"
             value={user}
             onChange={(e) => setUser(e.target.value)}
-            placeholder="moncompte@gmail.com"
+            placeholder="moncompte@gmail.com ou identifiant Brevo (xxxx@smtp-brevo.com)"
             autoComplete="off"
             required
           />
         </div>
         <div>
           <label className={labelClass}>
-            Mot de passe d’application {status?.hasPass && <span className="text-slate-500">(enregistré)</span>}
+            Mot de passe / clé SMTP {status?.hasPass && <span className="text-slate-500">(enregistré)</span>}
           </label>
           <input
             type="password"
             className={inputClass}
             value={pass}
             onChange={(e) => setPass(e.target.value)}
-            placeholder={status?.hasPass ? '•••••••• (laisser vide pour conserver)' : 'abcd efgh ijkl mnop'}
+            placeholder={status?.hasPass ? '•••••••• (laisser vide pour conserver)' : 'le secret de ton fournisseur'}
             autoComplete="new-password"
           />
           <p className="mt-1 text-xs text-slate-500">
-            Pas ton mot de passe Gmail habituel : active la validation en 2 étapes, puis crée un{' '}
+            Pas ton mot de passe de compte habituel. Gmail →{' '}
             <a
               href="https://myaccount.google.com/apppasswords"
               target="_blank"
               rel="noopener noreferrer"
               className="text-emerald-400 hover:underline"
             >
-              mot de passe d’application
+              un mot de passe d’application
             </a>{' '}
-            pour CE compte (colle-le sans les espaces).
+            (validation en 2 étapes requise). Brevo → une <strong>clé SMTP</strong> (page « SMTP & API »).
           </p>
         </div>
 
@@ -157,7 +156,7 @@ export default function SmtpSettings() {
           <div className="grid gap-3 rounded-lg border border-slate-800 bg-slate-950/40 p-3 sm:grid-cols-2">
             <div>
               <label className={labelClass}>Serveur SMTP</label>
-              <input className={inputClass} value={host} onChange={(e) => setHost(e.target.value)} placeholder="smtp.gmail.com" required />
+              <input className={inputClass} value={host} onChange={(e) => setHost(e.target.value)} placeholder="smtp.gmail.com / smtp-relay.brevo.com" required />
             </div>
             <div>
               <label className={labelClass}>Port</label>
@@ -166,7 +165,7 @@ export default function SmtpSettings() {
                 className={inputClass}
                 value={port}
                 onChange={(e) => setPort(Number(e.target.value))}
-                placeholder="465"
+                placeholder="587"
                 min={1}
                 max={65535}
                 required
@@ -174,13 +173,16 @@ export default function SmtpSettings() {
               <p className="mt-1 text-xs text-slate-500">465 (TLS) ou 587 (STARTTLS)</p>
             </div>
             <div className="sm:col-span-2">
-              <label className={labelClass}>Expéditeur affiché (optionnel)</label>
+              <label className={labelClass}>Expéditeur affiché (From)</label>
               <input
                 className={inputClass}
                 value={from}
                 onChange={(e) => setFrom(e.target.value)}
-                placeholder={user ? `AC-KINETIK <${user}>` : 'AC-KINETIK <moncompte@gmail.com>'}
+                placeholder={user ? `AC-KINETIK <${user}>` : 'AC-KINETIK <expediteur@exemple.com>'}
               />
+              <p className="mt-1 text-xs text-slate-500">
+                L’adresse affichée comme expéditeur. Avec un relais (Brevo), ce doit être une adresse <strong>vérifiée</strong> dans ton compte — pas l’identifiant SMTP.
+              </p>
             </div>
           </div>
         )}
@@ -192,15 +194,6 @@ export default function SmtpSettings() {
             className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-500 disabled:opacity-40"
           >
             {busy === 'save' ? 'Enregistrement…' : 'Enregistrer la connexion'}
-          </button>
-          <button
-            type="button"
-            onClick={test}
-            disabled={busy !== null}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800 disabled:opacity-40"
-          >
-            <Send className="h-4 w-4" />
-            {busy === 'test' ? 'Envoi…' : 'Tester la connexion'}
           </button>
           {connected && (
             <button
@@ -215,9 +208,31 @@ export default function SmtpSettings() {
         </div>
       </form>
 
-      <p className="mt-3 text-xs text-slate-500">
-        Le test envoie un email à l’adresse émettrice elle-même (utilise les valeurs ci-dessus, mot de passe enregistré si laissé vide).
-      </p>
+      <div className="mt-5 border-t border-slate-800 pt-4">
+        <label className={labelClass}>Tester l’envoi</label>
+        <div className="flex flex-wrap items-end gap-2">
+          <input
+            className={`${inputClass} max-w-xs flex-1`}
+            type="email"
+            value={testTo}
+            onChange={(e) => setTestTo(e.target.value)}
+            placeholder="Destinataire (par défaut : l’adresse émettrice)"
+          />
+          <button
+            type="button"
+            onClick={test}
+            disabled={busy !== null}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 px-4 py-2 text-sm text-slate-300 hover:bg-slate-800 disabled:opacity-40"
+          >
+            <Send className="h-4 w-4" />
+            {busy === 'test' ? 'Envoi…' : 'Envoyer un test'}
+          </button>
+        </div>
+        <p className="mt-1 text-xs text-slate-500">
+          Utilise les valeurs ci-dessus (mot de passe enregistré si laissé vide). Avec un relais comme Brevo,
+          mets une adresse à toi ici — sinon le test part vers l’identifiant technique, illisible.
+        </p>
+      </div>
 
       {msg && (
         <div
