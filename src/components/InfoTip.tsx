@@ -1,4 +1,4 @@
-import {useState, type ReactNode} from 'react';
+import {useLayoutEffect, useRef, useState, type ReactNode} from 'react';
 import {Badge} from './ui';
 import {label} from '../lib/api';
 import {useExplanations} from '../lib/settings';
@@ -11,10 +11,36 @@ import {useExplanations} from '../lib/settings';
 export function InfoTip({children, srLabel = 'Explication'}: {children: ReactNode; srLabel?: string}) {
   const explanations = useExplanations();
   const [open, setOpen] = useState(false);
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const [pos, setPos] = useState<{top: number; left: number; width: number} | null>(null);
+
+  // Bulle en position `fixed`, ancrée sous le « ? » mais CLAMPÉE dans l'écran : sinon
+  // elle déborde quand le « ? » est au bord (en-tête de tableau, mobile). Au scroll /
+  // resize la position figée se décalerait -> on referme.
+  useLayoutEffect(() => {
+    if (!open) return;
+    const el = btnRef.current;
+    if (el) {
+      const r = el.getBoundingClientRect();
+      const width = Math.min(256, window.innerWidth - 16);
+      const center = r.left + r.width / 2;
+      const left = Math.max(8, Math.min(center - width / 2, window.innerWidth - width - 8));
+      setPos({top: r.bottom + 6, left, width});
+    }
+    const close = () => setOpen(false);
+    window.addEventListener('scroll', close, true);
+    window.addEventListener('resize', close);
+    return () => {
+      window.removeEventListener('scroll', close, true);
+      window.removeEventListener('resize', close);
+    };
+  }, [open]);
+
   if (!explanations) return null; // mode explication désactivé -> pas de « ? »
   return (
     <span className="relative inline-flex items-center align-middle">
       <button
+        ref={btnRef}
         type="button"
         aria-label={srLabel}
         aria-expanded={open}
@@ -27,13 +53,14 @@ export function InfoTip({children, srLabel = 'Explication'}: {children: ReactNod
       >
         ?
       </button>
-      {open && (
+      {open && pos && (
         <>
           {/* Capte le clic extérieur pour refermer. */}
-          <span className="fixed inset-0 z-10" onClick={(e) => {e.stopPropagation(); setOpen(false);}} />
+          <span className="fixed inset-0 z-40" onClick={(e) => {e.stopPropagation(); setOpen(false);}} />
           <span
             role="tooltip"
-            className="absolute left-1/2 top-full z-20 mt-1 w-56 max-w-[70vw] -translate-x-1/2 rounded-lg border border-slate-700 bg-slate-800 p-2.5 text-left text-xs font-normal normal-case leading-snug tracking-normal text-slate-200 shadow-xl"
+            style={{top: pos.top, left: pos.left, width: pos.width}}
+            className="fixed z-50 rounded-lg border border-slate-700 bg-slate-800 p-2.5 text-left font-sans text-xs font-normal normal-case leading-snug tracking-normal text-slate-200 shadow-xl"
           >
             {children}
           </span>
