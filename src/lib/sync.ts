@@ -39,6 +39,14 @@ export function clearLocalData() {
   for (const c of collections.values()) c.clear?.();
 }
 
+// Changement d'ÉTAT DE COMPTE poussé par le serveur (email confirmé, sexe, rôle) :
+// les abonnés rafraîchissent /me. Découplé de l'auth (pas d'import circulaire).
+const accountListeners = new Set<() => void>();
+export function onAccountUpdate(cb: () => void): () => void {
+  accountListeners.add(cb);
+  return () => accountListeners.delete(cb);
+}
+
 let ws: WebSocket | null = null;
 let connected = false;
 let want = false; // on souhaite être connecté (utilisateur loggé)
@@ -82,6 +90,7 @@ function open() {
       return;
     }
     if (msg.type === 'items' && Array.isArray(msg.items)) route(msg.items);
+    else if (msg.type === 'account') accountListeners.forEach((l) => l());
   };
   sock.onclose = () => {
     connected = false;

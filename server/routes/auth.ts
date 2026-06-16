@@ -32,7 +32,7 @@ import {
 } from '../repositories/userRepository';
 import {isEmailConfigured, sendPasswordResetEmail, sendVerificationEmail} from '../email';
 import {isDisposableEmail} from '../disposableEmails';
-import {closeUserSockets} from '../sync';
+import {closeUserSockets, notifyUser} from '../sync';
 
 const VERIFY_TTL_MS = 24 * 60 * 60 * 1000; // 24 h
 const RESET_TTL_MS = 60 * 60 * 1000; // 1 h
@@ -150,8 +150,13 @@ const verifyBody = z.object({token: z.string().min(1).max(256)});
 router.post('/verify-email', async (req, res) => {
   const parsed = verifyBody.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({error: 'Jeton manquant.'});
-  const status = await verifyEmailByToken(parsed.data.token);
-  if (status === 'ok') return res.json({ok: true});
+  const {status, userId} = await verifyEmailByToken(parsed.data.token);
+  if (status === 'ok') {
+    // Pousse la maj à TOUS les appareils connectés de l'utilisateur -> le bandeau
+    // « confirme ton email » disparaît partout en temps réel (pas que sur cet onglet).
+    if (userId) notifyUser(userId, {type: 'account'});
+    return res.json({ok: true});
+  }
   return res.status(400).json({error: status === 'expired' ? 'Lien expiré.' : 'Lien invalide ou déjà utilisé.'});
 });
 
@@ -224,6 +229,8 @@ router.post('/gender', async (req, res) => {
   if (!auth) return res.status(401).json({error: 'Non connecté.'});
   const gender = req.body?.gender === 'male' || req.body?.gender === 'female' ? req.body.gender : null;
   await setGender(auth.id, gender);
+  // Propage aux autres appareils (logo + programmes mis en avant se mettent à jour).
+  notifyUser(auth.id, {type: 'account'});
   return res.json({ok: true, gender});
 });
 

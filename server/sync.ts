@@ -66,6 +66,21 @@ function broadcast(userId: string, from: WebSocket, payload: unknown) {
   }
 }
 
+/**
+ * Pousse un message à TOUTES les sockets d'un utilisateur (sur tous ses appareils).
+ * Sert à propager un changement d'ÉTAT DE COMPTE (email confirmé, sexe, rôle) : chaque
+ * appareil rafraîchit alors son `/me` -> le bandeau « confirme ton email » disparaît
+ * partout, le logo / les programmes suggérés se mettent à jour, etc.
+ */
+export function notifyUser(userId: string, payload: unknown) {
+  const set = rooms.get(userId);
+  if (!set) return;
+  const msg = JSON.stringify(payload);
+  for (const ws of set) {
+    if (ws.readyState === WebSocket.OPEN) ws.send(msg);
+  }
+}
+
 /** Ferme les sockets d'un utilisateur (révocation : changement de mdp / suppression). */
 export function closeUserSockets(userId: string) {
   const set = rooms.get(userId);

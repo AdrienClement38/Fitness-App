@@ -74,13 +74,13 @@ export async function deleteExpiredSessions() {
 
 /* ---- Confirmation d'email -------------------------------------------- */
 
-/** Valide un email à partir de son jeton (single-use). */
-export async function verifyEmailByToken(token: string): Promise<'ok' | 'expired' | 'invalid'> {
+/** Valide un email à partir de son jeton (single-use). Renvoie l'userId pour diffuser la maj. */
+export async function verifyEmailByToken(token: string): Promise<{status: 'ok' | 'expired' | 'invalid'; userId?: string}> {
   const [u] = await db.select().from(users).where(eq(users.verifyToken, token));
-  if (!u) return 'invalid'; // jeton inconnu ou déjà consommé
-  if (!u.verifyExpires || u.verifyExpires.getTime() < Date.now()) return 'expired';
+  if (!u) return {status: 'invalid'}; // jeton inconnu ou déjà consommé
+  if (!u.verifyExpires || u.verifyExpires.getTime() < Date.now()) return {status: 'expired'};
   await db.update(users).set({emailVerified: true, verifyToken: null, verifyExpires: null}).where(eq(users.id, u.id));
-  return 'ok';
+  return {status: 'ok', userId: u.id};
 }
 
 /** (Re)génère le jeton de confirmation d'un utilisateur (renvoi d'email). */

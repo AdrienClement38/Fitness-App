@@ -6,7 +6,7 @@
  */
 import {useSyncExternalStore} from 'react';
 import {authApi, type AuthUser, type Gender} from './api';
-import {clearLocalData} from './sync';
+import {clearLocalData, onAccountUpdate} from './sync';
 
 const UKEY = 'auth-user';
 const OWNER_KEY = 'sync-data-owner'; // à quel compte appartiennent les données locales synchronisées
@@ -134,6 +134,13 @@ export async function refreshUser() {
     /* panne réseau : on conserve l'état courant */
   }
 }
+
+// Le serveur pousse un message « account » sur le WebSocket quand l'état du compte change
+// (email confirmé, sexe, rôle). On rafraîchit alors /me : confirmer son email sur un
+// appareil fait disparaître le bandeau sur TOUS les appareils connectés, en temps réel.
+onAccountUpdate(() => {
+  void refreshUser();
+});
 
 /** Renvoie l'email de confirmation (utilisateur connecté non vérifié). */
 export function resendVerification() {

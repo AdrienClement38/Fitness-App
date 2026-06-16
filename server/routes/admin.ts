@@ -18,7 +18,7 @@ import {
 } from '../repositories/userRepository';
 import {clearSmtpConfig, configForTest, saveSmtpConfig, sendTestEmail, smtpStatus} from '../email';
 import {getAdminAppStatus, setAnnouncement, setMaintenance} from '../appStatus';
-import {closeUserSockets} from '../sync';
+import {closeUserSockets, notifyUser} from '../sync';
 
 const router = Router();
 
@@ -58,6 +58,7 @@ router.post('/users/:id/role', async (req, res) => {
   const target = await getUserById(req.params.id);
   if (!target) return res.status(404).json({error: 'Utilisateur introuvable.'});
   await setUserRole(target.id, parsed.data.role);
+  notifyUser(target.id, {type: 'account'}); // l'utilisateur voit son rôle changer en direct (nav admin)
   return res.json({ok: true, role: parsed.data.role});
 });
 
