@@ -6,8 +6,40 @@
  */
 import {useSyncExternalStore} from 'react';
 import {authApi, type AuthUser, type Gender} from './api';
+import {clearLocalData} from './sync';
 
 const UKEY = 'auth-user';
+const OWNER_KEY = 'sync-data-owner'; // à quel compte appartiennent les données locales synchronisées
+
+function getDataOwner(): string | null {
+  try {
+    return localStorage.getItem(OWNER_KEY);
+  } catch {
+    return null;
+  }
+}
+/**
+ * À l'authentification : si les données locales (séances, programmes, favoris) appartiennent
+ * à un AUTRE compte, on les purge — jamais de mélange entre comptes sur un même appareil
+ * (ex. suppression puis re-création de compte). Puis on marque le compte courant propriétaire.
+ * 1er chargement (aucun propriétaire connu) : on adopte les données existantes sans rien purger.
+ */
+function adoptUserData(userId: string) {
+  const prev = getDataOwner();
+  if (prev !== null && prev !== userId) clearLocalData();
+  try {
+    localStorage.setItem(OWNER_KEY, userId);
+  } catch {
+    /* quota / mode privé */
+  }
+}
+function forgetDataOwner() {
+  try {
+    localStorage.removeItem(OWNER_KEY);
+  } catch {
+    /* ignore */
+  }
+}
 
 function readCachedUser(): AuthUser | null {
   try {
@@ -49,6 +81,7 @@ function subscribe(cb: () => void) {
 authApi
   .me()
   .then((u) => {
+    adoptUserData(u.id);
     cacheUser(u);
     set({user: u, loading: false});
   })
@@ -60,11 +93,13 @@ authApi
 
 export async function login(email: string, password: string) {
   const u = await authApi.login(email, password);
+  adoptUserData(u.id);
   cacheUser(u);
   set({user: u, loading: false});
 }
 export async function register(email: string, password: string, gender: Gender | null = null, website = '') {
   const u = await authApi.register(email, password, gender, website);
+  adoptUserData(u.id);
   cacheUser(u);
   set({user: u, loading: false});
 }
@@ -78,6 +113,9 @@ export async function changePassword(currentPassword: string, newPassword: strin
 }
 export async function deleteAccount(password: string) {
   await authApi.deleteAccount(password);
+  // Compte supprimé : on efface toutes ses données locales (séances, programmes, favoris…).
+  clearLocalData();
+  forgetDataOwner();
   cacheUser(null);
   set({user: null, loading: false});
 }

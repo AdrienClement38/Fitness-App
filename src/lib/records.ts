@@ -68,7 +68,19 @@ function applyRemote(items: SyncItem[]) {
   if (changed) commit();
 }
 
-registerCollection(KIND, {snapshot, applyRemote});
+/** Purge locale (changement de compte). */
+function clear() {
+  records = {};
+  recordsArr = [];
+  try {
+    localStorage.removeItem(RKEY);
+  } catch {
+    /* quota / pas de localStorage (tests) */
+  }
+  listeners.forEach((l) => l());
+}
+
+registerCollection(KIND, {snapshot, applyRemote, clear});
 
 export function useRecords(): ExerciseRecord[] {
   return useSyncExternalStore(

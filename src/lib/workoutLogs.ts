@@ -360,7 +360,22 @@ function applyRemote(items: SyncItem[]) {
   if (itemsChanged) saveHistory([...byId.values()].sort((a, b) => (logAt(a) < logAt(b) ? 1 : -1)));
 }
 
-registerCollection(KIND, {snapshot, applyRemote});
+/** Purge locale (changement de compte) : historique, séance active et tombstones. */
+function clear() {
+  history = [];
+  active = null;
+  tombstones = {};
+  try {
+    localStorage.removeItem(HKEY);
+    localStorage.removeItem(AKEY);
+    localStorage.removeItem(TKEY);
+  } catch {
+    /* quota / mode privé */
+  }
+  emit();
+}
+
+registerCollection(KIND, {snapshot, applyRemote, clear});
 
 // Purge au démarrage (et après chaque séance terminée) : borne le stockage/sync à ~3 mois.
 pruneOldLogs();

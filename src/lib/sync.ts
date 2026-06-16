@@ -20,11 +20,23 @@ export interface SyncItem {
 interface Collection {
   snapshot: () => SyncItem[]; // état local courant (réconciliation)
   applyRemote: (items: SyncItem[]) => void; // merge des items entrants
+  clear?: () => void; // purge locale (localStorage + état mémoire) au changement de compte
 }
 
 const collections = new Map<string, Collection>();
 export function registerCollection(kind: string, c: Collection) {
   collections.set(kind, c);
+}
+
+/**
+ * Purge les données locales de TOUTES les collections (séances, programmes, favoris,
+ * records). Appelée quand le « propriétaire » des données locales change : connexion
+ * sur un AUTRE compte, ou suppression de compte. Les données d'un compte ne doivent
+ * jamais réapparaître ni être re-synchronisées sous un autre compte sur le même appareil.
+ * S'appuie sur l'enregistrement de toutes les collections au démarrage (cf. syncCollections.ts).
+ */
+export function clearLocalData() {
+  for (const c of collections.values()) c.clear?.();
 }
 
 let ws: WebSocket | null = null;

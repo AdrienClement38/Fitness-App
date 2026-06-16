@@ -86,4 +86,17 @@ function snapshot(): SyncItem[] {
 function applyRemote(items: SyncItem[]) {
   if (mergeFavorites(meta, items)) commit();
 }
-registerCollection(KIND, {snapshot, applyRemote});
+
+/** Purge locale (changement de compte). */
+function clear() {
+  meta = {};
+  favArray = [];
+  try {
+    localStorage.removeItem(KEY);
+  } catch {
+    /* quota / mode privé */
+  }
+  listeners.forEach((l) => l());
+}
+
+registerCollection(KIND, {snapshot, applyRemote, clear});

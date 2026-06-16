@@ -232,4 +232,17 @@ function applyRemote(items: SyncItem[]) {
   }
   if (itemsChanged) commit([...byId.values()]);
 }
-registerCollection(KIND, {snapshot, applyRemote});
+/** Purge locale (changement de compte) : programmes perso + tombstones. */
+function clear() {
+  list = [];
+  tombstones = {};
+  try {
+    localStorage.removeItem(KEY);
+    localStorage.removeItem(TKEY);
+  } catch {
+    /* quota / mode privé */
+  }
+  listeners.forEach((l) => l());
+}
+
+registerCollection(KIND, {snapshot, applyRemote, clear});
