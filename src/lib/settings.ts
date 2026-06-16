@@ -41,7 +41,7 @@ export function useStretchSuggestions(): boolean {
   );
 }
 
-/* ---- Mode explication (info-bulles « ? » des termes techniques) -------- */
+/* ---- Mode explication (info-bulles « ? » des termes techniques) -------- */
 const EXPLAIN_KEY = 'pref-explanations';
 
 function readExplain(): boolean {
@@ -66,7 +66,7 @@ export function setExplanations(on: boolean) {
   explainListeners.forEach((l) => l());
 }
 
-/** Réactif : les info-bulles « ? » ne s'affichent que si le mode explication est ON. */
+/** Réactif : les info-bulles « ? » ne s'affichent que si le mode explication est ON. */
 export function useExplanations(): boolean {
   return useSyncExternalStore(
     (cb) => {

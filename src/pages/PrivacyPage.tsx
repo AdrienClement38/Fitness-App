@@ -76,8 +76,8 @@ export default function PrivacyPage() {
       <Section title="Tes droits (RGPD)">
         <p>Tu disposes d'un droit d'accès, de rectification, d'effacement, de portabilité et d'opposition :</p>
         <ul className="list-disc space-y-1 pl-5">
-          <li>Rectification : modifie ton mot de passe depuis « Mon compte ».</li>
-          <li>Effacement : bouton « Supprimer mon compte » dans « Mon compte ».</li>
+          <li>Rectification : modifie ton mot de passe depuis « Mon compte ».</li>
+          <li>Effacement : bouton « Supprimer mon compte » dans « Mon compte ».</li>
           <li>
             Autres demandes : adrienc.tech@gmail.com.
           </li>

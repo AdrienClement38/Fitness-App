@@ -4,7 +4,7 @@ import {addExerciseToNewSession, addExerciseToSession, createEmptyProgram, useMy
 import {useModalDismiss} from '../lib/useModalDismiss';
 
 /**
- * Bouton « Ajouter à un programme » + sélecteur (programme perso -> séance).
+ * Bouton « Ajouter à un programme » + sélecteur (programme perso -> séance).
  * Calqué sur l'overlay d'ExercisePicker ; l'écriture passe par addExerciseToSession
  * (défauts de prescription + persistance + synchro gérés dans le store).
  */

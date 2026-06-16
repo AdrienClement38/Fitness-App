@@ -9,7 +9,7 @@ import {Component, type ErrorInfo, type ReactNode} from 'react';
  * (page chargée en `lazy(() => import(...))`) dont le hash a changé / qui a été supprimé
  * du serveur -> l'import dynamique échoue. On le DÉTECTE et on RECHARGE automatiquement
  * (la page récupère la version à jour), avec une garde anti-boucle. L'utilisateur ne voit
- * alors qu'un bref « Mise à jour… » au lieu de l'écran d'erreur.
+ * alors qu'un bref « Mise à jour… » au lieu de l'écran d'erreur.
  */
 
 // Messages d'échec d'import dynamique / chunk périmé selon les navigateurs (Chrome,

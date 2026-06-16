@@ -281,7 +281,7 @@ export const PRESCRIPTION_DEFAULTS: Record<MeasureKind, {sets: number; min: numb
   cardio: {sets: 1, min: 15, max: 20, rest: 0},
 };
 
-/** Unité de la « valeur » d'une série selon le mode (vide = reps). */
+/** Unité de la « valeur » d'une série selon le mode (vide = reps). */
 export const KIND_UNIT: Record<MeasureKind, string> = {load: '', bodyweight: '', duration: 's', cardio: 'min'};
 
 /** Images d'exécution (free-exercise-db, domaine public) servies depuis l'upstream. */

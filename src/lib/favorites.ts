@@ -1,6 +1,6 @@
 /**
- * Favoris : stockés en localStorage, synchronisés entre appareils. Modèle « état
- * plat » : chaque exercice (dé)favorisé garde {deleted, updatedAt} pour permettre
+ * Favoris : stockés en localStorage, synchronisés entre appareils. Modèle « état
+ * plat » : chaque exercice (dé)favorisé garde {deleted, updatedAt} pour permettre
  * le merge last-write-wins (un retrait doit se propager, d'où le flag `deleted`).
  */
 import {useSyncExternalStore} from 'react';

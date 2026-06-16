@@ -13,7 +13,7 @@ function reps(e: ProgramExerciseItem): string {
   return `${e.repsMin}–${e.repsMax}`;
 }
 
-/** Suffixe d'unité selon le mode de saisie (« s », « min », ou rien pour des reps). */
+/** Suffixe d'unité selon le mode de saisie (« s », « min », ou rien pour des reps). */
 function unitSuffix(e: ProgramExerciseItem): string {
   const u = KIND_UNIT[measureKind(e)];
   return u ? ` ${u}` : '';

@@ -23,7 +23,7 @@ export default function TermsPage() {
       <Section title="Objet">
         <p>
           AC-KINETIK est une application personnelle et gratuite de musculation : bibliothèque d'exercices, programmes,
-          suivi de séances et savoir d'entraînement. Elle est proposée « en l'état », sans but commercial.
+          suivi de séances et savoir d'entraînement. Elle est proposée « en l'état », sans but commercial.
         </p>
       </Section>
 
@@ -59,7 +59,7 @@ export default function TermsPage() {
         <p>
           Les exercices et images proviennent de <strong>free-exercise-db</strong> (domaine public). Le reste du
           contenu reste la propriété de l'éditeur. Tes données d'entraînement t'appartiennent ; tu peux les exporter
-          ou les supprimer à tout moment depuis « Mon compte ».
+          ou les supprimer à tout moment depuis « Mon compte ».
         </p>
       </Section>
 
@@ -76,7 +76,7 @@ export default function TermsPage() {
       <Section title="Disponibilité et résiliation">
         <p>
           Le service est fourni sans garantie de disponibilité et peut évoluer ou s'arrêter. Tu peux supprimer ton
-          compte (et tes données côté serveur) à tout moment depuis « Mon compte ». L'éditeur peut suspendre un compte
+          compte (et tes données côté serveur) à tout moment depuis « Mon compte ». L'éditeur peut suspendre un compte
           en cas d'usage abusif.
         </p>
       </Section>

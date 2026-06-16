@@ -41,7 +41,7 @@ export default function LegalPage() {
           Les exercices et leurs images proviennent de <strong>free-exercise-db</strong> (données libres de droit,
           domaine public). Le savoir d'entraînement (principes, volumes, schémas de répétitions) s'appuie sur des{' '}
           <strong>ressources scientifiques et des recommandations reconnues</strong>, référencées dans l'onglet
-          « Savoir ». Le reste du contenu est édité par l'éditeur ci-dessus.
+          « Savoir ». Le reste du contenu est édité par l'éditeur ci-dessus.
         </p>
       </Section>
 

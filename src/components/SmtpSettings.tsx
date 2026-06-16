@@ -16,7 +16,7 @@ const SOURCE_LABEL: Record<SmtpStatus['source'], {text: string; tone: 'emerald' 
 /**
  * Connexion email (SMTP) éditable par l'admin — neutre vis-à-vis du fournisseur
  * (Gmail, Brevo, etc.) : login + mot de passe/clé, serveur/port repliés sous
- * « Configuration avancée ». Le secret est chiffré au repos côté serveur et jamais
+ * « Configuration avancée ». Le secret est chiffré au repos côté serveur et jamais
  * réaffiché. Module de test avec destinataire optionnel (par défaut l'émetteur).
  */
 export default function SmtpSettings() {
@@ -139,7 +139,7 @@ export default function SmtpSettings() {
             >
               un mot de passe d’application
             </a>{' '}
-            (validation en 2 étapes requise). Brevo → une <strong>clé SMTP</strong> (page « SMTP & API »).
+            (validation en 2 étapes requise). Brevo → une <strong>clé SMTP</strong> (page « SMTP & API »).
           </p>
         </div>
 

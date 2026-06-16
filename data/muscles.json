@@ -96,7 +96,7 @@
     "group_id": "core",
     "antagonist_id": "lower-back",
     "function_fr": "Flexion du tronc, antéversion du bassin, rotation/inclinaison et surtout stabilisation (anti-extension, anti-rotation). Protègent la colonne sous charge.",
-    "anatomy_fr": "Grand droit (les « tablettes »), obliques externes et internes (rotation/inclinaison) et transverse en profondeur (gainage, sangle abdominale). Transverse et obliques se travaillent surtout en gainage et anti-rotation.",
+    "anatomy_fr": "Grand droit (les « tablettes »), obliques externes et internes (rotation/inclinaison) et transverse en profondeur (gainage, sangle abdominale). Transverse et obliques se travaillent surtout en gainage et anti-rotation.",
     "aliases_fr": ["Abdos", "Sangle abdominale", "Core", "Grand droit"]
   },
   {
@@ -106,7 +106,7 @@
     "group_id": "legs",
     "antagonist_id": "hamstrings",
     "function_fr": "Extension du genou (moteur des squats, presses, fentes) ; le droit fémoral participe à la flexion de hanche. Plus gros groupe de la cuisse (face avant).",
-    "anatomy_fr": "Quatre chefs : droit fémoral (central, bi-articulaire), vaste latéral (externe), vaste médial (interne, la « goutte » au-dessus du genou) et vaste intermédiaire. Squat, presse, leg extension, fentes.",
+    "anatomy_fr": "Quatre chefs : droit fémoral (central, bi-articulaire), vaste latéral (externe), vaste médial (interne, la « goutte » au-dessus du genou) et vaste intermédiaire. Squat, presse, leg extension, fentes.",
     "aliases_fr": ["Quadriceps", "Quadris", "Cuisses avant"]
   },
   {
@@ -136,7 +136,7 @@
     "group_id": "legs",
     "antagonist_id": null,
     "function_fr": "Flexion plantaire de la cheville (se mettre sur la pointe des pieds). Propulsion à la marche, la course et le saut.",
-    "anatomy_fr": "Triceps sural : gastrocnémien (les deux « jumeaux » superficiels, ciblés jambe tendue — mollet debout) et soléaire (profond, ciblé genou fléchi — mollet assis). Le tibial antérieur est l'antagoniste.",
+    "anatomy_fr": "Triceps sural : gastrocnémien (les deux « jumeaux » superficiels, ciblés jambe tendue — mollet debout) et soléaire (profond, ciblé genou fléchi — mollet assis). Le tibial antérieur est l'antagoniste.",
     "aliases_fr": ["Mollets", "Jumeaux", "Triceps sural"]
   },
   {

@@ -14,7 +14,7 @@ import {
   type MyProgramExercise,
 } from '../lib/myPrograms';
 
-/** Libellé du champ « répétitions » selon le mode (reps / durée). */
+/** Libellé du champ « répétitions » selon le mode (reps / durée). */
 const repLabel = (e: {category: string | null; force: string | null; equipmentId: string | null}): string => {
   const k = measureKind(e);
   return k === 'duration' ? 'Durée (s)' : k === 'cardio' ? 'Durée (min)' : 'Reps';
@@ -79,10 +79,10 @@ export default function MyProgramPage() {
   const addSession = () =>
     patch((d) => d.sessions.push({nameFr: `Séance ${d.sessions.length + 1}`, focusFr: null, exercises: []}));
   const removeSession = (si: number) => {
-    if (confirm(`Supprimer « ${program.sessions[si].nameFr} » ?`)) patch((d) => d.sessions.splice(si, 1));
+    if (confirm(`Supprimer « ${program.sessions[si].nameFr} » ?`)) patch((d) => d.sessions.splice(si, 1));
   };
   const del = () => {
-    if (confirm(`Supprimer « ${program.nameFr} » ? Action définitive.`)) {
+    if (confirm(`Supprimer « ${program.nameFr} » ? Action définitive.`)) {
       removeMyProgram(program.id);
       navigate('/programmes');
     }
@@ -115,7 +115,7 @@ export default function MyProgramPage() {
         <Badge>Programme perso</Badge>
       </div>
       <p className="mt-2 text-xs text-slate-500">
-        Tes modifications sont enregistrées automatiquement sur cet appareil. Quand tu as fini, clique « Terminé ».
+        Tes modifications sont enregistrées automatiquement sur cet appareil. Quand tu as fini, clique « Terminé ».
       </p>
 
       <div className="mt-4 grid gap-4">

@@ -1,6 +1,6 @@
 /**
  * Client de synchronisation temps réel (WebSocket). Le client fait tout le
- * merge : chaque « collection » (séances, programmes, favoris) s'enregistre en
+ * merge : chaque « collection » (séances, programmes, favoris) s'enregistre en
  * fournissant un snapshot (pour réconcilier) et un applyRemote (merge entrant).
  * Offline-first : si la socket est fermée, on ne bloque rien ; la réconciliation
  * au prochain `open` (push du snapshot complet) rattrape les modifs hors-ligne.
@@ -30,7 +30,7 @@ export function registerCollection(kind: string, c: Collection) {
 
 /**
  * Purge les données locales de TOUTES les collections (séances, programmes, favoris,
- * records). Appelée quand le « propriétaire » des données locales change : connexion
+ * records). Appelée quand le « propriétaire » des données locales change : connexion
  * sur un AUTRE compte, ou suppression de compte. Les données d'un compte ne doivent
  * jamais réapparaître ni être re-synchronisées sous un autre compte sur le même appareil.
  * S'appuie sur l'enregistrement de toutes les collections au démarrage (cf. syncCollections.ts).

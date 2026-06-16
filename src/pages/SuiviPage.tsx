@@ -84,7 +84,7 @@ export default function SuiviPage() {
       )}
 
       {history.length === 0 ? (
-        <Empty label="Aucune séance enregistrée. Ouvre un programme et clique « Démarrer la séance »." />
+        <Empty label="Aucune séance enregistrée. Ouvre un programme et clique « Démarrer la séance »." />
       ) : (
         <>
           {/* Résumé */}

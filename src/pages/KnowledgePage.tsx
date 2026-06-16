@@ -150,7 +150,7 @@ function Splits({items}: {items: Split[]}) {
   return (
     <div className="grid gap-3">
       <p className="text-sm leading-relaxed text-slate-400">
-        Une « répartition » (ou <em>split</em>) = la façon d'organiser les muscles sur tes séances de la semaine
+        Une « répartition » (ou <em>split</em>) = la façon d'organiser les muscles sur tes séances de la semaine
         (par exemple un jour le haut du corps, un jour le bas).
       </p>
       {items.map((s) => (

@@ -36,7 +36,7 @@ export interface RestState {
 }
 export interface WorkoutLog {
   id: string;
-  startedIso: string | null; // null tant que le chrono n'est pas lancé (« Commencer la séance »)
+  startedIso: string | null; // null tant que le chrono n'est pas lancé (« Commencer la séance »)
   finishedIso: string | null;
   programName: string | null;
   sessionName: string;
@@ -150,12 +150,12 @@ export function lastWeight(exerciseId: string): number | null {
   return null;
 }
 
-/** Démarre une séance pré-remplie et la met en « active ». Retourne son id. */
+/** Démarre une séance pré-remplie et la met en « active ». Retourne son id. */
 export function startSession(seed: SessionSeed): string {
   const id = genId();
   const log: WorkoutLog = {
     id,
-    startedIso: null, // le chrono démarre via « Commencer la séance »
+    startedIso: null, // le chrono démarre via « Commencer la séance »
     finishedIso: null,
     programName: seed.programName,
     sessionName: seed.sessionName,
@@ -177,10 +177,10 @@ export function startSession(seed: SessionSeed): string {
   return id;
 }
 
-/** Exercice « one-shot » (séance d'un seul exercice, hors programme). */
+/** Exercice « one-shot » (séance d'un seul exercice, hors programme). */
 export type QuickExercise = ExerciseSeedInput;
 
-/** Démarre une séance « one-shot » avec un seul exercice (hors programme). Retourne l'id. */
+/** Démarre une séance « one-shot » avec un seul exercice (hors programme). Retourne l'id. */
 export function startQuickSession(ex: QuickExercise): string {
   const kind = measureKind(ex);
   const d = PRESCRIPTION_DEFAULTS[kind];
@@ -200,7 +200,7 @@ export function updateActive(mut: (draft: WorkoutLog) => void) {
   saveActive(draft);
 }
 
-/** Lance le chrono de la séance (bouton « Commencer la séance »). Idempotent. */
+/** Lance le chrono de la séance (bouton « Commencer la séance »). Idempotent. */
 export function startChrono() {
   updateActive((d) => {
     if (!d.startedIso) d.startedIso = new Date().toISOString();

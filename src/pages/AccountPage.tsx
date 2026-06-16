@@ -196,7 +196,7 @@ function StretchPref() {
   );
 }
 
-/** Mode explication : affiche (ou non) les « ? » qui expliquent les termes techniques. */
+/** Mode explication : affiche (ou non) les « ? » qui expliquent les termes techniques. */
 function ExplanationsPref() {
   const on = useExplanations();
   return (
@@ -207,14 +207,14 @@ function ExplanationsPref() {
       label={
         <>
           Mode explication
-          <span className="mt-0.5 block text-xs text-slate-500">Affiche les « ? » qui expliquent les termes techniques.</span>
+          <span className="mt-0.5 block text-xs text-slate-500">Affiche les « ? » qui expliquent les termes techniques.</span>
         </>
       }
     />
   );
 }
 
-/** « Mot de passe oublié » : demande un lien de réinitialisation par email. */
+/** « Mot de passe oublié » : demande un lien de réinitialisation par email. */
 function ForgotPasswordForm({onBack}: {onBack: () => void}) {
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
@@ -278,7 +278,7 @@ function ForgotPasswordForm({onBack}: {onBack: () => void}) {
   );
 }
 
-/** Sélecteur de sexe dans « Mon compte » : sauvegarde immédiate (logo + suggestions réagissent). */
+/** Sélecteur de sexe dans « Mon compte » : sauvegarde immédiate (logo + suggestions réagissent). */
 function GenderPref() {
   const {user} = useAuth();
   const [busy, setBusy] = useState(false);
@@ -483,7 +483,7 @@ export default function AccountPage() {
         {mode === 'register' && (
           <p className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs leading-relaxed text-amber-300/90">
             Après l'inscription, tu reçois un email de confirmation. Il peut arriver dans tes{' '}
-            <strong>spams / indésirables</strong> : pense à l'y chercher et à le marquer « non spam », puis active ton compte.
+            <strong>spams / indésirables</strong> : pense à l'y chercher et à le marquer « non spam », puis active ton compte.
           </p>
         )}
         {error && <p className="text-sm text-red-400">{error}</p>}

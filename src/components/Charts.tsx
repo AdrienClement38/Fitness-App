@@ -6,7 +6,7 @@ interface Point {
   value: number;
 }
 
-/** Bornes et graduations « rondes » pour un axe (algo classique nice-numbers). */
+/** Bornes et graduations « rondes » pour un axe (algo classique nice-numbers). */
 function niceScale(min: number, max: number, count = 4) {
   if (min === max) {
     min -= 1;

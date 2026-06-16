@@ -47,7 +47,7 @@ export default function AdminPage() {
   };
   const onRole = (u: AdminUser) => {
     const next = u.role === 'admin' ? 'user' : 'admin';
-    if (confirm(`Passer ${u.email} en « ${next} » ?`)) act(u.id, () => adminApi.setRole(u.id, next));
+    if (confirm(`Passer ${u.email} en « ${next} » ?`)) act(u.id, () => adminApi.setRole(u.id, next));
   };
   const onReset = (u: AdminUser) => {
     if (confirm(`Réinitialiser le mot de passe de ${u.email} ? La personne sera déconnectée.`)) {
@@ -74,7 +74,7 @@ export default function AdminPage() {
           <p className="font-semibold text-amber-300">Mot de passe temporaire — {temp.email}</p>
           <p className="mt-1 select-all font-mono text-base tracking-wide text-amber-100">{temp.password}</p>
           <p className="mt-1 text-xs text-amber-300/80">
-            Transmets-le à la personne ; elle pourra le changer depuis « Mon compte ». Il ne sera plus réaffiché.
+            Transmets-le à la personne ; elle pourra le changer depuis « Mon compte ». Il ne sera plus réaffiché.
           </p>
           <button onClick={() => setTemp(null)} className="mt-2 text-xs text-amber-300 underline">Masquer</button>
         </div>

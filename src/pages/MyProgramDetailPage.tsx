@@ -83,7 +83,7 @@ export default function MyProgramDetailPage() {
             </div>
 
             {s.exercises.length === 0 ? (
-              <p className="mt-2 text-sm text-slate-500">Séance vide — ajoute des exercices via « Modifier ».</p>
+              <p className="mt-2 text-sm text-slate-500">Séance vide — ajoute des exercices via « Modifier ».</p>
             ) : (
               <>
                 <div className="mt-2 divide-y divide-slate-800">

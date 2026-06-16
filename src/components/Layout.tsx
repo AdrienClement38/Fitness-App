@@ -27,7 +27,7 @@ export default function Layout() {
   // Maintenance : on coupe l'app pour les non-admins, mais on laisse /compte ouvert
   // pour que l'admin (ou qui que ce soit) puisse se connecter et désactiver.
   const blockForMaintenance = maintenance.active && !isAdmin && pathname !== '/compte';
-  // Remet la vue en haut sur une navigation « avant » (ex. ouvrir une fiche exercice
+  // Remet la vue en haut sur une navigation « avant » (ex. ouvrir une fiche exercice
   // depuis une liste scrollée). On laisse le navigateur restaurer la position sur
   // retour/avance (POP) pour ne pas perdre l'endroit où on en était dans une liste.
   useLayoutEffect(() => {

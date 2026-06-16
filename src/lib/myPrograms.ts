@@ -1,5 +1,5 @@
 /**
- * « Mes programmes » : programmes persos de l'utilisateur, stockés en
+ * « Mes programmes » : programmes persos de l'utilisateur, stockés en
  * localStorage (perso, hors-ligne, zéro backend). Dupliqués depuis un
  * programme curated puis éditables. Store réactif (useSyncExternalStore).
  */

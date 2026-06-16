@@ -36,7 +36,7 @@ export default function MuscleDetailPage() {
   const {id} = useParams<{id: string}>();
   const navigate = useNavigate();
   const {data: m, error, loading} = useFetch(() => api.muscle(id!), [id]);
-  // Même niveau mémorisé que la page Programmes (l'utilisateur a « son » niveau).
+  // Même niveau mémorisé que la page Programmes (l'utilisateur a « son » niveau).
   const [level, setLevel] = useState(() => localStorage.getItem('program-level') || 'beginner');
   useEffect(() => {
     localStorage.setItem('program-level', level);

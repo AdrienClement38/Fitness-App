@@ -10,7 +10,7 @@ function subscribe(cb: () => void) {
 }
 
 /** État réseau du navigateur (événements online/offline). PWA offline-first : sert à
- *  distinguer « pas de réseau » de « pas de résultat » et à afficher un bandeau. */
+ *  distinguer « pas de réseau » de « pas de résultat » et à afficher un bandeau. */
 export function useOnline(): boolean {
   return useSyncExternalStore(subscribe, () => navigator.onLine, () => true);
 }

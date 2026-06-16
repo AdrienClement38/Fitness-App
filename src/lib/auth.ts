@@ -80,7 +80,7 @@ function subscribe(cb: () => void) {
   };
 }
 
-// Init : revalide la session une fois. `get` lève « Erreur <status> » quand le
+// Init : revalide la session une fois. `get` lève « Erreur <status> » quand le
 // serveur a répondu (session invalide) ; toute autre erreur = réseau (hors-ligne).
 authApi
   .me()
@@ -135,7 +135,7 @@ export async function refreshUser() {
   }
 }
 
-// Le serveur pousse un message « account » sur le WebSocket quand l'état du compte change
+// Le serveur pousse un message « account » sur le WebSocket quand l'état du compte change
 // (email confirmé, sexe, rôle). On rafraîchit alors /me : confirmer son email sur un
 // appareil fait disparaître le bandeau sur TOUS les appareils connectés, en temps réel.
 onAccountUpdate(() => {

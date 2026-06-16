@@ -7,7 +7,7 @@ import {useFetch} from '../lib/useFetch';
 import ExerciseCard from '../components/ExerciseCard';
 import {Empty, ErrorState, Loading} from '../components/ui';
 
-// Niveau : sélecteur segmenté (même style que Programmes / Muscles), + « Tous »
+// Niveau : sélecteur segmenté (même style que Programmes / Muscles), + « Tous »
 // car la page exercices est une page de parcours (on veut pouvoir tout voir).
 const LEVELS = [
   {id: '', label: 'Tous'},

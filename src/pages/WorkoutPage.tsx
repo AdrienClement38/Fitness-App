@@ -237,7 +237,7 @@ export default function WorkoutPage() {
         })}
       </div>
 
-      {/* « Commencer » n'existe qu'en haut. Ici, une fois lancé, on garde « Terminer ». */}
+      {/* « Commencer » n'existe qu'en haut. Ici, une fois lancé, on garde « Terminer ». */}
       {started && (
         <button
           onClick={finish}
