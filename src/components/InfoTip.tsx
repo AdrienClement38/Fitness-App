@@ -26,7 +26,7 @@ export function InfoTip({children, srLabel = 'Explication'}: {children: ReactNod
       const center = r.left + r.width / 2;
       const left = Math.max(8, Math.min(center - width / 2, window.innerWidth - width - 8));
       const caret = Math.max(12, Math.min(center - left, width - 12)); // X de la flèche = sous le « ? »
-      setPos({top: r.bottom + 6, left, width, caret});
+      setPos({top: r.bottom + 10, left, width, caret}); // +10 : petit espace entre le « ? » et la flèche
     }
     const close = () => setOpen(false);
     window.addEventListener('scroll', close, true);
