@@ -86,12 +86,6 @@ export default function ProgramsPage() {
 
       <SectionTitle>Catalogue par niveau</SectionTitle>
 
-      {gender === 'female' && (
-        <p className="mt-2 rounded-lg border border-emerald-500/20 bg-emerald-500/5 px-3 py-2 text-xs leading-relaxed text-emerald-200/80">
-          💪 Les mêmes programmes marchent pour tout le monde — tu logges tes charges, elles s'adaptent à toi. Et non, charger lourd ne rend pas « massive ».
-        </p>
-      )}
-
       <div className="mt-3 flex gap-1 rounded-xl bg-slate-900 p-1">
         {LEVELS.map((lv) => (
           <button
