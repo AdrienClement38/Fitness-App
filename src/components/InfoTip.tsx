@@ -1,4 +1,5 @@
 import {useLayoutEffect, useRef, useState, type ReactNode} from 'react';
+import {CircleHelp} from 'lucide-react';
 import {Badge} from './ui';
 import {label} from '../lib/api';
 import {useExplanations} from '../lib/settings';
@@ -50,9 +51,9 @@ export function InfoTip({children, srLabel = 'Explication'}: {children: ReactNod
           e.stopPropagation();
           setOpen((o) => !o);
         }}
-        className="ml-1 inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-slate-500 text-[10px] font-bold leading-none text-slate-400 transition-colors hover:border-slate-300 hover:text-slate-200"
+        className="ml-1 inline-flex shrink-0 items-center justify-center text-slate-400 transition-colors hover:text-slate-200"
       >
-        ?
+        <CircleHelp className="h-4 w-4" aria-hidden="true" />
       </button>
       {open && pos && (
         <>
