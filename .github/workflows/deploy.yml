@@ -59,6 +59,9 @@ jobs:
           # --delete sur dist : on retire les vieux assets hashés. Migrations idem (append-only mais propre).
           rsync -az --delete -e "$RSH" dist/                  "$SSH_USER@$SSH_HOST:$REMOTE_DIR/dist/"
           rsync -az --delete -e "$RSH" server/db/migrations/  "$SSH_USER@$SSH_HOST:$REMOTE_DIR/server/db/migrations/"
+          # data/ + etl/sources/ : sources lues par le seed (dist/seed.cjs) au runtime sur le serveur.
+          rsync -az --delete -e "$RSH" data/                  "$SSH_USER@$SSH_HOST:$REMOTE_DIR/data/"
+          rsync -az --delete -e "$RSH" etl/sources/           "$SSH_USER@$SSH_HOST:$REMOTE_DIR/etl/sources/"
           rsync -az          -e "$RSH" package.json package-lock.json "$SSH_USER@$SSH_HOST:$REMOTE_DIR/"
 
       - name: Installer le runtime + redémarrer
@@ -69,23 +72,17 @@ jobs:
           ssh -i ~/.ssh/deploy_key "$SSH_USER@$SSH_HOST" \
             "cd $REMOTE_DIR && npm install --omit=dev --no-audit --no-fund && (pkill -x node || true)"
 
-      - name: Recharger le catalogue en prod (seed transactionnel)
+      - name: Recharger le catalogue en prod (seed transactionnel sur le serveur)
         # Le déploiement met à jour le CODE ; les données du catalogue (programmes,
-        # exercices, muscles…) vivent dans Postgres et ne sont pas touchées par le rsync.
-        # On reseed donc la base prod depuis le runner (il a déjà tsx + data/ via `npm ci`).
-        # Sûr : le seed valide tout AVANT de purger, s'exécute dans UNE transaction
-        # (tout-ou-rien) et ne touche QUE le catalogue curé — jamais users/sessions/données
-        # perso. Sans le secret DATABASE_URL, l'étape se désactive proprement.
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        # exercices, muscles…) vivent dans Postgres et ne sont PAS touchées par le rsync.
+        # On lance donc le seed bundlé (dist/seed.cjs, sans tsx) DIRECTEMENT sur le serveur :
+        # il y trouve le .env (DATABASE_URL), data/, etl/sources/ et les migrations. Aucun
+        # secret à exposer côté CI. Sûr : le seed valide tout AVANT de purger, s'exécute dans
+        # UNE transaction (tout-ou-rien) et ne touche QUE le catalogue curé — jamais
+        # users/sessions/données perso. Un échec annule tout et fait échouer le déploiement.
         run: |
-          if [ -z "$DATABASE_URL" ]; then
-            echo "::warning::Secret DATABASE_URL absent -> seed prod ignore (catalogue inchange)."
-            echo "Ajoute-le dans Settings > Secrets and variables > Actions pour activer l'auto-seed."
-            exit 0
-          fi
-          echo "Seed du catalogue cure sur la base prod (transactionnel)..."
-          npm run db:seed
+          ssh -i ~/.ssh/deploy_key "$SSH_USER@$SSH_HOST" \
+            "cd $REMOTE_DIR && node dist/seed.cjs"
 
       - name: Réveiller le site et vérifier
         run: |

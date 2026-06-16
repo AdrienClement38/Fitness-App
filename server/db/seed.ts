@@ -13,11 +13,14 @@
 import 'dotenv/config';
 import {existsSync, readFileSync} from 'node:fs';
 import path from 'node:path';
-import {fileURLToPath} from 'node:url';
 import {db, migrateDb, schema} from './client';
 import {deriveMeasureKind} from '../../src/lib/measureKindRule';
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
+// Racine = répertoire de travail. `npm run db:seed` (tsx, dev) comme
+// `node dist/seed.cjs` (bundle, prod sur AlwaysData) sont lancés depuis la racine
+// du projet -> data/ et etl/ s'y trouvent. On évite import.meta.url, indisponible
+// une fois bundlé en CJS (le bundle vit dans dist/, à une autre profondeur).
+const ROOT = process.cwd();
 const DATA = path.join(ROOT, 'data');
 const DATASET = path.join(ROOT, 'etl', 'sources', 'free-exercise-db.exercises.json');
 const DATASET_SOURCE_ID = 'free-exercise-db';

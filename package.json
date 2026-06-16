@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "tsx server.ts",
-    "build": "vite build && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs",
+    "build": "vite build && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs && esbuild server/db/seed.ts --bundle --platform=node --format=cjs --packages=external --outfile=dist/seed.cjs",
     "start": "node dist/server.cjs",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
