@@ -228,16 +228,16 @@ export const LABELS = {
     powerlifting: 'Force athlétique', olympic_weightlifting: 'Haltérophilie',
     strongman: 'Strongman', cardio: 'Cardio',
   } as Record<string, string>,
-  goal: {strength: 'Force', hypertrophy: 'Hypertrophie', endurance: 'Endurance', power: 'Puissance'} as Record<string, string>,
+  goal: {strength: 'Force', hypertrophy: 'Prise de muscle', endurance: 'Endurance', power: 'Puissance'} as Record<string, string>,
   evidence: {strong: 'Preuve forte', moderate: 'Preuve modérée', limited: 'Preuve limitée', consensus: 'Consensus'} as Record<string, string>,
   sourceType: {
     scientific: 'Étude scientifique', guideline: 'Recommandation officielle',
     coach: 'Coach', dataset: 'Jeu de données', book: 'Ouvrage',
   } as Record<string, string>,
   theme: {
-    'full-body': 'Full Body', 'upper-lower': 'Haut / Bas', ppl: 'Push Pull Legs',
+    'full-body': 'Full Body', 'upper-lower': 'Haut / Bas', ppl: 'Poussé / Tiré / Jambes',
     strength: 'Force', glutes: 'Fessiers', 'upper-body': 'Haut du corps',
-    'fat-loss': 'Perte de gras', split: 'Split par muscle', cardio: 'Cardio',
+    'fat-loss': 'Perte de gras', split: 'Par muscle', cardio: 'Cardio',
   } as Record<string, string>,
 };
 

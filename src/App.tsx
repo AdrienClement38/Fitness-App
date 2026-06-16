@@ -93,7 +93,7 @@ export default function App() {
             element={
               <CategoryBrowse
                 category="stretching"
-                title="Récup & Mobilité"
+                title="Récupération & étirements"
                 intro="À faire après ta séance : étirements pour gagner en souplesse, et automassages (foam rolling) pour relâcher les tensions et accélérer la récupération."
               />
             }

@@ -62,7 +62,7 @@ export default function SuiviPage() {
     <div>
       <h1 className="text-xl font-bold">Suivi</h1>
       <p className="mt-1 text-sm text-slate-400">
-        Démarre une séance depuis un programme, log tes poids série par série, suis ta progression ici.
+        Démarre une séance depuis un programme, note tes poids série par série, suis ta progression ici.
       </p>
 
       {active && (
@@ -176,7 +176,7 @@ export default function SuiviPage() {
                     </button>
                   </div>
                   <div className="mt-2 flex flex-wrap gap-1.5">
-                    <Badge>{log.exercises.length} exos</Badge>
+                    <Badge>{log.exercises.length} exercices</Badge>
                     <Badge tone="emerald">{setsDone(log)} séries faites</Badge>
                     {vol > 0 && <Badge tone="indigo">{vol.toLocaleString('fr-FR')} kg de volume</Badge>}
                     {dur != null && <Badge>{dur} min</Badge>}

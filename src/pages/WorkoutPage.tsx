@@ -148,7 +148,7 @@ export default function WorkoutPage() {
         ) : (
           <>
             <p className="mt-1 text-xs text-slate-400">
-              {w.exercises.length} exercices · {total} séries prévues. Renseigne tes charges, puis lance le chrono.
+              {w.exercises.length} exercices · {total} séries prévues. Renseigne tes poids, puis lance le chrono.
             </p>
             <button
               onClick={start}

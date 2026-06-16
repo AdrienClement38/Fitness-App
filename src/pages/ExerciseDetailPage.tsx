@@ -4,6 +4,7 @@ import {Link, useNavigate, useParams} from 'react-router-dom';
 import {api, exerciseImageUrl, label} from '../lib/api';
 import {useFetch} from '../lib/useFetch';
 import {Badge, ErrorState, Loading, SectionTitle} from '../components/ui';
+import {InfoTip, LabelBadge, TERMS} from '../components/InfoTip';
 import FavoriteButton from '../components/FavoriteButton';
 import AddToSessionButton from '../components/AddToSessionButton';
 import {startQuickSession, useActiveWorkout} from '../lib/workoutLogs';
@@ -61,12 +62,16 @@ export default function ExerciseDetailPage() {
 
       <div className="mt-3 flex flex-wrap gap-1.5">
         <Badge tone="emerald">{label('level', ex.level)}</Badge>
-        <Badge>{label('category', ex.category)}</Badge>
-        {ex.force && <Badge tone="amber">{label('force', ex.force)}</Badge>}
-        {ex.mechanic && <Badge tone="indigo">{label('mechanic', ex.mechanic)}</Badge>}
+        <LabelBadge kind="category" value={ex.category} />
+        <LabelBadge kind="force" value={ex.force} tone="amber" />
+        <LabelBadge kind="mechanic" value={ex.mechanic} tone="indigo" />
         {ex.equipmentNameFr && <Badge>{ex.equipmentNameFr}</Badge>}
         {ex.movementPatternNameFr && <Badge>{ex.movementPatternNameFr}</Badge>}
-        {ex.tempo && <Badge tone="indigo">Tempo {ex.tempo}</Badge>}
+        {ex.tempo && (
+          <Badge tone="indigo">
+            Tempo {ex.tempo} <InfoTip srLabel="Tempo">{TERMS.tempo}</InfoTip>
+          </Badge>
+        )}
       </div>
 
       <button

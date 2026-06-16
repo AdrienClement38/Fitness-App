@@ -9,7 +9,7 @@ import Logo from '../components/Logo';
 
 // Accès unique à l'accueil (le cardio, lui, est un exercice -> onglet Exercices).
 const browseCards = [
-  {to: '/recuperation', icon: Leaf, title: 'Récup & Mobilité', desc: 'Étirements et automassages, pour après la séance.'},
+  {to: '/recuperation', icon: Leaf, title: 'Récupération & étirements', desc: 'Étirements et automassages, pour après la séance.'},
 ];
 
 export default function HomePage() {

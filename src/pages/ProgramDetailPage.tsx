@@ -5,6 +5,7 @@ import {duplicateProgram} from '../lib/myPrograms';
 import {startSession, useActiveWorkout} from '../lib/workoutLogs';
 import {useFetch} from '../lib/useFetch';
 import {Badge, ErrorState, Loading} from '../components/ui';
+import {LabelBadge} from '../components/InfoTip';
 
 function reps(e: ProgramExerciseItem): string {
   if (e.repsMin == null) return '';
@@ -55,10 +56,10 @@ export default function ProgramDetailPage() {
 
       <h1 className="text-xl font-bold leading-tight">{p.nameFr}</h1>
       <div className="mt-2 flex flex-wrap gap-1.5">
-        {p.theme && <Badge tone="indigo">{label('theme', p.theme)}</Badge>}
+        <LabelBadge kind="theme" value={p.theme} tone="indigo" />
         {p.level && <Badge tone="emerald">{label('level', p.level)}</Badge>}
         {p.daysPerWeek && <Badge>{p.daysPerWeek} j/sem</Badge>}
-        {p.goal && <Badge>{label('goal', p.goal)}</Badge>}
+        <LabelBadge kind="goal" value={p.goal} />
       </div>
       {p.descriptionFr && <p className="mt-3 text-sm leading-relaxed text-slate-300">{p.descriptionFr}</p>}
 

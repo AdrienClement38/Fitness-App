@@ -4,6 +4,7 @@ import {Link, useNavigate, useParams} from 'react-router-dom';
 import {api, type ExerciseRef} from '../lib/api';
 import {useFetch} from '../lib/useFetch';
 import {Badge, ErrorState, Loading, SectionTitle} from '../components/ui';
+import {InfoTip} from '../components/InfoTip';
 import BodyMap from '../components/BodyMap';
 
 const LEVELS = [
@@ -64,7 +65,7 @@ export default function MuscleDetailPage() {
         <Badge>{m.groupNameFr}</Badge>
         {m.antagonistId && (
           <Link to={`/muscles/${m.antagonistId}`}>
-            <Badge tone="indigo">Antagoniste : {m.antagonistNameFr}</Badge>
+            <Badge tone="indigo">Muscle opposé : {m.antagonistNameFr}</Badge>
           </Link>
         )}
       </div>
@@ -86,19 +87,25 @@ export default function MuscleDetailPage() {
 
       {vl && (vl.mevSets || vl.mrvSets) && (
         <>
-          <SectionTitle>Volume hebdomadaire (séries)</SectionTitle>
+          <SectionTitle>
+            Séries par semaine{' '}
+            <InfoTip srLabel="Séries par semaine">
+              Nombre de séries par semaine pour ce muscle : le minimum pour progresser, la zone idéale, et le
+              maximum à ne pas dépasser. (Sigles techniques : MEV · MAV · MRV.)
+            </InfoTip>
+          </SectionTitle>
           <div className="flex gap-2">
             <div className="flex-1 rounded-lg border border-slate-800 bg-slate-900/50 p-3 text-center">
               <div className="text-lg font-bold text-emerald-400">{vl.mevSets}</div>
-              <div className="text-xs text-slate-400">MEV (minimum)</div>
+              <div className="text-xs text-slate-400">Minimum</div>
             </div>
             <div className="flex-1 rounded-lg border border-slate-800 bg-slate-900/50 p-3 text-center">
               <div className="text-lg font-bold text-emerald-400">{vl.mavSetsMin}–{vl.mavSetsMax}</div>
-              <div className="text-xs text-slate-400">MAV (optimal)</div>
+              <div className="text-xs text-slate-400">Idéal</div>
             </div>
             <div className="flex-1 rounded-lg border border-slate-800 bg-slate-900/50 p-3 text-center">
               <div className="text-lg font-bold text-emerald-400">{vl.mrvSets}</div>
-              <div className="text-xs text-slate-400">MRV (max)</div>
+              <div className="text-xs text-slate-400">Maximum</div>
             </div>
           </div>
           {vl.notesFr && <p className="mt-2 text-xs text-slate-400">{vl.notesFr}</p>}

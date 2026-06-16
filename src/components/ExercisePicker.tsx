@@ -184,7 +184,7 @@ export default function ExercisePicker({
               <ChevronLeft className="h-4 w-4" /> Préc.
             </button>
             <span className="text-xs text-slate-500">
-              Page {page}/{pageCount} · {total} exos
+              Page {page}/{pageCount} · {total} exercices
             </span>
             <button
               disabled={page >= pageCount}

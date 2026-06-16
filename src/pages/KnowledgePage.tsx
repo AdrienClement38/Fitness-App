@@ -3,13 +3,14 @@ import {ChevronDown} from 'lucide-react';
 import {api, label, type Principle, type RepScheme, type Source, type Split, type VolumeLandmark} from '../lib/api';
 import {useFetch} from '../lib/useFetch';
 import {Badge, ErrorState, Loading} from '../components/ui';
+import {InfoTip, TERMS} from '../components/InfoTip';
 
 type Tab = 'principles' | 'reps' | 'volumes' | 'splits' | 'sources';
 const TABS: {id: Tab; label: string}[] = [
   {id: 'principles', label: 'Principes'},
   {id: 'reps', label: 'Reps'},
   {id: 'volumes', label: 'Volumes'},
-  {id: 'splits', label: 'Splits'},
+  {id: 'splits', label: 'Répartitions'},
   {id: 'sources', label: 'Sources'},
 ];
 
@@ -88,9 +89,9 @@ function RepSchemes({items}: {items: RepScheme[]}) {
           </div>
           <div className="mt-2 grid grid-cols-2 gap-2 text-sm sm:grid-cols-4">
             <Stat label="Répétitions" value={range(r.repsMin, r.repsMax)} />
-            <Stat label="% 1RM" value={range(r.intensityPct1rmMin, r.intensityPct1rmMax, '%')} />
+            <Stat label={<>% du max <InfoTip srLabel="Pourcentage du max">{TERMS.oneRm}</InfoTip></>} value={range(r.intensityPct1rmMin, r.intensityPct1rmMax, '%')} />
             <Stat label="Repos" value={range(r.restSecondsMin, r.restSecondsMax, ' s')} />
-            <Stat label="RIR" value={range(r.rirMin, r.rirMax)} />
+            <Stat label={<>Reps en réserve <InfoTip srLabel="Reps en réserve">{TERMS.rir}</InfoTip></>} value={range(r.rirMin, r.rirMax)} />
           </div>
           {r.notesFr && <p className="mt-2 text-xs text-slate-400">{r.notesFr}</p>}
         </div>
@@ -99,7 +100,7 @@ function RepSchemes({items}: {items: RepScheme[]}) {
   );
 }
 
-function Stat({label: l, value}: {label: string; value: string}) {
+function Stat({label: l, value}: {label: ReactNode; value: string}) {
   return (
     <div className="rounded-lg bg-slate-800/50 p-2 text-center">
       <div className="font-semibold text-slate-100">{value}</div>
@@ -110,30 +111,37 @@ function Stat({label: l, value}: {label: string; value: string}) {
 
 function Volumes({items}: {items: VolumeLandmark[]}) {
   return (
-    <div className="overflow-hidden rounded-xl border border-slate-800">
-      <table className="w-full text-sm">
-        <thead className="bg-slate-900 text-xs uppercase text-slate-400">
-          <tr>
-            <th className="p-2 text-left">Muscle</th>
-            <th className="p-2 text-center">MEV</th>
-            <th className="p-2 text-center">MAV</th>
-            <th className="p-2 text-center">MRV</th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((v) => (
-            <tr key={v.muscleId} className="border-t border-slate-800">
-              <td className="p-2">{v.muscleNameFr}</td>
-              <td className="p-2 text-center text-slate-300">{v.mevSets ?? '—'}</td>
-              <td className="p-2 text-center text-emerald-400">{range(v.mavSetsMin, v.mavSetsMax)}</td>
-              <td className="p-2 text-center text-slate-300">{v.mrvSets ?? '—'}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <p className="bg-slate-900/60 p-2 text-xs text-slate-500">
-        Séries dures par semaine. MEV : minimum efficace · MAV : zone optimale · MRV : maximum récupérable.
+    <div>
+      <p className="mb-3 text-sm leading-relaxed text-slate-400">
+        Combien de <strong className="text-slate-200">séries par muscle et par semaine</strong> — des séries dures,
+        menées proche de la limite (pas des séries faciles). Trois repères : le minimum pour progresser, la zone
+        idéale, et le plafond à ne pas dépasser.
       </p>
+      <div className="overflow-hidden rounded-xl border border-slate-800">
+        <table className="w-full text-sm">
+          <thead className="bg-slate-900 text-xs uppercase text-slate-400">
+            <tr>
+              <th className="p-2 text-left">Muscle</th>
+              <th className="p-2 text-center"><span className="inline-flex items-center justify-center">Mini <InfoTip srLabel="Minimum (MEV)">{TERMS.mev}</InfoTip></span></th>
+              <th className="p-2 text-center"><span className="inline-flex items-center justify-center">Idéal <InfoTip srLabel="Zone idéale (MAV)">{TERMS.mav}</InfoTip></span></th>
+              <th className="p-2 text-center"><span className="inline-flex items-center justify-center">Max <InfoTip srLabel="Maximum (MRV)">{TERMS.mrv}</InfoTip></span></th>
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((v) => (
+              <tr key={v.muscleId} className="border-t border-slate-800">
+                <td className="p-2">{v.muscleNameFr}</td>
+                <td className="p-2 text-center text-slate-300">{v.mevSets ?? '—'}</td>
+                <td className="p-2 text-center text-emerald-400">{range(v.mavSetsMin, v.mavSetsMax)}</td>
+                <td className="p-2 text-center text-slate-300">{v.mrvSets ?? '—'}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p className="bg-slate-900/60 p-2 text-xs text-slate-500">
+          Séries dures par semaine. Sigles techniques : Mini = MEV · Idéal = MAV · Max = MRV.
+        </p>
+      </div>
     </div>
   );
 }
@@ -141,6 +149,10 @@ function Volumes({items}: {items: VolumeLandmark[]}) {
 function Splits({items}: {items: Split[]}) {
   return (
     <div className="grid gap-3">
+      <p className="text-sm leading-relaxed text-slate-400">
+        Une « répartition » (ou <em>split</em>) = la façon d'organiser les muscles sur tes séances de la semaine
+        (par exemple un jour le haut du corps, un jour le bas).
+      </p>
       {items.map((s) => (
         <div key={s.id} className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
           <div className="flex flex-wrap items-center gap-2">
