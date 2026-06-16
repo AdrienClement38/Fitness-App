@@ -15,6 +15,10 @@ type Props = {
   onSelect?: (muscleId: string) => void;
 };
 
+// Zones dessinées par la lib mais qui NE sont PAS des muscles (tête, genoux) :
+// aucun clic possible -> on les grise (foncé) pour montrer qu'il n'y a rien à toucher.
+const NON_MUSCLE_SLUGS: Muscle[] = ['head', 'knees'];
+
 /** Nos 17 muscles → slugs react-body-highlighter (1 vers n). */
 const MUSCLE_MAP: Record<string, Muscle[]> = {
   chest: ['chest'],
@@ -64,8 +68,9 @@ const SLUG_TO_MUSCLE: Record<string, string> = {
 };
 
 const BODY_COLOR = '#475569'; // slate-600 (muscle non sollicité)
-// index = fréquence − 1 : 1 = secondaire (rouge clair), 2+ = primaire (rouge).
-const COLORS = ['#fca5a5', '#ef4444', '#ef4444'];
+// index = fréquence − 1 : 1 = secondaire (rouge clair), 2 = primaire (rouge),
+// 3 = muscle SANS exercice (gris foncé, ajouté 3× ci-dessous).
+const COLORS = ['#fca5a5', '#ef4444', '#1e293b'];
 
 export default function BodyMap({primary = [], secondary = [], className, onSelect}: Props) {
   const prim = map(primary);
@@ -74,8 +79,13 @@ export default function BodyMap({primary = [], secondary = [], className, onSele
     {name: 'primaires', muscles: prim},
     {name: 'primaires', muscles: prim}, // compté 2× → rouge
     {name: 'secondaires', muscles: sec}, // compté 1× → rouge clair
+    // compté 3× → COLORS[2] (gris foncé) : zones non-muscles (tête, genoux), inertes
+    {name: 'inertes', muscles: NON_MUSCLE_SLUGS},
+    {name: 'inertes', muscles: NON_MUSCLE_SLUGS},
+    {name: 'inertes', muscles: NON_MUSCLE_SLUGS},
   ];
 
+  // head/knees ne sont pas dans SLUG_TO_MUSCLE → le clic est déjà ignoré (id undefined).
   const handleClick = onSelect
     ? (e: IMuscleStats) => {
         const id = SLUG_TO_MUSCLE[e.muscle];
