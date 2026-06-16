@@ -68,11 +68,13 @@ jobs:
 
       - name: Installer le runtime + redémarrer
         run: |
-          # Deps runtime seulement (ni Vite, ni React, ni PGlite) puis on tue le node :
-          # AlwaysData relance l'upstream avec le nouveau code à la prochaine requête.
+          # Deps runtime seulement (ni Vite, ni React, ni PGlite) puis on tue le process
+          # serveur : AlwaysData relance l'upstream avec le nouveau code à la prochaine requête.
+          # `pkill -f dist/server.cjs` cible la ligne de commande complete (plus fiable que
+          # `-x node`, qui ne matchait pas toujours le bon process -> redemarrage rate).
           # Les migrations Drizzle s'appliquent au démarrage (migrateDb).
           ssh -i ~/.ssh/deploy_key "$SSH_USER@$SSH_HOST" \
-            "cd $REMOTE_DIR && npm install --omit=dev --no-audit --no-fund && (pkill -x node || true)"
+            "cd $REMOTE_DIR && npm install --omit=dev --no-audit --no-fund && (pkill -f 'dist/server.cjs' || true)"
 
       - name: Recharger le catalogue en prod (seed transactionnel sur le serveur)
         # Le déploiement met à jour le CODE ; les données du catalogue (programmes,
