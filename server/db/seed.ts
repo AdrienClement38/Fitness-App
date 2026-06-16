@@ -286,96 +286,102 @@ async function main() {
     process.exit(1);
   }
 
-  /* ---- Insertion ---------------------------------------------------- */
+  /* ---- Insertion (atomique : tout ou rien dans une transaction) ----- */
+  // migrateDb() reste HORS transaction (DDL). La recharge du catalogue (purge +
+  // insertion) est enveloppee dans une transaction : si une insertion echoue,
+  // tout est annule et la base garde son catalogue precedent intact. Crucial en
+  // prod (reseed a distance) : jamais de catalogue a moitie vide.
   await migrateDb();
 
-  // Vide (dépendants d'abord) pour une recharge propre.
-  await db.delete(schema.programExercises);
-  await db.delete(schema.programSessions);
-  await db.delete(schema.programs);
-  await db.delete(schema.exerciseMuscles);
-  await db.delete(schema.muscleVolumeLandmarks);
-  await db.delete(schema.principleSources);
-  await db.delete(schema.splitDays);
-  await db.delete(schema.exercises);
-  await db.delete(schema.trainingPrinciples);
-  await db.delete(schema.splits);
-  await db.delete(schema.repSchemes);
-  await db.delete(schema.movementPatterns);
-  await db.delete(schema.equipment);
-  await db.delete(schema.sources);
-  await db.delete(schema.muscles);
-  await db.delete(schema.muscleGroups);
+  await db.transaction(async (tx) => {
+    // Vide (dépendants d'abord) pour une recharge propre.
+    await tx.delete(schema.programExercises);
+    await tx.delete(schema.programSessions);
+    await tx.delete(schema.programs);
+    await tx.delete(schema.exerciseMuscles);
+    await tx.delete(schema.muscleVolumeLandmarks);
+    await tx.delete(schema.principleSources);
+    await tx.delete(schema.splitDays);
+    await tx.delete(schema.exercises);
+    await tx.delete(schema.trainingPrinciples);
+    await tx.delete(schema.splits);
+    await tx.delete(schema.repSchemes);
+    await tx.delete(schema.movementPatterns);
+    await tx.delete(schema.equipment);
+    await tx.delete(schema.sources);
+    await tx.delete(schema.muscles);
+    await tx.delete(schema.muscleGroups);
 
-  await db.insert(schema.muscleGroups).values(
-    muscleGroups.map((g) => ({id: g.id as string, nameFr: g.name_fr as string, region: str(g.region), descriptionFr: str(g.description_fr)})),
-  );
-  await db.insert(schema.muscles).values(
-    muscles.map((m) => ({
-      id: m.id as string, nameFr: m.name_fr as string, nameEn: str(m.name_en), groupId: m.group_id as string,
-      antagonistId: str(m.antagonist_id), functionFr: str(m.function_fr), anatomyFr: str(m.anatomy_fr),
-      aliasesFr: (m.aliases_fr as string[] | undefined) ?? null,
-    })),
-  );
-  await db.insert(schema.equipment).values(
-    equipment.map((e) => ({id: e.id as string, nameFr: e.name_fr as string, category: str(e.category), descriptionFr: str(e.description_fr)})),
-  );
-  await db.insert(schema.movementPatterns).values(
-    patterns.map((p) => ({id: p.id as string, nameFr: p.name_fr as string, descriptionFr: str(p.description_fr)})),
-  );
-  await db.insert(schema.sources).values(
-    sources.map((s) => ({
-      id: s.id as string, title: s.title as string, authors: str(s.authors), year: num(s.year),
-      type: s.type as string, url: str(s.url), license: str(s.license), notesFr: str(s.notes_fr),
-    })),
-  );
+    await tx.insert(schema.muscleGroups).values(
+      muscleGroups.map((g) => ({id: g.id as string, nameFr: g.name_fr as string, region: str(g.region), descriptionFr: str(g.description_fr)})),
+    );
+    await tx.insert(schema.muscles).values(
+      muscles.map((m) => ({
+        id: m.id as string, nameFr: m.name_fr as string, nameEn: str(m.name_en), groupId: m.group_id as string,
+        antagonistId: str(m.antagonist_id), functionFr: str(m.function_fr), anatomyFr: str(m.anatomy_fr),
+        aliasesFr: (m.aliases_fr as string[] | undefined) ?? null,
+      })),
+    );
+    await tx.insert(schema.equipment).values(
+      equipment.map((e) => ({id: e.id as string, nameFr: e.name_fr as string, category: str(e.category), descriptionFr: str(e.description_fr)})),
+    );
+    await tx.insert(schema.movementPatterns).values(
+      patterns.map((p) => ({id: p.id as string, nameFr: p.name_fr as string, descriptionFr: str(p.description_fr)})),
+    );
+    await tx.insert(schema.sources).values(
+      sources.map((s) => ({
+        id: s.id as string, title: s.title as string, authors: str(s.authors), year: num(s.year),
+        type: s.type as string, url: str(s.url), license: str(s.license), notesFr: str(s.notes_fr),
+      })),
+    );
 
-  for (let i = 0; i < exerciseRows.length; i += 400) await db.insert(schema.exercises).values(exerciseRows.slice(i, i + 400));
-  for (let i = 0; i < exerciseMuscleRows.length; i += 400) await db.insert(schema.exerciseMuscles).values(exerciseMuscleRows.slice(i, i + 400));
+    for (let i = 0; i < exerciseRows.length; i += 400) await tx.insert(schema.exercises).values(exerciseRows.slice(i, i + 400));
+    for (let i = 0; i < exerciseMuscleRows.length; i += 400) await tx.insert(schema.exerciseMuscles).values(exerciseMuscleRows.slice(i, i + 400));
 
-  if (programRows.length) await db.insert(schema.programs).values(programRows);
-  if (programSessionRows.length) await db.insert(schema.programSessions).values(programSessionRows);
-  if (programExerciseRows.length) await db.insert(schema.programExercises).values(programExerciseRows);
+    if (programRows.length) await tx.insert(schema.programs).values(programRows);
+    if (programSessionRows.length) await tx.insert(schema.programSessions).values(programSessionRows);
+    if (programExerciseRows.length) await tx.insert(schema.programExercises).values(programExerciseRows);
 
-  await db.insert(schema.trainingPrinciples).values(
-    principles.map((p) => ({
-      id: p.id as string, titleFr: p.title_fr as string, category: p.category as string, summaryFr: p.summary_fr as string,
-      detailFr: str(p.detail_fr), evidence: str(p.evidence), practicalFr: (p.practical_fr as string[] | undefined) ?? null,
-    })),
-  );
-  const principleSourceRows = principles.flatMap((p) =>
-    ((p.sources as string[] | undefined) ?? []).map((sid) => ({principleId: p.id as string, sourceId: sid})),
-  );
-  if (principleSourceRows.length) await db.insert(schema.principleSources).values(principleSourceRows);
+    await tx.insert(schema.trainingPrinciples).values(
+      principles.map((p) => ({
+        id: p.id as string, titleFr: p.title_fr as string, category: p.category as string, summaryFr: p.summary_fr as string,
+        detailFr: str(p.detail_fr), evidence: str(p.evidence), practicalFr: (p.practical_fr as string[] | undefined) ?? null,
+      })),
+    );
+    const principleSourceRows = principles.flatMap((p) =>
+      ((p.sources as string[] | undefined) ?? []).map((sid) => ({principleId: p.id as string, sourceId: sid})),
+    );
+    if (principleSourceRows.length) await tx.insert(schema.principleSources).values(principleSourceRows);
 
-  await db.insert(schema.repSchemes).values(
-    repSchemes.map((r) => ({
-      id: r.id as string, goal: r.goal as string, labelFr: r.label_fr as string,
-      repsMin: r.reps_min as number, repsMax: r.reps_max as number, setsMin: num(r.sets_min), setsMax: num(r.sets_max),
-      intensityPct1rmMin: num(r.intensity_pct_1rm_min), intensityPct1rmMax: num(r.intensity_pct_1rm_max),
-      restSecondsMin: num(r.rest_seconds_min), restSecondsMax: num(r.rest_seconds_max),
-      rirMin: num(r.rir_min), rirMax: num(r.rir_max), notesFr: str(r.notes_fr),
-    })),
-  );
-  await db.insert(schema.muscleVolumeLandmarks).values(
-    volumeLandmarks.map((v) => ({
-      muscleId: v.muscle_id as string, mvSets: num(v.mv_sets), mevSets: num(v.mev_sets),
-      mavSetsMin: num(v.mav_sets_min), mavSetsMax: num(v.mav_sets_max), mrvSets: num(v.mrv_sets), notesFr: str(v.notes_fr),
-    })),
-  );
-  await db.insert(schema.splits).values(
-    splits.map((s) => ({
-      id: s.id as string, nameFr: s.name_fr as string, daysPerWeekMin: num(s.days_per_week_min), daysPerWeekMax: num(s.days_per_week_max),
-      level: str(s.level), goal: str(s.goal), summaryFr: str(s.summary_fr),
-      prosFr: (s.pros_fr as string[] | undefined) ?? null, consFr: (s.cons_fr as string[] | undefined) ?? null,
-    })),
-  );
-  const splitDayRows = splits.flatMap((s) =>
-    ((s.days as JsonRow[] | undefined) ?? []).map((d) => ({
-      splitId: s.id as string, dayOrder: d.day_order as number, nameFr: d.name_fr as string, focusFr: str(d.focus_fr),
-    })),
-  );
-  if (splitDayRows.length) await db.insert(schema.splitDays).values(splitDayRows);
+    await tx.insert(schema.repSchemes).values(
+      repSchemes.map((r) => ({
+        id: r.id as string, goal: r.goal as string, labelFr: r.label_fr as string,
+        repsMin: r.reps_min as number, repsMax: r.reps_max as number, setsMin: num(r.sets_min), setsMax: num(r.sets_max),
+        intensityPct1rmMin: num(r.intensity_pct_1rm_min), intensityPct1rmMax: num(r.intensity_pct_1rm_max),
+        restSecondsMin: num(r.rest_seconds_min), restSecondsMax: num(r.rest_seconds_max),
+        rirMin: num(r.rir_min), rirMax: num(r.rir_max), notesFr: str(r.notes_fr),
+      })),
+    );
+    await tx.insert(schema.muscleVolumeLandmarks).values(
+      volumeLandmarks.map((v) => ({
+        muscleId: v.muscle_id as string, mvSets: num(v.mv_sets), mevSets: num(v.mev_sets),
+        mavSetsMin: num(v.mav_sets_min), mavSetsMax: num(v.mav_sets_max), mrvSets: num(v.mrv_sets), notesFr: str(v.notes_fr),
+      })),
+    );
+    await tx.insert(schema.splits).values(
+      splits.map((s) => ({
+        id: s.id as string, nameFr: s.name_fr as string, daysPerWeekMin: num(s.days_per_week_min), daysPerWeekMax: num(s.days_per_week_max),
+        level: str(s.level), goal: str(s.goal), summaryFr: str(s.summary_fr),
+        prosFr: (s.pros_fr as string[] | undefined) ?? null, consFr: (s.cons_fr as string[] | undefined) ?? null,
+      })),
+    );
+    const splitDayRows = splits.flatMap((s) =>
+      ((s.days as JsonRow[] | undefined) ?? []).map((d) => ({
+        splitId: s.id as string, dayOrder: d.day_order as number, nameFr: d.name_fr as string, focusFr: str(d.focus_fr),
+      })),
+    );
+    if (splitDayRows.length) await tx.insert(schema.splitDays).values(splitDayRows);
+  });
 
   /* ---- Rapport ------------------------------------------------------ */
   const kindCounts = exerciseRows.reduce<Record<string, number>>((m, r) => {

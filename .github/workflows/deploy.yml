@@ -69,6 +69,24 @@ jobs:
           ssh -i ~/.ssh/deploy_key "$SSH_USER@$SSH_HOST" \
             "cd $REMOTE_DIR && npm install --omit=dev --no-audit --no-fund && (pkill -x node || true)"
 
+      - name: Recharger le catalogue en prod (seed transactionnel)
+        # Le déploiement met à jour le CODE ; les données du catalogue (programmes,
+        # exercices, muscles…) vivent dans Postgres et ne sont pas touchées par le rsync.
+        # On reseed donc la base prod depuis le runner (il a déjà tsx + data/ via `npm ci`).
+        # Sûr : le seed valide tout AVANT de purger, s'exécute dans UNE transaction
+        # (tout-ou-rien) et ne touche QUE le catalogue curé — jamais users/sessions/données
+        # perso. Sans le secret DATABASE_URL, l'étape se désactive proprement.
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          if [ -z "$DATABASE_URL" ]; then
+            echo "::warning::Secret DATABASE_URL absent -> seed prod ignore (catalogue inchange)."
+            echo "Ajoute-le dans Settings > Secrets and variables > Actions pour activer l'auto-seed."
+            exit 0
+          fi
+          echo "Seed du catalogue cure sur la base prod (transactionnel)..."
+          npm run db:seed
+
       - name: Réveiller le site et vérifier
         run: |
           sleep 3
