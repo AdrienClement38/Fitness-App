@@ -22,6 +22,7 @@ import {
   deleteUserSessions,
   getUserByEmail,
   getUserById,
+  setGender,
   setResetToken,
   setUserRole,
   setVerifyToken,
@@ -186,6 +187,15 @@ router.get('/me', async (req, res) => {
   const user = await getUserFromRequest(req);
   if (!user) return res.status(401).json({error: 'Non connecté.'});
   return res.json(user);
+});
+
+// Met à jour son sexe (Homme/Femme/null) — pour la perso (programmes mis en avant, logo).
+router.post('/gender', async (req, res) => {
+  const auth = await getUserFromRequest(req);
+  if (!auth) return res.status(401).json({error: 'Non connecté.'});
+  const gender = req.body?.gender === 'male' || req.body?.gender === 'female' ? req.body.gender : null;
+  await setGender(auth.id, gender);
+  return res.json({ok: true, gender});
 });
 
 const passwordChange = z.object({

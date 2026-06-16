@@ -1,9 +1,10 @@
 import {useEffect, useState} from 'react';
 import {Plus} from 'lucide-react';
 import {Link, useNavigate} from 'react-router-dom';
-import {api, label} from '../lib/api';
+import {api, label, type Gender} from '../lib/api';
 import {createEmptyProgram, useMyPrograms} from '../lib/myPrograms';
 import {useFetch} from '../lib/useFetch';
+import {useAuth} from '../lib/auth';
 import {Badge, Empty, ErrorState, Loading, SectionTitle} from '../components/ui';
 
 const LEVELS = [
@@ -12,10 +13,22 @@ const LEVELS = [
   {id: 'advanced', label: 'Avancé'},
 ];
 
+// Mise en avant PAR OBJECTIF/PRÉFÉRENCE (pas une nécessité physiologique : cf. recherche
+// — les programmes marchent pareil pour tous, la charge est individuelle). Simple ordre
+// d'affichage + badge « Suggéré » : tout reste accessible. 'préfère ne pas dire' -> aucun tri.
+const FEMALE_THEMES = new Set(['glutes', 'fat-loss', 'full-body', 'upper-lower']);
+const MALE_THEMES = new Set(['strength', 'upper-body', 'ppl', 'split']);
+const isSuggested = (theme: string | null, gender: Gender | null | undefined): boolean => {
+  if (!gender || !theme) return false;
+  return gender === 'female' ? FEMALE_THEMES.has(theme) : MALE_THEMES.has(theme);
+};
+
 export default function ProgramsPage() {
   const {data, error, loading} = useFetch(() => api.programs(), []);
   const mine = useMyPrograms();
+  const {user} = useAuth();
   const navigate = useNavigate();
+  const gender = user?.gender ?? null;
   // Niveau choisi, mémorisé (l'utilisateur retrouve son niveau).
   const [level, setLevel] = useState(() => localStorage.getItem('program-level') || 'beginner');
   useEffect(() => {
@@ -23,6 +36,10 @@ export default function ProgramsPage() {
   }, [level]);
 
   const filtered = (data ?? []).filter((p) => p.level === level);
+  // Suggérés (selon l'objectif fréquent du sexe) remontés en premier ; ordre neutre sinon.
+  const catalog = gender
+    ? [...filtered].sort((a, b) => Number(isSuggested(b.theme, gender)) - Number(isSuggested(a.theme, gender)))
+    : filtered;
 
   return (
     <div>
@@ -69,6 +86,12 @@ export default function ProgramsPage() {
 
       <SectionTitle>Catalogue par niveau</SectionTitle>
 
+      {gender === 'female' && (
+        <p className="mt-2 rounded-lg border border-emerald-500/20 bg-emerald-500/5 px-3 py-2 text-xs leading-relaxed text-emerald-200/80">
+          💪 Les mêmes programmes marchent pour tout le monde — tu logges tes charges, elles s'adaptent à toi. Et non, charger lourd ne rend pas « massive ».
+        </p>
+      )}
+
       <div className="mt-3 flex gap-1 rounded-xl bg-slate-900 p-1">
         {LEVELS.map((lv) => (
           <button
@@ -87,10 +110,10 @@ export default function ProgramsPage() {
       {error && <ErrorState message={error} />}
       {data && (
         <div className="mt-4 grid gap-3">
-          {filtered.length === 0 ? (
+          {catalog.length === 0 ? (
             <Empty label="Aucun programme à ce niveau pour l'instant." />
           ) : (
-            filtered.map((p) => (
+            catalog.map((p) => (
               <Link
                 key={p.id}
                 to={`/programmes/${p.id}`}
@@ -98,6 +121,7 @@ export default function ProgramsPage() {
               >
                 <div className="flex flex-wrap items-center gap-2">
                   <h3 className="font-semibold">{p.nameFr}</h3>
+                  {isSuggested(p.theme, gender) && <Badge tone="emerald">Suggéré</Badge>}
                   {p.theme && <Badge tone="indigo">{label('theme', p.theme)}</Badge>}
                   {p.daysPerWeek && <Badge>{p.daysPerWeek} j/sem</Badge>}
                 </div>

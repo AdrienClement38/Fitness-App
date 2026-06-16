@@ -52,6 +52,11 @@ export async function updatePassword(id: string, passwordHash: string) {
   await db.update(users).set({passwordHash}).where(eq(users.id, id));
 }
 
+/** Met à jour le sexe (ou null = préfère ne pas dire) — modifiable depuis « Mon compte ». */
+export async function setGender(id: string, gender: 'male' | 'female' | null) {
+  await db.update(users).set({gender}).where(eq(users.id, id));
+}
+
 /** Révoque toutes les sessions d'un utilisateur (ex. après changement de mot de passe). */
 export async function deleteUserSessions(userId: string) {
   await db.delete(sessions).where(eq(sessions.userId, userId));

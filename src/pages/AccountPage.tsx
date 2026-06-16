@@ -1,7 +1,7 @@
 import {useState, type FormEvent} from 'react';
 import {Link, useLocation, useNavigate} from 'react-router-dom';
 import {Download, LogOut, Shield, User} from 'lucide-react';
-import {changePassword, deleteAccount, login, logout, register, useAuth} from '../lib/auth';
+import {changePassword, deleteAccount, login, logout, register, setGender, useAuth} from '../lib/auth';
 import {authApi, type Gender} from '../lib/api';
 import {useSyncConnected} from '../lib/sync';
 import {exportMyData} from '../lib/exportData';
@@ -263,6 +263,45 @@ function ForgotPasswordForm({onBack}: {onBack: () => void}) {
   );
 }
 
+/** Sélecteur de sexe dans « Mon compte » : sauvegarde immédiate (logo + suggestions réagissent). */
+function GenderPref() {
+  const {user} = useAuth();
+  const [busy, setBusy] = useState(false);
+  const current = user?.gender ?? null;
+  const change = async (g: Gender | null) => {
+    setBusy(true);
+    try {
+      await setGender(g);
+    } finally {
+      setBusy(false);
+    }
+  };
+  return (
+    <div className="mt-3 rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+      <p className="text-sm font-medium">Profil</p>
+      <p className="mt-0.5 text-xs text-slate-500">Sert à te suggérer des programmes (tout reste accessible) et au logo. Optionnel.</p>
+      <div className="mt-2 grid grid-cols-3 gap-1.5">
+        {([
+          {v: 'male', label: 'Homme'},
+          {v: 'female', label: 'Femme'},
+          {v: null, label: 'Ne pas dire'},
+        ] as {v: Gender | null; label: string}[]).map((o) => (
+          <button
+            key={o.label}
+            disabled={busy}
+            onClick={() => change(o.v)}
+            className={`rounded-lg border px-2 py-2 text-xs font-medium transition-colors disabled:opacity-50 ${
+              current === o.v ? 'border-emerald-500 bg-emerald-500/15 text-emerald-300' : 'border-slate-700 text-slate-300 hover:bg-slate-800'
+            }`}
+          >
+            {o.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function AccountPage() {
   const {user, loading} = useAuth();
   const navigate = useNavigate();
@@ -312,6 +351,7 @@ export default function AccountPage() {
           </Link>
         )}
 
+        <GenderPref />
         <StretchPref />
 
         <button

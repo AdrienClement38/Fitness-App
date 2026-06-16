@@ -379,6 +379,7 @@ export const authApi = {
   resendVerification: () => post<{ok: boolean; alreadyVerified?: boolean}>('/auth/resend-verification', {}),
   forgotPassword: (email: string) => post<{ok: boolean}>('/auth/forgot-password', {email}),
   resetPassword: (token: string, newPassword: string) => post<{ok: boolean}>('/auth/reset-password', {token, newPassword}),
+  setGender: (gender: Gender | null) => post<{ok: boolean; gender: Gender | null}>('/auth/gender', {gender}),
 };
 
 /** Administration : un compte de la liste (infos de compte uniquement). */

@@ -98,6 +98,12 @@ export function resendVerification() {
   return authApi.resendVerification();
 }
 
+/** Met à jour son sexe puis rafraîchit l'utilisateur (logo + programmes suggérés réagissent). */
+export async function setGender(gender: Gender | null) {
+  await authApi.setGender(gender);
+  await refreshUser();
+}
+
 export function useAuth(): AuthState {
   return useSyncExternalStore(subscribe, () => state, () => state);
 }
