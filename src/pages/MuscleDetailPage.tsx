@@ -60,7 +60,7 @@ export default function MuscleDetailPage() {
 
       <h1 className="text-xl font-bold leading-tight">{m.nameFr}</h1>
       {m.nameEn && <p className="text-sm italic text-slate-500">{m.nameEn}</p>}
-      <div className="mt-2 flex flex-wrap gap-1.5">
+      <div className="mt-2 flex flex-wrap items-center gap-1.5">
         <Badge>{m.groupNameFr}</Badge>
         {m.antagonistId && (
           <Link to={`/muscles/${m.antagonistId}`}>
