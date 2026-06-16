@@ -1,6 +1,7 @@
 import {useState, type ReactNode} from 'react';
 import {Badge} from './ui';
 import {label} from '../lib/api';
+import {useExplanations} from '../lib/settings';
 
 /**
  * Petit « ? » cliquable qui révèle une définition courte et grand public. Pensé mobile
@@ -8,7 +9,9 @@ import {label} from '../lib/api';
  * techniques tout en les expliquant à un débutant.
  */
 export function InfoTip({children, srLabel = 'Explication'}: {children: ReactNode; srLabel?: string}) {
+  const explanations = useExplanations();
   const [open, setOpen] = useState(false);
+  if (!explanations) return null; // mode explication désactivé -> pas de « ? »
   return (
     <span className="relative inline-flex items-center align-middle">
       <button

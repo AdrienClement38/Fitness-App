@@ -5,8 +5,8 @@ import {changePassword, deleteAccount, login, logout, register, setGender, useAu
 import {authApi, type Gender} from '../lib/api';
 import {useSyncConnected} from '../lib/sync';
 import {exportMyData} from '../lib/exportData';
-import {setStretchSuggestions, useStretchSuggestions} from '../lib/settings';
-import {Loading} from '../components/ui';
+import {setExplanations, setStretchSuggestions, useExplanations, useStretchSuggestions} from '../lib/settings';
+import {Loading, ToggleSwitch} from '../components/ui';
 
 const inputClass =
   'w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2.5 text-sm outline-none placeholder:text-slate-500 focus:border-emerald-500';
@@ -187,15 +187,30 @@ function SyncStatus() {
 function StretchPref() {
   const on = useStretchSuggestions();
   return (
-    <label className="mt-3 flex cursor-pointer items-center justify-between gap-3 rounded-xl border border-slate-800 bg-slate-900/50 p-4">
-      <span className="text-sm text-slate-300">Suggérer des étirements à la fin de mes séances</span>
-      <input
-        type="checkbox"
-        checked={on}
-        onChange={(e) => setStretchSuggestions(e.target.checked)}
-        className="h-5 w-5 shrink-0 accent-emerald-500"
-      />
-    </label>
+    <ToggleSwitch
+      checked={on}
+      onChange={setStretchSuggestions}
+      srLabel="Suggérer des étirements à la fin de mes séances"
+      label="Suggérer des étirements à la fin de mes séances"
+    />
+  );
+}
+
+/** Mode explication : affiche (ou non) les « ? » qui expliquent les termes techniques. */
+function ExplanationsPref() {
+  const on = useExplanations();
+  return (
+    <ToggleSwitch
+      checked={on}
+      onChange={setExplanations}
+      srLabel="Mode explication"
+      label={
+        <>
+          Mode explication
+          <span className="mt-0.5 block text-xs text-slate-500">Affiche les « ? » qui expliquent les termes techniques.</span>
+        </>
+      }
+    />
   );
 }
 
@@ -352,6 +367,7 @@ export default function AccountPage() {
         )}
 
         <GenderPref />
+        <ExplanationsPref />
         <StretchPref />
 
         <button

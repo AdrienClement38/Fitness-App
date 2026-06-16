@@ -40,3 +40,40 @@ export function useStretchSuggestions(): boolean {
     () => true,
   );
 }
+
+/* ---- Mode explication (info-bulles « ? » des termes techniques) -------- */
+const EXPLAIN_KEY = 'pref-explanations';
+
+function readExplain(): boolean {
+  try {
+    const v = localStorage.getItem(EXPLAIN_KEY);
+    return v === null ? true : v === '1'; // activé par défaut (utile aux débutants)
+  } catch {
+    return true;
+  }
+}
+
+let explainValue = readExplain();
+const explainListeners = new Set<() => void>();
+
+export function setExplanations(on: boolean) {
+  explainValue = on;
+  try {
+    localStorage.setItem(EXPLAIN_KEY, on ? '1' : '0');
+  } catch {
+    /* quota / mode privé */
+  }
+  explainListeners.forEach((l) => l());
+}
+
+/** Réactif : les info-bulles « ? » ne s'affichent que si le mode explication est ON. */
+export function useExplanations(): boolean {
+  return useSyncExternalStore(
+    (cb) => {
+      explainListeners.add(cb);
+      return () => explainListeners.delete(cb);
+    },
+    () => explainValue,
+    () => true,
+  );
+}
