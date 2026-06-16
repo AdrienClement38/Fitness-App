@@ -85,15 +85,20 @@ export default function BodyMap({primary = [], secondary = [], className, onSele
   const svgStyle = onSelect ? {cursor: 'pointer'} : undefined;
 
   const showLegend = primary.length > 0 || secondary.length > 0;
+  // Interactif (sélection de muscle) : silhouettes agrandies pour faciliter le tap
+  // sur mobile -> elles remplissent la largeur (chacune ~moitié, plafonnée). Sinon
+  // (affichage seul, ex. fiche exercice) : taille compacte fixe.
+  const interactive = !!onSelect;
+  const figW = interactive ? '100%' : '8rem';
 
   return (
-    <div className={`${onSelect ? 'bodymap-interactive ' : ''}${className ?? ''}`}>
-      <div className="flex items-start justify-center gap-6">
-        <Figure label="Face avant">
-          <Model data={data} type="anterior" bodyColor={BODY_COLOR} highlightedColors={COLORS} style={{width: '8rem'}} svgStyle={svgStyle} onClick={handleClick} />
+    <div className={`${interactive ? 'bodymap-interactive ' : ''}${className ?? ''}`}>
+      <div className={`flex items-start justify-center ${interactive ? 'gap-3' : 'gap-6'}`}>
+        <Figure label="Face avant" interactive={interactive}>
+          <Model data={data} type="anterior" bodyColor={BODY_COLOR} highlightedColors={COLORS} style={{width: figW}} svgStyle={svgStyle} onClick={handleClick} />
         </Figure>
-        <Figure label="Face arrière">
-          <Model data={data} type="posterior" bodyColor={BODY_COLOR} highlightedColors={COLORS} style={{width: '8rem'}} svgStyle={svgStyle} onClick={handleClick} />
+        <Figure label="Face arrière" interactive={interactive}>
+          <Model data={data} type="posterior" bodyColor={BODY_COLOR} highlightedColors={COLORS} style={{width: figW}} svgStyle={svgStyle} onClick={handleClick} />
         </Figure>
       </div>
       {showLegend && (
@@ -110,9 +115,9 @@ export default function BodyMap({primary = [], secondary = [], className, onSele
   );
 }
 
-function Figure({label, children}: {label: string; children: ReactNode}) {
+function Figure({label, children, interactive}: {label: string; children: ReactNode; interactive?: boolean}) {
   return (
-    <div className="flex flex-col items-center gap-1">
+    <div className={`flex flex-col items-center gap-1${interactive ? ' min-w-0 max-w-[12rem] flex-1' : ''}`}>
       {children}
       <span className="text-[10px] uppercase tracking-wide text-slate-500">{label}</span>
     </div>
