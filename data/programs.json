@@ -2566,7 +2566,7 @@
       {
         "day_order": 3,
         "name_fr": "Séance C — Fente & poussée",
-        "focus_fr": "Jambes, pectoraux, bras + cardio",
+        "focus_fr": "Jambes, pectoraux, dos, bras + cardio",
         "exercises": [
           {
             "exercise_id": "barbell-walking-lunge",
@@ -2588,6 +2588,20 @@
             "reps_min": 8,
             "reps_max": 12,
             "rest_seconds": 90
+          },
+          {
+            "exercise_id": "face-pull",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 60
+          },
+          {
+            "exercise_id": "dumbbell-bicep-curl",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 60
           },
           {
             "exercise_id": "triceps-pushdown",
@@ -2894,7 +2908,7 @@
     "audience": "female",
     "days_per_week": 4,
     "summary_fr": "4 séances haut/bas pour fondre tout en construisant : musculation lourde 4×/semaine et cardio court en fin de séance.",
-    "description_fr": "Le split haut/bas frappe chaque muscle 2×/semaine, fréquence optimale pour garder le muscle en déficit calorique. Soulève lourd sur les mouvements de base (1 à 2 répétitions en réserve) puis termine par un bloc cardio modéré qui augmente la dépense sans nuire à la récupération. Maintiens les charges semaine après semaine : c'est le déficit alimentaire, pas l'allègement des barres, qui fait fondre le gras.",
+    "description_fr": "Le split haut/bas frappe chaque muscle 2×/semaine, fréquence optimale pour garder le muscle en déficit calorique. Soulève lourd sur les mouvements de base en gardant 1 à 2 répétitions en réserve, puis termine par un bloc cardio modéré qui augmente la dépense sans nuire à la récupération. Cherche à progresser dans la fourchette de reps, puis ajoute un peu de charge quand la barre monte facile et proprement ; en déficit, vise au minimum à maintenir tes perfs pour préserver le muscle. Et garde en tête que c'est le déficit alimentaire, pas l'allègement des barres, qui fait fondre le gras.",
     "sessions": [
       {
         "day_order": 1,
@@ -3075,7 +3089,7 @@
     "audience": "male",
     "days_per_week": 5,
     "summary_fr": "Un muscle par jour sur 5 jours : volume maximal et congestion par groupe pour construire de la masse.",
-    "description_fr": "Enchaîne Pecs, Dos, Jambes, Épaules, Bras du lundi au vendredi, week-end de repos. Chaque muscle reçoit beaucoup de volume avec 48h+ de récupération avant d'être resollicité. Monte la charge dès que tu boucles toutes tes séries en haut de fourchette, sans sacrifier l'exécution.",
+    "description_fr": "Enchaîne Pecs, Dos, Épaules, Jambes, Bras du lundi au vendredi, week-end de repos. Chaque groupe musculaire principal n'est ciblé qu'une fois par semaine, ce qui laisse plusieurs jours de récupération avant de le retravailler. Monte la charge dès que tu boucles toutes tes séries en haut de fourchette, sans sacrifier l'exécution.",
     "sessions": [
       {
         "day_order": 1,
@@ -3163,6 +3177,48 @@
       },
       {
         "day_order": 3,
+        "name_fr": "Épaules",
+        "focus_fr": "Deltoïdes complets",
+        "exercises": [
+          {
+            "exercise_id": "barbell-shoulder-press",
+            "sets": 4,
+            "reps_min": 6,
+            "reps_max": 10,
+            "rest_seconds": 150
+          },
+          {
+            "exercise_id": "dumbbell-shoulder-press",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 90
+          },
+          {
+            "exercise_id": "side-lateral-raise",
+            "sets": 4,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 60
+          },
+          {
+            "exercise_id": "face-pull",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 60
+          },
+          {
+            "exercise_id": "ab-crunch-machine",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 60
+          }
+        ]
+      },
+      {
+        "day_order": 4,
         "name_fr": "Jambes",
         "focus_fr": "Quadriceps, ischios, fessiers, mollets",
         "exercises": [
@@ -3204,48 +3260,6 @@
           {
             "exercise_id": "standing-calf-raises",
             "sets": 4,
-            "reps_min": 12,
-            "reps_max": 15,
-            "rest_seconds": 60
-          }
-        ]
-      },
-      {
-        "day_order": 4,
-        "name_fr": "Épaules",
-        "focus_fr": "Deltoïdes complets",
-        "exercises": [
-          {
-            "exercise_id": "barbell-shoulder-press",
-            "sets": 4,
-            "reps_min": 6,
-            "reps_max": 10,
-            "rest_seconds": 150
-          },
-          {
-            "exercise_id": "dumbbell-shoulder-press",
-            "sets": 3,
-            "reps_min": 10,
-            "reps_max": 12,
-            "rest_seconds": 90
-          },
-          {
-            "exercise_id": "side-lateral-raise",
-            "sets": 4,
-            "reps_min": 12,
-            "reps_max": 15,
-            "rest_seconds": 60
-          },
-          {
-            "exercise_id": "face-pull",
-            "sets": 3,
-            "reps_min": 12,
-            "reps_max": 15,
-            "rest_seconds": 60
-          },
-          {
-            "exercise_id": "ab-crunch-machine",
-            "sets": 3,
             "reps_min": 12,
             "reps_max": 15,
             "rest_seconds": 60
@@ -3346,6 +3360,14 @@
             "reps_min": 6,
             "reps_max": 10,
             "rest_seconds": 90
+          },
+          {
+            "exercise_id": "dips-triceps-version",
+            "sets": 3,
+            "reps_min": 6,
+            "reps_max": 10,
+            "rest_seconds": 90,
+            "notes_fr": "Assiste si besoin. Équilibre le travail direct des triceps avec celui des biceps."
           }
         ]
       },
@@ -3505,14 +3527,16 @@
             "sets": 4,
             "reps_min": 6,
             "reps_max": 10,
-            "rest_seconds": 90
+            "rest_seconds": 90,
+            "notes_fr": "En superset antagoniste avec l'exo suivant (dips triceps)."
           },
           {
             "exercise_id": "dips-triceps-version",
             "sets": 4,
             "reps_min": 6,
             "reps_max": 10,
-            "rest_seconds": 90
+            "rest_seconds": 90,
+            "notes_fr": "En superset antagoniste avec l'exo précédent (curl barre)."
           },
           {
             "exercise_id": "alternate-hammer-curl",
@@ -3533,7 +3557,8 @@
             "sets": 3,
             "reps_min": 12,
             "reps_max": 15,
-            "rest_seconds": 45
+            "rest_seconds": 45,
+            "notes_fr": "Finis les 1-2 dernières séries en rest-pause."
           }
         ]
       },
@@ -3582,14 +3607,16 @@
             "sets": 4,
             "reps_min": 10,
             "reps_max": 12,
-            "rest_seconds": 75
+            "rest_seconds": 75,
+            "notes_fr": "En superset antagoniste avec l'exo suivant (pushdown triceps)."
           },
           {
             "exercise_id": "triceps-pushdown",
             "sets": 4,
             "reps_min": 12,
             "reps_max": 15,
-            "rest_seconds": 60
+            "rest_seconds": 60,
+            "notes_fr": "En superset antagoniste avec l'exo précédent (curl haltères)."
           },
           {
             "exercise_id": "hammer-curls",
@@ -3610,7 +3637,8 @@
             "sets": 3,
             "reps_min": 12,
             "reps_max": 15,
-            "rest_seconds": 45
+            "rest_seconds": 45,
+            "notes_fr": "Finis les 1-2 dernières séries en rest-pause."
           }
         ]
       },
@@ -3660,7 +3688,7 @@
     "audience": "male",
     "days_per_week": 4,
     "summary_fr": "Spécialisation torse : 2 séances dédiées Pecs et Dos pour épaissir le buste, plus 2 séances d'entretien jambes/épaules.",
-    "description_fr": "Cycle de 4 à 8 semaines pour un haut du corps plus large et plus épais. Alterne une séance Pectoraux et une séance Dos riches en volume, encadrées par deux séances d'entretien pour le bas du corps et les épaules. Utilise les supersets pecs/dos sur les exercices d'isolation pour maximiser la tension et gagner du temps.",
+    "description_fr": "Cycle de 4 à 8 semaines pour un haut du corps plus large et plus épais. Alterne une séance Pectoraux et une séance Dos riches en volume, encadrées par deux séances d'entretien pour le bas du corps et les épaules. Termine chaque séance par les exercices d'isolation (crossover, face pull) en séries courtes et bien reposées pour maximiser la congestion.",
     "sessions": [
       {
         "day_order": 1,
@@ -3944,7 +3972,7 @@
     "goal": "hypertrophy",
     "audience": "all",
     "days_per_week": 4,
-    "summary_fr": "Corps entier 4 fois par semaine : chaque muscle stimulé à très haute fréquence, avec une rotation de 4 séances qui varie les mouvements et les angles.",
+    "summary_fr": "Corps entier réparti sur 4 séances complémentaires (A/B/C/D) qui font tourner les mouvements et les angles, pour une fréquence élevée et bien répartie sur chaque groupe musculaire.",
     "description_fr": "Enchaîne A, B, C puis D sur la semaine (ex. lun/mar/jeu/ven), 1 à 2 jours de repos entre deux blocs de séances. Chaque séance ouvre sur un gros polyarticulaire lourd puis enchaîne sur des accessoires plus légers. Quand tu boucles le haut de la fourchette de reps proprement sur toutes les séries, ajoute du poids.",
     "sessions": [
       {
@@ -4131,7 +4159,7 @@
       {
         "day_order": 1,
         "name_fr": "Séance A — Corps entier",
-        "focus_fr": "Cardio, jambes, dos, abdos",
+        "focus_fr": "Cardio, jambes, dos, épaules, abdos",
         "exercises": [
           {
             "exercise_id": "bicycling-stationary",
@@ -4180,7 +4208,7 @@
       {
         "day_order": 2,
         "name_fr": "Séance B — Corps entier",
-        "focus_fr": "Cardio, pectoraux, jambes, abdos",
+        "focus_fr": "Cardio, pectoraux, dos, jambes, abdos",
         "exercises": [
           {
             "exercise_id": "rowing-stationary",
@@ -4229,7 +4257,7 @@
       {
         "day_order": 3,
         "name_fr": "Séance C — Corps entier",
-        "focus_fr": "Cardio, jambes, épaules, bras",
+        "focus_fr": "Cardio, jambes, épaules, dos, bras",
         "exercises": [
           {
             "exercise_id": "recumbent-bike",
@@ -4246,7 +4274,7 @@
             "rest_seconds": 90
           },
           {
-            "exercise_id": "cable-crossover",
+            "exercise_id": "face-pull",
             "sets": 3,
             "reps_min": 12,
             "reps_max": 15,
@@ -4308,11 +4336,12 @@
             "rest_seconds": 150
           },
           {
-            "exercise_id": "pullups",
+            "exercise_id": "wide-grip-lat-pulldown",
             "sets": 3,
-            "reps_min": 6,
-            "reps_max": 10,
-            "rest_seconds": 120
+            "reps_min": 8,
+            "reps_max": 12,
+            "rest_seconds": 120,
+            "notes_fr": "Tirage vertical progressif pour débuter ; vise les tractions strictes comme objectif quand tu gagnes en force."
           }
         ]
       },
@@ -4364,11 +4393,12 @@
             "rest_seconds": 150
           },
           {
-            "exercise_id": "pullups",
+            "exercise_id": "wide-grip-lat-pulldown",
             "sets": 3,
-            "reps_min": 6,
-            "reps_max": 10,
-            "rest_seconds": 120
+            "reps_min": 8,
+            "reps_max": 12,
+            "rest_seconds": 120,
+            "notes_fr": "Tirage vertical progressif pour débuter ; vise les tractions strictes comme objectif quand tu gagnes en force."
           }
         ]
       }
@@ -4379,11 +4409,11 @@
     "name_fr": "Athlétique & Fonctionnel",
     "theme": "full-body",
     "level": "intermediate",
-    "goal": "power",
+    "goal": "strength",
     "audience": "all",
     "days_per_week": 3,
-    "summary_fr": "Force et condition physique : chaque séance combine un gros mouvement de base, des accessoires et un finisher cardio pour un corps performant et endurant.",
-    "description_fr": "3 séances par semaine sur des jours non consécutifs. Commence par le mouvement principal en charge soutenue et reps modérées, enchaîne les accessoires sans traîner, puis vide le réservoir sur le finisher cardio à allure soutenue. Progresse en charge sur les bases et en intensité/durée sur le cardio.",
+    "summary_fr": "Force et condition physique : chaque séance combine un gros mouvement de base en charge lourde, des accessoires et un finisher cardio pour un corps performant et endurant.",
+    "description_fr": "3 séances par semaine sur des jours non consécutifs. Commence par le mouvement principal en charge lourde et reps basses, enchaîne les accessoires sans traîner, puis vide le réservoir sur le finisher cardio à allure soutenue. Progresse en charge sur les bases et en intensité/durée sur le cardio.",
     "sessions": [
       {
         "day_order": 1,
@@ -4393,15 +4423,15 @@
           {
             "exercise_id": "front-barbell-squat",
             "sets": 4,
-            "reps_min": 5,
-            "reps_max": 8,
+            "reps_min": 4,
+            "reps_max": 6,
             "rest_seconds": 150
           },
           {
             "exercise_id": "barbell-bench-press-medium-grip",
             "sets": 4,
-            "reps_min": 6,
-            "reps_max": 8,
+            "reps_min": 4,
+            "reps_max": 6,
             "rest_seconds": 120
           },
           {
@@ -4435,8 +4465,8 @@
           {
             "exercise_id": "barbell-deadlift",
             "sets": 4,
-            "reps_min": 4,
-            "reps_max": 6,
+            "reps_min": 3,
+            "reps_max": 5,
             "rest_seconds": 180
           },
           {
@@ -4477,8 +4507,8 @@
           {
             "exercise_id": "barbell-shoulder-press",
             "sets": 4,
-            "reps_min": 5,
-            "reps_max": 8,
+            "reps_min": 4,
+            "reps_max": 6,
             "rest_seconds": 120
           },
           {
@@ -4522,7 +4552,7 @@
     "audience": "all",
     "days_per_week": 3,
     "summary_fr": "Cardio long et facile en zone 2 (60-70% FC max) pour bâtir une base aérobie solide et durable.",
-    "description_fr": "Reste à une intensité où tu peux tenir une conversation par phrases complètes (test de la parole) : c'est le coeur de la zone 2. Commence à 30-40 min par séance et ajoute 5 min chaque semaine jusqu'à 50-60 min. Alterne les machines pour varier les appuis et progresse en durée avant d'augmenter l'allure.",
+    "description_fr": "Reste à une intensité où tu peux tenir une conversation par phrases complètes (test de la parole) : c'est le coeur de la zone 2. Compte ~45 min par séance au départ (5 min d'échauffement + 35 min d'effort continu + 5 min de retour au calme) et allonge progressivement le bloc principal jusqu'à atteindre 55-60 min par séance. Alterne les machines pour varier les appuis et progresse en durée avant d'augmenter l'allure.",
     "sessions": [
       {
         "day_order": 1,
@@ -4716,7 +4746,7 @@
     "audience": "all",
     "days_per_week": 4,
     "summary_fr": "Mix malin de séances longues faciles (LISS) et de fractionné modéré pour maximiser la dépense et fondre.",
-    "description_fr": "Combine 2 séances LISS longues (faible intensité, beaucoup de calories sur la durée) et 2 séances d'intervalles modérés qui prolongent la dépense après l'effort. Vise 3-4 h de cardio par semaine au total et accompagne d'un léger déficit calorique. Augmente la durée des séances LISS avant d'intensifier le fractionné.",
+    "description_fr": "Combine 2 séances LISS longues (faible intensité, beaucoup de calories sur la durée) et 2 séances d'intervalles modérés qui prolongent la dépense après l'effort. Vise ~2h30 à 3h de cardio par semaine au total et accompagne d'un léger déficit calorique. Augmente la durée des séances LISS avant d'intensifier le fractionné.",
     "sessions": [
       {
         "day_order": 1,
@@ -4819,8 +4849,8 @@
     "goal": "endurance",
     "audience": "all",
     "days_per_week": 3,
-    "summary_fr": "Programme progressif marche/course inspiré du Couch-to-5K : courir 30 min d'affilée en quelques semaines.",
-    "description_fr": "Fais les 3 séances par semaine en respectant les jours de repos entre chaque. Chaque séance représente un palier : reste sur le même palier une à deux semaines si l'allure n'est pas encore confortable avant de passer au suivant. Toujours 5 min de marche d'échauffement et 5 min de retour au calme.",
+    "summary_fr": "Programme progressif marche/course inspiré du Couch-to-5K : poser les bases de la course en intervalles et tenir des blocs de course de plus en plus longs.",
+    "description_fr": "Les 3 séances de la semaine sont 3 paliers distincts (du plus facile au plus exigeant) : fais-en une par jour d'entraînement, en respectant un jour de repos entre chaque. Reste sur ce cycle de 3 paliers une à deux semaines : si l'allure n'est pas encore confortable, recommence la même semaine de paliers avant d'augmenter la durée des blocs de course. Toujours 5 min de marche d'échauffement et 5 min de retour au calme.",
     "sessions": [
       {
         "day_order": 1,
@@ -4917,19 +4947,20 @@
     "audience": "all",
     "days_per_week": 3,
     "summary_fr": "Rotation rameur / vélo / elliptique : tout le corps, peu d'impact sur les articulations, endurance variée.",
-    "description_fr": "En enchaînant plusieurs machines, tu sollicites des groupes musculaires différents et tu réduis le stress articulaire tout en gardant un gros volume aérobie. Reste en intensité modérée (60-75% FC max) sur les enchaînements, sans pause longue entre les machines. Idéal en récupération active ou en complément d'un programme de muscu.",
+    "description_fr": "En enchaînant plusieurs machines, tu sollicites des groupes musculaires différents et tu réduis le stress articulaire tout en gardant un gros volume aérobie. Reste en intensité modérée (60-75% FC max) sur les enchaînements, sans pause longue entre les machines. Encadre chaque séance d'un échauffement et d'un retour au calme courts pour monter et redescendre en régime en douceur. Idéal en récupération active ou en complément d'un programme de muscu.",
     "sessions": [
       {
         "day_order": 1,
         "name_fr": "Triathlon indoor",
-        "focus_fr": "Enchaînement continu rameur, vélo, elliptique sans coupure",
+        "focus_fr": "Enchaînement continu rameur, vélo, elliptique puis retour au calme",
         "exercises": [
           {
             "exercise_id": "rowing-stationary",
             "sets": 1,
             "reps_min": 12,
             "reps_max": 15,
-            "rest_seconds": 0
+            "rest_seconds": 0,
+            "notes_fr": "Démarre à allure facile : la première machine sert d'échauffement progressif."
           },
           {
             "exercise_id": "bicycling-stationary",
@@ -4944,6 +4975,14 @@
             "reps_min": 12,
             "reps_max": 15,
             "rest_seconds": 0
+          },
+          {
+            "exercise_id": "walking-treadmill",
+            "sets": 1,
+            "reps_min": 5,
+            "reps_max": 5,
+            "rest_seconds": 0,
+            "notes_fr": "Retour au calme : marche facile pour faire redescendre le cardio."
           }
         ]
       },
@@ -4952,6 +4991,14 @@
         "name_fr": "Bas du corps - Vélo couché & escalier",
         "focus_fr": "Volume jambes faible impact, intensité modérée et régulière",
         "exercises": [
+          {
+            "exercise_id": "walking-treadmill",
+            "sets": 1,
+            "reps_min": 5,
+            "reps_max": 5,
+            "rest_seconds": 0,
+            "notes_fr": "Échauffement : marche facile pour monter en régime avant l'effort."
+          },
           {
             "exercise_id": "recumbent-bike",
             "sets": 1,
@@ -4965,14 +5012,30 @@
             "reps_min": 12,
             "reps_max": 15,
             "rest_seconds": 0
+          },
+          {
+            "exercise_id": "walking-treadmill",
+            "sets": 1,
+            "reps_min": 5,
+            "reps_max": 5,
+            "rest_seconds": 0,
+            "notes_fr": "Retour au calme : marche facile pour faire redescendre le cardio."
           }
         ]
       },
       {
         "day_order": 3,
-        "name_fr": "Corps entier - Rameur & corde",
-        "focus_fr": "Rameur en continu puis corde à sauter par blocs courts",
+        "name_fr": "Corps entier - Rameur & escalier",
+        "focus_fr": "Rameur en continu puis escalier, le tout en faible impact",
         "exercises": [
+          {
+            "exercise_id": "walking-treadmill",
+            "sets": 1,
+            "reps_min": 5,
+            "reps_max": 5,
+            "rest_seconds": 0,
+            "notes_fr": "Échauffement : marche facile pour monter en régime avant le rameur."
+          },
           {
             "exercise_id": "rowing-stationary",
             "sets": 1,
@@ -4981,11 +5044,19 @@
             "rest_seconds": 0
           },
           {
-            "exercise_id": "rope-jumping",
+            "exercise_id": "step-mill",
             "sets": 1,
             "reps_min": 8,
             "reps_max": 10,
             "rest_seconds": 0
+          },
+          {
+            "exercise_id": "walking-treadmill",
+            "sets": 1,
+            "reps_min": 5,
+            "reps_max": 5,
+            "rest_seconds": 0,
+            "notes_fr": "Retour au calme : marche facile pour faire redescendre le cardio."
           }
         ]
       }
@@ -5000,7 +5071,7 @@
     "audience": "all",
     "days_per_week": 3,
     "summary_fr": "Sprints maximaux et traîneau pour les confirmés : puissance, VO2max et explosivité au plus haut niveau.",
-    "description_fr": "Réservé à une bonne base aérobie : les efforts sont quasi maximaux (9-10/10) avec récupérations complètes. Ne fais ces séances que sur un corps frais, jamais deux jours de suite, et arrête le bloc si la qualité du sprint chute nettement. Augmente le nombre de répétitions avant d'allonger l'effort.",
+    "description_fr": "Réservé à une bonne base aérobie : la plupart des séances visent des efforts quasi maximaux (9-10/10) avec récupérations complètes ; la séance Tabata fait exception (effort 20 s / repos court 10 s, plus orientée capacité anaérobie et VO2max). Ne fais ces séances que sur un corps frais, jamais deux jours de suite, et arrête le bloc si la qualité du sprint chute nettement. Augmente le nombre de répétitions avant d'allonger l'effort.",
     "sessions": [
       {
         "day_order": 1,
@@ -5061,7 +5132,7 @@
       {
         "day_order": 3,
         "name_fr": "Double Tabata - Vélo & escalier",
-        "focus_fr": "2 blocs Tabata (8 x 20 s à fond / 10 s repos), un vélo, un stepmill",
+        "focus_fr": "Échauffement vélo, gros bloc d'intervalles Tabata au stepmill (séries de 20 s à fond / 10 s repos), puis marche de récupération",
         "exercises": [
           {
             "exercise_id": "bicycling-stationary",
