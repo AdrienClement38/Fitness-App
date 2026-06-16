@@ -58,8 +58,13 @@ jobs:
           RSH="ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes"
           # rsync ne crée pas les dossiers parents manquants -> on crée d'abord les cibles neuves.
           $RSH "$SSH_USER@$SSH_HOST" "mkdir -p '$REMOTE_DIR/data' '$REMOTE_DIR/etl/sources'"
-          # --delete sur dist : on retire les vieux assets hashés. Migrations idem (append-only mais propre).
-          rsync -az --delete -e "$RSH" dist/                  "$SSH_USER@$SSH_HOST:$REMOTE_DIR/dist/"
+          # Assets hashés (chunks JS/CSS des pages lazy) : on les AJOUTE sans supprimer les
+          # anciens -> un onglet ouvert AVANT un déploiement peut encore charger ses chunks
+          # (sinon import dynamique en 404 = ecran d'erreur). Accumulation lente, négligeable.
+          rsync -az          -e "$RSH" dist/assets/           "$SSH_USER@$SSH_HOST:$REMOTE_DIR/dist/assets/"
+          # Le reste de dist/ (index.html, sw.js, server.cjs, manifest…) : --delete propre,
+          # assets/ exclu (deja gere ci-dessus en additif).
+          rsync -az --delete --exclude='/assets/' -e "$RSH" dist/ "$SSH_USER@$SSH_HOST:$REMOTE_DIR/dist/"
           rsync -az --delete -e "$RSH" server/db/migrations/  "$SSH_USER@$SSH_HOST:$REMOTE_DIR/server/db/migrations/"
           # data/ + etl/sources/ : sources lues par le seed (dist/seed.cjs) au runtime sur le serveur.
           rsync -az --delete -e "$RSH" data/                  "$SSH_USER@$SSH_HOST:$REMOTE_DIR/data/"
