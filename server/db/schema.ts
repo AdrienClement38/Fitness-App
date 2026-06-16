@@ -235,10 +235,12 @@ export const programs = pgTable(
   {
     id: text('id').primaryKey(),
     nameFr: text('name_fr').notNull(),
-    theme: text('theme'), // 'full-body'|'upper-lower'|'ppl'|'strength'|'glutes'|'upper-body'…
+    theme: text('theme'), // 'full-body'|'upper-lower'|'ppl'|'strength'|'glutes'|'upper-body'|'cardio'…
     level: text('level'), // 'beginner'|'intermediate'|'advanced'
     goal: text('goal'), // 'strength'|'hypertrophy'|'endurance'|'power'
     daysPerWeek: integer('days_per_week'),
+    // Public cible (mise en avant) : 'female' | 'male' | 'all'. Soft default, tout reste accessible.
+    audience: text('audience'),
     summaryFr: text('summary_fr'),
     descriptionFr: text('description_fr'),
   },

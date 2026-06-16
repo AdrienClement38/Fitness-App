@@ -183,6 +183,7 @@ export interface ProgramListItem {
   level: string | null;
   goal: string | null;
   daysPerWeek: number | null;
+  audience: 'female' | 'male' | 'all' | null; // public cible (mise en avant)
   summaryFr: string | null;
 }
 
@@ -236,7 +237,7 @@ export const LABELS = {
   theme: {
     'full-body': 'Full Body', 'upper-lower': 'Haut / Bas', ppl: 'Push Pull Legs',
     strength: 'Force', glutes: 'Fessiers', 'upper-body': 'Haut du corps',
-    'fat-loss': 'Perte de gras', split: 'Split par muscle',
+    'fat-loss': 'Perte de gras', split: 'Split par muscle', cardio: 'Cardio',
   } as Record<string, string>,
 };
 

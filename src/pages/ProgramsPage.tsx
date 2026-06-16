@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {Plus} from 'lucide-react';
 import {Link, useNavigate} from 'react-router-dom';
-import {api, label, type Gender} from '../lib/api';
+import {api, label, type Gender, type ProgramListItem} from '../lib/api';
 import {createEmptyProgram, useMyPrograms} from '../lib/myPrograms';
 import {useFetch} from '../lib/useFetch';
 import {useAuth} from '../lib/auth';
@@ -14,14 +14,11 @@ const LEVELS = [
 ];
 
 // Mise en avant PAR OBJECTIF/PRÉFÉRENCE (pas une nécessité physiologique : cf. recherche
-// — les programmes marchent pareil pour tous, la charge est individuelle). Simple ordre
-// d'affichage + badge « Suggéré » : tout reste accessible. 'préfère ne pas dire' -> aucun tri.
-const FEMALE_THEMES = new Set(['glutes', 'fat-loss', 'full-body', 'upper-lower']);
-const MALE_THEMES = new Set(['strength', 'upper-body', 'ppl', 'split']);
-const isSuggested = (theme: string | null, gender: Gender | null | undefined): boolean => {
-  if (!gender || !theme) return false;
-  return gender === 'female' ? FEMALE_THEMES.has(theme) : MALE_THEMES.has(theme);
-};
+// — les programmes marchent pareil pour tous, la charge est individuelle). Le programme
+// porte un `audience` curé ; on remonte ceux du sexe + badge « Suggéré ». Tout reste
+// accessible ; 'all' = neutre ; 'préfère ne pas dire' (gender null) -> aucun tri.
+const isSuggested = (audience: ProgramListItem['audience'], gender: Gender | null | undefined): boolean =>
+  !!gender && audience === gender;
 
 export default function ProgramsPage() {
   const {data, error, loading} = useFetch(() => api.programs(), []);
@@ -38,8 +35,11 @@ export default function ProgramsPage() {
   const filtered = (data ?? []).filter((p) => p.level === level);
   // Suggérés (selon l'objectif fréquent du sexe) remontés en premier ; ordre neutre sinon.
   const catalog = gender
-    ? [...filtered].sort((a, b) => Number(isSuggested(b.theme, gender)) - Number(isSuggested(a.theme, gender)))
+    ? [...filtered].sort((a, b) => Number(isSuggested(b.audience, gender)) - Number(isSuggested(a.audience, gender)))
     : filtered;
+  // Le cardio est un type à part : machines (rameur/vélo/tapis/elliptique), séances en minutes.
+  const muscu = catalog.filter((p) => p.theme !== 'cardio');
+  const cardio = catalog.filter((p) => p.theme === 'cardio');
 
   return (
     <div>
@@ -102,29 +102,65 @@ export default function ProgramsPage() {
 
       {loading && <Loading />}
       {error && <ErrorState message={error} />}
-      {data && (
-        <div className="mt-4 grid gap-3">
-          {catalog.length === 0 ? (
+      {data &&
+        (catalog.length === 0 ? (
+          <div className="mt-4">
             <Empty label="Aucun programme à ce niveau pour l'instant." />
-          ) : (
-            catalog.map((p) => (
-              <Link
-                key={p.id}
-                to={`/programmes/${p.id}`}
-                className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 transition-colors hover:border-slate-700 hover:bg-slate-900"
-              >
-                <div className="flex flex-wrap items-center gap-2">
-                  <h3 className="font-semibold">{p.nameFr}</h3>
-                  {isSuggested(p.theme, gender) && <Badge tone="emerald">Suggéré</Badge>}
-                  {p.theme && <Badge tone="indigo">{label('theme', p.theme)}</Badge>}
-                  {p.daysPerWeek && <Badge>{p.daysPerWeek} j/sem</Badge>}
-                </div>
-                {p.summaryFr && <p className="mt-1 text-sm leading-relaxed text-slate-300">{p.summaryFr}</p>}
-              </Link>
-            ))
-          )}
-        </div>
-      )}
+          </div>
+        ) : (
+          <div className="mt-4 space-y-6">
+            <ProgramGroup title="Musculation" programs={muscu} gender={gender} />
+            <ProgramGroup
+              title="Cardio"
+              subtitle="Rameur, vélo, tapis, elliptique"
+              programs={cardio}
+              gender={gender}
+              hideTheme
+            />
+          </div>
+        ))}
     </div>
+  );
+}
+
+// Un bloc du catalogue (Musculation / Cardio). Rien si la liste est vide à ce niveau.
+function ProgramGroup({
+  title,
+  subtitle,
+  programs,
+  gender,
+  hideTheme,
+}: {
+  title: string;
+  subtitle?: string;
+  programs: ProgramListItem[];
+  gender: Gender | null;
+  hideTheme?: boolean;
+}) {
+  if (programs.length === 0) return null;
+  return (
+    <section>
+      <div className="mb-2 flex items-baseline gap-2">
+        <h3 className="font-heading text-sm uppercase tracking-wider text-slate-400">{title}</h3>
+        {subtitle && <span className="text-xs text-slate-600">{subtitle}</span>}
+      </div>
+      <div className="grid gap-3">
+        {programs.map((p) => (
+          <Link
+            key={p.id}
+            to={`/programmes/${p.id}`}
+            className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 transition-colors hover:border-slate-700 hover:bg-slate-900"
+          >
+            <div className="flex flex-wrap items-center gap-2">
+              <h3 className="font-semibold">{p.nameFr}</h3>
+              {isSuggested(p.audience, gender) && <Badge tone="emerald">Suggéré</Badge>}
+              {!hideTheme && p.theme && <Badge tone="indigo">{label('theme', p.theme)}</Badge>}
+              {p.daysPerWeek && <Badge>{p.daysPerWeek} j/sem</Badge>}
+            </div>
+            {p.summaryFr && <p className="mt-1 text-sm leading-relaxed text-slate-300">{p.summaryFr}</p>}
+          </Link>
+        ))}
+      </div>
+    </section>
   );
 }

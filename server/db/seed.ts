@@ -70,6 +70,7 @@ interface ProgramJson {
   theme?: string;
   level?: string;
   goal?: string;
+  audience?: string; // 'female' | 'male' | 'all'
   days_per_week?: number;
   summary_fr?: string;
   description_fr?: string;
@@ -259,7 +260,7 @@ async function main() {
   for (const p of programs) {
     programRows.push({
       id: p.id, nameFr: p.name_fr, theme: p.theme ?? null, level: p.level ?? null,
-      goal: p.goal ?? null, daysPerWeek: p.days_per_week ?? null,
+      goal: p.goal ?? null, daysPerWeek: p.days_per_week ?? null, audience: p.audience ?? null,
       summaryFr: p.summary_fr ?? null, descriptionFr: p.description_fr ?? null,
     });
     for (const s of p.sessions ?? []) {

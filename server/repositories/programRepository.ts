@@ -16,6 +16,7 @@ export async function listPrograms() {
       level: programs.level,
       goal: programs.goal,
       daysPerWeek: programs.daysPerWeek,
+      audience: programs.audience,
       summaryFr: programs.summaryFr,
     })
     .from(programs)
