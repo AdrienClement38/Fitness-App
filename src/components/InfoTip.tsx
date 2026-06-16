@@ -12,7 +12,7 @@ export function InfoTip({children, srLabel = 'Explication'}: {children: ReactNod
   const explanations = useExplanations();
   const [open, setOpen] = useState(false);
   const btnRef = useRef<HTMLButtonElement>(null);
-  const [pos, setPos] = useState<{top: number; left: number; width: number} | null>(null);
+  const [pos, setPos] = useState<{top: number; left: number; width: number; caret: number} | null>(null);
 
   // Bulle en position `fixed`, ancrée sous le « ? » mais CLAMPÉE dans l'écran : sinon
   // elle déborde quand le « ? » est au bord (en-tête de tableau, mobile). Au scroll /
@@ -25,7 +25,8 @@ export function InfoTip({children, srLabel = 'Explication'}: {children: ReactNod
       const width = Math.min(256, window.innerWidth - 16);
       const center = r.left + r.width / 2;
       const left = Math.max(8, Math.min(center - width / 2, window.innerWidth - width - 8));
-      setPos({top: r.bottom + 6, left, width});
+      const caret = Math.max(12, Math.min(center - left, width - 12)); // X de la flèche = sous le « ? »
+      setPos({top: r.bottom + 6, left, width, caret});
     }
     const close = () => setOpen(false);
     window.addEventListener('scroll', close, true);
@@ -62,6 +63,8 @@ export function InfoTip({children, srLabel = 'Explication'}: {children: ReactNod
             style={{top: pos.top, left: pos.left, width: pos.width}}
             className="fixed z-50 rounded-lg border border-slate-700 bg-slate-800 p-2.5 text-left font-sans text-xs font-normal normal-case leading-snug tracking-normal text-slate-200 shadow-xl"
           >
+            {/* Flèche pointant vers le « ? » cliqué (même si la bulle est décalée pour rester dans l'écran). */}
+            <span style={{left: pos.caret - 5}} className="absolute -top-1.5 h-2.5 w-2.5 rotate-45 border-l border-t border-slate-700 bg-slate-800" />
             {children}
           </span>
         </>

@@ -31,7 +31,7 @@ export default function ResetPasswordPage() {
   if (done) {
     return (
       <div className="mx-auto mt-10 max-w-md text-center">
-        <h1 className="text-xl font-bold">Mot de passe réinitialisé ✅</h1>
+        <h1 className="text-xl font-bold">Mot de passe réinitialisé</h1>
         <p className="mt-2 text-sm text-slate-400">Tu peux maintenant te connecter avec ton nouveau mot de passe.</p>
         <Link to="/compte" className="mt-5 inline-block rounded-lg bg-emerald-500 px-5 py-2.5 text-sm font-bold text-slate-950 hover:bg-emerald-400">
           Se connecter

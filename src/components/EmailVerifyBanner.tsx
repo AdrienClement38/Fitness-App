@@ -28,7 +28,7 @@ export default function EmailVerifyBanner() {
     <div className="bg-amber-500/15 px-4 py-2 text-center text-xs text-amber-300">
       {msg ?? (
         <>
-          Confirme ton adresse email pour sécuriser ton compte — l'email est souvent dans les <strong>spams</strong>, marque-le « non spam ».{' '}
+          Confirme ton adresse email pour sécuriser ton compte — l'email peut arriver dans tes <strong>spams</strong>, marque-le « non spam ».{' '}
           <button onClick={resend} disabled={busy} className="font-semibold underline disabled:opacity-50">
             {busy ? 'Envoi…' : 'Renvoyer le lien'}
           </button>

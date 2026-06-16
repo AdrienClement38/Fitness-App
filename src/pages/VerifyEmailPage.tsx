@@ -36,7 +36,7 @@ export default function VerifyEmailPage() {
 
   return (
     <div className="mx-auto mt-10 max-w-md text-center">
-      <h1 className="text-xl font-bold">{status === 'ok' ? 'Adresse confirmée ✅' : 'Confirmation impossible'}</h1>
+      <h1 className="text-xl font-bold">{status === 'ok' ? 'Adresse confirmée' : 'Confirmation impossible'}</h1>
       <p className="mt-2 text-sm text-slate-400">
         {status === 'ok'
           ? 'Merci — ton adresse email est validée, ton compte est pleinement actif.'

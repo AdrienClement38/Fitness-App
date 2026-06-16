@@ -130,7 +130,7 @@ export default function ExercisesPage() {
             <Empty
               label={
                 favActive
-                  ? 'Aucun favori pour l’instant — touche le ♥ sur un exercice.'
+                  ? 'Aucun favori pour l’instant — touche le cœur sur un exercice pour l’ajouter.'
                   : 'Aucun exercice ne correspond à ces filtres.'
               }
             />
