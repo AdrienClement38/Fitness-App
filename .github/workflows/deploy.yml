@@ -56,6 +56,8 @@ jobs:
       - name: Envoyer les artefacts (rsync)
         run: |
           RSH="ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes"
+          # rsync ne crée pas les dossiers parents manquants -> on crée d'abord les cibles neuves.
+          $RSH "$SSH_USER@$SSH_HOST" "mkdir -p '$REMOTE_DIR/data' '$REMOTE_DIR/etl/sources'"
           # --delete sur dist : on retire les vieux assets hashés. Migrations idem (append-only mais propre).
           rsync -az --delete -e "$RSH" dist/                  "$SSH_USER@$SSH_HOST:$REMOTE_DIR/dist/"
           rsync -az --delete -e "$RSH" server/db/migrations/  "$SSH_USER@$SSH_HOST:$REMOTE_DIR/server/db/migrations/"
