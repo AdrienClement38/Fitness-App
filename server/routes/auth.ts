@@ -36,8 +36,22 @@ import {closeUserSockets} from '../sync';
 
 const VERIFY_TTL_MS = 24 * 60 * 60 * 1000; // 24 h
 const RESET_TTL_MS = 60 * 60 * 1000; // 1 h
-const appBase = (req: {protocol: string; get: (h: string) => string | undefined}) =>
-  process.env.APP_URL || `${req.protocol}://${req.get('host')}`;
+// Hôtes de confiance pour les liens INSÉRÉS DANS LES EMAILS (confirmation / réinitialisation).
+// Anti « Host header poisoning » : un en-tête Host forgé par un attaquant ne doit jamais finir
+// dans un lien (avec jeton) envoyé à la victime. Priorité : APP_URL (recommandé en prod) ;
+// sinon on n'accepte que localhost (dev) ou un hôte explicitement de confiance, et à défaut on
+// retombe sur l'hôte prod — JAMAIS le Host fourni par le client.
+const TRUSTED_HOSTS = (process.env.APP_TRUSTED_HOSTS || 'fitnessapp.alwaysdata.net')
+  .split(',')
+  .map((h) => h.trim().toLowerCase())
+  .filter(Boolean);
+function appBase(req: {protocol: string; get: (h: string) => string | undefined}): string {
+  if (process.env.APP_URL) return process.env.APP_URL;
+  const host = (req.get('host') || '').toLowerCase();
+  const isLocal = /^(localhost|127\.0\.0\.1)(:\d+)?$/.test(host);
+  if (isLocal || TRUSTED_HOSTS.includes(host)) return `${req.protocol}://${host}`;
+  return `https://${TRUSTED_HOSTS[0]}`;
+}
 
 const router = Router();
 
@@ -112,6 +126,9 @@ router.post('/login', async (req, res) => {
   const parsed = credentials.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({error: 'Email ou mot de passe invalide.'});
   const email = parsed.data.email.trim().toLowerCase();
+  // Limite AUSSI par compte ciblé (en plus de l'IP) : freine un brute-force distribué sur
+  // de multiples IP contre un même email (la limite par IP seule ne l'attrape pas).
+  if (rateLimited(`login-id:${email}`)) return res.status(429).json({error: 'Trop de tentatives sur ce compte. Réessaie dans quelques minutes.'});
 
   const user = await getUserByEmail(email);
   if (!user) {

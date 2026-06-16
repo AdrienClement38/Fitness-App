@@ -87,7 +87,9 @@ function transportFor(c: SmtpConfig): Transporter {
     port: c.port,
     secure: c.port === 465, // 465 = TLS implicite ; 587 = STARTTLS
     auth: {user: c.user, pass: c.pass},
-    tls: {rejectUnauthorized: false}, // tolère un certif auto-signé (certains relais)
+    // Certificat du relais VÉRIFIÉ par défaut (Brevo/Gmail ont des certifs valides). On ne
+    // tolère un certif auto-signé que sur demande EXPLICITE (SMTP_INSECURE_TLS=1, rares relais).
+    tls: {rejectUnauthorized: process.env.SMTP_INSECURE_TLS !== '1'},
     connectionTimeout: 10000,
   });
 }

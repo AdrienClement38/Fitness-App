@@ -15,6 +15,7 @@ import {bootstrapAdmins, deleteUnverifiedBefore, grandfatherExistingUsers, markA
 import {adminEmails, getUserFromRequest} from './server/auth';
 import {isEmailConfigured} from './server/email';
 import {getPublicAppStatus, isMaintenanceActive, loadAppStatus} from './server/appStatus';
+import {dataEncryptionEnabled} from './server/crypto';
 import type {NextFunction, Request, Response} from 'express';
 
 const app = express();
@@ -70,6 +71,14 @@ async function startServer() {
   // est mise à niveau avant de servir les requêtes.
   await migrateDb();
 
+  // Garde de confidentialité : en prod, alerter si le chiffrement au repos est OFF
+  // (DATA_ENCRYPTION_KEY absente -> blobs sync_items + mot de passe SMTP stockés en clair).
+  if (process.env.NODE_ENV === 'production' && !dataEncryptionEnabled) {
+    console.warn(
+      '[AC-KINETIK] ⚠️ DATA_ENCRYPTION_KEY absente en production : sync_items et mot de passe SMTP stockés EN CLAIR. Définis DATA_ENCRYPTION_KEY pour activer le chiffrement au repos.',
+    );
+  }
+
   // Promotion des admin(s) déclarés dans ADMIN_EMAILS (idempotent).
   const promoted = await bootstrapAdmins(adminEmails());
   if (promoted.length) console.log(`[AC-KINETIK] Admin promu(s) : ${promoted.join(', ')}`);
@@ -100,6 +109,12 @@ async function startServer() {
     app.use(vite.middlewares);
   } else {
     const distPath = path.join(process.cwd(), 'dist');
+    // Le bundle serveur (server.cjs / seed.cjs) et les sourcemaps vivent dans dist/ mais ne
+    // sont PAS du contenu public -> on les masque (sinon GET /server.cjs exposerait le code serveur).
+    app.use((req, res, next) => {
+      if (/\.(cjs|map)$/.test(req.path)) return res.status(404).end();
+      next();
+    });
     app.use(express.static(distPath));
     app.get('*', (_req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));
