@@ -88,6 +88,14 @@ export async function setVerifyToken(id: string, token: string, expires: Date) {
   await db.update(users).set({verifyToken: token, verifyExpires: expires}).where(eq(users.id, id));
 }
 
+/**
+ * Marque UN compte comme vérifié (jeton effacé). Utilisé à l'inscription quand l'envoi
+ * d'email n'est pas configuré : la confirmation étant impossible, le compte naît vérifié.
+ */
+export async function markUserVerified(id: string): Promise<void> {
+  await db.update(users).set({emailVerified: true, verifyToken: null, verifyExpires: null}).where(eq(users.id, id));
+}
+
 /* ---- Réinitialisation de mot de passe par email ----------------------- */
 
 /** Pose un jeton de réinitialisation (single-use, expiration courte). */
@@ -118,6 +126,21 @@ export async function grandfatherExistingUsers(): Promise<number> {
     .update(users)
     .set({emailVerified: true})
     .where(and(eq(users.emailVerified, false), isNull(users.verifyToken)))
+    .returning({id: users.id});
+  return res.length;
+}
+
+/**
+ * Régularise TOUS les comptes non vérifiés (jeton effacé). Appelé au démarrage quand
+ * l'envoi d'email n'est pas configuré : la confirmation étant impossible, aucun compte
+ * ne doit rester « non vérifié » (sinon bandeau permanent + purge à 7 j sans recours).
+ * Idempotent (0 ligne touchée une fois tout régularisé). Retourne le nombre régularisé.
+ */
+export async function markAllVerified(): Promise<number> {
+  const res = await db
+    .update(users)
+    .set({emailVerified: true, verifyToken: null, verifyExpires: null})
+    .where(eq(users.emailVerified, false))
     .returning({id: users.id});
   return res.length;
 }

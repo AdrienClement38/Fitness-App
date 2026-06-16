@@ -71,6 +71,16 @@ export async function resolveSmtp(): Promise<{config: SmtpConfig; source: 'db' |
   return null;
 }
 
+/**
+ * Vrai si un envoi d'email est réellement possible (config SMTP en base ou en env).
+ * Source de vérité de la « confirmation d'email ACTIVE ». Quand c'est faux, la
+ * confirmation est DÉSACTIVÉE partout : pas de bandeau, pas de purge — un compte ne
+ * doit jamais être bloqué pour une vérification qu'il ne pourra jamais faire.
+ */
+export async function isEmailConfigured(): Promise<boolean> {
+  return (await resolveSmtp()) !== null;
+}
+
 function transportFor(c: SmtpConfig): Transporter {
   return nodemailer.createTransport({
     host: c.host,

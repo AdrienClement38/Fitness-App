@@ -22,6 +22,7 @@ import {
   deleteUserSessions,
   getUserByEmail,
   getUserById,
+  markUserVerified,
   setGender,
   setResetToken,
   setUserRole,
@@ -29,7 +30,7 @@ import {
   updatePassword,
   verifyEmailByToken,
 } from '../repositories/userRepository';
-import {sendPasswordResetEmail, sendVerificationEmail} from '../email';
+import {isEmailConfigured, sendPasswordResetEmail, sendVerificationEmail} from '../email';
 import {isDisposableEmail} from '../disposableEmails';
 import {closeUserSockets} from '../sync';
 
@@ -78,20 +79,31 @@ router.post('/register', async (req, res) => {
 
   // Sexe (optionnel) : seules 'male'/'female' sont retenues, sinon null (non renseigné).
   const gender = req.body?.gender === 'male' || req.body?.gender === 'female' ? req.body.gender : null;
-  // Jeton de confirmation d'email (24 h) -> le compte est créé NON vérifié.
-  const verifyToken = newToken();
-  const user = await createUser(email, await hashPassword(parsed.data.password), verifyToken, new Date(Date.now() + VERIFY_TTL_MS), gender);
+  // Confirmation d'email seulement si un envoi est réellement configuré. Sinon, la
+  // confirmation serait impossible -> le compte naît VÉRIFIÉ (jamais de bandeau ni de purge).
+  const emailActive = await isEmailConfigured();
+  const verifyToken = emailActive ? newToken() : undefined;
+  const user = await createUser(
+    email,
+    await hashPassword(parsed.data.password),
+    verifyToken,
+    emailActive ? new Date(Date.now() + VERIFY_TTL_MS) : undefined,
+    gender,
+  );
+  if (!emailActive) await markUserVerified(user.id);
   // Auto-promotion si l'email est déclaré admin (ADMIN_EMAILS) : pas besoin de redémarrer.
   const role: 'user' | 'admin' = adminEmails().includes(email) ? 'admin' : 'user';
   if (role !== user.role) await setUserRole(user.id, role);
-  // Envoi best-effort : une panne SMTP ne doit pas bloquer l'inscription (renvoi possible depuis le compte).
-  sendVerificationEmail(email, `${appBase(req)}/verifier-email?token=${verifyToken}`).catch((e) =>
-    console.error('[email] envoi confirmation échoué :', (e as Error).message),
-  );
+  // Envoi best-effort (seulement si configuré) : une panne SMTP ne bloque pas l'inscription.
+  if (emailActive) {
+    sendVerificationEmail(email, `${appBase(req)}/verifier-email?token=${verifyToken}`).catch((e) =>
+      console.error('[email] envoi confirmation échoué :', (e as Error).message),
+    );
+  }
   const token = newToken();
   await createSession(user.id, token, sessionExpiry());
   res.cookie(SESSION_COOKIE, token, cookieOptions());
-  return res.status(201).json({id: user.id, email: user.email, role, emailVerified: false, gender});
+  return res.status(201).json({id: user.id, email: user.email, role, emailVerified: !emailActive, gender});
 });
 
 router.post('/login', async (req, res) => {

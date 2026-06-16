@@ -11,8 +11,9 @@ import authRouter from './server/routes/auth';
 import adminRouter from './server/routes/admin';
 import {attachSync} from './server/sync';
 import {migrateDb} from './server/db/client';
-import {bootstrapAdmins, deleteUnverifiedBefore, grandfatherExistingUsers} from './server/repositories/userRepository';
+import {bootstrapAdmins, deleteUnverifiedBefore, grandfatherExistingUsers, markAllVerified} from './server/repositories/userRepository';
 import {adminEmails, getUserFromRequest} from './server/auth';
+import {isEmailConfigured} from './server/email';
 import {getPublicAppStatus, isMaintenanceActive, loadAppStatus} from './server/appStatus';
 import type {NextFunction, Request, Response} from 'express';
 
@@ -76,9 +77,17 @@ async function startServer() {
   // Comptes créés AVANT la confirmation d'email : régularisés (considérés vérifiés).
   const regularized = await grandfatherExistingUsers();
   if (regularized) console.log(`[AC-KINETIK] ${regularized} compte(s) historique(s) régularisé(s) (email réputé vérifié)`);
-  // Nettoyage anti-bots : comptes du nouveau flux jamais confirmés depuis > 7 jours.
-  const purged = await deleteUnverifiedBefore(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000));
-  if (purged) console.log(`[AC-KINETIK] ${purged} compte(s) non confirmé(s) purgé(s)`);
+  // Confirmation d'email : active UNIQUEMENT si un envoi est réellement configuré.
+  //  - configuré   -> nettoyage anti-bots : comptes jamais confirmés depuis > 7 jours.
+  //  - non configuré -> la confirmation est impossible : on régularise tout le monde
+  //    (jamais de bandeau ni de purge pour un compte qui ne pourra jamais confirmer).
+  if (await isEmailConfigured()) {
+    const purged = await deleteUnverifiedBefore(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000));
+    if (purged) console.log(`[AC-KINETIK] ${purged} compte(s) non confirmé(s) purgé(s)`);
+  } else {
+    const reputedVerified = await markAllVerified();
+    if (reputedVerified) console.log(`[AC-KINETIK] Envoi d'email non configuré → ${reputedVerified} compte(s) régularisé(s) (confirmation désactivée)`);
+  }
 
   // État applicatif (annonce + maintenance) en cache mémoire.
   await loadAppStatus();
