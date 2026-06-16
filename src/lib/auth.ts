@@ -19,14 +19,18 @@ function getDataOwner(): string | null {
   }
 }
 /**
- * À l'authentification : si les données locales (séances, programmes, favoris) appartiennent
- * à un AUTRE compte, on les purge — jamais de mélange entre comptes sur un même appareil
- * (ex. suppression puis re-création de compte). Puis on marque le compte courant propriétaire.
- * 1er chargement (aucun propriétaire connu) : on adopte les données existantes sans rien purger.
+ * À l'authentification : on ne CONSERVE les données locales (séances, programmes, favoris)
+ * que si elles appartiennent de façon CERTAINE au compte qui se connecte, c.-à-d. si le
+ * marqueur `sync-data-owner` vaut exactement son userId. Dans TOUS les autres cas —
+ * propriétaire différent OU inconnu (`null` : autre navigateur, données héritées d'un
+ * compte supprimé puis recréé…) — on PURGE le local ; la sync (pull serveur, source de
+ * vérité) restaure ensuite les vraies données du compte. Ainsi un appareil ne peut jamais
+ * réinjecter les données d'un compte dans un autre. (Une donnée créée hors-ligne et jamais
+ * synchronisée sur un appareil au propriétaire inconnu peut être perdue — cas marginal,
+ * acceptable face à la garantie d'isolation.)
  */
 function adoptUserData(userId: string) {
-  const prev = getDataOwner();
-  if (prev !== null && prev !== userId) clearLocalData();
+  if (getDataOwner() !== userId) clearLocalData();
   try {
     localStorage.setItem(OWNER_KEY, userId);
   } catch {
