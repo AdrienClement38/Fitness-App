@@ -38,7 +38,7 @@ export default function Layout() {
     <div className="mx-auto flex min-h-screen max-w-2xl flex-col">
       <header className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-800/80 bg-slate-950/90 px-4 py-3 backdrop-blur">
         <NavLink to="/" className="flex items-center gap-2">
-          <Logo className="h-8 w-8" />
+          <Logo className="h-8 w-8" women={user?.gender === 'female'} />
           <span className="font-display text-lg font-bold tracking-wide">AC-KINETIK</span>
         </NavLink>
         <NavLink

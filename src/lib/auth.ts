@@ -5,7 +5,7 @@
  * une panne réseau conserve l'état local. Cookie httpOnly géré par le navigateur.
  */
 import {useSyncExternalStore} from 'react';
-import {authApi, type AuthUser} from './api';
+import {authApi, type AuthUser, type Gender} from './api';
 
 const UKEY = 'auth-user';
 
@@ -63,8 +63,8 @@ export async function login(email: string, password: string) {
   cacheUser(u);
   set({user: u, loading: false});
 }
-export async function register(email: string, password: string, website = '') {
-  const u = await authApi.register(email, password, website);
+export async function register(email: string, password: string, gender: Gender | null = null, website = '') {
+  const u = await authApi.register(email, password, gender, website);
   cacheUser(u);
   set({user: u, loading: false});
 }

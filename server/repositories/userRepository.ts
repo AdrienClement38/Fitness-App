@@ -10,11 +10,17 @@ export async function getUserByEmail(email: string) {
   return u ?? null;
 }
 
-export async function createUser(email: string, passwordHash: string, verifyToken?: string, verifyExpires?: Date) {
+export async function createUser(
+  email: string,
+  passwordHash: string,
+  verifyToken?: string,
+  verifyExpires?: Date,
+  gender?: 'male' | 'female' | null,
+) {
   const id = `u-${randomUUID()}`;
   const [u] = await db
     .insert(users)
-    .values({id, email, passwordHash, verifyToken: verifyToken ?? null, verifyExpires: verifyExpires ?? null})
+    .values({id, email, passwordHash, verifyToken: verifyToken ?? null, verifyExpires: verifyExpires ?? null, gender: gender ?? null})
     .returning();
   return u;
 }
@@ -26,7 +32,7 @@ export async function createSession(userId: string, token: string, expiresAt: Da
 /** Session + email de l'utilisateur, en une requête (pour la résolution du cookie). */
 export async function getSessionWithUser(token: string) {
   const [row] = await db
-    .select({userId: sessions.userId, expiresAt: sessions.expiresAt, email: users.email, role: users.role, emailVerified: users.emailVerified})
+    .select({userId: sessions.userId, expiresAt: sessions.expiresAt, email: users.email, role: users.role, emailVerified: users.emailVerified, gender: users.gender})
     .from(sessions)
     .innerJoin(users, eq(users.id, sessions.userId))
     .where(eq(sessions.token, token));

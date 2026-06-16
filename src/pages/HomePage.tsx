@@ -4,6 +4,7 @@ import {Link, useNavigate} from 'react-router-dom';
 import {useActiveWorkout, useWorkoutHistory} from '../lib/workoutLogs';
 import {useMyPrograms} from '../lib/myPrograms';
 import {summary} from '../lib/stats';
+import {useAuth} from '../lib/auth';
 import Logo from '../components/Logo';
 
 // Accès unique à l'accueil (le cardio, lui, est un exercice -> onglet Exercices).
@@ -14,6 +15,7 @@ const browseCards = [
 export default function HomePage() {
   const [q, setQ] = useState('');
   const navigate = useNavigate();
+  const {user} = useAuth();
   const active = useActiveWorkout();
   const myPrograms = useMyPrograms();
   const history = useWorkoutHistory();
@@ -28,7 +30,7 @@ export default function HomePage() {
   return (
     <div>
       <div className="flex flex-col items-center text-center">
-        <Logo className="h-40 w-40" />
+        <Logo className="h-40 w-40" women={user?.gender === 'female'} />
         <h1 className="mt-4 text-2xl font-bold tracking-tight">Ta salle, dans ta poche</h1>
         <p className="mt-1 text-slate-400">Tes entraînements, tes programmes, et une bibliothèque complète.</p>
       </div>

@@ -355,18 +355,21 @@ export interface PublicAppStatus {
   maintenance: {active: boolean; message: string};
 }
 
+export type Gender = 'male' | 'female';
+
 export interface AuthUser {
   id: string;
   email: string;
   role?: string; // 'user' | 'admin' (optionnel : compatible cache pré-migration)
   emailVerified?: boolean;
+  gender?: Gender | null; // null/absent = préfère ne pas dire
 }
 
 export const authApi = {
   me: () => get<AuthUser>('/auth/me'),
-  // `website` = honeypot anti-bot (champ caché ; vide pour un humain).
-  register: (email: string, password: string, website = '') =>
-    post<AuthUser>('/auth/register', {email, password, website}),
+  // `gender` optionnel ; `website` = honeypot anti-bot (champ caché ; vide pour un humain).
+  register: (email: string, password: string, gender: Gender | null = null, website = '') =>
+    post<AuthUser>('/auth/register', {email, password, gender, website}),
   login: (email: string, password: string) => post<AuthUser>('/auth/login', {email, password}),
   logout: () => post<{ok: boolean}>('/auth/logout', {}),
   changePassword: (currentPassword: string, newPassword: string) =>

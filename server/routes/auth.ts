@@ -75,9 +75,11 @@ router.post('/register', async (req, res) => {
   if (isDisposableEmail(email)) return res.status(400).json({error: 'Les adresses email jetables ne sont pas acceptées.'});
   if (await getUserByEmail(email)) return res.status(409).json({error: 'Un compte existe déjà avec cet email.'});
 
+  // Sexe (optionnel) : seules 'male'/'female' sont retenues, sinon null (non renseigné).
+  const gender = req.body?.gender === 'male' || req.body?.gender === 'female' ? req.body.gender : null;
   // Jeton de confirmation d'email (24 h) -> le compte est créé NON vérifié.
   const verifyToken = newToken();
-  const user = await createUser(email, await hashPassword(parsed.data.password), verifyToken, new Date(Date.now() + VERIFY_TTL_MS));
+  const user = await createUser(email, await hashPassword(parsed.data.password), verifyToken, new Date(Date.now() + VERIFY_TTL_MS), gender);
   // Auto-promotion si l'email est déclaré admin (ADMIN_EMAILS) : pas besoin de redémarrer.
   const role: 'user' | 'admin' = adminEmails().includes(email) ? 'admin' : 'user';
   if (role !== user.role) await setUserRole(user.id, role);
@@ -88,7 +90,7 @@ router.post('/register', async (req, res) => {
   const token = newToken();
   await createSession(user.id, token, sessionExpiry());
   res.cookie(SESSION_COOKIE, token, cookieOptions());
-  return res.status(201).json({id: user.id, email: user.email, role, emailVerified: false});
+  return res.status(201).json({id: user.id, email: user.email, role, emailVerified: false, gender});
 });
 
 router.post('/login', async (req, res) => {
@@ -110,7 +112,7 @@ router.post('/login', async (req, res) => {
   const token = newToken();
   await createSession(user.id, token, sessionExpiry());
   res.cookie(SESSION_COOKIE, token, cookieOptions());
-  return res.json({id: user.id, email: user.email, role: user.role, emailVerified: user.emailVerified});
+  return res.json({id: user.id, email: user.email, role: user.role, emailVerified: user.emailVerified, gender: user.gender});
 });
 
 const verifyBody = z.object({token: z.string().min(1).max(256)});

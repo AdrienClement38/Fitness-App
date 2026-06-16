@@ -2,7 +2,7 @@ import {useState, type FormEvent} from 'react';
 import {Link, useLocation, useNavigate} from 'react-router-dom';
 import {Download, LogOut, Shield, User} from 'lucide-react';
 import {changePassword, deleteAccount, login, logout, register, useAuth} from '../lib/auth';
-import {authApi} from '../lib/api';
+import {authApi, type Gender} from '../lib/api';
 import {useSyncConnected} from '../lib/sync';
 import {exportMyData} from '../lib/exportData';
 import {setStretchSuggestions, useStretchSuggestions} from '../lib/settings';
@@ -270,6 +270,7 @@ export default function AccountPage() {
   const [mode, setMode] = useState<'login' | 'register' | 'forgot'>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [gender, setGender] = useState<Gender | null>(null); // optionnel : null = préfère ne pas dire
   const [website, setWebsite] = useState(''); // honeypot anti-bot (reste vide pour un humain)
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
@@ -336,7 +337,7 @@ export default function AccountPage() {
     setError('');
     setBusy(true);
     try {
-      if (mode === 'register') await register(email.trim(), password, website);
+      if (mode === 'register') await register(email.trim(), password, gender, website);
       else await login(email.trim(), password);
       // Connecté -> retour à la page demandée avant la redirection, sinon l'accueil.
       navigate((location.state as {from?: string} | null)?.from ?? '/');
@@ -389,6 +390,31 @@ export default function AccountPage() {
           autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
           className={inputClass}
         />
+        {mode === 'register' && (
+          <div>
+            <p className="mb-1 text-xs font-medium text-slate-400">Tu es… <span className="text-slate-500">(optionnel — pour te proposer des programmes adaptés)</span></p>
+            <div className="grid grid-cols-3 gap-1.5">
+              {([
+                {v: 'male', label: 'Homme'},
+                {v: 'female', label: 'Femme'},
+                {v: null, label: 'Ne pas dire'},
+              ] as {v: Gender | null; label: string}[]).map((o) => (
+                <button
+                  key={o.label}
+                  type="button"
+                  onClick={() => setGender(o.v)}
+                  className={`rounded-lg border px-2 py-2 text-xs font-medium transition-colors ${
+                    gender === o.v
+                      ? 'border-emerald-500 bg-emerald-500/15 text-emerald-300'
+                      : 'border-slate-700 text-slate-300 hover:bg-slate-800'
+                  }`}
+                >
+                  {o.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
         {mode === 'register' && (
           <p className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs leading-relaxed text-amber-300/90">
             📩 Après inscription, on t'envoie un email de confirmation. Il arrive souvent dans les{' '}

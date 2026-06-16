@@ -60,11 +60,14 @@ export function parseCookies(header: string | undefined): Record<string, string>
   return out;
 }
 
+export type Gender = 'male' | 'female';
+
 export interface AuthUser {
   id: string;
   email: string;
   role: string; // 'user' | 'admin'
   emailVerified: boolean;
+  gender: Gender | null; // null = préfère ne pas dire / non renseigné
 }
 
 /** Utilisateur déduit d'un en-tête Cookie (HTTP ou upgrade WebSocket), ou null. */
@@ -73,7 +76,7 @@ export async function getAuthUserByCookie(cookieHeader: string | undefined): Pro
   if (!token) return null;
   const sess = await getSessionWithUser(token);
   if (!sess || sess.expiresAt.getTime() < Date.now()) return null;
-  return {id: sess.userId, email: sess.email, role: sess.role, emailVerified: sess.emailVerified};
+  return {id: sess.userId, email: sess.email, role: sess.role, emailVerified: sess.emailVerified, gender: (sess.gender as Gender | null) ?? null};
 }
 
 /** Utilisateur courant déduit du cookie de session, ou null. */
