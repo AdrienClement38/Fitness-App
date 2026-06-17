@@ -1,8 +1,9 @@
-import {useState, type FormEvent} from 'react';
+import {useEffect, useRef, useState, type FormEvent} from 'react';
 import {Link, useLocation, useNavigate} from 'react-router-dom';
-import {Download, LogOut, Shield, User} from 'lucide-react';
-import {changePassword, deleteAccount, login, logout, register, setGender, useAuth} from '../lib/auth';
+import {Check, Download, LogOut, Shield, User} from 'lucide-react';
+import {changePassword, deleteAccount, login, logout, register, setEquipment, setGender, useAuth} from '../lib/auth';
 import {authApi, type Gender} from '../lib/api';
+import {GYM_TOKEN, HOME_EQUIPMENT} from '../lib/equipment';
 import {useSyncConnected} from '../lib/sync';
 import {exportMyData} from '../lib/exportData';
 import {setExplanations, setStretchSuggestions, useExplanations, useStretchSuggestions} from '../lib/settings';
@@ -317,6 +318,109 @@ function GenderPref() {
   );
 }
 
+/**
+ * Choix du matériel accessible (salle + équipements maison). Présentation pure :
+ * utilisé à l'inscription (état local) ET dans « Mon compte » (sauvegarde immédiate).
+ * Le poids du corps / étirements / cardio extérieur sont toujours dispo (pas de toggle).
+ */
+function EquipmentToggles({value, onChange}: {value: string[]; onChange: (next: string[]) => void}) {
+  const has = (t: string) => value.includes(t);
+  const gym = has(GYM_TOKEN);
+  const allHome = HOME_EQUIPMENT.map((e) => e.id);
+  // La salle est un sélecteur MAÎTRE : cochée -> tout le matériel coché ; décochée -> tout vidé.
+  const toggleGym = () => onChange(gym ? [] : [GYM_TOKEN, ...allHome]);
+  // Décocher un équipement retire aussi « salle » (on n'a plus accès à TOUT).
+  const toggleItem = (id: string) =>
+    onChange(has(id) ? value.filter((x) => x !== id && x !== GYM_TOKEN) : [...new Set([...value, id])]);
+  return (
+    <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+      <p className="text-sm font-medium">Mon matériel</p>
+      <p className="mt-0.5 text-xs text-slate-500">
+        Sert à mettre en avant les exercices que tu peux faire. Le poids du corps, les étirements et le cardio en
+        extérieur restent toujours accessibles.
+      </p>
+      <div className="mt-3">
+        <ToggleSwitch
+          checked={gym}
+          onChange={toggleGym}
+          srLabel="J'ai accès à une salle de sport"
+          label={
+            <>
+              J'ai accès à une salle
+              <span className="mt-0.5 block text-xs text-slate-500">Donne accès à tout le matériel (machines, poulies, barres…).</span>
+            </>
+          }
+        />
+      </div>
+      <p className="mb-1.5 mt-3 text-xs font-medium text-slate-400">
+        Chez moi / dehors{gym ? <span className="font-normal text-slate-600"> — déjà inclus avec la salle</span> : ''}
+      </p>
+      <div className="grid grid-cols-2 gap-1.5">
+        {HOME_EQUIPMENT.map((e) => {
+          const on = has(e.id);
+          return (
+            <button
+              key={e.id}
+              type="button"
+              onClick={() => toggleItem(e.id)}
+              aria-pressed={on}
+              className={`flex items-center gap-2 rounded-lg border px-2.5 py-2 text-xs font-medium transition-colors disabled:opacity-50 ${
+                on ? 'border-emerald-500 bg-emerald-500/15 text-emerald-300' : 'border-slate-700 text-slate-300 hover:bg-slate-800'
+              }`}
+            >
+              <span
+                className={`flex h-4 w-4 shrink-0 items-center justify-center rounded border ${
+                  on ? 'border-emerald-400 bg-emerald-500/30 text-emerald-200' : 'border-slate-600'
+                }`}
+              >
+                {on && <Check className="h-3 w-3" />}
+              </span>
+              {e.label}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * « Mon matériel » dans « Mon compte » : état optimiste + sauvegarde débouncée.
+ * - débounce : des toggles rapides se coalescent en UNE écriture (pas de course de POST) ;
+ * - `sentRef` : on ne resynchronise depuis le serveur que sur un VRAI changement externe
+ *   (autre appareil), jamais sur l'écho de notre propre écriture -> l'édition optimiste
+ *   n'est jamais écrasée ;
+ * - rollback : en cas d'échec réseau, on revient à l'état serveur connu.
+ */
+function EquipmentPref() {
+  const {user} = useAuth();
+  const serverValue = user?.equipment ?? [];
+  const key = serverValue.join(',');
+  const [value, setValue] = useState<string[]>(serverValue);
+  const sentRef = useRef<string>(key); // dernière valeur qu'on a poussée
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  useEffect(() => {
+    if (key !== sentRef.current) {
+      sentRef.current = key; // changement externe (autre appareil) -> on s'aligne
+      setValue(user?.equipment ?? []);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key]);
+  const change = (next: string[]) => {
+    setValue(next); // optimiste : l'UI répond tout de suite
+    sentRef.current = next.join(',');
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => {
+      void setEquipment(next).catch(() => setValue(user?.equipment ?? [])); // échec -> rollback serveur
+    }, 350);
+  };
+  return (
+    <div className="mt-3">
+      <EquipmentToggles value={value} onChange={change} />
+    </div>
+  );
+}
+
 export default function AccountPage() {
   const {user, loading} = useAuth();
   const navigate = useNavigate();
@@ -325,6 +429,7 @@ export default function AccountPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [gender, setGender] = useState<Gender | null>(null); // optionnel : null = préfère ne pas dire
+  const [equip, setEquip] = useState<string[]>([]); // matériel coché à l'inscription (vide = non renseigné)
   const [website, setWebsite] = useState(''); // honeypot anti-bot (reste vide pour un humain)
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
@@ -367,6 +472,7 @@ export default function AccountPage() {
         )}
 
         <GenderPref />
+        <EquipmentPref />
         <ExplanationsPref />
         <StretchPref />
 
@@ -393,7 +499,7 @@ export default function AccountPage() {
     setError('');
     setBusy(true);
     try {
-      if (mode === 'register') await register(email.trim(), password, gender, website);
+      if (mode === 'register') await register(email.trim(), password, gender, website, equip.length ? equip : null);
       else await login(email.trim(), password);
       // Connecté -> retour à la page demandée avant la redirection, sinon l'accueil.
       navigate((location.state as {from?: string} | null)?.from ?? '/');
@@ -469,6 +575,14 @@ export default function AccountPage() {
                 </button>
               ))}
             </div>
+          </div>
+        )}
+        {mode === 'register' && (
+          <div>
+            <p className="mb-1 text-xs font-medium text-slate-400">
+              Ton matériel <span className="text-slate-500">(optionnel — pour mettre en avant les exercices faisables)</span>
+            </p>
+            <EquipmentToggles value={equip} onChange={setEquip} />
           </div>
         )}
         {mode === 'register' && (

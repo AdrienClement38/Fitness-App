@@ -101,8 +101,14 @@ export async function login(email: string, password: string) {
   cacheUser(u);
   set({user: u, loading: false});
 }
-export async function register(email: string, password: string, gender: Gender | null = null, website = '') {
-  const u = await authApi.register(email, password, gender, website);
+export async function register(
+  email: string,
+  password: string,
+  gender: Gender | null = null,
+  website = '',
+  equipment: string[] | null = null,
+) {
+  const u = await authApi.register(email, password, gender, website, equipment);
   adoptUserData(u.id);
   cacheUser(u);
   set({user: u, loading: false});
@@ -151,6 +157,25 @@ export function resendVerification() {
 export async function setGender(gender: Gender | null) {
   await authApi.setGender(gender);
   await refreshUser();
+}
+
+// Garde de séquence : si deux écritures de matériel se chevauchent, seule la PLUS RÉCENTE
+// met à jour l'état (évite qu'une réponse en retard ne réverte l'édition courante).
+let equipmentWriteSeq = 0;
+/**
+ * Met à jour son matériel. On applique la valeur RENVOYÉE par le POST (déjà validée serveur)
+ * au lieu d'un GET /me séparé : pas de course entre deux toggles rapides. La diffusion
+ * WebSocket {type:'account'} resynchronise en plus les autres appareils.
+ */
+export async function setEquipment(equipment: string[]) {
+  const seq = ++equipmentWriteSeq;
+  const res = await authApi.setEquipment(equipment);
+  if (seq !== equipmentWriteSeq) return; // une écriture plus récente a primé : on ignore cette réponse
+  if (state.user) {
+    const u: AuthUser = {...state.user, equipment: res.equipment};
+    cacheUser(u);
+    set({user: u, loading: false});
+  }
 }
 
 export function useAuth(): AuthState {

@@ -4,6 +4,7 @@
  */
 import {and, asc, count, eq, ilike, inArray, or, sql} from 'drizzle-orm';
 import {db, schema} from '../db/client';
+import {canDoExercise, sanitizeEquipment} from '../../src/lib/equipment';
 
 const {exercises, equipment, exerciseMuscles, muscles, movementPatterns} = schema;
 
@@ -17,6 +18,9 @@ export interface ExerciseFilters {
   ids?: string[];
   page?: number;
   pageSize?: number;
+  // Matériel possédé (jetons) : si défini, on remonte les exercices faisables en premier
+  // et on renvoie un drapeau `canDo` par item. Undefined = pas de préférence (liste neutre).
+  owned?: string[];
 }
 
 const orderByName = asc(sql`coalesce(${exercises.nameFr}, ${exercises.nameEn})`);
@@ -63,28 +67,55 @@ async function primaryMusclesFor(ids: string[]) {
   return byExercise;
 }
 
+// Colonnes renvoyées pour une ligne de liste (réutilisé par les deux chemins de pagination).
+const listColumns = {
+  id: exercises.id,
+  nameFr: exercises.nameFr,
+  nameEn: exercises.nameEn,
+  level: exercises.level,
+  category: exercises.category,
+  measureKind: exercises.measureKind,
+  force: exercises.force,
+  mechanic: exercises.mechanic,
+  isEnriched: exercises.isEnriched,
+  equipmentId: exercises.equipmentId,
+  equipmentNameFr: equipment.nameFr,
+  images: exercises.images,
+};
+
 export async function listExercises(f: ExerciseFilters) {
   const page = Math.max(1, f.page ?? 1);
   const pageSize = Math.min(60, Math.max(1, f.pageSize ?? 24));
   const where = buildWhere(f);
 
+  // Mise en avant « faisable » : matériel renseigné -> on charge TOUT le catalogue filtré
+  // (≤ 873 lignes), on remonte les faisables en premier (tri STABLE : l'ordre alpha SQL est
+  // conservé dans chaque groupe), puis on pagine en mémoire. La logique reste partagée
+  // (canDoExercise) — aucun SQL dédié à maintenir.
+  if (f.owned) {
+    // Re-validation défensive : on ne fait jamais confiance à des jetons stockés (legacy /
+    // écriture future contournant sanitizeEquipment) au moment du calcul `canDo`.
+    const owned = new Set(sanitizeEquipment(f.owned) ?? []);
+    const all = await db
+      .select(listColumns)
+      .from(exercises)
+      .leftJoin(equipment, eq(equipment.id, exercises.equipmentId))
+      .where(where)
+      .orderBy(orderByName);
+    const ranked = all
+      .map((r) => ({...r, canDo: canDoExercise({id: r.id, category: r.category, equipmentId: r.equipmentId}, owned)}))
+      .sort((a, b) => Number(b.canDo) - Number(a.canDo));
+    const total = ranked.length;
+    const pageRows = ranked.slice((page - 1) * pageSize, page * pageSize);
+    const byExercise = await primaryMusclesFor(pageRows.map((r) => r.id));
+    const items = pageRows.map((r) => ({...r, primaryMuscles: byExercise.get(r.id) ?? []}));
+    return {items, total, page, pageSize, pageCount: Math.ceil(total / pageSize)};
+  }
+
   const [{value: total}] = await db.select({value: count()}).from(exercises).where(where);
 
   const rows = await db
-    .select({
-      id: exercises.id,
-      nameFr: exercises.nameFr,
-      nameEn: exercises.nameEn,
-      level: exercises.level,
-      category: exercises.category,
-      measureKind: exercises.measureKind,
-      force: exercises.force,
-      mechanic: exercises.mechanic,
-      isEnriched: exercises.isEnriched,
-      equipmentId: exercises.equipmentId,
-      equipmentNameFr: equipment.nameFr,
-      images: exercises.images,
-    })
+    .select(listColumns)
     .from(exercises)
     .leftJoin(equipment, eq(equipment.id, exercises.equipmentId))
     .where(where)

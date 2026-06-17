@@ -73,9 +73,9 @@ export default function ProgramDetailPage() {
       <div className="mt-4 grid gap-4">
         {p.sessions.map((s) => (
           <div key={s.dayOrder} className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
-            <div className="flex items-baseline justify-between gap-2">
+            <div>
               <h2 className="font-semibold">{s.nameFr}</h2>
-              {s.focusFr && <span className="text-right text-xs text-slate-500">{s.focusFr}</span>}
+              {s.focusFr && <p className="mt-0.5 text-xs leading-relaxed text-slate-500">{s.focusFr}</p>}
             </div>
             <div className="mt-2 divide-y divide-slate-800">
               {s.exercises.map((e) => (

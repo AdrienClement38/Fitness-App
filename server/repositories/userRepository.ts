@@ -16,11 +16,20 @@ export async function createUser(
   verifyToken?: string,
   verifyExpires?: Date,
   gender?: 'male' | 'female' | null,
+  equipment?: string[] | null,
 ) {
   const id = `u-${randomUUID()}`;
   const [u] = await db
     .insert(users)
-    .values({id, email, passwordHash, verifyToken: verifyToken ?? null, verifyExpires: verifyExpires ?? null, gender: gender ?? null})
+    .values({
+      id,
+      email,
+      passwordHash,
+      verifyToken: verifyToken ?? null,
+      verifyExpires: verifyExpires ?? null,
+      gender: gender ?? null,
+      equipment: equipment ?? null,
+    })
     .returning();
   return u;
 }
@@ -32,7 +41,15 @@ export async function createSession(userId: string, token: string, expiresAt: Da
 /** Session + email de l'utilisateur, en une requête (pour la résolution du cookie). */
 export async function getSessionWithUser(token: string) {
   const [row] = await db
-    .select({userId: sessions.userId, expiresAt: sessions.expiresAt, email: users.email, role: users.role, emailVerified: users.emailVerified, gender: users.gender})
+    .select({
+      userId: sessions.userId,
+      expiresAt: sessions.expiresAt,
+      email: users.email,
+      role: users.role,
+      emailVerified: users.emailVerified,
+      gender: users.gender,
+      equipment: users.equipment,
+    })
     .from(sessions)
     .innerJoin(users, eq(users.id, sessions.userId))
     .where(eq(sessions.token, token));
@@ -55,6 +72,11 @@ export async function updatePassword(id: string, passwordHash: string) {
 /** Met à jour le sexe (ou null = préfère ne pas dire) — modifiable depuis « Mon compte ». */
 export async function setGender(id: string, gender: 'male' | 'female' | null) {
   await db.update(users).set({gender}).where(eq(users.id, id));
+}
+
+/** Met à jour le matériel accessible (liste de jetons) — modifiable depuis « Mon compte ». */
+export async function setEquipment(id: string, equipment: string[]) {
+  await db.update(users).set({equipment}).where(eq(users.id, id));
 }
 
 /** Révoque toutes les sessions d'un utilisateur (ex. après changement de mot de passe). */

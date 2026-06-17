@@ -1,7 +1,9 @@
 import {Heart} from 'lucide-react';
 import {useEffect, useState} from 'react';
-import {useSearchParams} from 'react-router-dom';
+import {Link, useSearchParams} from 'react-router-dom';
 import {api, label, type Facets} from '../lib/api';
+import {useAuth} from '../lib/auth';
+import {hasEquipmentPref} from '../lib/equipment';
 import {useFavorites} from '../lib/favorites';
 import {useFetch} from '../lib/useFetch';
 import ExerciseCard from '../components/ExerciseCard';
@@ -24,6 +26,16 @@ export default function ExercisesPage() {
   const {favorites, count: favCount} = useFavorites();
   const favActive = params.get('fav') === '1';
 
+  // Matériel renseigné -> le serveur remonte les exercices faisables en premier (+ drapeau
+  // canDo). On inclut sa signature dans les deps pour refetcher quand il change (autre
+  // appareil, ou retour depuis « Mon compte » après modification).
+  const {user} = useAuth();
+  // Préférence renseignée = tableau présent, MÊME vide ([] = « zéro matériel »). La signature
+  // distingue null (non renseigné) de [] pour refetcher sur cette transition.
+  const equip = user && hasEquipmentPref(user.equipment) ? user.equipment : null;
+  const prefSet = equip !== null;
+  const equipSig = equip ? `set:${equip.join(',')}` : '∅';
+
   const facets = useFetch<Facets>(() => api.facets(), []);
   const exercises = useFetch(
     () =>
@@ -36,7 +48,7 @@ export default function ExercisesPage() {
         ids: favActive ? (favorites.length ? favorites.join(',') : '__none__') : undefined,
         page,
       }),
-    [params.toString(), favActive ? favorites.join(',') : ''],
+    [params.toString(), favActive ? favorites.join(',') : '', equipSig],
   );
 
   const setParam = (key: string, value: string) =>
@@ -121,6 +133,15 @@ export default function ExercisesPage() {
         </select>
       </div>
 
+      {user && !prefSet && (
+        <p className="mt-3 rounded-lg border border-slate-800 bg-slate-900/40 px-3 py-2 text-xs text-slate-400">
+          Indique ton matériel (salle, haltères…) pour repérer d'un coup d'œil les exercices compatibles.{' '}
+          <Link to="/compte" className="font-medium text-emerald-400 hover:underline">
+            Renseigner
+          </Link>
+        </p>
+      )}
+
       {exercises.loading && <Loading />}
       {exercises.error && <ErrorState message={exercises.error} />}
       {exercises.data && (
@@ -152,7 +173,7 @@ export default function ExercisesPage() {
                 Précédent
               </button>
               <span className="text-sm text-slate-400">
-                Page {page} / {exercises.data.pageCount}
+                Page {Math.min(page, exercises.data.pageCount)} / {exercises.data.pageCount}
               </span>
               <button
                 disabled={page >= exercises.data.pageCount}

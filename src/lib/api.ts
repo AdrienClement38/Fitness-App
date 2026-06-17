@@ -20,6 +20,9 @@ export interface ExerciseListItem {
   equipmentNameFr: string | null;
   images: string[] | null;
   primaryMuscles: MuscleRef[];
+  // Faisable avec le matériel de l'utilisateur ? Présent seulement si la préférence
+  // « mon matériel » est renseignée (sinon absent -> aucune mise en avant).
+  canDo?: boolean;
 }
 
 export interface ExercisesResponse {
@@ -185,6 +188,11 @@ export interface ProgramListItem {
   daysPerWeek: number | null;
   audience: 'female' | 'male' | 'all' | null; // public cible (mise en avant)
   summaryFr: string | null;
+  // Faisabilité selon le matériel de l'utilisateur. Présents seulement si la préférence
+  // « mon matériel » est renseignée (sinon absents). canDo = tous les exercices faisables.
+  canDo?: boolean;
+  doableCount?: number;
+  exerciseCount?: number;
 }
 
 export interface ProgramExerciseItem {
@@ -364,13 +372,14 @@ export interface AuthUser {
   role?: string; // 'user' | 'admin' (optionnel : compatible cache pré-migration)
   emailVerified?: boolean;
   gender?: Gender | null; // null/absent = préfère ne pas dire
+  equipment?: string[] | null; // matériel accessible ; null/absent = non renseigné
 }
 
 export const authApi = {
   me: () => get<AuthUser>('/auth/me'),
-  // `gender` optionnel ; `website` = honeypot anti-bot (champ caché ; vide pour un humain).
-  register: (email: string, password: string, gender: Gender | null = null, website = '') =>
-    post<AuthUser>('/auth/register', {email, password, gender, website}),
+  // `gender`/`equipment` optionnels ; `website` = honeypot anti-bot (champ caché ; vide pour un humain).
+  register: (email: string, password: string, gender: Gender | null = null, website = '', equipment: string[] | null = null) =>
+    post<AuthUser>('/auth/register', {email, password, gender, website, equipment}),
   login: (email: string, password: string) => post<AuthUser>('/auth/login', {email, password}),
   logout: () => post<{ok: boolean}>('/auth/logout', {}),
   changePassword: (currentPassword: string, newPassword: string) =>
@@ -381,6 +390,7 @@ export const authApi = {
   forgotPassword: (email: string) => post<{ok: boolean}>('/auth/forgot-password', {email}),
   resetPassword: (token: string, newPassword: string) => post<{ok: boolean}>('/auth/reset-password', {token, newPassword}),
   setGender: (gender: Gender | null) => post<{ok: boolean; gender: Gender | null}>('/auth/gender', {gender}),
+  setEquipment: (equipment: string[]) => post<{ok: boolean; equipment: string[]}>('/auth/equipment', {equipment}),
 };
 
 /** Administration : un compte de la liste (infos de compte uniquement). */

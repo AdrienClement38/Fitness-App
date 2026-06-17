@@ -1,5 +1,7 @@
 import {Router} from 'express';
 import {getExerciseById, getFacets, listExercises, stretchSuggestionsFor} from '../repositories/exerciseRepository';
+import {getUserFromRequest} from '../auth';
+import {hasEquipmentPref} from '../../src/lib/equipment';
 
 const router = Router();
 
@@ -30,6 +32,14 @@ router.get('/stretch-suggestions', async (req, res) => {
 // GET /api/exercises — liste filtrée + paginée.
 router.get('/', async (req, res) => {
   try {
+    // Matériel de l'utilisateur connecté (cookie de session) : si renseigné, la liste
+    // remonte les exercices faisables en premier (mise en avant). Sinon liste neutre.
+    const user = await getUserFromRequest(req);
+    // Préférence renseignée (tableau présent, MÊME vide) -> mise en avant active. Une liste
+    // vide est une vraie préférence « zéro matériel » : on met alors en avant le poids du
+    // corps / étirements / cardio extérieur (canDoExercise gère owned=[]). Non renseignée
+    // (null/undefined) -> liste neutre.
+    const owned = user && hasEquipmentPref(user.equipment) ? user.equipment : undefined;
     const result = await listExercises({
       search: q(req.query.search),
       muscle: q(req.query.muscle),
@@ -40,6 +50,7 @@ router.get('/', async (req, res) => {
       ids: q(req.query.ids)?.split(',').filter(Boolean),
       page: req.query.page ? Number(req.query.page) : undefined,
       pageSize: req.query.pageSize ? Number(req.query.pageSize) : undefined,
+      owned,
     });
     res.json(result);
   } catch (err) {

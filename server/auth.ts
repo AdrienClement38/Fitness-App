@@ -68,6 +68,7 @@ export interface AuthUser {
   role: string; // 'user' | 'admin'
   emailVerified: boolean;
   gender: Gender | null; // null = préfère ne pas dire / non renseigné
+  equipment: string[] | null; // matériel accessible ; null = non renseigné (cf. equipment.ts)
 }
 
 /** Utilisateur déduit d'un en-tête Cookie (HTTP ou upgrade WebSocket), ou null. */
@@ -76,7 +77,14 @@ export async function getAuthUserByCookie(cookieHeader: string | undefined): Pro
   if (!token) return null;
   const sess = await getSessionWithUser(token);
   if (!sess || sess.expiresAt.getTime() < Date.now()) return null;
-  return {id: sess.userId, email: sess.email, role: sess.role, emailVerified: sess.emailVerified, gender: (sess.gender as Gender | null) ?? null};
+  return {
+    id: sess.userId,
+    email: sess.email,
+    role: sess.role,
+    emailVerified: sess.emailVerified,
+    gender: (sess.gender as Gender | null) ?? null,
+    equipment: (sess.equipment as string[] | null) ?? null,
+  };
 }
 
 /** Utilisateur courant déduit du cookie de session, ou null. */

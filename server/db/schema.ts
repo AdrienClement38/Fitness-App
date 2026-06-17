@@ -296,6 +296,10 @@ export const users = pgTable('users', {
   // Sexe (optionnel) : 'male' | 'female' | null (préfère ne pas dire / non renseigné).
   // Sert à mettre en avant des programmes et à ajuster les valeurs par défaut.
   gender: text('gender'),
+  // Matériel auquel l'utilisateur a accès (salle + équipements maison) : liste de jetons
+  // (cf. src/lib/equipment.ts). Sert à mettre en avant les exercices faisables. null =
+  // non renseigné (mise en avant inactive) ; [] = renseigné « rien » (poids du corps seul).
+  equipment: jsonb('equipment').$type<string[]>(),
   emailVerified: boolean('email_verified').notNull().default(false),
   verifyToken: text('verify_token'), // jeton de confirmation d'email (null une fois vérifié)
   verifyExpires: timestamp('verify_expires', {withTimezone: true}),

@@ -900,7 +900,7 @@
   },
   {
     "id": "Bicycling_Stationary",
-    "name_fr": "Vélo stationnaire",
+    "name_fr": "Vélo (appartement ou extérieur)",
     "instructions_fr": [
       "Pour commencer, assieds-toi sur le vélo et règle la selle à ta hauteur.",
       "Sélectionne l'option souhaitée dans le menu. Il est possible que tu doives commencer à pédaler pour l'allumer. Tu peux utiliser le mode manuel ou choisir un programme. En général, tu peux entrer ton âge et ton poids pour estimer le nombre de calories brûlées pendant l'exercice. Le niveau de résistance peut être modifié tout au long de la séance. Les poignées peuvent être utilisées pour surveiller ta fréquence cardiaque et t'aider à maintenir une intensité adaptée."
@@ -3810,7 +3810,7 @@
   },
   {
     "id": "Jogging_Treadmill",
-    "name_fr": "Jogging sur tapis de course",
+    "name_fr": "Jogging (tapis ou extérieur)",
     "instructions_fr": [
       "Monte sur le tapis de course et sélectionne l'option souhaitée dans le menu. La plupart des tapis proposent un réglage manuel ou des programmes préétablis. Tu peux généralement entrer ton âge et ton poids pour estimer les calories brûlées pendant l'exercice. L'inclinaison peut être ajustée pour modifier l'intensité de la séance.",
       "Le tapis de course offre praticité, bénéfices cardiovasculaires et génère généralement moins d'impact que le jogging en extérieur. Une personne de 68 kg brûlera près de 250 calories en faisant du jogging pendant 30 minutes, contre plus de 450 calories en courant. Maintiens une bonne posture pendant le jogging et ne tiens les poignées que si nécessaire, par exemple pour descendre ou vérifier ta fréquence cardiaque."
@@ -6296,7 +6296,7 @@
   },
   {
     "id": "Running_Treadmill",
-    "name_fr": "Course sur tapis de course",
+    "name_fr": "Course (tapis ou extérieur)",
     "instructions_fr": [
       "Pour commencer, monte sur le tapis de course et sélectionne l'option souhaitée dans le menu. La plupart des tapis ont un réglage manuel ou des programmes. Tu peux généralement entrer ton âge et ton poids pour estimer les calories brûlées. L'inclinaison peut être réglée pour modifier l'intensité de la séance.",
       "Les tapis de course offrent praticité et bénéfices cardiovasculaires avec généralement moins d'impact qu'une course en extérieur. Une personne de 68 kg brûle plus de 450 calories en courant à 13 km/h pendant 30 minutes. Maintiens une bonne posture pendant ta course et ne tiens les poignées que lorsque nécessaire, par exemple pour descendre ou vérifier ton rythme cardiaque."
@@ -7609,7 +7609,7 @@
   },
   {
     "id": "Stairmaster",
-    "name_fr": "Stairmaster",
+    "name_fr": "Escaliers (Stairmaster ou réels)",
     "instructions_fr": [
       "Pour commencer, monte sur le Stairmaster et sélectionne l'option souhaitée dans le menu. Tu peux choisir un mode manuel ou sélectionner un programme. En général, tu peux entrer ton âge et ton poids pour estimer le nombre de calories brûlées pendant l'exercice.",
       "Actionne les pédales de haut en bas selon un rythme régulier, en appuyant vers le bas sans aller jusqu'au fond. Il est recommandé de maintenir les mains sur les poignées pour ne pas tomber. Les poignées peuvent être utilisées pour surveiller ta fréquence cardiaque et t'aider à rester à une intensité appropriée.",
@@ -8123,7 +8123,7 @@
   },
   {
     "id": "Step_Mill",
-    "name_fr": "Escalier cardio (Step Mill)",
+    "name_fr": "Escaliers en continu (Step Mill ou réels)",
     "instructions_fr": [
       "Pour commencer, monte sur le step mill et sélectionne l'option souhaitée dans le menu. Tu peux choisir un réglage manuel ou sélectionner un programme. En général, tu peux entrer ton âge et ton poids pour estimer le nombre de calories brûlées pendant l'exercice. Fais attention à ne pas trébucher en montant les marches. Il est recommandé de maintenir la prise sur les poignées pour ne pas tomber.",
       "Les step mills offrent praticité, bénéfices cardiovasculaires et ont généralement moins d'impact que la course en extérieur tout en brûlant un nombre similaire de calories. Ils sont en général bien plus difficiles que les autres équipements cardio. Une personne de 68 kg brûle typiquement plus de 300 calories en 30 minutes, contre environ 175 calories en marchant."
@@ -8675,7 +8675,7 @@
   },
   {
     "id": "Walking_Treadmill",
-    "name_fr": "Marche sur tapis roulant",
+    "name_fr": "Marche (tapis ou extérieur)",
     "instructions_fr": [
       "Pour commencer, monte sur le tapis roulant et sélectionne l'option souhaitée dans le menu. La plupart des tapis roulants disposent d'un réglage manuel, ou tu peux sélectionner un programme. En général, tu peux saisir ton âge et ton poids pour estimer le nombre de calories brûlées pendant l'exercice. L'inclinaison peut être ajustée pour modifier l'intensité de la séance.",
       "Les tapis roulants offrent praticité, bénéfices cardiovasculaires et généralement moins d'impact qu'une marche en extérieur. En marchant, adopte une allure modérée à rapide, pas un pas de promenade. Étant une activité de faible intensité, la marche brûle moins de calories que certaines autres activités, mais procure tout de même d'excellents bénéfices. Une personne de 68 kg brûlera environ 175 calories en marchant à 6,5 km/h pendant 30 minutes, contre 450 calories en courant deux fois plus vite. Maintiens une bonne posture en marchant et ne tiens les poignées que lorsque c'est nécessaire, par exemple pour descendre ou vérifier ta fréquence cardiaque."

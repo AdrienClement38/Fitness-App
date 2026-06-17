@@ -4552,7 +4552,7 @@
     "audience": "all",
     "days_per_week": 3,
     "summary_fr": "Cardio long et facile en zone 2 (60-70% FC max) pour bâtir une base aérobie solide et durable.",
-    "description_fr": "Reste à une intensité où tu peux tenir une conversation par phrases complètes (test de la parole) : c'est le coeur de la zone 2. Compte ~45 min par séance au départ (5 min d'échauffement + 35 min d'effort continu + 5 min de retour au calme) et allonge progressivement le bloc principal jusqu'à atteindre 55-60 min par séance. Alterne les machines pour varier les appuis et progresse en durée avant d'augmenter l'allure.",
+    "description_fr": "Reste à une intensité où tu peux tenir une conversation par phrases complètes (test de la parole) : c'est le coeur de la zone 2. Compte ~45 min par séance au départ (5 min d'échauffement + 35 min d'effort continu + 5 min de retour au calme) et allonge progressivement le bloc principal jusqu'à atteindre 55-60 min par séance. Alterne les modalités pour varier les appuis et progresse en durée avant d'augmenter l'allure.",
     "sessions": [
       {
         "day_order": 1,
@@ -4584,8 +4584,8 @@
       },
       {
         "day_order": 2,
-        "name_fr": "Zone 2 - Elliptique",
-        "focus_fr": "Effort continu facile, faible impact, allure régulière",
+        "name_fr": "Zone 2 - Escaliers",
+        "focus_fr": "Effort continu facile dans les escaliers, faible impact, allure régulière",
         "exercises": [
           {
             "exercise_id": "walking-treadmill",
@@ -4595,7 +4595,7 @@
             "rest_seconds": 0
           },
           {
-            "exercise_id": "elliptical-trainer",
+            "exercise_id": "stairmaster",
             "sets": 1,
             "reps_min": 35,
             "reps_max": 45,
@@ -4681,25 +4681,25 @@
       },
       {
         "day_order": 2,
-        "name_fr": "Intervalles 1/1 - Rameur",
-        "focus_fr": "Échauffement, puis 8-10 fois 1 min fort / 1 min facile au rameur",
+        "name_fr": "Intervalles 1/1 - Course",
+        "focus_fr": "Échauffement, puis 8-10 fois 1 min de course rapide / 1 min facile en jogging",
         "exercises": [
           {
-            "exercise_id": "rowing-stationary",
+            "exercise_id": "jogging-treadmill",
             "sets": 1,
             "reps_min": 6,
             "reps_max": 6,
             "rest_seconds": 0
           },
           {
-            "exercise_id": "rowing-stationary",
+            "exercise_id": "running-treadmill",
             "sets": 1,
             "reps_min": 16,
             "reps_max": 20,
             "rest_seconds": 0
           },
           {
-            "exercise_id": "rowing-stationary",
+            "exercise_id": "walking-treadmill",
             "sets": 1,
             "reps_min": 5,
             "reps_max": 5,
@@ -4771,18 +4771,18 @@
       },
       {
         "day_order": 2,
-        "name_fr": "Intervalles modérés - Rameur",
-        "focus_fr": "Échauffement puis 8-10 fois 1 min fort / 1 min facile au rameur",
+        "name_fr": "Intervalles modérés - Course",
+        "focus_fr": "Échauffement puis 8-10 fois 1 min de course soutenue / 1 min de marche facile",
         "exercises": [
           {
-            "exercise_id": "rowing-stationary",
+            "exercise_id": "jogging-treadmill",
             "sets": 1,
             "reps_min": 6,
             "reps_max": 6,
             "rest_seconds": 0
           },
           {
-            "exercise_id": "rowing-stationary",
+            "exercise_id": "running-treadmill",
             "sets": 1,
             "reps_min": 16,
             "reps_max": 20,
@@ -4799,11 +4799,11 @@
       },
       {
         "day_order": 3,
-        "name_fr": "LISS - Vélo / Elliptique",
+        "name_fr": "LISS - Vélo",
         "focus_fr": "Effort continu facile à modéré, faible impact, longue durée",
         "exercises": [
           {
-            "exercise_id": "elliptical-trainer",
+            "exercise_id": "bicycling-stationary",
             "sets": 1,
             "reps_min": 40,
             "reps_max": 50,
@@ -4814,7 +4814,7 @@
       {
         "day_order": 4,
         "name_fr": "Intervalles modérés - Escalier",
-        "focus_fr": "Échauffement puis 30/30 au stepmill : 30 s rythme soutenu / 30 s calme",
+        "focus_fr": "Échauffement puis 30/30 dans les escaliers : 30 s rythme soutenu / 30 s calme",
         "exercises": [
           {
             "exercise_id": "walking-treadmill",
@@ -4946,21 +4946,21 @@
     "goal": "endurance",
     "audience": "all",
     "days_per_week": 3,
-    "summary_fr": "Rotation rameur / vélo / elliptique : tout le corps, peu d'impact sur les articulations, endurance variée.",
-    "description_fr": "En enchaînant plusieurs machines, tu sollicites des groupes musculaires différents et tu réduis le stress articulaire tout en gardant un gros volume aérobie. Reste en intensité modérée (60-75% FC max) sur les enchaînements, sans pause longue entre les machines. Encadre chaque séance d'un échauffement et d'un retour au calme courts pour monter et redescendre en régime en douceur. Idéal en récupération active ou en complément d'un programme de muscu.",
+    "summary_fr": "Rotation vélo / escaliers / marche : tout le corps, peu d'impact sur les articulations, endurance variée.",
+    "description_fr": "En enchaînant plusieurs modalités, tu sollicites des groupes musculaires différents et tu réduis le stress articulaire tout en gardant un gros volume aérobie. Reste en intensité modérée (60-75% FC max) sur les enchaînements, sans pause longue entre les blocs. Encadre chaque séance d'un échauffement et d'un retour au calme courts pour monter et redescendre en régime en douceur. Idéal en récupération active ou en complément d'un programme de muscu.",
     "sessions": [
       {
         "day_order": 1,
-        "name_fr": "Triathlon indoor",
-        "focus_fr": "Enchaînement continu rameur, vélo, elliptique puis retour au calme",
+        "name_fr": "Triathlon faible impact",
+        "focus_fr": "Enchaînement continu escaliers, vélo, marche puis retour au calme",
         "exercises": [
           {
-            "exercise_id": "rowing-stationary",
+            "exercise_id": "step-mill",
             "sets": 1,
             "reps_min": 12,
             "reps_max": 15,
             "rest_seconds": 0,
-            "notes_fr": "Démarre à allure facile : la première machine sert d'échauffement progressif."
+            "notes_fr": "Démarre à allure facile : ce premier bloc sert d'échauffement progressif."
           },
           {
             "exercise_id": "bicycling-stationary",
@@ -4970,7 +4970,7 @@
             "rest_seconds": 0
           },
           {
-            "exercise_id": "elliptical-trainer",
+            "exercise_id": "bicycling",
             "sets": 1,
             "reps_min": 12,
             "reps_max": 15,
@@ -4988,7 +4988,7 @@
       },
       {
         "day_order": 2,
-        "name_fr": "Bas du corps - Vélo couché & escalier",
+        "name_fr": "Bas du corps - Vélo & escaliers",
         "focus_fr": "Volume jambes faible impact, intensité modérée et régulière",
         "exercises": [
           {
@@ -5000,7 +5000,7 @@
             "notes_fr": "Échauffement : marche facile pour monter en régime avant l'effort."
           },
           {
-            "exercise_id": "recumbent-bike",
+            "exercise_id": "bicycling-stationary",
             "sets": 1,
             "reps_min": 20,
             "reps_max": 25,
@@ -5025,8 +5025,8 @@
       },
       {
         "day_order": 3,
-        "name_fr": "Corps entier - Rameur & escalier",
-        "focus_fr": "Rameur en continu puis escalier, le tout en faible impact",
+        "name_fr": "Corps entier - Vélo & escaliers",
+        "focus_fr": "Vélo en continu puis escaliers, le tout en faible impact",
         "exercises": [
           {
             "exercise_id": "walking-treadmill",
@@ -5034,10 +5034,10 @@
             "reps_min": 5,
             "reps_max": 5,
             "rest_seconds": 0,
-            "notes_fr": "Échauffement : marche facile pour monter en régime avant le rameur."
+            "notes_fr": "Échauffement : marche facile pour monter en régime avant le vélo."
           },
           {
-            "exercise_id": "rowing-stationary",
+            "exercise_id": "bicycling-stationary",
             "sets": 1,
             "reps_min": 20,
             "reps_max": 25,
@@ -5070,7 +5070,7 @@
     "goal": "power",
     "audience": "all",
     "days_per_week": 3,
-    "summary_fr": "Sprints maximaux et traîneau pour les confirmés : puissance, VO2max et explosivité au plus haut niveau.",
+    "summary_fr": "Sprints maximaux et côtes pour les confirmés : puissance, VO2max et explosivité au plus haut niveau.",
     "description_fr": "Réservé à une bonne base aérobie : la plupart des séances visent des efforts quasi maximaux (9-10/10) avec récupérations complètes ; la séance Tabata fait exception (effort 20 s / repos court 10 s, plus orientée capacité anaérobie et VO2max). Ne fais ces séances que sur un corps frais, jamais deux jours de suite, et arrête le bloc si la qualité du sprint chute nettement. Augmente le nombre de répétitions avant d'allonger l'effort.",
     "sessions": [
       {
@@ -5103,25 +5103,25 @@
       },
       {
         "day_order": 2,
-        "name_fr": "Traîneau & rameur",
-        "focus_fr": "Pousses de traîneau explosives alternées avec sprints rameur, récup complète",
+        "name_fr": "Sprints en côte",
+        "focus_fr": "Montées explosives en côte avec récupération complète entre les efforts",
         "exercises": [
           {
-            "exercise_id": "rowing-stationary",
+            "exercise_id": "jogging-treadmill",
             "sets": 1,
             "reps_min": 8,
             "reps_max": 8,
             "rest_seconds": 0
           },
           {
-            "exercise_id": "prowler-sprint",
+            "exercise_id": "trail-running-walking",
             "sets": 1,
             "reps_min": 12,
             "reps_max": 15,
             "rest_seconds": 0
           },
           {
-            "exercise_id": "rowing-stationary",
+            "exercise_id": "walking-treadmill",
             "sets": 1,
             "reps_min": 6,
             "reps_max": 6,
@@ -5132,7 +5132,7 @@
       {
         "day_order": 3,
         "name_fr": "Double Tabata - Vélo & escalier",
-        "focus_fr": "Échauffement vélo, gros bloc d'intervalles Tabata au stepmill (séries de 20 s à fond / 10 s repos), puis marche de récupération",
+        "focus_fr": "Échauffement vélo, gros bloc d'intervalles Tabata dans les escaliers (séries de 20 s à fond / 10 s repos), puis marche de récupération",
         "exercises": [
           {
             "exercise_id": "bicycling-stationary",
@@ -5154,6 +5154,2172 @@
             "reps_min": 5,
             "reps_max": 5,
             "rest_seconds": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "maison-full-body-debutant-poids-du-corps",
+    "name_fr": "Full-body maison debutant - poids du corps",
+    "theme": "full-body",
+    "level": "beginner",
+    "goal": "hypertrophy",
+    "audience": "all",
+    "days_per_week": 3,
+    "summary_fr": "Trois seances full-body sans aucun materiel pour batir du muscle a la maison ou au parc avec les mouvements fondamentaux.",
+    "description_fr": "Ce programme s'adresse aux debutants qui veulent s'entrainer chez eux, dans le salon ou au parc, sans equipement. Chaque seance couvre pousser, tirer, jambes et gainage afin de developper l'ensemble du corps de maniere equilibree. Progressez en ajoutant une repetition par semaine, puis en passant aux variantes plus dures (par exemple pompes au sol des que les pompes inclinees deviennent faciles). Soignez l'amplitude et le controle plutot que la vitesse, et gardez le dos neutre sur les fentes et les ponts fessiers.",
+    "sessions": [
+      {
+        "day_order": 1,
+        "name_fr": "Seance A - Bas du corps et poussee",
+        "focus_fr": "Quadriceps, fessiers, pectoraux et gainage",
+        "exercises": [
+          {
+            "exercise_id": "bodyweight-squat",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 75,
+            "notes_fr": "Descendez cuisses paralleles au sol, talons ancres, genoux dans l'axe des pieds."
+          },
+          {
+            "exercise_id": "incline-push-up",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 15,
+            "rest_seconds": 75,
+            "notes_fr": "Mains sur un rebord stable (table, banc) ; gardez le corps gaine d'un bloc."
+          },
+          {
+            "exercise_id": "bodyweight-walking-lunge",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 75,
+            "notes_fr": "10 a 12 pas par jambe, buste droit, genou arriere vers le sol sans le claquer."
+          },
+          {
+            "exercise_id": "butt-lift-bridge",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 60,
+            "notes_fr": "Montez le bassin en serrant les fessiers, marquez une pause en haut."
+          },
+          {
+            "exercise_id": "plank",
+            "sets": 3,
+            "reps_min": 20,
+            "reps_max": 40,
+            "rest_seconds": 45,
+            "notes_fr": "Maintenez 20 a 40 secondes, corps gaine, sans cambrer le bas du dos."
+          },
+          {
+            "exercise_id": "quad-stretch",
+            "sets": 1,
+            "reps_min": 1,
+            "reps_max": 1,
+            "rest_seconds": 30,
+            "notes_fr": "Etirement quadriceps, 30 secondes par jambe en fin de seance."
+          }
+        ]
+      },
+      {
+        "day_order": 2,
+        "name_fr": "Seance B - Tirage et gainage",
+        "focus_fr": "Dos, fessiers, abdominaux et lombaires",
+        "exercises": [
+          {
+            "exercise_id": "inverted-row",
+            "sets": 3,
+            "reps_min": 8,
+            "reps_max": 12,
+            "rest_seconds": 90,
+            "notes_fr": "Sous une table solide ou une barre basse ; tirez la poitrine vers la barre, omoplates serrees."
+          },
+          {
+            "exercise_id": "incline-push-up",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 15,
+            "rest_seconds": 75,
+            "notes_fr": "Coudes a environ 45 degres du buste, descente controlee."
+          },
+          {
+            "exercise_id": "single-leg-glute-bridge",
+            "sets": 3,
+            "reps_min": 8,
+            "reps_max": 12,
+            "rest_seconds": 60,
+            "notes_fr": "Une jambe tendue, bassin stable et de niveau ; 8 a 12 par cote."
+          },
+          {
+            "exercise_id": "superman",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 45,
+            "notes_fr": "Decollez bras et jambes en allongeant la nuque, sans a-coups."
+          },
+          {
+            "exercise_id": "dead-bug",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 45,
+            "notes_fr": "Bas du dos colle au sol, descendez bras et jambe oppose lentement."
+          },
+          {
+            "exercise_id": "hamstring-stretch",
+            "sets": 1,
+            "reps_min": 1,
+            "reps_max": 1,
+            "rest_seconds": 30,
+            "notes_fr": "Etirement des ischio-jambiers, 30 secondes, dos droit."
+          }
+        ]
+      },
+      {
+        "day_order": 3,
+        "name_fr": "Seance C - Full-body complet",
+        "focus_fr": "Jambes, poussee, tirage et abdominaux",
+        "exercises": [
+          {
+            "exercise_id": "bodyweight-squat",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 75,
+            "notes_fr": "Tempo controle ; ralentissez la descente sur 2 a 3 secondes."
+          },
+          {
+            "exercise_id": "pushups",
+            "sets": 3,
+            "reps_min": 6,
+            "reps_max": 12,
+            "rest_seconds": 75,
+            "notes_fr": "Pompes au sol ou genoux poses si besoin ; corps gaine, sans creuser le dos."
+          },
+          {
+            "exercise_id": "inverted-row",
+            "sets": 3,
+            "reps_min": 8,
+            "reps_max": 12,
+            "rest_seconds": 90,
+            "notes_fr": "Plus le corps est horizontal, plus c'est difficile ; ajustez l'angle."
+          },
+          {
+            "exercise_id": "step-up-with-knee-raise",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 60,
+            "notes_fr": "Montez sur une marche ou une chaise stable ; 10 a 12 par jambe."
+          },
+          {
+            "exercise_id": "side-bridge",
+            "sets": 3,
+            "reps_min": 20,
+            "reps_max": 30,
+            "rest_seconds": 45,
+            "notes_fr": "Gainage lateral 20 a 30 secondes par cote, bassin haut."
+          },
+          {
+            "exercise_id": "childs-pose",
+            "sets": 1,
+            "reps_min": 1,
+            "reps_max": 1,
+            "rest_seconds": 30,
+            "notes_fr": "Posture de l'enfant pour relacher le dos, respiration lente, 40 secondes."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "maison-full-body-intermediaire-poids-du-corps",
+    "name_fr": "Full-body maison intermediaire - poids du corps",
+    "theme": "full-body",
+    "level": "intermediate",
+    "goal": "hypertrophy",
+    "audience": "all",
+    "days_per_week": 4,
+    "summary_fr": "Quatre seances full-body au poids du corps avec variantes plus exigeantes pour continuer a prendre du muscle sans materiel.",
+    "description_fr": "Destine a ceux qui maitrisent deja les bases, ce programme utilise des variantes plus dures (pompes pieds sureleves, squat fendu, rowing horizontal) pour maintenir une surcharge progressive sans charges externes. Realisez-le sur 3 ou 4 jours selon votre recuperation, en alternant les deux seances proposees. Chaque entrainement equilibre poussee, tirage, jambes et gainage ; progressez en augmentant les repetitions, en ralentissant le tempo ou en passant aux versions unilaterales. Echauffez-vous quelques minutes et gardez une execution stricte avant de chercher le volume.",
+    "sessions": [
+      {
+        "day_order": 1,
+        "name_fr": "Seance A1 - Poussee dominante",
+        "focus_fr": "Pectoraux, quadriceps, fessiers et triceps",
+        "exercises": [
+          {
+            "exercise_id": "push-ups-with-feet-elevated",
+            "sets": 4,
+            "reps_min": 8,
+            "reps_max": 12,
+            "rest_seconds": 90,
+            "notes_fr": "Pieds sur une chaise ; plus ils sont hauts, plus la poussee est intense."
+          },
+          {
+            "exercise_id": "suspended-split-squat",
+            "sets": 3,
+            "reps_min": 8,
+            "reps_max": 12,
+            "rest_seconds": 90,
+            "notes_fr": "Pied arriere sur un support stable ; descendez droit, genou avant dans l'axe. 8 a 12 par jambe."
+          },
+          {
+            "exercise_id": "freehand-jump-squat",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 90,
+            "notes_fr": "Squat saute explosif, reception amortie genoux flechis."
+          },
+          {
+            "exercise_id": "dips-triceps-version",
+            "sets": 3,
+            "reps_min": 8,
+            "reps_max": 12,
+            "rest_seconds": 75,
+            "notes_fr": "Entre deux supports ou sur un banc ; coudes vers l'arriere, descente controlee."
+          },
+          {
+            "exercise_id": "plank",
+            "sets": 3,
+            "reps_min": 40,
+            "reps_max": 60,
+            "rest_seconds": 45,
+            "notes_fr": "Maintenez 40 a 60 secondes, gainage complet sans cambrer."
+          },
+          {
+            "exercise_id": "chest-and-front-of-shoulder-stretch",
+            "sets": 1,
+            "reps_min": 1,
+            "reps_max": 1,
+            "rest_seconds": 30,
+            "notes_fr": "Etirement pectoraux et deltoides anterieurs, 30 secondes, en fin de seance."
+          }
+        ]
+      },
+      {
+        "day_order": 2,
+        "name_fr": "Seance B1 - Tirage dominante",
+        "focus_fr": "Dos, ischio-jambiers, fessiers et abdominaux",
+        "exercises": [
+          {
+            "exercise_id": "bodyweight-mid-row",
+            "sets": 4,
+            "reps_min": 8,
+            "reps_max": 12,
+            "rest_seconds": 90,
+            "notes_fr": "Rowing horizontal sous une table ou barre ; corps gaine, tirez les coudes le long du buste."
+          },
+          {
+            "exercise_id": "floor-glute-ham-raise",
+            "sets": 3,
+            "reps_min": 6,
+            "reps_max": 10,
+            "rest_seconds": 90,
+            "notes_fr": "Chevilles bloquees, descente lente et freinee ; aidez-vous des mains si besoin en remontant."
+          },
+          {
+            "exercise_id": "single-leg-glute-bridge",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 60,
+            "notes_fr": "Amplitude complete, pause d'une seconde en haut. 10 a 12 par cote."
+          },
+          {
+            "exercise_id": "decline-push-up",
+            "sets": 3,
+            "reps_min": 8,
+            "reps_max": 12,
+            "rest_seconds": 75,
+            "notes_fr": "Pieds sureleves pour cibler le haut des pectoraux ; gardez le gainage."
+          },
+          {
+            "exercise_id": "russian-twist",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 16,
+            "rest_seconds": 45,
+            "notes_fr": "Buste incline, rotations controlees ; 12 a 16 contacts au total."
+          },
+          {
+            "exercise_id": "worlds-greatest-stretch",
+            "sets": 1,
+            "reps_min": 1,
+            "reps_max": 1,
+            "rest_seconds": 30,
+            "notes_fr": "Le grand etirement, 4 a 5 cycles lents par cote pour mobiliser hanches et dos."
+          }
+        ]
+      },
+      {
+        "day_order": 3,
+        "name_fr": "Seance A2 - Jambes et poussee",
+        "focus_fr": "Quadriceps, fessiers, pectoraux et gainage lateral",
+        "exercises": [
+          {
+            "exercise_id": "single-leg-high-box-squat",
+            "sets": 4,
+            "reps_min": 6,
+            "reps_max": 10,
+            "rest_seconds": 90,
+            "notes_fr": "Squat sur une jambe vers une box haute ou une chaise ; controlez la descente. 6 a 10 par jambe."
+          },
+          {
+            "exercise_id": "bodyweight-walking-lunge",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 14,
+            "rest_seconds": 75,
+            "notes_fr": "Grandes fentes marchees, buste droit ; 12 a 14 pas par jambe."
+          },
+          {
+            "exercise_id": "push-ups-with-feet-elevated",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 15,
+            "rest_seconds": 75,
+            "notes_fr": "Amplitude maximale, poitrine proche du sol."
+          },
+          {
+            "exercise_id": "glute-kickback",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 60,
+            "notes_fr": "A quatre pattes, montez le talon vers le plafond sans cambrer. 12 a 15 par cote."
+          },
+          {
+            "exercise_id": "side-bridge",
+            "sets": 3,
+            "reps_min": 30,
+            "reps_max": 45,
+            "rest_seconds": 45,
+            "notes_fr": "Gainage lateral 30 a 45 secondes par cote, hanche bien haute."
+          },
+          {
+            "exercise_id": "quad-stretch",
+            "sets": 1,
+            "reps_min": 1,
+            "reps_max": 1,
+            "rest_seconds": 30,
+            "notes_fr": "Etirement quadriceps, 30 secondes par jambe."
+          }
+        ]
+      },
+      {
+        "day_order": 4,
+        "name_fr": "Seance B2 - Tirage et abdominaux",
+        "focus_fr": "Dos, ischio-jambiers, abdominaux et lombaires",
+        "exercises": [
+          {
+            "exercise_id": "bodyweight-mid-row",
+            "sets": 4,
+            "reps_min": 8,
+            "reps_max": 12,
+            "rest_seconds": 90,
+            "notes_fr": "Variez la prise (mains ecartees) pour solliciter le milieu du dos."
+          },
+          {
+            "exercise_id": "suspended-split-squat",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 90,
+            "notes_fr": "Tempo lent en descente ; cherchez l'etirement du quadriceps arriere. 10 a 12 par jambe."
+          },
+          {
+            "exercise_id": "bench-dips",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 15,
+            "rest_seconds": 60,
+            "notes_fr": "Mains sur un banc derriere vous ; descendez les coudes a 90 degres."
+          },
+          {
+            "exercise_id": "superman",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 45,
+            "notes_fr": "Tenez une seconde en haut pour renforcer les lombaires."
+          },
+          {
+            "exercise_id": "reverse-crunch",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 45,
+            "notes_fr": "Enroulez le bassin vers le haut, sans elan, bas du dos plaque."
+          },
+          {
+            "exercise_id": "childs-pose",
+            "sets": 1,
+            "reps_min": 1,
+            "reps_max": 1,
+            "rest_seconds": 30,
+            "notes_fr": "Posture de l'enfant, 40 secondes de respiration lente pour relacher le dos."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "maison-calisthenics-avance-upper-lower",
+    "name_fr": "Calisthenics avance haut/bas - Force au poids du corps",
+    "theme": "upper-lower",
+    "level": "advanced",
+    "goal": "strength",
+    "audience": "all",
+    "days_per_week": 4,
+    "summary_fr": "Quatre seances haut/bas a la maison melant figures de force au poids du corps lestees et pliometrie pour developper une force athletique sans materiel de salle.",
+    "description_fr": "Le programme alterne deux jours haut du corps et deux jours bas du corps sur la semaine, en commencant chaque seance par le mouvement le plus exigeant a froid (pompe un bras, traction lestee, squat unijambiste, GHR). Les charges viennent d'un sac a dos leste, d'un appui sureleve et de progressions unilaterales, avec une dose de pliometrie en debut de seance pour recruter le systeme nerveux. Travaillez dans des series courtes et controlees (3 a 8 repetitions sur la force, repos longs), gardez du gras dans le reservoir et ne sacrifiez jamais la technique pour une repetition de plus. Echauffez epaules, poignets et hanches avant les figures avancees et privilegiez une amplitude complete plutot que le nombre.",
+    "sessions": [
+      {
+        "day_order": 1,
+        "name_fr": "Haut du corps A - Pousser dominant",
+        "focus_fr": "Force de poussee horizontale et verticale, triceps et gainage anti-extension",
+        "exercises": [
+          {
+            "exercise_id": "plyo-push-up",
+            "sets": 4,
+            "reps_min": 5,
+            "reps_max": 6,
+            "rest_seconds": 120,
+            "notes_fr": "En tout debut de seance pour activer le systeme nerveux : pousse explosive, mains qui quittent le sol, reception amortie."
+          },
+          {
+            "exercise_id": "single-arm-push-up",
+            "sets": 4,
+            "reps_min": 5,
+            "reps_max": 8,
+            "rest_seconds": 150,
+            "notes_fr": "Pieds ecartes pour la stabilite, corps gaine sans rotation du bassin. Reduisez l'ecartement au fil des semaines pour durcir."
+          },
+          {
+            "exercise_id": "handstand-push-ups",
+            "sets": 4,
+            "reps_min": 4,
+            "reps_max": 6,
+            "rest_seconds": 150,
+            "notes_fr": "Poirier contre le mur, descente lente jusqu'au sol. Si le contact tete-sol n'est pas atteint, limitez l'amplitude puis progressez."
+          },
+          {
+            "exercise_id": "weighted-bench-dip",
+            "sets": 4,
+            "reps_min": 6,
+            "reps_max": 8,
+            "rest_seconds": 120,
+            "notes_fr": "Sac a dos leste sur les cuisses, epaules basses et coudes pres du corps pour proteger l'articulation."
+          },
+          {
+            "exercise_id": "decline-push-up",
+            "sets": 3,
+            "reps_min": 8,
+            "reps_max": 12,
+            "rest_seconds": 90,
+            "notes_fr": "Pieds sur une chaise pour accentuer le haut des pectoraux et les epaules en fin de seance."
+          },
+          {
+            "exercise_id": "plank",
+            "sets": 3,
+            "reps_min": 6,
+            "reps_max": 8,
+            "rest_seconds": 60,
+            "notes_fr": "Gainage anti-extension : comptez les repetitions comme des maintiens de 10 secondes, bassin retroverse, fessiers serres."
+          }
+        ]
+      },
+      {
+        "day_order": 2,
+        "name_fr": "Bas du corps A - Quadriceps et explosivite",
+        "focus_fr": "Force unilaterale des quadriceps, fessiers et pliometrie de saut",
+        "exercises": [
+          {
+            "exercise_id": "scissors-jump",
+            "sets": 4,
+            "reps_min": 6,
+            "reps_max": 8,
+            "rest_seconds": 90,
+            "notes_fr": "Fente sautee alternee : changez de jambe en l'air, genou avant aligne sur le pied, reception silencieuse. Comptez les repetitions par jambe."
+          },
+          {
+            "exercise_id": "single-leg-high-box-squat",
+            "sets": 4,
+            "reps_min": 5,
+            "reps_max": 8,
+            "rest_seconds": 150,
+            "notes_fr": "Squat unijambiste sur appui haut (box, marche) pour controler la profondeur. Abaissez l'appui a mesure que la force progresse."
+          },
+          {
+            "exercise_id": "weighted-squat",
+            "sets": 4,
+            "reps_min": 6,
+            "reps_max": 8,
+            "rest_seconds": 120,
+            "notes_fr": "Sac a dos charge tenu contre la poitrine ou ceinture lestee, descente sous la parallele, dos neutre."
+          },
+          {
+            "exercise_id": "bodyweight-walking-lunge",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 90,
+            "notes_fr": "Fentes marchees lestees du sac a dos, grand pas pour solliciter les fessiers, buste droit. Comptez par jambe."
+          },
+          {
+            "exercise_id": "single-leg-glute-bridge",
+            "sets": 3,
+            "reps_min": 8,
+            "reps_max": 12,
+            "rest_seconds": 75,
+            "notes_fr": "Pont fessier unijambiste, epaules au sol, pause d'une seconde en haut. Comptez par jambe."
+          },
+          {
+            "exercise_id": "side-bridge",
+            "sets": 3,
+            "reps_min": 4,
+            "reps_max": 6,
+            "rest_seconds": 60,
+            "notes_fr": "Gainage lateral anti-inclinaison, une repetition = un maintien de 15 a 20 secondes par cote, hanche haute."
+          }
+        ]
+      },
+      {
+        "day_order": 3,
+        "name_fr": "Haut du corps B - Tirer dominant",
+        "focus_fr": "Force de traction verticale et horizontale, dos, biceps et grip",
+        "exercises": [
+          {
+            "exercise_id": "muscle-up",
+            "sets": 4,
+            "reps_min": 3,
+            "reps_max": 5,
+            "rest_seconds": 150,
+            "notes_fr": "A froid pour la qualite : transition propre, evitez le kipping excessif. Si non maitrise, remplacez mentalement par des tractions explosives hautes."
+          },
+          {
+            "exercise_id": "weighted-pull-ups",
+            "sets": 4,
+            "reps_min": 5,
+            "reps_max": 8,
+            "rest_seconds": 150,
+            "notes_fr": "Sac a dos leste, amplitude complete bras tendus en bas, menton au-dessus de la barre. Coeur de la seance de force du dos."
+          },
+          {
+            "exercise_id": "one-arm-chin-up",
+            "sets": 3,
+            "reps_min": 3,
+            "reps_max": 5,
+            "rest_seconds": 150,
+            "notes_fr": "Progression vers la traction un bras : utilisez l'autre main en assistance legere sur l'avant-bras et reduisez l'aide. Comptez par bras."
+          },
+          {
+            "exercise_id": "bodyweight-mid-row",
+            "sets": 4,
+            "reps_min": 6,
+            "reps_max": 10,
+            "rest_seconds": 90,
+            "notes_fr": "Rowing horizontal sous une table ou barre basse, corps gaine en ligne, omoplates serrees en fin de tirage."
+          },
+          {
+            "exercise_id": "gironda-sternum-chins",
+            "sets": 3,
+            "reps_min": 5,
+            "reps_max": 8,
+            "rest_seconds": 90,
+            "notes_fr": "Traction sternale : tirez le bas de la poitrine vers la barre en reculant le bassin, fort sur les dorsaux et la posture."
+          },
+          {
+            "exercise_id": "hanging-leg-raise",
+            "sets": 3,
+            "reps_min": 8,
+            "reps_max": 12,
+            "rest_seconds": 75,
+            "notes_fr": "Releve de jambes suspendu jambes tendues, sans balancier, controlez la descente pour le grip et les abdominaux."
+          }
+        ]
+      },
+      {
+        "day_order": 4,
+        "name_fr": "Bas du corps B - Chaine posterieure et pliometrie",
+        "focus_fr": "Force des ischio-jambiers et fessiers, detente verticale et gainage avance",
+        "exercises": [
+          {
+            "exercise_id": "depth-jump-leap",
+            "sets": 4,
+            "reps_min": 4,
+            "reps_max": 6,
+            "rest_seconds": 120,
+            "notes_fr": "Saut en profondeur avec rebond : descendez d'un appui bas puis rebondissez immediatement vers le haut, temps de contact minimal."
+          },
+          {
+            "exercise_id": "natural-glute-ham-raise",
+            "sets": 4,
+            "reps_min": 5,
+            "reps_max": 8,
+            "rest_seconds": 150,
+            "notes_fr": "Releve ischio-fessier naturel, pieds bloques sous un meuble lourd, descente la plus lente possible. Aidez-vous des mains pour remonter si besoin."
+          },
+          {
+            "exercise_id": "knee-tuck-jump",
+            "sets": 4,
+            "reps_min": 6,
+            "reps_max": 8,
+            "rest_seconds": 90,
+            "notes_fr": "Saut groupe genoux a la poitrine, reception genoux flechis et silencieuse, enchainez sans temps mort entre les sauts."
+          },
+          {
+            "exercise_id": "single-leg-hop-progression",
+            "sets": 3,
+            "reps_min": 5,
+            "reps_max": 6,
+            "rest_seconds": 90,
+            "notes_fr": "Sauts unijambistes en progression pour la force reactive et la stabilite de cheville. Comptez par jambe, gardez l'alignement genou-pied."
+          },
+          {
+            "exercise_id": "superman",
+            "sets": 3,
+            "reps_min": 8,
+            "reps_max": 12,
+            "rest_seconds": 60,
+            "notes_fr": "Extension lombaire au sol, bras et jambes decolles, pause d'une seconde en haut pour renforcer la chaine posterieure."
+          },
+          {
+            "exercise_id": "ab-roller",
+            "sets": 3,
+            "reps_min": 6,
+            "reps_max": 10,
+            "rest_seconds": 75,
+            "notes_fr": "Roue abdominale en gainage anti-extension avance : ne creusez jamais le bas du dos, reculez l'amplitude si la lombaire cede."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "maison-gainage-abdos-core",
+    "name_fr": "Gainage & Abdos au poids du corps",
+    "theme": "full-body",
+    "level": "beginner",
+    "goal": "hypertrophy",
+    "audience": "all",
+    "days_per_week": 3,
+    "summary_fr": "Un programme court de renforcement complet de la sangle abdominale à faire chez soi, sans matériel, trois fois par semaine.",
+    "description_fr": "Trois séances de 20 à 25 minutes couvrant l'ensemble de la ceinture abdominale : grand droit (flexion), obliques (rotation et inclinaison), transverse et anti-rotation, plus les lombaires en équilibre. Chaque séance mêle un travail isométrique de gainage (anti-extension et anti-rotation) à des mouvements dynamiques pour solliciter le muscle sur toute son amplitude. Progressez d'abord en allongeant les temps de gainage et en ajoutant des répétitions propres avant de réduire les temps de repos. Gardez le bas du dos plaqué au sol sur les exercices de flexion et expirez à chaque contraction pour engager le transverse.",
+    "sessions": [
+      {
+        "day_order": 1,
+        "name_fr": "Séance A - Anti-extension & grand droit",
+        "focus_fr": "Gainage frontal, transverse et flexion du grand droit",
+        "exercises": [
+          {
+            "exercise_id": "plank",
+            "sets": 3,
+            "reps_min": 30,
+            "reps_max": 45,
+            "rest_seconds": 45,
+            "notes_fr": "Durée en secondes. Corps gainé en ligne, bassin légèrement rétroversé, ne pas creuser le bas du dos."
+          },
+          {
+            "exercise_id": "dead-bug",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 14,
+            "rest_seconds": 45,
+            "notes_fr": "Comptez les répétitions par côté. Lombaires plaquées au sol pendant tout le mouvement, descente lente et contrôlée."
+          },
+          {
+            "exercise_id": "crunches",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 18,
+            "rest_seconds": 45,
+            "notes_fr": "Décollez seulement les omoplates, soufflez en montant, ne tirez pas sur la nuque."
+          },
+          {
+            "exercise_id": "reverse-crunch",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 18,
+            "rest_seconds": 60,
+            "notes_fr": "Enroulez le bassin vers le haut sans élan, contrôlez la descente pour cibler le bas des abdos."
+          }
+        ]
+      },
+      {
+        "day_order": 2,
+        "name_fr": "Séance B - Anti-rotation & obliques",
+        "focus_fr": "Gainage latéral, obliques et travail anti-rotation",
+        "exercises": [
+          {
+            "exercise_id": "side-bridge",
+            "sets": 3,
+            "reps_min": 25,
+            "reps_max": 40,
+            "rest_seconds": 45,
+            "notes_fr": "Durée en secondes par côté. Bassin haut et corps aligné, épaule au-dessus du coude."
+          },
+          {
+            "exercise_id": "air-bike",
+            "sets": 3,
+            "reps_min": 14,
+            "reps_max": 20,
+            "rest_seconds": 45,
+            "notes_fr": "Comptez par côté. Mouvement lent coude vers genou opposé, ne tirez pas la tête."
+          },
+          {
+            "exercise_id": "russian-twist",
+            "sets": 3,
+            "reps_min": 16,
+            "reps_max": 24,
+            "rest_seconds": 45,
+            "notes_fr": "Comptez chaque touche au sol. Buste incliné en arrière, rotation venue du tronc et non des bras."
+          },
+          {
+            "exercise_id": "cross-body-crunch",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 16,
+            "rest_seconds": 60,
+            "notes_fr": "Par côté. Amenez le coude vers le genou opposé en contractant l'oblique, sans à-coups."
+          }
+        ]
+      },
+      {
+        "day_order": 3,
+        "name_fr": "Séance C - Sangle complète & lombaires",
+        "focus_fr": "Gainage, bas des abdos et chaîne postérieure lombaire",
+        "exercises": [
+          {
+            "exercise_id": "plank",
+            "sets": 3,
+            "reps_min": 35,
+            "reps_max": 50,
+            "rest_seconds": 45,
+            "notes_fr": "Durée en secondes. Gardez la ceinture abdominale et les fessiers contractés tout du long."
+          },
+          {
+            "exercise_id": "bent-knee-hip-raise",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 18,
+            "rest_seconds": 45,
+            "notes_fr": "Relevez le bassin en enroulant, sans balancement, pour cibler le bas du grand droit."
+          },
+          {
+            "exercise_id": "flutter-kicks",
+            "sets": 3,
+            "reps_min": 20,
+            "reps_max": 30,
+            "rest_seconds": 45,
+            "notes_fr": "Comptez les battements. Bas du dos plaqué au sol, battez les jambes tendues à faible amplitude."
+          },
+          {
+            "exercise_id": "superman",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 16,
+            "rest_seconds": 60,
+            "notes_fr": "Décollez bras et jambes en gardant la nuque neutre, marquez une courte pause en haut pour les lombaires."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "maison-halteres-full-body-debutant",
+    "name_fr": "Halteres maison - Full-body debutant",
+    "theme": "full-body",
+    "level": "beginner",
+    "goal": "hypertrophy",
+    "audience": "all",
+    "days_per_week": 3,
+    "summary_fr": "Programme full-body 3 jours par semaine avec une seule paire d'halteres pour construire du muscle a la maison en s'appuyant sur les grands mouvements composes.",
+    "description_fr": "Trois seances identiques dans leur logique mais variees dans les exercices, a realiser en jours non consecutifs (par exemple lundi, mercredi, vendredi) pour laisser 48 h de recuperation. Chaque seance couvre pousser, tirer, jambes et gainage afin de stimuler tout le corps a chaque passage. Commence leger pour assimiler la technique, puis ajoute une repetition ou un peu de charge des que tu boucles le haut de la fourchette propre sur toutes les series. Garde le dos neutre sur les squats, fentes et souleves, et controle la descente sur 2 a 3 secondes pour maximiser la tension musculaire en securite.",
+    "sessions": [
+      {
+        "day_order": 1,
+        "name_fr": "Seance A - Squat et developpe couche",
+        "focus_fr": "Quadriceps, pectoraux, dos et gainage",
+        "exercises": [
+          {
+            "exercise_id": "dumbbell-squat",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 90,
+            "notes_fr": "Halteres le long du corps, descends jusqu'a cuisses paralleles en gardant les talons au sol."
+          },
+          {
+            "exercise_id": "dumbbell-bench-press",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 90,
+            "notes_fr": "Au sol ou sur banc si tu en as un, coudes a 45 degres, descente controlee."
+          },
+          {
+            "exercise_id": "one-arm-dumbbell-row",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 75,
+            "notes_fr": "Un genou et une main en appui, tire l'haltere vers la hanche sans tourner le buste."
+          },
+          {
+            "exercise_id": "dumbbell-lunges",
+            "sets": 2,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 75,
+            "notes_fr": "10 a 12 repetitions par jambe, genou avant aligne sur la pointe de pied."
+          },
+          {
+            "exercise_id": "side-lateral-raise",
+            "sets": 2,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 60,
+            "notes_fr": "Charge legere, monte jusqu'a hauteur d'epaules sans balancer."
+          },
+          {
+            "exercise_id": "plank",
+            "sets": 3,
+            "reps_min": 30,
+            "reps_max": 45,
+            "rest_seconds": 45,
+            "notes_fr": "Maintien en secondes, corps gaine et bassin dans l'axe."
+          }
+        ]
+      },
+      {
+        "day_order": 2,
+        "name_fr": "Seance B - Souleve de terre et developpe epaules",
+        "focus_fr": "Chaine posterieure, epaules, dos et abdominaux",
+        "exercises": [
+          {
+            "exercise_id": "stiff-legged-dumbbell-deadlift",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 90,
+            "notes_fr": "Jambes quasi tendues, descends en poussant les hanches en arriere, dos plat."
+          },
+          {
+            "exercise_id": "standing-dumbbell-press",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 90,
+            "notes_fr": "Gaine les abdos, pousse a la verticale sans cambrer le bas du dos."
+          },
+          {
+            "exercise_id": "bent-over-two-dumbbell-row",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 75,
+            "notes_fr": "Buste penche a 45 degres, serre les omoplates en fin de tirage."
+          },
+          {
+            "exercise_id": "split-squat-with-dumbbells",
+            "sets": 2,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 75,
+            "notes_fr": "Pied arriere fixe, 10 a 12 repetitions par jambe, descente verticale."
+          },
+          {
+            "exercise_id": "dumbbell-bicep-curl",
+            "sets": 2,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 60,
+            "notes_fr": "Coudes colles au corps, pas d'elan."
+          },
+          {
+            "exercise_id": "dead-bug",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 45,
+            "notes_fr": "10 a 12 repetitions par cote, bas du dos plaque au sol."
+          }
+        ]
+      },
+      {
+        "day_order": 3,
+        "name_fr": "Seance C - Squat plie et developpe incline",
+        "focus_fr": "Jambes, haut des pectoraux, dos et obliques",
+        "exercises": [
+          {
+            "exercise_id": "plie-dumbbell-squat",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 90,
+            "notes_fr": "Un haltere tenu a deux mains facon goblet, pieds larges et pointes ouvertes."
+          },
+          {
+            "exercise_id": "incline-dumbbell-press",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 90,
+            "notes_fr": "Buste legerement incline (banc ou coussins), vise le haut des pectoraux."
+          },
+          {
+            "exercise_id": "dumbbell-incline-row",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 75,
+            "notes_fr": "Poitrine en appui incline, tire les halteres vers les hanches."
+          },
+          {
+            "exercise_id": "dumbbell-step-ups",
+            "sets": 2,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 75,
+            "notes_fr": "10 a 12 repetitions par jambe sur une marche stable, pousse dans le talon."
+          },
+          {
+            "exercise_id": "lying-dumbbell-tricep-extension",
+            "sets": 2,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 60,
+            "notes_fr": "Coudes fixes pointes vers le plafond, descends les halteres pres du front."
+          },
+          {
+            "exercise_id": "russian-twist",
+            "sets": 3,
+            "reps_min": 14,
+            "reps_max": 20,
+            "rest_seconds": 45,
+            "notes_fr": "Repetitions au total (gauche + droite), tiens un haltere pour charger."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "maison-halteres-haut-bas-intermediaire",
+    "name_fr": "Halteres maison - Haut/Bas intermediaire",
+    "theme": "upper-lower",
+    "level": "intermediate",
+    "goal": "hypertrophy",
+    "audience": "all",
+    "days_per_week": 4,
+    "summary_fr": "Split haut/bas sur 4 jours avec une seule paire d'halteres, centre sur le volume hypertrophie et les mouvements composes pour progresser a la maison.",
+    "description_fr": "Quatre seances par semaine organisees en deux blocs Haut puis Bas, repetes une fois (par exemple lundi haut, mardi bas, jeudi haut, vendredi bas). Chaque muscle est ainsi travaille deux fois par semaine, dosage ideal pour l'hypertrophie a l'intermediaire. Travaille pres de l'echec sur les series de composes (1 a 2 repetitions en reserve) et soigne la connexion sur les isolations. Progresse en ajoutant des repetitions puis de la charge, et ralentis la phase negative sur 2 a 3 secondes pour compenser la charge limitee d'une seule paire d'halteres.",
+    "sessions": [
+      {
+        "day_order": 1,
+        "name_fr": "Haut A - Force et volume",
+        "focus_fr": "Pectoraux, dos, epaules et bras",
+        "exercises": [
+          {
+            "exercise_id": "dumbbell-bench-press",
+            "sets": 4,
+            "reps_min": 8,
+            "reps_max": 12,
+            "rest_seconds": 90,
+            "notes_fr": "Mouvement de base du haut, descente controlee et amplitude complete."
+          },
+          {
+            "exercise_id": "bent-over-two-dumbbell-row",
+            "sets": 4,
+            "reps_min": 8,
+            "reps_max": 12,
+            "rest_seconds": 90,
+            "notes_fr": "Buste penche, tire vers le bas-ventre, serre les omoplates."
+          },
+          {
+            "exercise_id": "seated-dumbbell-press",
+            "sets": 3,
+            "reps_min": 8,
+            "reps_max": 12,
+            "rest_seconds": 90,
+            "notes_fr": "Assis dos droit, pousse les halteres a la verticale sans bloquer les coudes."
+          },
+          {
+            "exercise_id": "incline-dumbbell-flyes",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 15,
+            "rest_seconds": 60,
+            "notes_fr": "Etirement controle des pectoraux, leger flechi des coudes."
+          },
+          {
+            "exercise_id": "hammer-curls",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 60,
+            "notes_fr": "Prise marteau, alterne ou simultane sans balancer."
+          },
+          {
+            "exercise_id": "lying-dumbbell-tricep-extension",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 60,
+            "notes_fr": "Coudes fixes, descends pres du front puis tends completement."
+          }
+        ]
+      },
+      {
+        "day_order": 2,
+        "name_fr": "Bas A - Quadriceps dominant",
+        "focus_fr": "Quadriceps, fessiers, ischios et gainage",
+        "exercises": [
+          {
+            "exercise_id": "dumbbell-squat",
+            "sets": 4,
+            "reps_min": 8,
+            "reps_max": 12,
+            "rest_seconds": 120,
+            "notes_fr": "Halteres le long du corps, descente profonde, poussee dans les talons."
+          },
+          {
+            "exercise_id": "dumbbell-rear-lunge",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 90,
+            "notes_fr": "Fentes arriere, 10 a 12 repetitions par jambe, buste droit."
+          },
+          {
+            "exercise_id": "stiff-legged-dumbbell-deadlift",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 90,
+            "notes_fr": "Cible les ischios, hanches en arriere, dos plat tout du long."
+          },
+          {
+            "exercise_id": "single-leg-glute-bridge",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 60,
+            "notes_fr": "12 a 15 repetitions par jambe, pousse dans le talon et serre le fessier en haut."
+          },
+          {
+            "exercise_id": "standing-dumbbell-calf-raise",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 45,
+            "notes_fr": "Amplitude complete, pause une seconde en haut."
+          },
+          {
+            "exercise_id": "plank",
+            "sets": 3,
+            "reps_min": 40,
+            "reps_max": 60,
+            "rest_seconds": 45,
+            "notes_fr": "Maintien en secondes, gainage strict sans casser le bassin."
+          }
+        ]
+      },
+      {
+        "day_order": 3,
+        "name_fr": "Haut B - Epaules et dos",
+        "focus_fr": "Epaules, dos, pectoraux hauts et bras",
+        "exercises": [
+          {
+            "exercise_id": "arnold-dumbbell-press",
+            "sets": 4,
+            "reps_min": 8,
+            "reps_max": 12,
+            "rest_seconds": 90,
+            "notes_fr": "Rotation des poignets pendant la poussee pour solliciter tout le deltoide."
+          },
+          {
+            "exercise_id": "one-arm-dumbbell-row",
+            "sets": 4,
+            "reps_min": 8,
+            "reps_max": 12,
+            "rest_seconds": 90,
+            "notes_fr": "Unilateral, amplitude maximale, 8 a 12 repetitions par bras."
+          },
+          {
+            "exercise_id": "incline-dumbbell-press",
+            "sets": 3,
+            "reps_min": 8,
+            "reps_max": 12,
+            "rest_seconds": 90,
+            "notes_fr": "Buste incline pour accentuer le haut des pectoraux."
+          },
+          {
+            "exercise_id": "reverse-flyes",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 60,
+            "notes_fr": "Cible les deltoides posterieurs, buste penche, mouvement lent."
+          },
+          {
+            "exercise_id": "side-lateral-raise",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 60,
+            "notes_fr": "Largeur d'epaules, montee jusqu'a l'horizontale sans a-coups."
+          },
+          {
+            "exercise_id": "concentration-curls",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 60,
+            "notes_fr": "Coude cale sur la cuisse, contraction maximale en haut."
+          }
+        ]
+      },
+      {
+        "day_order": 4,
+        "name_fr": "Bas B - Fessiers et unilateral",
+        "focus_fr": "Fessiers, quadriceps, ischios et obliques",
+        "exercises": [
+          {
+            "exercise_id": "plie-dumbbell-squat",
+            "sets": 4,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 120,
+            "notes_fr": "Un haltere tenu facon goblet, pieds larges pour cibler fessiers et adducteurs."
+          },
+          {
+            "exercise_id": "split-squat-with-dumbbells",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 90,
+            "notes_fr": "Pied arriere surleve si possible, 10 a 12 repetitions par jambe."
+          },
+          {
+            "exercise_id": "dumbbell-step-ups",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 90,
+            "notes_fr": "10 a 12 repetitions par jambe sur marche haute, pousse dans le talon."
+          },
+          {
+            "exercise_id": "butt-lift-bridge",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 60,
+            "notes_fr": "Pose un haltere sur les hanches pour charger, extension complete en haut."
+          },
+          {
+            "exercise_id": "standing-dumbbell-calf-raise",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 45,
+            "notes_fr": "Sur une marche pour gagner en amplitude, etirement en bas."
+          },
+          {
+            "exercise_id": "russian-twist",
+            "sets": 3,
+            "reps_min": 16,
+            "reps_max": 24,
+            "rest_seconds": 45,
+            "notes_fr": "Repetitions au total gauche + droite, tiens un haltere a deux mains."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "maison-kettlebell-conditioning-3j",
+    "name_fr": "Kettlebell conditioning full-body 3 jours",
+    "theme": "full-body",
+    "level": "intermediate",
+    "goal": "power",
+    "audience": "all",
+    "days_per_week": 3,
+    "summary_fr": "Programme full-body au kettlebell sur 3 jours melant explosivite balistique et travail de force-gainage, realisable a la maison ou en exterieur avec une seule charge.",
+    "description_fr": "Trois seances complementaires construites autour des grands patterns du kettlebell : hip hinge balistique (swing, snatch, sumo high pull), squat leste, epaule-developpe et gainage rotatif. Chaque seance ouvre sur un mouvement explosif a faible repetition pour developper la puissance, puis enchaine force et conditioning metabolique avec des temps de repos courts. Progressez d'abord en proprete technique et en amplitude avant d'augmenter la charge ou de reduire le repos ; pour les balistiques, l'explosion vient des hanches, pas des bras, et le dos reste neutre. Alternez systematiquement le cote travaille sur les mouvements a un bras et terminez chaque seance par du gainage pour verrouiller le tronc.",
+    "sessions": [
+      {
+        "day_order": 1,
+        "name_fr": "Jour 1 - Puissance hanches et full-body",
+        "focus_fr": "Hip hinge explosif, squat et epaule-developpe",
+        "exercises": [
+          {
+            "exercise_id": "one-arm-kettlebell-swings",
+            "sets": 4,
+            "reps_min": 8,
+            "reps_max": 10,
+            "rest_seconds": 75,
+            "notes_fr": "Balistique d'ouverture : projetez le kettlebell par l'extension de hanche, bras relache. Alternez les cotes a chaque serie."
+          },
+          {
+            "exercise_id": "goblet-squat",
+            "sets": 4,
+            "reps_min": 8,
+            "reps_max": 12,
+            "rest_seconds": 90,
+            "notes_fr": "Coudes a l'interieur des genoux en bas, buste droit, descente controlee jusqu'a la cuisse parallele."
+          },
+          {
+            "exercise_id": "two-arm-kettlebell-clean",
+            "sets": 3,
+            "reps_min": 6,
+            "reps_max": 8,
+            "rest_seconds": 75,
+            "notes_fr": "Epaule explosif : la cloche se pose en rack sans claquer sur l'avant-bras, gainez a la reception."
+          },
+          {
+            "exercise_id": "two-arm-kettlebell-military-press",
+            "sets": 3,
+            "reps_min": 6,
+            "reps_max": 10,
+            "rest_seconds": 75,
+            "notes_fr": "Verrouillage bras tendu en haut, cotes basses, pas de cambrure lombaire excessive."
+          },
+          {
+            "exercise_id": "alternating-renegade-row",
+            "sets": 3,
+            "reps_min": 8,
+            "reps_max": 10,
+            "rest_seconds": 60,
+            "notes_fr": "Position de planche stable, bassin fixe ; tirez un cote puis l'autre sans rotation du tronc."
+          },
+          {
+            "exercise_id": "plank",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 45,
+            "notes_fr": "Gainage final : corps aligne talons-epaules, fessiers et abdos contractes pour verrouiller le tronc."
+          }
+        ]
+      },
+      {
+        "day_order": 2,
+        "name_fr": "Jour 2 - Force unilaterale et stabilite",
+        "focus_fr": "Travail a un bras, chaine posterieure et gainage rotatif",
+        "exercises": [
+          {
+            "exercise_id": "one-arm-kettlebell-clean",
+            "sets": 4,
+            "reps_min": 5,
+            "reps_max": 6,
+            "rest_seconds": 75,
+            "notes_fr": "Mouvement explosif d'ouverture, un cote puis l'autre ; trajectoire proche du corps, poignet neutre en rack."
+          },
+          {
+            "exercise_id": "kettlebell-one-legged-deadlift",
+            "sets": 3,
+            "reps_min": 8,
+            "reps_max": 10,
+            "rest_seconds": 75,
+            "notes_fr": "Hinge unilateral : hanche en charniere, dos neutre, jambe libre dans l'axe du tronc pour le controle."
+          },
+          {
+            "exercise_id": "one-arm-kettlebell-row",
+            "sets": 3,
+            "reps_min": 8,
+            "reps_max": 12,
+            "rest_seconds": 60,
+            "notes_fr": "Tirage dos : coude le long du corps, omoplate qui se serre, pas de rotation des epaules."
+          },
+          {
+            "exercise_id": "kettlebell-turkish-get-up-squat-style",
+            "sets": 3,
+            "reps_min": 3,
+            "reps_max": 4,
+            "rest_seconds": 90,
+            "notes_fr": "Stabilite scapulaire : yeux sur la cloche, chaque transition lente et controlee ; 3 a 4 repetitions par cote."
+          },
+          {
+            "exercise_id": "russian-twist",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 16,
+            "rest_seconds": 45,
+            "notes_fr": "Gainage rotatif : buste incline, rotation depuis les obliques, pieds decolles pour les plus solides."
+          }
+        ]
+      },
+      {
+        "day_order": 3,
+        "name_fr": "Jour 3 - Conditioning metabolique",
+        "focus_fr": "Densite cardio-force : balistiques et complexes a repos court",
+        "exercises": [
+          {
+            "exercise_id": "one-arm-kettlebell-snatch",
+            "sets": 4,
+            "reps_min": 5,
+            "reps_max": 6,
+            "rest_seconds": 75,
+            "notes_fr": "Balistique technique : un seul mouvement du sol au verrouillage haut, alternez les cotes ; reduisez la charge si la cloche claque sur l'avant-bras."
+          },
+          {
+            "exercise_id": "kettlebell-thruster",
+            "sets": 4,
+            "reps_min": 8,
+            "reps_max": 10,
+            "rest_seconds": 60,
+            "notes_fr": "Squat-developpe enchaine : la poussee des jambes lance le developpe, expirez en haut, repos court pour l'effet cardio."
+          },
+          {
+            "exercise_id": "kettlebell-sumo-high-pull",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 60,
+            "notes_fr": "Tirage explosif : extension hanches puis coudes hauts, la cloche monte au niveau de la poitrine."
+          },
+          {
+            "exercise_id": "two-arm-kettlebell-row",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 60,
+            "notes_fr": "Tirage bilateral en hinge : buste penche stable, tirez vers le nombril pour equilibrer le volume de poussee."
+          },
+          {
+            "exercise_id": "freehand-jump-squat",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 45,
+            "notes_fr": "Finisher pliometrique au poids du corps : reception souple genoux flechis pour cloturer le bloc conditioning."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "maison-elastiques-full-body-debutant",
+    "name_fr": "Full-body élastiques débutant",
+    "theme": "full-body",
+    "level": "beginner",
+    "goal": "hypertrophy",
+    "audience": "all",
+    "days_per_week": 3,
+    "summary_fr": "Programme full-body 3 jours à la résistance élastique, complété au poids du corps, conçu pour s'entraîner à la maison ou en voyage sans aucune machine.",
+    "description_fr": "Trois séances full-body identiques dans leur logique mais variées dans les exercices, couvrant à chaque fois pousser, tirer, jambes et gainage. Le volume monte progressivement : tenez d'abord 3 séries propres avant de chercher la 4e, et augmentez la tension de l'élastique (band plus épais ou prise raccourcie) quand vous dépassez le haut de la fourchette de répétitions. Cherchez la sensation musculaire plutôt que la vitesse : 2 secondes à la descente, contraction marquée en fin de mouvement, et ancrez bien l'élastique sous les pieds ou autour d'un point fixe solide pour éviter tout retour brutal.",
+    "sessions": [
+      {
+        "day_order": 1,
+        "name_fr": "Séance A – Tout le corps",
+        "focus_fr": "Pousser, tirer, jambes, gainage",
+        "exercises": [
+          {
+            "exercise_id": "squats-with-bands",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 15,
+            "rest_seconds": 90,
+            "notes_fr": "Élastique sous les pieds et sur les épaules. Descendez cuisses parallèles, dos droit, poussez dans les talons."
+          },
+          {
+            "exercise_id": "bench-press-with-bands",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 15,
+            "rest_seconds": 75,
+            "notes_fr": "Élastique passé dans le dos. Coudes à 45 degrés, poussée contrôlée vers l'avant sans verrouiller brutalement."
+          },
+          {
+            "exercise_id": "bodyweight-mid-row",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 15,
+            "rest_seconds": 75,
+            "notes_fr": "Tirage horizontal sous une table solide ou une barre basse. Serrez les omoplates, corps gainé en planche."
+          },
+          {
+            "exercise_id": "shoulder-press-with-bands",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 15,
+            "rest_seconds": 75,
+            "notes_fr": "Pieds sur l'élastique. Montez droit au-dessus de la tête sans cambrer le bas du dos."
+          },
+          {
+            "exercise_id": "band-hip-adductions",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 45,
+            "notes_fr": "Élastique à la cheville, point d'ancrage latéral. Ramenez la jambe vers la ligne médiane, contrôlez le retour."
+          },
+          {
+            "exercise_id": "plank",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 60,
+            "notes_fr": "Gainage : tenez 20 à 40 secondes par série, bassin verrouillé, sans creuser le bas du dos. Reps indicatives."
+          }
+        ]
+      },
+      {
+        "day_order": 2,
+        "name_fr": "Séance B – Tout le corps",
+        "focus_fr": "Charnière de hanche, presses, tirage, abductions",
+        "exercises": [
+          {
+            "exercise_id": "band-good-morning",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 15,
+            "rest_seconds": 90,
+            "notes_fr": "Élastique sous les pieds, autour de la nuque. Penchez le buste en gardant le dos plat, sentez les ischios s'étirer."
+          },
+          {
+            "exercise_id": "hip-extension-with-bands",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 60,
+            "notes_fr": "Élastique à la cheville. Poussez la jambe vers l'arrière en serrant le fessier, sans cambrer."
+          },
+          {
+            "exercise_id": "cross-over-with-bands",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 15,
+            "rest_seconds": 75,
+            "notes_fr": "Élastique ancré derrière vous à hauteur d'épaule. Ramenez les mains devant la poitrine en serrant les pectoraux."
+          },
+          {
+            "exercise_id": "band-pull-apart",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 60,
+            "notes_fr": "Bras tendus devant. Écartez l'élastique en serrant les omoplates, excellent pour le haut du dos et la posture."
+          },
+          {
+            "exercise_id": "pushups",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 15,
+            "rest_seconds": 75,
+            "notes_fr": "Complément poids du corps. Sur les genoux si besoin, corps gainé, descente complète et contrôlée."
+          },
+          {
+            "exercise_id": "monster-walk",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 45,
+            "notes_fr": "Élastique autour des cuisses ou chevilles. Pas latéraux en gardant la tension constante, genoux vers l'extérieur."
+          }
+        ]
+      },
+      {
+        "day_order": 3,
+        "name_fr": "Séance C – Tout le corps",
+        "focus_fr": "Jambes, épaules, fessiers, bras et core",
+        "exercises": [
+          {
+            "exercise_id": "squats-with-bands",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 90,
+            "notes_fr": "Augmentez légèrement la tension par rapport à la séance A. Rythme régulier, gainage du tronc maintenu."
+          },
+          {
+            "exercise_id": "hip-lift-with-band",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 60,
+            "notes_fr": "Allongé, élastique sur les hanches ancré au sol. Montez le bassin en serrant les fessiers, pause en haut."
+          },
+          {
+            "exercise_id": "lateral-raise-with-bands",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 60,
+            "notes_fr": "Pieds sur l'élastique. Montez les bras à l'horizontale sans hausser les épaules, coudes légèrement fléchis."
+          },
+          {
+            "exercise_id": "upright-row-with-bands",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 60,
+            "notes_fr": "Tirage vertical élastique sous les pieds. Coudes plus hauts que les mains, montée jusqu'au sternum."
+          },
+          {
+            "exercise_id": "band-skull-crusher",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 60,
+            "notes_fr": "Travail des triceps. Coudes fixes, seuls les avant-bras bougent, tendez sans à-coups."
+          },
+          {
+            "exercise_id": "crunches",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 45,
+            "notes_fr": "Gainage abdominal. Enroulez le buste sans tirer sur la nuque, expirez en haut du mouvement."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cardio-prepa-5km-intermediaire",
+    "name_fr": "Préparation 5 km - Intermédiaire",
+    "theme": "cardio",
+    "level": "intermediate",
+    "goal": "endurance",
+    "audience": "all",
+    "days_per_week": 3,
+    "summary_fr": "Plan sur 3 séances hebdomadaires pour préparer un 5 km en extérieur en combinant tempo, intervalles et sortie longue.",
+    "description_fr": "Ce programme structure la semaine autour de trois qualités complémentaires de la course à pied en extérieur : une séance de tempo à allure soutenue mais maîtrisée, une séance d'intervalles pour gagner en vitesse, et une sortie longue à allure facile pour développer l'endurance de base. Chaque séance commence par un footing d'échauffement progressif et se termine par un retour au calme en marche active. Progressez d'une semaine à l'autre en allongeant légèrement les blocs de tempo et la sortie longue, et conservez une allure de conversation sur les portions faciles. Conseil sécurité : hydratez-vous, choisissez un terrain régulier et arrêtez-vous si une douleur articulaire apparaît.",
+    "sessions": [
+      {
+        "day_order": 1,
+        "name_fr": "Séance tempo",
+        "focus_fr": "Allure seuil soutenue et continue",
+        "exercises": [
+          {
+            "exercise_id": "jogging-treadmill",
+            "sets": 1,
+            "reps_min": 10,
+            "reps_max": 10,
+            "rest_seconds": 0,
+            "notes_fr": "Échauffement en footing lent et progressif, respiration sous contrôle."
+          },
+          {
+            "exercise_id": "trail-running-walking",
+            "sets": 1,
+            "reps_min": 18,
+            "reps_max": 22,
+            "rest_seconds": 0,
+            "notes_fr": "Bloc tempo à allure soutenue mais régulière, juste en dessous de l'essoufflement."
+          },
+          {
+            "exercise_id": "walking-treadmill",
+            "sets": 1,
+            "reps_min": 5,
+            "reps_max": 5,
+            "rest_seconds": 0,
+            "notes_fr": "Retour au calme en marche active pour faire baisser le rythme cardiaque."
+          }
+        ]
+      },
+      {
+        "day_order": 2,
+        "name_fr": "Séance intervalles",
+        "focus_fr": "Fractionné pour la vitesse et la VMA",
+        "exercises": [
+          {
+            "exercise_id": "jogging-treadmill",
+            "sets": 1,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 0,
+            "notes_fr": "Échauffement progressif puis quelques accélérations courtes en fin de bloc."
+          },
+          {
+            "exercise_id": "running-treadmill",
+            "sets": 1,
+            "reps_min": 16,
+            "reps_max": 20,
+            "rest_seconds": 0,
+            "notes_fr": "Alternez 1 min rapide / 1 min lente sur toute la durée du bloc, restez relâché dans les épaules."
+          },
+          {
+            "exercise_id": "walking-treadmill",
+            "sets": 1,
+            "reps_min": 6,
+            "reps_max": 6,
+            "rest_seconds": 0,
+            "notes_fr": "Marche de récupération, respiration nasale pour calmer le cardio."
+          }
+        ]
+      },
+      {
+        "day_order": 3,
+        "name_fr": "Sortie longue",
+        "focus_fr": "Endurance fondamentale à allure facile",
+        "exercises": [
+          {
+            "exercise_id": "jogging-treadmill",
+            "sets": 1,
+            "reps_min": 8,
+            "reps_max": 10,
+            "rest_seconds": 0,
+            "notes_fr": "Démarrez très doucement, le temps que le corps se mette en route."
+          },
+          {
+            "exercise_id": "trail-running-walking",
+            "sets": 1,
+            "reps_min": 35,
+            "reps_max": 45,
+            "rest_seconds": 0,
+            "notes_fr": "Allure facile de conversation, sans jamais forcer ; alternez course et marche si besoin."
+          },
+          {
+            "exercise_id": "walking-treadmill",
+            "sets": 1,
+            "reps_min": 7,
+            "reps_max": 7,
+            "rest_seconds": 0,
+            "notes_fr": "Marche de fin de sortie pour relâcher les jambes."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cardio-fractionne-piste-cotes-avance",
+    "name_fr": "Fractionné piste et côtes - Avancé",
+    "theme": "cardio",
+    "level": "advanced",
+    "goal": "power",
+    "audience": "all",
+    "days_per_week": 3,
+    "summary_fr": "Trois séances exigeantes mêlant intervalles courts sur piste, répétitions en côte et sprints pour développer la puissance du coureur confirmé.",
+    "description_fr": "Destiné aux coureurs avancés, ce programme cible la puissance et la vitesse maximale par des efforts brefs et intenses : intervalles courts sur piste, répétitions en côte pour la force spécifique, et sprints francs sur le plat ou en montée. Chaque séance s'ouvre par un échauffement long et complet, indispensable avant les efforts explosifs, et se ferme par un retour au calme prolongé. Respectez scrupuleusement les phases de récupération entre les efforts pour maintenir la qualité des accélérations, et réduisez le volume au moindre signe de fatigue tendineuse. Conseil sécurité : ne lancez jamais de sprint à froid et privilégiez un sol stable pour les côtes.",
+    "sessions": [
+      {
+        "day_order": 1,
+        "name_fr": "Intervalles courts sur piste",
+        "focus_fr": "Vitesse maximale et changements de rythme",
+        "exercises": [
+          {
+            "exercise_id": "jogging-treadmill",
+            "sets": 1,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 0,
+            "notes_fr": "Échauffement complet avec gammes et accélérations progressives en fin de bloc."
+          },
+          {
+            "exercise_id": "running-treadmill",
+            "sets": 1,
+            "reps_min": 18,
+            "reps_max": 24,
+            "rest_seconds": 0,
+            "notes_fr": "Répétitions de 30 à 45 s très rapides avec récupération marchée active, gardez une foulée ample et propre."
+          },
+          {
+            "exercise_id": "walking-treadmill",
+            "sets": 1,
+            "reps_min": 8,
+            "reps_max": 8,
+            "rest_seconds": 0,
+            "notes_fr": "Retour au calme prolongé pour évacuer l'intensité de la séance."
+          }
+        ]
+      },
+      {
+        "day_order": 2,
+        "name_fr": "Répétitions en côte",
+        "focus_fr": "Force spécifique et puissance en montée",
+        "exercises": [
+          {
+            "exercise_id": "jogging-treadmill",
+            "sets": 1,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 0,
+            "notes_fr": "Échauffement sur terrain plat avant d'attaquer la côte, mobilisez bien les chevilles."
+          },
+          {
+            "exercise_id": "trail-running-walking",
+            "sets": 1,
+            "reps_min": 20,
+            "reps_max": 26,
+            "rest_seconds": 0,
+            "notes_fr": "Montées vigoureuses de 45 à 60 s, redescente en trottinant ou en marchant pour récupérer ; poussez sur les appuis."
+          },
+          {
+            "exercise_id": "walking-treadmill",
+            "sets": 1,
+            "reps_min": 8,
+            "reps_max": 8,
+            "rest_seconds": 0,
+            "notes_fr": "Marche de récupération sur terrain plat en fin de séance."
+          }
+        ]
+      },
+      {
+        "day_order": 3,
+        "name_fr": "Sprints et puissance",
+        "focus_fr": "Explosivité et tolérance lactique",
+        "exercises": [
+          {
+            "exercise_id": "jogging-treadmill",
+            "sets": 1,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 0,
+            "notes_fr": "Échauffement progressif, indispensable avant tout sprint pour protéger les ischio-jambiers."
+          },
+          {
+            "exercise_id": "running-treadmill",
+            "sets": 1,
+            "reps_min": 12,
+            "reps_max": 16,
+            "rest_seconds": 0,
+            "notes_fr": "Sprints courts et explosifs sur le plat ou en légère montée, récupération complète entre chaque effort."
+          },
+          {
+            "exercise_id": "trail-running-walking",
+            "sets": 1,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 0,
+            "notes_fr": "Footing léger de transition pour relâcher avant le retour au calme."
+          },
+          {
+            "exercise_id": "walking-treadmill",
+            "sets": 1,
+            "reps_min": 8,
+            "reps_max": 8,
+            "rest_seconds": 0,
+            "notes_fr": "Marche finale lente, étirements doux conseillés ensuite."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cardio-corde-hiit-maison-power",
+    "name_fr": "Corde à Sauter & HIIT Maison",
+    "theme": "cardio",
+    "level": "intermediate",
+    "goal": "power",
+    "audience": "all",
+    "days_per_week": 4,
+    "summary_fr": "Quatre séances explosives à la maison qui alternent blocs de corde à sauter et circuits pliométrie/poids du corps pour gagner en puissance et en cardio.",
+    "description_fr": "Chaque séance suit la même logique : un échauffement court à la corde, deux à trois blocs principaux qui alternent saut à la corde et circuit pliométrique/poids du corps, puis un retour au calme léger. Les durées sont exprimées en minutes : sur la corde, varie le rythme (sauts simples soutenus, puis pointes rapides) et sur les circuits enchaîne les mouvements explosifs en gardant une exécution propre, réception souple genoux fléchis. Place un jour de repos entre deux séances et ne raccourcis la récupération qu'une fois tous les blocs bouclés sans casser la cadence. Surface plane, bonnes chaussures et corde à la bonne longueur : c'est la base pour préserver chevilles et genoux.",
+    "sessions": [
+      {
+        "day_order": 1,
+        "name_fr": "Corde & Bas du corps explosif",
+        "focus_fr": "Échauffement corde, puis alternance corde / sauts des jambes, retour au calme",
+        "exercises": [
+          {
+            "exercise_id": "rope-jumping",
+            "sets": 1,
+            "reps_min": 4,
+            "reps_max": 5,
+            "rest_seconds": 0,
+            "notes_fr": "Échauffement : sauts simples à cadence facile pour monter en température et trouver le rythme."
+          },
+          {
+            "exercise_id": "rope-jumping",
+            "sets": 1,
+            "reps_min": 6,
+            "reps_max": 8,
+            "rest_seconds": 0,
+            "notes_fr": "Bloc corde : alterne 40 s de sauts rapides et 20 s de sauts lents, sans poser le pied."
+          },
+          {
+            "exercise_id": "freehand-jump-squat",
+            "sets": 1,
+            "reps_min": 5,
+            "reps_max": 6,
+            "rest_seconds": 0,
+            "notes_fr": "Circuit jambes : enchaîne 30 s de squats sautés / 30 s de récup active, réception genoux fléchis."
+          },
+          {
+            "exercise_id": "split-jump",
+            "sets": 1,
+            "reps_min": 4,
+            "reps_max": 5,
+            "rest_seconds": 0,
+            "notes_fr": "Fentes sautées alternées en continu, buste droit ; ralentis si la réception devient bruyante."
+          },
+          {
+            "exercise_id": "rope-jumping",
+            "sets": 1,
+            "reps_min": 4,
+            "reps_max": 4,
+            "rest_seconds": 0,
+            "notes_fr": "Retour au calme : sauts simples très lents pour faire redescendre le cardio."
+          }
+        ]
+      },
+      {
+        "day_order": 2,
+        "name_fr": "Corde & Haut du corps pliométrique",
+        "focus_fr": "Échauffement corde, puis alternance corde / pompes et gainage dynamique",
+        "exercises": [
+          {
+            "exercise_id": "rope-jumping",
+            "sets": 1,
+            "reps_min": 4,
+            "reps_max": 5,
+            "rest_seconds": 0,
+            "notes_fr": "Échauffement progressif à la corde, épaules relâchées et impulsion par les chevilles."
+          },
+          {
+            "exercise_id": "rope-jumping",
+            "sets": 1,
+            "reps_min": 6,
+            "reps_max": 8,
+            "rest_seconds": 0,
+            "notes_fr": "Bloc corde : pointes de vitesse de 30 s entrecoupées de 30 s de récupération en sauts simples."
+          },
+          {
+            "exercise_id": "plyo-push-up",
+            "sets": 1,
+            "reps_min": 4,
+            "reps_max": 5,
+            "rest_seconds": 0,
+            "notes_fr": "Circuit poussée : pompes pliométriques explosives ; passe sur les genoux si tu perds la poussée."
+          },
+          {
+            "exercise_id": "mountain-climbers",
+            "sets": 1,
+            "reps_min": 4,
+            "reps_max": 5,
+            "rest_seconds": 0,
+            "notes_fr": "Mountain climbers rapides, bassin stable, gainage serré tout du long."
+          },
+          {
+            "exercise_id": "rope-jumping",
+            "sets": 1,
+            "reps_min": 4,
+            "reps_max": 4,
+            "rest_seconds": 0,
+            "notes_fr": "Retour au calme à la corde, cadence lente, respiration profonde."
+          }
+        ]
+      },
+      {
+        "day_order": 3,
+        "name_fr": "Corde & Circuit full-body sauté",
+        "focus_fr": "Échauffement corde, puis deux tours d'un circuit pliométrique complet, retour au calme",
+        "exercises": [
+          {
+            "exercise_id": "rope-jumping",
+            "sets": 1,
+            "reps_min": 4,
+            "reps_max": 5,
+            "rest_seconds": 0,
+            "notes_fr": "Échauffement corde pour mobiliser chevilles, mollets et épaules."
+          },
+          {
+            "exercise_id": "star-jump",
+            "sets": 1,
+            "reps_min": 5,
+            "reps_max": 6,
+            "rest_seconds": 0,
+            "notes_fr": "Circuit full-body : sauts étoile explosifs, bras et jambes amples, réception souple."
+          },
+          {
+            "exercise_id": "knee-tuck-jump",
+            "sets": 1,
+            "reps_min": 4,
+            "reps_max": 5,
+            "rest_seconds": 0,
+            "notes_fr": "Sauts groupés genoux à la poitrine ; vise la hauteur, pas la vitesse, et amortis chaque réception."
+          },
+          {
+            "exercise_id": "rope-jumping",
+            "sets": 1,
+            "reps_min": 6,
+            "reps_max": 8,
+            "rest_seconds": 0,
+            "notes_fr": "Bloc corde central : sauts soutenus, ajoute quelques double-unders si tu maîtrises."
+          },
+          {
+            "exercise_id": "rope-jumping",
+            "sets": 1,
+            "reps_min": 4,
+            "reps_max": 4,
+            "rest_seconds": 0,
+            "notes_fr": "Retour au calme : sauts lents puis marche sur place."
+          }
+        ]
+      },
+      {
+        "day_order": 4,
+        "name_fr": "Corde & Latéral / agilité",
+        "focus_fr": "Échauffement corde, puis alternance corde / sauts latéraux et gainage",
+        "exercises": [
+          {
+            "exercise_id": "rope-jumping",
+            "sets": 1,
+            "reps_min": 4,
+            "reps_max": 5,
+            "rest_seconds": 0,
+            "notes_fr": "Échauffement corde, introduis quelques pas de boxeur pour réveiller le jeu de jambes."
+          },
+          {
+            "exercise_id": "rope-jumping",
+            "sets": 1,
+            "reps_min": 6,
+            "reps_max": 8,
+            "rest_seconds": 0,
+            "notes_fr": "Bloc corde : alterne sauts pieds joints et sauts latéraux d'un côté à l'autre."
+          },
+          {
+            "exercise_id": "lateral-bound",
+            "sets": 1,
+            "reps_min": 4,
+            "reps_max": 5,
+            "rest_seconds": 0,
+            "notes_fr": "Bonds latéraux explosifs d'un appui à l'autre, stabilise la réception avant de repartir."
+          },
+          {
+            "exercise_id": "scissors-jump",
+            "sets": 1,
+            "reps_min": 4,
+            "reps_max": 5,
+            "rest_seconds": 0,
+            "notes_fr": "Sauts en ciseau dynamiques, gainage actif et changement de jambe à chaque saut."
+          },
+          {
+            "exercise_id": "rope-jumping",
+            "sets": 1,
+            "reps_min": 4,
+            "reps_max": 4,
+            "rest_seconds": 0,
+            "notes_fr": "Retour au calme à la corde, cadence très lente, puis étirements légers des mollets."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cardio-velo-exterieur-endurance",
+    "name_fr": "Vélo extérieur : endurance fondamentale",
+    "theme": "cardio",
+    "level": "beginner",
+    "goal": "endurance",
+    "audience": "all",
+    "days_per_week": 3,
+    "summary_fr": "Trois sorties vélo en extérieur par semaine pour bâtir une base d'endurance aérobie en douceur, avec une durée qui progresse au fil des séances.",
+    "description_fr": "Chaque séance débute par une mise en route en marche active, puis un bloc de pédalage continu à allure facile où vous devez pouvoir tenir une conversation, avant un retour au calme. Le volume augmente progressivement d'une séance à l'autre (sortie courte, sortie moyenne, sortie longue) pour habituer le coeur et les jambes sans à-coups. Restez sur du plat ou des faux-plats, gardez une cadence souple de 70 à 90 tours par minute et n'augmentez la durée que si la précédente est passée sans douleur. Hydratez-vous et portez un casque.",
+    "sessions": [
+      {
+        "day_order": 1,
+        "name_fr": "Sortie courte",
+        "focus_fr": "Découverte de l'allure facile et mise en route du moteur aérobie",
+        "exercises": [
+          {
+            "exercise_id": "trail-running-walking",
+            "sets": 1,
+            "reps_min": 5,
+            "reps_max": 5,
+            "rest_seconds": 0,
+            "notes_fr": "Échauffement en marche active avant d'enfourcher le vélo, pour préparer les jambes."
+          },
+          {
+            "exercise_id": "bicycling",
+            "sets": 1,
+            "reps_min": 20,
+            "reps_max": 25,
+            "rest_seconds": 0,
+            "notes_fr": "Pédalage continu sur terrain plat, allure conversationnelle (vous pouvez parler sans être essoufflé)."
+          },
+          {
+            "exercise_id": "trail-running-walking",
+            "sets": 1,
+            "reps_min": 5,
+            "reps_max": 5,
+            "rest_seconds": 0,
+            "notes_fr": "Retour au calme en marche lente pour faire redescendre le rythme cardiaque."
+          }
+        ]
+      },
+      {
+        "day_order": 2,
+        "name_fr": "Sortie moyenne",
+        "focus_fr": "Allongement du temps passé en zone d'endurance",
+        "exercises": [
+          {
+            "exercise_id": "trail-running-walking",
+            "sets": 1,
+            "reps_min": 5,
+            "reps_max": 5,
+            "rest_seconds": 0,
+            "notes_fr": "Marche active progressive pour monter doucement en température."
+          },
+          {
+            "exercise_id": "bicycling",
+            "sets": 1,
+            "reps_min": 30,
+            "reps_max": 35,
+            "rest_seconds": 0,
+            "notes_fr": "Pédalage continu à allure facile, cadence souple ; gardez le souffle régulier tout du long."
+          },
+          {
+            "exercise_id": "trail-running-walking",
+            "sets": 1,
+            "reps_min": 5,
+            "reps_max": 5,
+            "rest_seconds": 0,
+            "notes_fr": "Marche lente de récupération en fin de sortie."
+          }
+        ]
+      },
+      {
+        "day_order": 3,
+        "name_fr": "Sortie longue",
+        "focus_fr": "Endurance de durée à intensité modérée",
+        "exercises": [
+          {
+            "exercise_id": "trail-running-walking",
+            "sets": 1,
+            "reps_min": 8,
+            "reps_max": 8,
+            "rest_seconds": 0,
+            "notes_fr": "Échauffement plus long avant la sortie la plus volumineuse de la semaine."
+          },
+          {
+            "exercise_id": "bicycling",
+            "sets": 1,
+            "reps_min": 40,
+            "reps_max": 50,
+            "rest_seconds": 0,
+            "notes_fr": "Sortie continue sur plat ou faux-plats, allure tenue confortablement du début à la fin ; ralentissez si l'essoufflement monte."
+          },
+          {
+            "exercise_id": "trail-running-walking",
+            "sets": 1,
+            "reps_min": 7,
+            "reps_max": 7,
+            "rest_seconds": 0,
+            "notes_fr": "Retour au calme prolongé en marche lente, puis étirement léger des jambes."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "cardio-escaliers-et-cotes",
+    "name_fr": "Escaliers & côtes : endurance grimpée",
+    "theme": "cardio",
+    "level": "intermediate",
+    "goal": "endurance",
+    "audience": "all",
+    "days_per_week": 3,
+    "summary_fr": "Trois séances par semaine combinant escaliers (escalier cardio, step-mill) et côtes en marche ou course pour développer l'endurance en montée et renforcer le moteur cardiaque.",
+    "description_fr": "Chaque séance s'ouvre sur une mise en route en marche/course facile sur sentier, suivie d'un ou deux blocs de grimpée sur des escaliers réels (utilisez le step-mill ou le stairmaster comme un escalier de la vie courante) et de côtes parcourues en marche soutenue ou en course, puis d'un retour au calme. Le travail en montée élève vite le rythme cardiaque : visez une allure soutenue mais maîtrisée, où la phrase devient courte sans être impossible. Progressez en gardant le dos droit et le regard devant dans les escaliers, posez le pied complet sur la marche et redescendez toujours en marchant pour ménager les genoux. Adaptez la durée des blocs à votre forme du jour.",
+    "sessions": [
+      {
+        "day_order": 1,
+        "name_fr": "Escaliers en continu",
+        "focus_fr": "Volume de grimpée à allure régulière",
+        "exercises": [
+          {
+            "exercise_id": "trail-running-walking",
+            "sets": 1,
+            "reps_min": 6,
+            "reps_max": 6,
+            "rest_seconds": 0,
+            "notes_fr": "Échauffement en marche puis trottinement léger sur sentier plat."
+          },
+          {
+            "exercise_id": "step-mill",
+            "sets": 1,
+            "reps_min": 18,
+            "reps_max": 22,
+            "rest_seconds": 0,
+            "notes_fr": "Montée continue d'escalier à allure régulière ; gardez le buste droit et ne vous accrochez pas aux rampes."
+          },
+          {
+            "exercise_id": "trail-running-walking",
+            "sets": 1,
+            "reps_min": 6,
+            "reps_max": 6,
+            "rest_seconds": 0,
+            "notes_fr": "Retour au calme en marche lente pour faire baisser le rythme cardiaque."
+          }
+        ]
+      },
+      {
+        "day_order": 2,
+        "name_fr": "Côtes en marche/course",
+        "focus_fr": "Endurance en montée sur terrain extérieur",
+        "exercises": [
+          {
+            "exercise_id": "trail-running-walking",
+            "sets": 1,
+            "reps_min": 6,
+            "reps_max": 6,
+            "rest_seconds": 0,
+            "notes_fr": "Mise en route sur plat, allure facile pour préparer les mollets et les chevilles."
+          },
+          {
+            "exercise_id": "trail-running-walking",
+            "sets": 1,
+            "reps_min": 25,
+            "reps_max": 30,
+            "rest_seconds": 0,
+            "notes_fr": "Bloc principal en côte : montées en marche soutenue ou course, descentes en marche de récupération ; répétez le parcours vallonné en continu."
+          },
+          {
+            "exercise_id": "trail-running-walking",
+            "sets": 1,
+            "reps_min": 6,
+            "reps_max": 6,
+            "rest_seconds": 0,
+            "notes_fr": "Retour au calme en marche lente sur terrain plat."
+          }
+        ]
+      },
+      {
+        "day_order": 3,
+        "name_fr": "Mix escaliers et côtes",
+        "focus_fr": "Combinaison des deux supports de grimpée",
+        "exercises": [
+          {
+            "exercise_id": "trail-running-walking",
+            "sets": 1,
+            "reps_min": 7,
+            "reps_max": 7,
+            "rest_seconds": 0,
+            "notes_fr": "Échauffement progressif marche puis course légère."
+          },
+          {
+            "exercise_id": "stairmaster",
+            "sets": 1,
+            "reps_min": 15,
+            "reps_max": 18,
+            "rest_seconds": 0,
+            "notes_fr": "Premier bloc de grimpée sur escalier : allure soutenue et maîtrisée, respiration ample."
+          },
+          {
+            "exercise_id": "trail-running-walking",
+            "sets": 1,
+            "reps_min": 15,
+            "reps_max": 20,
+            "rest_seconds": 0,
+            "notes_fr": "Second bloc en côtes extérieures : alternez montées dynamiques et descentes marchées."
+          },
+          {
+            "exercise_id": "trail-running-walking",
+            "sets": 1,
+            "reps_min": 6,
+            "reps_max": 6,
+            "rest_seconds": 0,
+            "notes_fr": "Retour au calme en marche lente puis étirement des mollets et des quadriceps."
           }
         ]
       }

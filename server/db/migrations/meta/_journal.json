@@ -78,6 +78,13 @@
       "when": 1781606404602,
       "tag": "0010_tranquil_longshot",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1781682629221,
+      "tag": "0011_chubby_black_knight",
+      "breakpoints": true
     }
   ]
 }

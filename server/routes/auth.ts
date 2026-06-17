@@ -23,6 +23,7 @@ import {
   getUserByEmail,
   getUserById,
   markUserVerified,
+  setEquipment,
   setGender,
   setResetToken,
   setUserRole,
@@ -33,6 +34,7 @@ import {
 import {isEmailConfigured, sendPasswordResetEmail, sendVerificationEmail} from '../email';
 import {isDisposableEmail} from '../disposableEmails';
 import {closeUserSockets, notifyUser} from '../sync';
+import {sanitizeEquipment} from '../../src/lib/equipment';
 
 const VERIFY_TTL_MS = 24 * 60 * 60 * 1000; // 24 h
 const RESET_TTL_MS = 60 * 60 * 1000; // 1 h
@@ -93,6 +95,8 @@ router.post('/register', async (req, res) => {
 
   // Sexe (optionnel) : seules 'male'/'female' sont retenues, sinon null (non renseigné).
   const gender = req.body?.gender === 'male' || req.body?.gender === 'female' ? req.body.gender : null;
+  // Matériel accessible (optionnel) : liste de jetons validée. Absent -> null (non renseigné).
+  const equipment = sanitizeEquipment(req.body?.equipment);
   // Confirmation d'email seulement si un envoi est réellement configuré. Sinon, la
   // confirmation serait impossible -> le compte naît VÉRIFIÉ (jamais de bandeau ni de purge).
   const emailActive = await isEmailConfigured();
@@ -103,6 +107,7 @@ router.post('/register', async (req, res) => {
     verifyToken,
     emailActive ? new Date(Date.now() + VERIFY_TTL_MS) : undefined,
     gender,
+    equipment,
   );
   if (!emailActive) await markUserVerified(user.id);
   // Auto-promotion si l'email est déclaré admin (ADMIN_EMAILS) : pas besoin de redémarrer.
@@ -117,7 +122,7 @@ router.post('/register', async (req, res) => {
   const token = newToken();
   await createSession(user.id, token, sessionExpiry());
   res.cookie(SESSION_COOKIE, token, cookieOptions());
-  return res.status(201).json({id: user.id, email: user.email, role, emailVerified: !emailActive, gender});
+  return res.status(201).json({id: user.id, email: user.email, role, emailVerified: !emailActive, gender, equipment});
 });
 
 router.post('/login', async (req, res) => {
@@ -142,7 +147,14 @@ router.post('/login', async (req, res) => {
   const token = newToken();
   await createSession(user.id, token, sessionExpiry());
   res.cookie(SESSION_COOKIE, token, cookieOptions());
-  return res.json({id: user.id, email: user.email, role: user.role, emailVerified: user.emailVerified, gender: user.gender});
+  return res.json({
+    id: user.id,
+    email: user.email,
+    role: user.role,
+    emailVerified: user.emailVerified,
+    gender: user.gender,
+    equipment: user.equipment,
+  });
 });
 
 const verifyBody = z.object({token: z.string().min(1).max(256)});
@@ -232,6 +244,18 @@ router.post('/gender', async (req, res) => {
   // Propage aux autres appareils (logo + programmes mis en avant se mettent à jour).
   notifyUser(auth.id, {type: 'account'});
   return res.json({ok: true, gender});
+});
+
+// Met à jour le matériel accessible (salle + équipements) — pour mettre en avant les
+// exercices faisables. Liste de jetons validée ; toujours un tableau (même vide).
+router.post('/equipment', async (req, res) => {
+  const auth = await getUserFromRequest(req);
+  if (!auth) return res.status(401).json({error: 'Non connecté.'});
+  const equipment = sanitizeEquipment(req.body?.equipment) ?? [];
+  await setEquipment(auth.id, equipment);
+  // Propage aux autres appareils : la mise en avant des exercices se met à jour partout.
+  notifyUser(auth.id, {type: 'account'});
+  return res.json({ok: true, equipment});
 });
 
 const passwordChange = z.object({
