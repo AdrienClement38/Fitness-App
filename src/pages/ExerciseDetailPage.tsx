@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {ArrowLeft, ChevronLeft, ChevronRight, Play, X} from 'lucide-react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
 import {api, exerciseImageUrl, label} from '../lib/api';
@@ -205,6 +205,7 @@ function ImageLightbox({
 }) {
   const multi = images.length > 1;
   const go = (delta: number) => onIndex((index + delta + images.length) % images.length);
+  const touchX = useRef<number | null>(null); // début d'un swipe tactile (mobile)
 
   // Échap pour fermer, flèches pour naviguer, et on bloque le scroll de fond.
   useEffect(() => {
@@ -230,13 +231,30 @@ function ImageLightbox({
           <X className="h-6 w-6" />
         </button>
       </div>
-      <div className="flex flex-1 items-center justify-center px-3 pb-8">
+      <div
+        className="flex flex-1 items-center justify-center px-3 pb-8"
+        onTouchStart={(e) => {
+          touchX.current = e.touches[0]?.clientX ?? null;
+        }}
+        onTouchEnd={(e) => {
+          if (touchX.current === null) return;
+          const dx = (e.changedTouches[0]?.clientX ?? touchX.current) - touchX.current;
+          touchX.current = null;
+          // Swipe gauche -> image suivante ; swipe droite -> précédente (seuil 40 px pour ne pas
+          // déclencher sur un simple tap). On stoppe la propagation pour ne pas fermer la lightbox.
+          if (multi && Math.abs(dx) > 40) {
+            e.stopPropagation();
+            go(dx < 0 ? 1 : -1);
+          }
+        }}
+      >
         {/* Clic sur l'image : ne ferme pas. Clic n'importe où ailleurs (fond, marges) : ferme. */}
         <img
           src={exerciseImageUrl(images[index])}
           alt={alt}
+          draggable={false}
           onClick={(e) => e.stopPropagation()}
-          className="max-h-full max-w-full rounded-lg object-contain"
+          className="max-h-full max-w-full select-none rounded-lg object-contain"
         />
       </div>
       {multi && (
