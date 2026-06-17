@@ -4,6 +4,7 @@ import {KIND_UNIT, label, measureKind} from '../lib/api';
 import {Badge, Empty} from '../components/ui';
 import {getMyProgram, useMyPrograms, type MyProgramExercise, type MyProgramSession} from '../lib/myPrograms';
 import {startSession, useActiveWorkout} from '../lib/workoutLogs';
+import {mmss} from '../lib/time';
 
 function reps(e: MyProgramExercise): string {
   if (e.repsMin == null) return '';
@@ -100,7 +101,7 @@ export default function MyProgramDetailPage() {
                       </div>
                       {(e.restSeconds || e.notesFr) && (
                         <p className="mt-0.5 text-xs text-slate-500">
-                          {e.restSeconds ? `Repos ${e.restSeconds}s` : ''}
+                          {e.restSeconds ? `Repos ${mmss(e.restSeconds)}` : ''}
                           {e.restSeconds && e.notesFr ? ' · ' : ''}
                           {e.notesFr ?? ''}
                         </p>

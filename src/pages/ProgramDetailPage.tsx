@@ -4,6 +4,7 @@ import {api, KIND_UNIT, label, measureKind, type ProgramExerciseItem, type Progr
 import {duplicateProgram} from '../lib/myPrograms';
 import {startSession, useActiveWorkout} from '../lib/workoutLogs';
 import {useFetch} from '../lib/useFetch';
+import {mmss} from '../lib/time';
 import {Badge, ErrorState, Loading} from '../components/ui';
 import {LabelBadge} from '../components/InfoTip';
 
@@ -91,7 +92,7 @@ export default function ProgramDetailPage() {
                   </div>
                   {(e.restSeconds || e.notesFr) && (
                     <p className="mt-0.5 text-xs text-slate-500">
-                      {e.restSeconds ? `Repos ${e.restSeconds}s` : ''}
+                      {e.restSeconds ? `Repos ${mmss(e.restSeconds)}` : ''}
                       {e.restSeconds && e.notesFr ? ' · ' : ''}
                       {e.notesFr ?? ''}
                     </p>

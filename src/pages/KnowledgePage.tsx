@@ -2,6 +2,7 @@ import {useState, type ReactNode} from 'react';
 import {ChevronDown} from 'lucide-react';
 import {api, label, type Principle, type RepScheme, type Source, type Split, type VolumeLandmark} from '../lib/api';
 import {useFetch} from '../lib/useFetch';
+import {mmssRange} from '../lib/time';
 import {Badge, ErrorState, Loading} from '../components/ui';
 import {InfoTip, TERMS} from '../components/InfoTip';
 
@@ -90,7 +91,7 @@ function RepSchemes({items}: {items: RepScheme[]}) {
           <div className="mt-2 grid grid-cols-2 gap-2 text-sm sm:grid-cols-4">
             <Stat label="Répétitions" value={range(r.repsMin, r.repsMax)} />
             <Stat label={<>% du max <InfoTip srLabel="Pourcentage du max">{TERMS.oneRm}</InfoTip></>} value={range(r.intensityPct1rmMin, r.intensityPct1rmMax, '%')} />
-            <Stat label="Repos" value={range(r.restSecondsMin, r.restSecondsMax, ' s')} />
+            <Stat label="Repos" value={mmssRange(r.restSecondsMin, r.restSecondsMax)} />
             <Stat label={<>Reps en réserve <InfoTip srLabel="Reps en réserve">{TERMS.rir}</InfoTip></>} value={range(r.rirMin, r.rirMax)} />
           </div>
           {r.notesFr && <p className="mt-2 text-xs text-slate-400">{r.notesFr}</p>}

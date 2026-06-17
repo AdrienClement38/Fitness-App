@@ -1,6 +1,7 @@
 import {useEffect, useRef, useState} from 'react';
 import {Check, Minus, Play, Plus, Timer, X} from 'lucide-react';
 import {Link, useNavigate} from 'react-router-dom';
+import {mmss} from '../lib/time';
 import {
   abandonActive,
   adjustRest,
@@ -39,8 +40,6 @@ function NumCell({
     />
   );
 }
-
-const mmss = (s: number) => `${Math.floor(Math.max(0, s) / 60)}:${String(Math.max(0, s) % 60).padStart(2, '0')}`;
 
 /** Chrono de séance : H:MM:SS au-delà d'une heure, sinon M:SS. */
 const hms = (s: number) => {
@@ -177,7 +176,7 @@ export default function WorkoutPage() {
                 {e.targetReps && (
                   <span className="shrink-0 text-xs text-slate-500">
                     objectif {e.targetReps} {objUnit}
-                    {e.restSeconds ? ` · repos ${e.restSeconds}s` : ''}
+                    {e.restSeconds ? ` · repos ${mmss(e.restSeconds)}` : ''}
                   </span>
                 )}
               </div>
