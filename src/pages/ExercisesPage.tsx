@@ -115,9 +115,12 @@ export default function ExercisesPage() {
         </button>
         <select className={selectClass} value={val('category')} onChange={(e) => setParam('category', e.target.value)}>
           <option value="">Tous types</option>
-          {facets.data?.categories.map((c) => (
-            <option key={c} value={c}>{label('category', c)}</option>
-          ))}
+          {facets.data?.categories
+            .slice()
+            .sort((a, b) => label('category', a).localeCompare(label('category', b), 'fr'))
+            .map((c) => (
+              <option key={c} value={c}>{label('category', c)}</option>
+            ))}
         </select>
         <select className={selectClass} value={val('equipment')} onChange={(e) => setParam('equipment', e.target.value)}>
           <option value="">Tout matériel</option>
