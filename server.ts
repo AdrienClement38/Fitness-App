@@ -101,13 +101,22 @@ async function startServer() {
   // État applicatif (annonce + maintenance) en cache mémoire.
   await loadAppStatus();
 
+  // Vite (dev) chargé dynamiquement ET de façon TOLÉRANTE : s'il est absent (bundle de prod
+  // sans devDependencies, ou NODE_ENV non défini sur un nouvel hébergement), on ne crashe pas
+  // -> on bascule sur le service du build statique. Le serveur démarre donc toujours en prod,
+  // sans dépendre de NODE_ENV. (Le bundle dist/server.cjs ne dépend pas de Vite : import dynamique.)
+  let viteAttached = false;
   if (process.env.NODE_ENV !== 'production') {
-    // Import dynamique : Vite n'est chargé qu'en dev, le bundle de prod
-    // (dist/server.cjs) ne dépend donc pas de Vite (hébergement léger AlwaysData).
-    const {createServer: createViteServer} = await import('vite');
-    const vite = await createViteServer({server: {middlewareMode: true}, appType: 'spa'});
-    app.use(vite.middlewares);
-  } else {
+    try {
+      const {createServer: createViteServer} = await import('vite');
+      const vite = await createViteServer({server: {middlewareMode: true}, appType: 'spa'});
+      app.use(vite.middlewares);
+      viteAttached = true;
+    } catch {
+      console.warn('[AC-KINETIK] Vite indisponible (prod sans NODE_ENV=production ?) — bascule en service statique.');
+    }
+  }
+  if (!viteAttached) {
     const distPath = path.join(process.cwd(), 'dist');
     // Le bundle serveur (server.cjs / seed.cjs) et les sourcemaps vivent dans dist/ mais ne
     // sont PAS du contenu public -> on les masque (sinon GET /server.cjs exposerait le code serveur).
