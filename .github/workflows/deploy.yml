@@ -32,10 +32,10 @@ jobs:
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     env:
-      SSH_HOST: ssh-fitnessapp.alwaysdata.net
-      SSH_USER: fitnessapp
+      SSH_HOST: ssh-ac-kinetik.alwaysdata.net
+      SSH_USER: ac-kinetik
       REMOTE_DIR: salle-de-sport
-      SITE_URL: https://fitnessapp.alwaysdata.net
+      SITE_URL: https://ac-kinetik.alwaysdata.net
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
