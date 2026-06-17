@@ -56,8 +56,9 @@ jobs:
       - name: Envoyer les artefacts (rsync)
         run: |
           RSH="ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=yes"
-          # rsync ne crée pas les dossiers parents manquants -> on crée d'abord les cibles neuves.
-          $RSH "$SSH_USER@$SSH_HOST" "mkdir -p '$REMOTE_DIR/data' '$REMOTE_DIR/etl/sources'"
+          # rsync ne crée PAS les dossiers parents manquants -> on crée d'abord TOUTES les
+          # cibles (sinon, sur un compte neuf ou dist/server.db absents, rsync sort en exit 11).
+          $RSH "$SSH_USER@$SSH_HOST" "mkdir -p '$REMOTE_DIR/data' '$REMOTE_DIR/etl/sources' '$REMOTE_DIR/dist/assets' '$REMOTE_DIR/server/db/migrations'"
           # Assets hashés (chunks JS/CSS des pages lazy) : on les AJOUTE sans supprimer les
           # anciens -> un onglet ouvert AVANT un déploiement peut encore charger ses chunks
           # (sinon import dynamique en 404 = ecran d'erreur). Accumulation lente, négligeable.
