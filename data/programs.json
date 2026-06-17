@@ -17,10 +17,11 @@
         "exercises": [
           {
             "exercise_id": "barbell-full-squat",
-            "sets": 3,
+            "sets": 4,
             "reps_min": 8,
             "reps_max": 12,
-            "rest_seconds": 120
+            "rest_seconds": 120,
+            "notes_fr": "Technique avant la charge. 4e série ajoutée pour amener les quadriceps au volume minimal efficace."
           },
           {
             "exercise_id": "barbell-bench-press-medium-grip",
@@ -87,11 +88,12 @@
             "rest_seconds": 60
           },
           {
-            "exercise_id": "hanging-leg-raise",
+            "exercise_id": "cable-crunch",
             "sets": 3,
             "reps_min": 10,
             "reps_max": 15,
-            "rest_seconds": 60
+            "rest_seconds": 60,
+            "notes_fr": "Abdos accessibles et contrôlables, adaptés au débutant."
           }
         ]
       },
@@ -102,10 +104,11 @@
         "exercises": [
           {
             "exercise_id": "leg-press",
-            "sets": 3,
+            "sets": 4,
             "reps_min": 10,
             "reps_max": 15,
-            "rest_seconds": 120
+            "rest_seconds": 120,
+            "notes_fr": "4e série ajoutée pour amener les quadriceps au volume minimal efficace."
           },
           {
             "exercise_id": "barbell-incline-bench-press-medium-grip",
@@ -304,11 +307,12 @@
             "rest_seconds": 180
           },
           {
-            "exercise_id": "front-barbell-squat",
+            "exercise_id": "leg-press",
             "sets": 3,
-            "reps_min": 8,
-            "reps_max": 12,
-            "rest_seconds": 150
+            "reps_min": 10,
+            "reps_max": 15,
+            "rest_seconds": 120,
+            "notes_fr": "Remplace le squat avant : presse guidée pour cibler les quadriceps sans empiler la charge lombaire après le soulevé de terre lourd qui ouvre la séance."
           },
           {
             "exercise_id": "barbell-hip-thrust",
@@ -344,7 +348,7 @@
     "audience": "male",
     "days_per_week": 6,
     "summary_fr": "3 séances (poussée / tirage / jambes) à enchaîner 1 à 2 fois par semaine (3 ou 6 jours). Volume élevé par muscle.",
-    "description_fr": "Push = pectoraux/épaules/triceps, Pull = dos/biceps, Legs = jambes complètes. En 6 jours, chaque muscle est travaillé 2×/semaine. Garde 1 à 2 reps en réserve sur les gros mouvements.",
+    "description_fr": "Push = pectoraux/épaules/triceps, Pull = dos/biceps, Legs = jambes complètes. En 6 jours, chaque muscle est travaillé 2×/semaine. Garde 1 à 2 reps en réserve sur les gros mouvements. Note récupération : le jour Pull utilise un soulevé de terre roumain modéré (et non un soulevé conventionnel lourd) pour présenter des lombaires fraîches au squat lourd du jour Legs qui suit, garantissant au moins 48 h entre deux sollicitations lombaires lourdes.",
     "sessions": [
       {
         "day_order": 1,
@@ -398,14 +402,15 @@
       {
         "day_order": 2,
         "name_fr": "Pull (tirage)",
-        "focus_fr": "Dos, biceps, avant-bras",
+        "focus_fr": "Dos, ischios, biceps",
         "exercises": [
           {
-            "exercise_id": "barbell-deadlift",
+            "exercise_id": "romanian-deadlift",
             "sets": 3,
-            "reps_min": 5,
-            "reps_max": 6,
-            "rest_seconds": 180
+            "reps_min": 8,
+            "reps_max": 12,
+            "rest_seconds": 150,
+            "notes_fr": "Charge modérée, RIR 1-2 : ce hinge léger remplace le soulevé conventionnel lourd pour préserver tes lombaires avant le squat lourd du jour Legs."
           },
           {
             "exercise_id": "pullups",
@@ -485,11 +490,12 @@
             "rest_seconds": 60
           },
           {
-            "exercise_id": "hanging-leg-raise",
+            "exercise_id": "cable-crunch",
             "sets": 3,
-            "reps_min": 10,
+            "reps_min": 12,
             "reps_max": 15,
-            "rest_seconds": 60
+            "rest_seconds": 60,
+            "notes_fr": "Remplace le relevé de jambes suspendu (trop technique pour un intermédiaire) : crunch à la poulie, gainage contrôlé sans balancement."
           }
         ]
       }
@@ -504,7 +510,7 @@
     "audience": "male",
     "days_per_week": 3,
     "summary_fr": "Programme de force classique : 5 séries de 5 sur les gros mouvements polyarticulaires, charges lourdes, surcharge progressive séance après séance.",
-    "description_fr": "Alterne les séances A et B (3 fois par semaine). Ajoute un peu de poids à chaque séance tant que tu réussis tes 5×5. Repos longs (3 min) pour maintenir la charge.",
+    "description_fr": "Alterne les séances A et B (3 fois par semaine). Tant que tu valides tes 5×5, ajoute un peu de poids à la séance suivante (environ +2,5 kg sur le haut du corps, +5 kg au squat et au soulevé). La progression linéaire n'est pas infinie : si tu rates le même exercice 3 séances de suite à la même charge, redescends de 10 % et remonte progressivement (décharge de plateau). Si tu cales une 2e fois, passe à une progression hebdomadaire ou allonge le bloc. Repos longs (3 min) pour maintenir la charge. Le volume de tirage est minimaliste (1 rowing) ; si tu enchaînes les blocs, ajoute du tirage horizontal en assistance (rowing ou face pull) pour la santé d'épaule à long terme.",
     "sessions": [
       {
         "day_order": 1,
@@ -757,7 +763,7 @@
     "audience": "male",
     "days_per_week": 6,
     "summary_fr": "PPL haut volume sur 6 jours pour pratiquants avancés. Beaucoup de séries par muscle, gestion de la fatigue indispensable.",
-    "description_fr": "6 séances/semaine (Push/Pull/Legs ×2). Volume élevé : surveille ta récupération, place une semaine de décharge toutes les 5 à 6 semaines.",
+    "description_fr": "6 séances/semaine (Push/Pull/Legs ×2) : cette version avancée suppose les 6 jours, chaque muscle travaillé 2×/semaine. En version réduite à 3 jours, la fréquence par muscle tombe à 1×/semaine, ce qui n'est pas optimal pour un niveau avancé. Volume élevé : surveille ta récupération, place une semaine de décharge toutes les 5 à 6 semaines. Note récupération : le jour Pull n'inclut plus de soulevé conventionnel lourd (le jour Legs fournit déjà le hinge lourd via le soulevé roumain et la charge axiale via le squat), remplacé par un rowing T-bar appuyé pour limiter le stress lombaire répété deux jours consécutifs.",
     "sessions": [
       {
         "day_order": 1,
@@ -821,11 +827,12 @@
         "focus_fr": "Dos, biceps, avant-bras",
         "exercises": [
           {
-            "exercise_id": "barbell-deadlift",
+            "exercise_id": "lying-t-bar-row",
             "sets": 4,
-            "reps_min": 5,
-            "reps_max": 6,
-            "rest_seconds": 180
+            "reps_min": 8,
+            "reps_max": 12,
+            "rest_seconds": 120,
+            "notes_fr": "Rowing T-bar appuyé (poitrine soutenue) : tirage épaisseur à faible contrainte lombaire qui remplace le soulevé conventionnel lourd, pour ne pas cumuler deux jours lombaires lourds avant le squat du jour Legs."
           },
           {
             "exercise_id": "pullups",
@@ -931,7 +938,7 @@
     "audience": "female",
     "days_per_week": 4,
     "summary_fr": "Programme axé fessiers (hip thrust, charnière de hanche, fentes) sans négliger le reste du corps. 4 séances par semaine.",
-    "description_fr": "2 séances orientées fessiers/jambes + 1 haut du corps + 1 bas du corps/abdos. Contracte fort les fessiers en haut de chaque répétition.",
+    "description_fr": "2 séances orientées fessiers/jambes + 1 haut du corps + 1 bas du corps/abdos. Contracte fort les fessiers en haut de chaque répétition. Espace les jours J3 (squat lourd + fentes) et J4 (soulevé de terre roumain) d'au moins une journée de repos, par exemple J1-J2-repos-J3-repos-J4, pour que la charnière de hanche du J4 tombe sur un bas du dos récupéré.",
     "sessions": [
       {
         "day_order": 1,
@@ -1073,11 +1080,12 @@
             "rest_seconds": 60
           },
           {
-            "exercise_id": "hanging-leg-raise",
+            "exercise_id": "cable-crunch",
             "sets": 3,
             "reps_min": 12,
             "reps_max": 15,
-            "rest_seconds": 60
+            "rest_seconds": 60,
+            "notes_fr": "Remplace le relevé de jambes suspendu (trop technique en intermédiaire) : à genoux face à la poulie haute, enroulez les abdos en abaissant les coudes vers les cuisses, sans tirer avec les bras."
           },
           {
             "exercise_id": "plank",
@@ -1100,7 +1108,7 @@
     "audience": "male",
     "days_per_week": 3,
     "summary_fr": "Spécialisation haut du corps en 3 séances : pectoraux/triceps, dos/biceps, épaules/bras. Idéal pour épaissir le buste.",
-    "description_fr": "À combiner avec 1 à 2 séances de jambes selon ton emploi du temps. Volume élevé sur les bras et les épaules.",
+    "description_fr": "À combiner avec 1 à 2 séances de jambes selon ton emploi du temps. Volume élevé sur les bras et les épaules. Les séances jambes que tu ajoutes ne doivent pas remplacer la séance Dos & biceps (J2) : c'est elle qui maintient l'équilibre poussée/tirage du programme.",
     "sessions": [
       {
         "day_order": 1,
@@ -1239,7 +1247,7 @@
     "audience": "male",
     "days_per_week": 4,
     "summary_fr": "Force + volume : chaque séance démarre par un gros mouvement lourd (5×5, ou 4×5 au soulevé) suivi d'accessoires en hypertrophie. Pour pratiquants confirmés.",
-    "description_fr": "4 séances autour des 4 mouvements rois (squat, développé, soulevé, militaire). Surcharge progressive sur le gros mouvement lourd d'ouverture, effort proche de l'échec sur les accessoires.",
+    "description_fr": "4 séances autour des 4 mouvements rois (squat, développé, soulevé, militaire). Surcharge progressive sur le gros mouvement lourd d'ouverture : ne monte la charge que lorsque toutes les séries de travail passent propres (surcharge plafonnée). Effort proche de l'échec sur les accessoires. Toutes les 4 à 6 semaines, fais une semaine de décharge à ~60 % du volume (charge et nombre de séries réduits) pour gérer la fatigue cumulée. Si tu cales 2-3 séances de suite sur un gros mouvement, redescends de 10 % et remonte progressivement. La semaine du soulevé lourd, allège le rowing pour limiter le stress lombaire répété.",
     "sessions": [
       {
         "day_order": 1,
@@ -1324,11 +1332,12 @@
             "rest_seconds": 180
           },
           {
-            "exercise_id": "bent-over-barbell-row",
+            "exercise_id": "lying-t-bar-row",
             "sets": 4,
             "reps_min": 6,
             "reps_max": 10,
-            "rest_seconds": 120
+            "rest_seconds": 120,
+            "notes_fr": "Rowing appuyé (poitrine soutenue) : même stimulus dos, charge lombaire fortement réduite le jour du soulevé lourd."
           },
           {
             "exercise_id": "wide-grip-lat-pulldown",
@@ -1464,11 +1473,12 @@
             "rest_seconds": 90
           },
           {
-            "exercise_id": "hanging-leg-raise",
+            "exercise_id": "cable-crunch",
             "sets": 3,
             "reps_min": 10,
             "reps_max": 15,
-            "rest_seconds": 60
+            "rest_seconds": 60,
+            "notes_fr": "Dos arrondi sur la flexion, contraction des abdos ; pas de balancement."
           }
         ]
       },
@@ -1518,7 +1528,7 @@
     "audience": "male",
     "days_per_week": 6,
     "summary_fr": "Le split légendaire d'Arnold : Pecs/Dos, Épaules/Bras, Jambes, répété 2× par semaine. Volume très élevé pour pratiquants avancés.",
-    "description_fr": "6 séances/semaine. Les pectoraux et le dos sont travaillés ensemble en superset pour la congestion. Gère bien ta récupération.",
+    "description_fr": "6 séances/semaine. Les pectoraux et le dos sont travaillés ensemble en superset pour la congestion. Progression : monte la charge uniquement quand toutes les séries passent propres dans la fourchette de reps (double progression), sans jamais dépasser le haut du MAV en volume. Toutes les 4 à 6 semaines, fais une semaine de décharge à environ 60 % du volume habituel. Si tu cales 2-3 séances de suite sur un mouvement, redescends de 10 % et remonte progressivement.",
     "sessions": [
       {
         "day_order": 1,
@@ -1572,7 +1582,7 @@
       {
         "day_order": 2,
         "name_fr": "Épaules & Bras",
-        "focus_fr": "Épaules, biceps, triceps",
+        "focus_fr": "Épaules, biceps, triceps, abdos",
         "exercises": [
           {
             "exercise_id": "barbell-shoulder-press",
@@ -1622,6 +1632,14 @@
             "reps_min": 12,
             "reps_max": 15,
             "rest_seconds": 60
+          },
+          {
+            "exercise_id": "hanging-leg-raise",
+            "sets": 4,
+            "reps_min": 15,
+            "reps_max": 20,
+            "rest_seconds": 60,
+            "notes_fr": "Placé ici (et non en fin de séance jambes) pour travailler les abdos sur un gainage frais, sans fatigue lombaire préalable."
           }
         ]
       },
@@ -1664,13 +1682,6 @@
             "reps_min": 15,
             "reps_max": 20,
             "rest_seconds": 60
-          },
-          {
-            "exercise_id": "hanging-leg-raise",
-            "sets": 4,
-            "reps_min": 15,
-            "reps_max": 20,
-            "rest_seconds": 60
           }
         ]
       }
@@ -1685,7 +1696,7 @@
     "audience": "all",
     "days_per_week": 3,
     "summary_fr": "Corps entier sur machines, poulies et haltères : aucun mouvement à la barre libre. Idéal pour débuter sans être intimidé.",
-    "description_fr": "3 séances (A, B, C). Les machines guident le mouvement : tu apprends à sentir tes muscles en sécurité avant de passer aux charges libres.",
+    "description_fr": "3 séances (A, B, C). Les machines guident le mouvement : tu apprends à sentir tes muscles en sécurité avant de passer aux charges libres. Après quelques semaines, quand la technique est solide, passe le développé couché haltères et la presse à 4 séries pour atteindre le MEV des pectoraux et des quadriceps.",
     "sessions": [
       {
         "day_order": 1,
@@ -1847,7 +1858,7 @@
     "audience": "all",
     "days_per_week": 2,
     "summary_fr": "Seulement 2 séances corps entier par semaine : le minimum efficace quand le temps manque. Parfait pour rester régulier.",
-    "description_fr": "2 séances (A et B) sur des jours non consécutifs. Que des mouvements de base, à charge maîtrisée.",
+    "description_fr": "2 séances (A et B) sur des jours non consécutifs. Que des mouvements de base, à charge maîtrisée. Le haut du corps (pecs, dos large, dos épais) est travaillé 2× par semaine pour atteindre un volume utile malgré le format court.",
     "sessions": [
       {
         "day_order": 1,
@@ -1863,13 +1874,20 @@
           },
           {
             "exercise_id": "dumbbell-bench-press",
-            "sets": 3,
+            "sets": 4,
             "reps_min": 10,
             "reps_max": 12,
             "rest_seconds": 90
           },
           {
             "exercise_id": "seated-cable-rows",
+            "sets": 4,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 90
+          },
+          {
+            "exercise_id": "wide-grip-lat-pulldown",
             "sets": 3,
             "reps_min": 10,
             "reps_max": 12,
@@ -1905,7 +1923,21 @@
             "rest_seconds": 120
           },
           {
+            "exercise_id": "dumbbell-bench-press",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 90
+          },
+          {
             "exercise_id": "wide-grip-lat-pulldown",
+            "sets": 4,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 90
+          },
+          {
+            "exercise_id": "seated-cable-rows",
             "sets": 3,
             "reps_min": 10,
             "reps_max": 12,
@@ -1926,11 +1958,12 @@
             "rest_seconds": 60
           },
           {
-            "exercise_id": "hanging-leg-raise",
+            "exercise_id": "cable-crunch",
             "sets": 3,
             "reps_min": 10,
             "reps_max": 15,
-            "rest_seconds": 60
+            "rest_seconds": 60,
+            "notes_fr": "Dos arrondi sur la flexion, contraction des abdos ; pas de balancement."
           }
         ]
       }
@@ -2072,6 +2105,14 @@
             "rest_seconds": 90
           },
           {
+            "exercise_id": "v-bar-pulldown",
+            "sets": 3,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 90,
+            "notes_fr": "Tirage prise serrée dédié aux grands dorsaux, pour amener le volume lats dans le MAV."
+          },
+          {
             "exercise_id": "cable-crossover",
             "sets": 3,
             "reps_min": 12,
@@ -2174,28 +2215,32 @@
             "sets": 3,
             "reps_min": 8,
             "reps_max": 10,
-            "rest_seconds": 120
+            "rest_seconds": 120,
+            "notes_fr": null
           },
           {
             "exercise_id": "romanian-deadlift",
             "sets": 3,
             "reps_min": 8,
             "reps_max": 10,
-            "rest_seconds": 120
+            "rest_seconds": 120,
+            "notes_fr": null
           },
           {
             "exercise_id": "lying-leg-curls",
             "sets": 3,
             "reps_min": 10,
             "reps_max": 12,
-            "rest_seconds": 90
+            "rest_seconds": 90,
+            "notes_fr": null
           },
           {
             "exercise_id": "hanging-leg-raise",
             "sets": 3,
             "reps_min": 12,
             "reps_max": 15,
-            "rest_seconds": 60
+            "rest_seconds": 60,
+            "notes_fr": null
           }
         ]
       },
@@ -2217,28 +2262,32 @@
             "sets": 3,
             "reps_min": 6,
             "reps_max": 8,
-            "rest_seconds": 120
+            "rest_seconds": 120,
+            "notes_fr": null
           },
           {
             "exercise_id": "dips-triceps-version",
             "sets": 3,
             "reps_min": 8,
             "reps_max": 12,
-            "rest_seconds": 90
+            "rest_seconds": 90,
+            "notes_fr": null
           },
           {
             "exercise_id": "side-lateral-raise",
             "sets": 3,
             "reps_min": 12,
             "reps_max": 15,
-            "rest_seconds": 60
+            "rest_seconds": 60,
+            "notes_fr": null
           },
           {
             "exercise_id": "triceps-pushdown",
             "sets": 3,
             "reps_min": 10,
             "reps_max": 12,
-            "rest_seconds": 60
+            "rest_seconds": 60,
+            "notes_fr": null
           }
         ]
       },
@@ -2260,28 +2309,32 @@
             "sets": 4,
             "reps_min": 6,
             "reps_max": 8,
-            "rest_seconds": 120
+            "rest_seconds": 120,
+            "notes_fr": null
           },
           {
             "exercise_id": "pullups",
             "sets": 4,
             "reps_min": 8,
             "reps_max": 10,
-            "rest_seconds": 120
+            "rest_seconds": 120,
+            "notes_fr": null
           },
           {
             "exercise_id": "barbell-curl",
             "sets": 3,
             "reps_min": 8,
             "reps_max": 12,
-            "rest_seconds": 60
+            "rest_seconds": 60,
+            "notes_fr": null
           },
           {
             "exercise_id": "standing-calf-raises",
             "sets": 4,
             "reps_min": 12,
             "reps_max": 15,
-            "rest_seconds": 60
+            "rest_seconds": 60,
+            "notes_fr": null
           }
         ]
       },
@@ -2295,35 +2348,40 @@
             "sets": 4,
             "reps_min": 5,
             "reps_max": 6,
-            "rest_seconds": 150
+            "rest_seconds": 150,
+            "notes_fr": null
           },
           {
             "exercise_id": "seated-cable-rows",
             "sets": 4,
             "reps_min": 8,
             "reps_max": 10,
-            "rest_seconds": 90
+            "rest_seconds": 90,
+            "notes_fr": null
           },
           {
             "exercise_id": "cable-crossover",
             "sets": 3,
             "reps_min": 12,
             "reps_max": 15,
-            "rest_seconds": 60
+            "rest_seconds": 60,
+            "notes_fr": null
           },
           {
             "exercise_id": "face-pull",
-            "sets": 3,
+            "sets": 4,
             "reps_min": 15,
             "reps_max": 20,
-            "rest_seconds": 60
+            "rest_seconds": 60,
+            "notes_fr": "Volume monté à 4 séries pour la santé de la coiffe, face au gros volume de développés lourds de la semaine."
           },
           {
             "exercise_id": "hammer-curls",
             "sets": 3,
             "reps_min": 10,
             "reps_max": 12,
-            "rest_seconds": 60
+            "rest_seconds": 60,
+            "notes_fr": null
           }
         ]
       }
@@ -2338,7 +2396,7 @@
     "audience": "female",
     "days_per_week": 3,
     "summary_fr": "3 séances pour bâtir des fessiers et des jambes solides en partant des bons mouvements de base, barre et haltères inclus.",
-    "description_fr": "Place toujours l'exercice fessier en premier, quand tu es la plus fraîche, et soigne la technique avant d'ajouter du poids. Alterne les 3 séances sur des jours non consécutifs (ex. lundi/mercredi/vendredi). Dès que tu atteins le haut de la fourchette de répétitions proprement, monte la charge à la séance suivante.",
+    "description_fr": "Place toujours l'exercice fessier en premier, quand tu es la plus fraîche, et soigne la technique avant d'ajouter du poids. Le hip thrust et le pont fessier à la barre s'apprennent débutante avec une charge légère et maîtrisée : commence léger, filme-toi ou prends un repère de posture, et n'augmente la charge que lorsque l'exécution reste propre. Si la barre te gêne au départ, fais ces deux mouvements avec un haltère ou sur un banc avant d'y passer. Alterne les 3 séances sur des jours non consécutifs (ex. lundi/mercredi/vendredi). Dès que tu atteins le haut de la fourchette de répétitions proprement, monte la charge à la séance suivante.",
     "sessions": [
       {
         "day_order": 1,
@@ -2350,35 +2408,40 @@
             "sets": 3,
             "reps_min": 10,
             "reps_max": 12,
-            "rest_seconds": 120
+            "rest_seconds": 120,
+            "notes_fr": null
           },
           {
             "exercise_id": "goblet-squat",
             "sets": 3,
             "reps_min": 10,
             "reps_max": 12,
-            "rest_seconds": 90
+            "rest_seconds": 90,
+            "notes_fr": null
           },
           {
             "exercise_id": "leg-press",
             "sets": 3,
             "reps_min": 12,
             "reps_max": 15,
-            "rest_seconds": 90
+            "rest_seconds": 90,
+            "notes_fr": null
           },
           {
             "exercise_id": "leg-extensions",
             "sets": 3,
             "reps_min": 12,
             "reps_max": 15,
-            "rest_seconds": 60
+            "rest_seconds": 60,
+            "notes_fr": null
           },
           {
             "exercise_id": "plank",
             "sets": 3,
             "reps_min": 30,
             "reps_max": 45,
-            "rest_seconds": 60
+            "rest_seconds": 60,
+            "notes_fr": null
           }
         ]
       },
@@ -2392,35 +2455,40 @@
             "sets": 3,
             "reps_min": 10,
             "reps_max": 12,
-            "rest_seconds": 120
+            "rest_seconds": 120,
+            "notes_fr": null
           },
           {
             "exercise_id": "romanian-deadlift",
             "sets": 3,
             "reps_min": 10,
             "reps_max": 12,
-            "rest_seconds": 120
+            "rest_seconds": 120,
+            "notes_fr": null
           },
           {
             "exercise_id": "lying-leg-curls",
             "sets": 3,
             "reps_min": 12,
             "reps_max": 15,
-            "rest_seconds": 60
+            "rest_seconds": 60,
+            "notes_fr": null
           },
           {
             "exercise_id": "standing-calf-raises",
             "sets": 3,
             "reps_min": 12,
             "reps_max": 15,
-            "rest_seconds": 60
+            "rest_seconds": 60,
+            "notes_fr": null
           },
           {
             "exercise_id": "ab-crunch-machine",
             "sets": 3,
             "reps_min": 12,
             "reps_max": 15,
-            "rest_seconds": 60
+            "rest_seconds": 60,
+            "notes_fr": null
           }
         ]
       },
@@ -2434,35 +2502,40 @@
             "sets": 3,
             "reps_min": 10,
             "reps_max": 12,
-            "rest_seconds": 90
+            "rest_seconds": 90,
+            "notes_fr": null
           },
           {
             "exercise_id": "barbell-full-squat",
             "sets": 3,
             "reps_min": 8,
             "reps_max": 12,
-            "rest_seconds": 120
+            "rest_seconds": 120,
+            "notes_fr": null
           },
           {
             "exercise_id": "seated-leg-curl",
             "sets": 3,
             "reps_min": 12,
             "reps_max": 15,
-            "rest_seconds": 60
+            "rest_seconds": 60,
+            "notes_fr": null
           },
           {
             "exercise_id": "wide-grip-lat-pulldown",
             "sets": 3,
             "reps_min": 10,
             "reps_max": 12,
-            "rest_seconds": 90
+            "rest_seconds": 90,
+            "notes_fr": null
           },
           {
             "exercise_id": "dumbbell-shoulder-press",
             "sets": 3,
             "reps_min": 10,
             "reps_max": 12,
-            "rest_seconds": 60
+            "rest_seconds": 60,
+            "notes_fr": null
           }
         ]
       }
@@ -2477,7 +2550,7 @@
     "audience": "female",
     "days_per_week": 3,
     "summary_fr": "3 séances corps entier qui combinent gros mouvements lourds et un finisher cardio pour perdre du gras tout en gardant du muscle.",
-    "description_fr": "La recomposition repose sur la musculation lourde en progression, pas sur l'enchaînement de petites machines : garde 1 à 2 répétitions en réserve sur les mouvements de base. Le cardio en fin de séance crée la dépense supplémentaire sans grignoter la récupération. Alterne les 3 séances sur des jours non consécutifs et ajoute du poids dès que tu boucles le haut de la fourchette proprement.",
+    "description_fr": "La recomposition repose sur la musculation lourde en progression, pas sur l'enchaînement de petites machines : garde 1 à 2 répétitions en réserve sur les mouvements de base. Le cardio en fin de séance crée la dépense supplémentaire sans grignoter la récupération. Le dos est travaillé 2×/semaine (un tirage vertical et un tirage horizontal à chaque fois) pour un volume suffisant en recomposition. Alterne les 3 séances sur des jours non consécutifs et ajoute du poids dès que tu boucles le haut de la fourchette proprement.",
     "sessions": [
       {
         "day_order": 1,
@@ -2513,6 +2586,14 @@
             "rest_seconds": 90
           },
           {
+            "exercise_id": "wide-grip-lat-pulldown",
+            "sets": 4,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 90,
+            "notes_fr": "Tirage vertical ajouté pour travailler les dorsaux 2×/semaine et atteindre un volume de dos suffisant."
+          },
+          {
             "exercise_id": "rowing-stationary",
             "sets": 1,
             "reps_min": 10,
@@ -2539,6 +2620,14 @@
             "reps_min": 10,
             "reps_max": 12,
             "rest_seconds": 90
+          },
+          {
+            "exercise_id": "seated-cable-rows",
+            "sets": 4,
+            "reps_min": 10,
+            "reps_max": 12,
+            "rest_seconds": 90,
+            "notes_fr": "Tirage horizontal ajouté pour le milieu du dos : deuxième exposition de la semaine."
           },
           {
             "exercise_id": "dumbbell-shoulder-press",
@@ -2642,35 +2731,40 @@
             "sets": 3,
             "reps_min": 12,
             "reps_max": 15,
-            "rest_seconds": 90
+            "rest_seconds": 90,
+            "notes_fr": null
           },
           {
             "exercise_id": "barbell-hip-thrust",
             "sets": 3,
             "reps_min": 12,
             "reps_max": 15,
-            "rest_seconds": 90
+            "rest_seconds": 90,
+            "notes_fr": null
           },
           {
             "exercise_id": "dumbbell-bench-press",
             "sets": 3,
             "reps_min": 12,
             "reps_max": 15,
-            "rest_seconds": 75
+            "rest_seconds": 75,
+            "notes_fr": null
           },
           {
             "exercise_id": "seated-cable-rows",
             "sets": 3,
             "reps_min": 12,
             "reps_max": 15,
-            "rest_seconds": 75
+            "rest_seconds": 75,
+            "notes_fr": null
           },
           {
             "exercise_id": "plank",
             "sets": 3,
             "reps_min": 30,
             "reps_max": 45,
-            "rest_seconds": 60
+            "rest_seconds": 60,
+            "notes_fr": null
           }
         ]
       },
@@ -2684,35 +2778,40 @@
             "sets": 3,
             "reps_min": 12,
             "reps_max": 15,
-            "rest_seconds": 90
+            "rest_seconds": 90,
+            "notes_fr": null
           },
           {
             "exercise_id": "barbell-lunge",
             "sets": 3,
             "reps_min": 12,
             "reps_max": 15,
-            "rest_seconds": 75
+            "rest_seconds": 75,
+            "notes_fr": null
           },
           {
             "exercise_id": "wide-grip-lat-pulldown",
             "sets": 3,
             "reps_min": 12,
             "reps_max": 15,
-            "rest_seconds": 75
+            "rest_seconds": 75,
+            "notes_fr": null
           },
           {
             "exercise_id": "dumbbell-shoulder-press",
             "sets": 3,
             "reps_min": 12,
             "reps_max": 15,
-            "rest_seconds": 75
+            "rest_seconds": 75,
+            "notes_fr": null
           },
           {
             "exercise_id": "ab-crunch-machine",
             "sets": 3,
             "reps_min": 15,
             "reps_max": 20,
-            "rest_seconds": 60
+            "rest_seconds": 60,
+            "notes_fr": null
           }
         ]
       }
@@ -2727,7 +2826,7 @@
     "audience": "female",
     "days_per_week": 4,
     "summary_fr": "4 séances bas/haut orientées fessiers : chaque bas du corps est travaillé 2×/semaine, en alternant journée lourde et journée volume.",
-    "description_fr": "Inspiré des splits bas/haut style Bret Contreras : Bas A est lourd (charnière + poussée de hanche), Bas B est en volume avec plus de répétitions et de tempo. Le haut du corps reste équilibré pour une silhouette harmonieuse. Garde 1 à 2 répétitions en réserve sur les séries lourdes et progresse en charge ou en répétitions chaque semaine.",
+    "description_fr": "Inspiré des splits bas/haut style Bret Contreras : Bas A est lourd (charnière + poussée de hanche), Bas B est en volume avec plus de répétitions et de tempo. Pour limiter le cumul lombaire en journée lourde, Bas A ne garde que deux gros mouvements de charnière (hip thrust + soulevé de terre) et confie le travail quadriceps à la presse à cuisses (charge lourde, lombaires épargnées). Le haut du corps reste équilibré pour une silhouette harmonieuse. Garde 1 à 2 répétitions en réserve sur les séries lourdes et progresse en charge ou en répétitions chaque semaine. Toutes les 4 à 6 semaines, fais une semaine de décharge à volume et charge réduits (~40-50 %). Si tu cales 2-3 séances de suite sur un mouvement, redescends de 10 % et remonte progressivement.",
     "sessions": [
       {
         "day_order": 1,
@@ -2749,11 +2848,12 @@
             "rest_seconds": 180
           },
           {
-            "exercise_id": "barbell-full-squat",
+            "exercise_id": "leg-press",
             "sets": 3,
             "reps_min": 6,
             "reps_max": 8,
-            "rest_seconds": 150
+            "rest_seconds": 150,
+            "notes_fr": "Remplace le squat lourd pour ne pas empiler une 3e charge lombaire lourde : même stimulus quadriceps, lombaires épargnées. Charge lourde, dos calé contre le dossier."
           },
           {
             "exercise_id": "seated-leg-curl",
@@ -2773,7 +2873,7 @@
       },
       {
         "day_order": 2,
-        "name_fr": "Haut A — Tirage",
+        "name_fr": "Haut A — Dos & épaules",
         "focus_fr": "Dos, épaules, biceps",
         "exercises": [
           {
@@ -2908,7 +3008,7 @@
     "audience": "female",
     "days_per_week": 4,
     "summary_fr": "4 séances haut/bas pour fondre tout en construisant : musculation lourde 4×/semaine et cardio court en fin de séance.",
-    "description_fr": "Le split haut/bas frappe chaque muscle 2×/semaine, fréquence optimale pour garder le muscle en déficit calorique. Soulève lourd sur les mouvements de base en gardant 1 à 2 répétitions en réserve, puis termine par un bloc cardio modéré qui augmente la dépense sans nuire à la récupération. Cherche à progresser dans la fourchette de reps, puis ajoute un peu de charge quand la barre monte facile et proprement ; en déficit, vise au minimum à maintenir tes perfs pour préserver le muscle. Et garde en tête que c'est le déficit alimentaire, pas l'allègement des barres, qui fait fondre le gras.",
+    "description_fr": "Le split haut/bas frappe chaque muscle 2×/semaine, fréquence optimale pour garder le muscle en déficit calorique. Soulève lourd sur les mouvements de base en gardant 1 à 2 répétitions en réserve, puis termine par un bloc cardio modéré qui augmente la dépense sans nuire à la récupération. Les blocs cardio se lisent en minutes (et non en répétitions) : vise la durée indiquée à une intensité modérée (RPE 6-7), allure soutenue mais conversationnelle. Cherche à progresser dans la fourchette de reps, puis ajoute un peu de charge quand la barre monte facile et proprement ; en déficit, vise au minimum à maintenir tes perfs pour préserver le muscle. Et garde en tête que c'est le déficit alimentaire, pas l'allègement des barres, qui fait fondre le gras.",
     "sessions": [
       {
         "day_order": 1,
@@ -2948,7 +3048,8 @@
             "sets": 1,
             "reps_min": 12,
             "reps_max": 15,
-            "rest_seconds": 0
+            "rest_seconds": 0,
+            "notes_fr": "Durée en minutes (12 à 15 min), pas des répétitions. Intensité modérée, RPE 6-7."
           }
         ]
       },
@@ -2990,7 +3091,8 @@
             "sets": 1,
             "reps_min": 12,
             "reps_max": 15,
-            "rest_seconds": 0
+            "rest_seconds": 0,
+            "notes_fr": "Durée en minutes (12 à 15 min), pas des répétitions. Intensité modérée, RPE 6-7."
           }
         ]
       },
@@ -3032,14 +3134,15 @@
             "sets": 1,
             "reps_min": 15,
             "reps_max": 20,
-            "rest_seconds": 0
+            "rest_seconds": 0,
+            "notes_fr": "Durée en minutes (15 à 20 min), pas des répétitions. Intensité modérée, RPE 6-7."
           }
         ]
       },
       {
         "day_order": 4,
         "name_fr": "Haut B",
-        "focus_fr": "Dos, épaules, bras + cardio",
+        "focus_fr": "Dos, pectoraux, épaules, bras + cardio",
         "exercises": [
           {
             "exercise_id": "wide-grip-lat-pulldown",
@@ -3074,7 +3177,8 @@
             "sets": 1,
             "reps_min": 15,
             "reps_max": 20,
-            "rest_seconds": 0
+            "rest_seconds": 0,
+            "notes_fr": "Durée en minutes (15 à 20 min), pas des répétitions. Intensité modérée, RPE 6-7."
           }
         ]
       }
@@ -3468,11 +3572,12 @@
         "focus_fr": "Jambes complètes en volume",
         "exercises": [
           {
-            "exercise_id": "front-barbell-squat",
+            "exercise_id": "hack-squat",
             "sets": 4,
             "reps_min": 10,
             "reps_max": 12,
-            "rest_seconds": 120
+            "rest_seconds": 120,
+            "notes_fr": "Variante guidée du squat avant : même cible quadriceps, plus facile à contrôler sur séries longues."
           },
           {
             "exercise_id": "romanian-deadlift",
@@ -3674,6 +3779,14 @@
             "reps_min": 10,
             "reps_max": 12,
             "rest_seconds": 60
+          },
+          {
+            "exercise_id": "face-pull",
+            "sets": 3,
+            "reps_min": 15,
+            "reps_max": 20,
+            "rest_seconds": 60,
+            "notes_fr": "Santé de la coiffe et des épaules : maintient le volume de tirage face au gros volume de développés et de dips du bloc."
           }
         ]
       }
@@ -3795,7 +3908,7 @@
           },
           {
             "exercise_id": "leg-press",
-            "sets": 3,
+            "sets": 4,
             "reps_min": 12,
             "reps_max": 15,
             "rest_seconds": 90
@@ -3954,11 +4067,12 @@
             "rest_seconds": 120
           },
           {
-            "exercise_id": "hanging-leg-raise",
+            "exercise_id": "knee-hip-raise-on-parallel-bars",
             "sets": 3,
             "reps_min": 8,
             "reps_max": 12,
-            "rest_seconds": 60
+            "rest_seconds": 60,
+            "notes_fr": "Relevé de genoux suspendu (genoux fléchis) : bras de levier court, plus facile à contrôler sans balancement ni cambrure. Progresse vers le relevé jambes tendues une fois le gainage acquis, en cohérence avec la planche de la Séance A."
           }
         ]
       }
@@ -4104,7 +4218,7 @@
       {
         "day_order": 4,
         "name_fr": "Séance D — Dominante chaîne postérieure",
-        "focus_fr": "Ischios, fessiers, dos, abdos",
+        "focus_fr": "Ischios, fessiers, dos, pectoraux, abdos",
         "exercises": [
           {
             "exercise_id": "barbell-deadlift",
@@ -4135,11 +4249,12 @@
             "rest_seconds": 90
           },
           {
-            "exercise_id": "hanging-leg-raise",
+            "exercise_id": "knee-hip-raise-on-parallel-bars",
             "sets": 3,
             "reps_min": 12,
             "reps_max": 15,
-            "rest_seconds": 60
+            "rest_seconds": 60,
+            "notes_fr": "Relevé de genoux suspendu (genoux fléchis) : variante accessible et contrôlable. Passe au relevé jambes tendues quand le gainage anti-bascule du bassin est solide."
           }
         ]
       }
@@ -4257,7 +4372,7 @@
       {
         "day_order": 3,
         "name_fr": "Séance C — Corps entier",
-        "focus_fr": "Cardio, jambes, épaules, dos, bras",
+        "focus_fr": "Cardio, jambes, épaules, bras",
         "exercises": [
           {
             "exercise_id": "recumbent-bike",
@@ -4275,14 +4390,14 @@
           },
           {
             "exercise_id": "face-pull",
-            "sets": 3,
+            "sets": 4,
             "reps_min": 12,
             "reps_max": 15,
             "rest_seconds": 75
           },
           {
             "exercise_id": "side-lateral-raise",
-            "sets": 3,
+            "sets": 2,
             "reps_min": 12,
             "reps_max": 15,
             "rest_seconds": 60
@@ -4314,7 +4429,7 @@
     "audience": "all",
     "days_per_week": 3,
     "summary_fr": "Le strict nécessaire : 3 gros mouvements par séance (pousser, tirer, jambes) pour bâtir de la force et du muscle en moins de 45 minutes.",
-    "description_fr": "Alterne les séances A et B sur 3 jours non consécutifs (A-B-A puis B-A-B la semaine suivante). Échauffe-toi par des séries montantes, puis donne tout sur tes séries de travail. Ajoute un peu de charge dès que tu atteins le haut de la fourchette de reps en exécution propre.",
+    "description_fr": "Alterne les séances A et B sur 3 jours non consécutifs (A-B-A puis B-A-B la semaine suivante). Échauffe-toi par des séries montantes, puis garde 2 à 3 reps en réserve (RIR 2-3) sur le squat, le développé couché et le soulevé de terre : on ne va jamais à l'échec sur les barres lourdes. Ajoute un peu de charge seulement quand tu atteins le haut de la fourchette de reps en exécution propre sur toute la série. Volume pectoral volontairement réduit (objectif force/base) : il progressera via la double progression, ce n'est pas un défaut du format minimaliste.",
     "sessions": [
       {
         "day_order": 1,
@@ -4326,14 +4441,16 @@
             "sets": 3,
             "reps_min": 5,
             "reps_max": 8,
-            "rest_seconds": 180
+            "rest_seconds": 180,
+            "notes_fr": "RIR 2-3 : garde 2 à 3 reps en réserve, jamais à l'échec."
           },
           {
             "exercise_id": "barbell-bench-press-medium-grip",
             "sets": 3,
             "reps_min": 5,
             "reps_max": 8,
-            "rest_seconds": 150
+            "rest_seconds": 150,
+            "notes_fr": "RIR 2-3 : garde 2 à 3 reps en réserve, jamais à l'échec."
           },
           {
             "exercise_id": "wide-grip-lat-pulldown",
@@ -4353,16 +4470,18 @@
           {
             "exercise_id": "barbell-deadlift",
             "sets": 3,
-            "reps_min": 5,
-            "reps_max": 6,
-            "rest_seconds": 180
+            "reps_min": 6,
+            "reps_max": 8,
+            "rest_seconds": 180,
+            "notes_fr": "Introduit léger et en travail technique, RIR 2-3 : monte la charge seulement quand l'exécution reste irréprochable sur toute la fourchette. Jamais de grind à l'échec."
           },
           {
             "exercise_id": "barbell-shoulder-press",
             "sets": 3,
             "reps_min": 6,
             "reps_max": 10,
-            "rest_seconds": 150
+            "rest_seconds": 150,
+            "notes_fr": "RIR 2-3 : garde 2 à 3 reps en réserve, jamais à l'échec."
           },
           {
             "exercise_id": "bent-over-barbell-row",
@@ -4383,14 +4502,16 @@
             "sets": 3,
             "reps_min": 5,
             "reps_max": 8,
-            "rest_seconds": 180
+            "rest_seconds": 180,
+            "notes_fr": "RIR 2-3 : garde 2 à 3 reps en réserve, jamais à l'échec."
           },
           {
             "exercise_id": "barbell-bench-press-medium-grip",
             "sets": 3,
             "reps_min": 5,
             "reps_max": 8,
-            "rest_seconds": 150
+            "rest_seconds": 150,
+            "notes_fr": "RIR 2-3 : garde 2 à 3 reps en réserve, jamais à l'échec."
           },
           {
             "exercise_id": "wide-grip-lat-pulldown",
@@ -4418,7 +4539,7 @@
       {
         "day_order": 1,
         "name_fr": "Séance 1 — Poussée & rameur",
-        "focus_fr": "Jambes et poussée en force (front squat, développé couché, fentes), gainage, puis bloc de conditioning au rameur 10-12 min.",
+        "focus_fr": "Jambes et poussée en force (front squat, développé couché, fentes), gainage à la poulie, puis bloc de conditioning au rameur 10-12 min.",
         "exercises": [
           {
             "exercise_id": "front-barbell-squat",
@@ -4442,11 +4563,12 @@
             "rest_seconds": 90
           },
           {
-            "exercise_id": "hanging-leg-raise",
+            "exercise_id": "cable-crunch",
             "sets": 3,
             "reps_min": 12,
             "reps_max": 15,
-            "rest_seconds": 60
+            "rest_seconds": 60,
+            "notes_fr": "Remplace le relevé de jambes suspendu (mouvement expert) par un gainage en flexion plus accessible : à genoux sous la poulie haute, enroule le buste vers le bassin sans tirer avec les bras, hanches fixes."
           },
           {
             "exercise_id": "rowing-stationary",
@@ -4857,91 +4979,100 @@
     "level": "beginner",
     "goal": "endurance",
     "audience": "all",
+    "summary_fr": "Programme progressif de remise à la course inspiré du Couch-to-5K : des intervalles marche/course de plus en plus longs, encadrés de 5 min de marche d'échauffement et de retour au calme.",
+    "description_fr": "Les 3 séances de la semaine sont 3 paliers distincts (du plus facile au plus exigeant) : fais-en une par jour d'entraînement, en respectant un jour de repos entre chaque. On démarre en intervalles marche/course, jamais en course continue, pour habituer le corps en douceur. Reste sur ce cycle de 3 paliers une à deux semaines : si l'allure n'est pas encore confortable, recommence la même semaine de paliers avant d'allonger les blocs de course. Ne passe au jogging continu (20 min et plus) qu'une fois ces blocs d'intervalles validés sans essoufflement excessif. Toujours 5 min de marche d'échauffement et 5 min de retour au calme.",
     "days_per_week": 3,
-    "summary_fr": "Programme progressif de remise à la course inspiré du Couch-to-5K : des blocs de jogging de plus en plus longs, encadrés de 5 min de marche d'échauffement et de retour au calme.",
-    "description_fr": "Les 3 séances de la semaine sont 3 paliers distincts (du plus facile au plus exigeant) : fais-en une par jour d'entraînement, en respectant un jour de repos entre chaque. Reste sur ce cycle de 3 paliers une à deux semaines : si l'allure n'est pas encore confortable, recommence la même semaine de paliers avant d'augmenter la durée des blocs de course. Toujours 5 min de marche d'échauffement et 5 min de retour au calme.",
     "sessions": [
       {
         "day_order": 1,
-        "name_fr": "Palier 1 - Jogging continu 20 min",
-        "focus_fr": "Échauffement en marche 5 min, jogging léger en continu 20 min, puis 5 min de marche de retour au calme.",
+        "name_fr": "Palier 1 — Intervalles 1 min course / 1 min 30 marche",
+        "focus_fr": "Échauffement marche 5 min, puis 8 × (1 min jogging léger / 1 min 30 marche de récupération), puis 5 min de marche de retour au calme.",
         "exercises": [
           {
             "exercise_id": "walking-treadmill",
             "sets": 1,
             "reps_min": 5,
             "reps_max": 5,
-            "rest_seconds": 0
+            "rest_seconds": 0,
+            "notes_fr": "Échauffement : 5 min de marche à allure aisée."
           },
           {
             "exercise_id": "jogging-treadmill",
-            "sets": 1,
-            "reps_min": 20,
-            "reps_max": 20,
-            "rest_seconds": 0
+            "sets": 8,
+            "reps_min": 1,
+            "reps_max": 1,
+            "rest_seconds": 90,
+            "notes_fr": "8 répétitions : 1 min de jogging léger, puis 1 min 30 de marche de récupération (les 90 s de repos = marche)."
           },
           {
             "exercise_id": "walking-treadmill",
             "sets": 1,
             "reps_min": 5,
             "reps_max": 5,
-            "rest_seconds": 0
+            "rest_seconds": 0,
+            "notes_fr": "Retour au calme : 5 min de marche lente."
           }
         ]
       },
       {
         "day_order": 2,
-        "name_fr": "Palier 2 - Jogging continu 21 min",
-        "focus_fr": "Échauffement en marche 5 min, jogging en continu 21 min, puis 5 min de marche de retour au calme.",
+        "name_fr": "Palier 2 — Intervalles 2 min course / 1 min marche",
+        "focus_fr": "Échauffement marche 5 min, puis 6 × (2 min jogging / 1 min marche de récupération), puis 5 min de marche de retour au calme.",
         "exercises": [
           {
             "exercise_id": "walking-treadmill",
             "sets": 1,
             "reps_min": 5,
             "reps_max": 5,
-            "rest_seconds": 0
+            "rest_seconds": 0,
+            "notes_fr": "Échauffement : 5 min de marche à allure aisée."
           },
           {
             "exercise_id": "jogging-treadmill",
-            "sets": 1,
-            "reps_min": 21,
-            "reps_max": 21,
-            "rest_seconds": 0
+            "sets": 6,
+            "reps_min": 2,
+            "reps_max": 2,
+            "rest_seconds": 60,
+            "notes_fr": "6 répétitions : 2 min de jogging, puis 1 min de marche de récupération (les 60 s de repos = marche)."
           },
           {
             "exercise_id": "walking-treadmill",
             "sets": 1,
             "reps_min": 5,
             "reps_max": 5,
-            "rest_seconds": 0
+            "rest_seconds": 0,
+            "notes_fr": "Retour au calme : 5 min de marche lente."
           }
         ]
       },
       {
         "day_order": 3,
-        "name_fr": "Palier 3 - Jogging continu 22-25 min",
-        "focus_fr": "Échauffement en marche 5 min, jogging en continu 22-25 min, puis 5 min de marche de retour au calme.",
+        "name_fr": "Palier 3 — Intervalles 4-5 min course / 1 min marche",
+        "focus_fr": "Échauffement marche 5 min, puis 4 × (4 à 5 min jogging / 1 min marche de récupération), puis 5 min de marche de retour au calme.",
         "exercises": [
           {
             "exercise_id": "walking-treadmill",
             "sets": 1,
             "reps_min": 5,
             "reps_max": 5,
-            "rest_seconds": 0
+            "rest_seconds": 0,
+            "notes_fr": "Échauffement : 5 min de marche à allure aisée."
           },
           {
             "exercise_id": "jogging-treadmill",
-            "sets": 1,
-            "reps_min": 22,
-            "reps_max": 25,
-            "rest_seconds": 0
+            "sets": 4,
+            "reps_min": 4,
+            "reps_max": 5,
+            "rest_seconds": 60,
+            "notes_fr": "4 répétitions : 4 à 5 min de jogging, puis 1 min de marche de récupération (les 60 s de repos = marche)."
           },
           {
             "exercise_id": "walking-treadmill",
             "sets": 1,
             "reps_min": 5,
             "reps_max": 5,
-            "rest_seconds": 0
+            "rest_seconds": 0,
+            "notes_fr": "Retour au calme : 5 min de marche lente."
           }
         ]
       }
@@ -5194,12 +5325,12 @@
     "audience": "all",
     "days_per_week": 3,
     "summary_fr": "Trois seances full-body sans aucun materiel pour batir du muscle a la maison ou au parc avec les mouvements fondamentaux.",
-    "description_fr": "Ce programme s'adresse aux debutants qui veulent s'entrainer chez eux, dans le salon ou au parc, sans equipement. Chaque seance couvre pousser, tirer, jambes et gainage afin de developper l'ensemble du corps de maniere equilibree. Progressez en ajoutant une repetition par semaine, puis en passant aux variantes plus dures (par exemple pompes au sol des que les pompes inclinees deviennent faciles). Soignez l'amplitude et le controle plutot que la vitesse, et gardez le dos neutre sur les fentes et les ponts fessiers.",
+    "description_fr": "Ce programme s'adresse aux debutants qui veulent s'entrainer chez eux, dans le salon ou au parc, sans equipement. Chaque seance couvre pousser, tirer, jambes et gainage afin de developper l'ensemble du corps de maniere equilibree, avec autant de volume de tirage horizontal que de poussee pour preserver les epaules. Progressez en ajoutant une repetition par semaine, puis en passant aux variantes plus dures (par exemple pompes au sol des que les pompes inclinees deviennent faciles). Pour le tirage, pas besoin de barre : un rowing a la serviette autour d'une porte solide ou entre deux chaises stables fait l'affaire ; si vous disposez d'une barre fixe, ajoutez quelques tractions assistees pour solliciter le dos en vertical. Soignez l'amplitude et le controle plutot que la vitesse, et gardez le dos neutre sur les fentes et les ponts fessiers.",
     "sessions": [
       {
         "day_order": 1,
         "name_fr": "Seance A - Bas du corps et poussee",
-        "focus_fr": "Quadriceps, fessiers, pectoraux et gainage",
+        "focus_fr": "Quadriceps, fessiers, pectoraux, dos et gainage",
         "exercises": [
           {
             "exercise_id": "bodyweight-squat",
@@ -5211,11 +5342,19 @@
           },
           {
             "exercise_id": "incline-push-up",
-            "sets": 3,
+            "sets": 4,
             "reps_min": 10,
             "reps_max": 15,
             "rest_seconds": 75,
-            "notes_fr": "Mains sur un rebord stable (table, banc) ; gardez le corps gaine d'un bloc."
+            "notes_fr": "Mains sur un rebord stable (table, banc) ; gardez le corps gaine d'un bloc. 4 series pour amener les pectoraux au volume minimal efficace."
+          },
+          {
+            "exercise_id": "inverted-row",
+            "sets": 3,
+            "reps_min": 8,
+            "reps_max": 12,
+            "rest_seconds": 90,
+            "notes_fr": "Sans barre : rowing a la serviette autour d'une porte solide ou entre deux chaises stables ; tirez la poitrine vers les mains, omoplates serrees. Equilibre le volume de tirage avec celui de poussee."
           },
           {
             "exercise_id": "bodyweight-walking-lunge",
@@ -5262,7 +5401,7 @@
             "reps_min": 8,
             "reps_max": 12,
             "rest_seconds": 90,
-            "notes_fr": "Sous une table solide ou une barre basse ; tirez la poitrine vers la barre, omoplates serrees."
+            "notes_fr": "Sous une table solide, autour d'une porte (serviette) ou entre deux chaises ; tirez la poitrine vers les mains, omoplates serrees."
           },
           {
             "exercise_id": "incline-push-up",
@@ -5333,7 +5472,7 @@
             "reps_min": 8,
             "reps_max": 12,
             "rest_seconds": 90,
-            "notes_fr": "Plus le corps est horizontal, plus c'est difficile ; ajustez l'angle."
+            "notes_fr": "Plus le corps est horizontal, plus c'est difficile ; ajustez l'angle. Variante sans barre : serviette autour d'une porte ou entre deux chaises."
           },
           {
             "exercise_id": "step-up-with-knee-raise",
@@ -5605,7 +5744,7 @@
     "audience": "all",
     "days_per_week": 4,
     "summary_fr": "Quatre seances haut/bas a la maison melant figures de force au poids du corps lestees et pliometrie pour developper une force athletique sans materiel de salle.",
-    "description_fr": "Le programme alterne deux jours haut du corps et deux jours bas du corps sur la semaine, en commencant chaque seance par le mouvement le plus exigeant a froid (pompe un bras, traction lestee, squat unijambiste, GHR). Les charges viennent d'un sac a dos leste, d'un appui sureleve et de progressions unilaterales, avec une dose de pliometrie en debut de seance pour recruter le systeme nerveux. Travaillez dans des series courtes et controlees (3 a 8 repetitions sur la force, repos longs), gardez du gras dans le reservoir et ne sacrifiez jamais la technique pour une repetition de plus. Echauffez epaules, poignets et hanches avant les figures avancees et privilegiez une amplitude complete plutot que le nombre.",
+    "description_fr": "Le programme alterne deux jours haut du corps et deux jours bas du corps sur la semaine, en commencant chaque seance par le mouvement le plus exigeant a froid (pompe un bras, traction lestee, squat unijambiste, GHR). Les charges viennent d'un sac a dos leste, d'un appui sureleve et de progressions unilaterales, avec une dose de pliometrie en debut de seance pour recruter le systeme nerveux. Travaillez dans des series courtes et controlees (3 a 8 repetitions sur la force, repos longs), gardez du gras dans le reservoir et ne sacrifiez jamais la technique pour une repetition de plus. Echauffez epaules, poignets et hanches avant les figures avancees et privilegiez une amplitude complete plutot que le nombre. Espacez les deux jours bas du corps d'au moins 72 h (par exemple J1-J2-repos-J3-J4 plutot que des jours bas rapproches) : les sauts intenses (saut en ciseau, saut en profondeur, sauts unijambistes) imposent un fort stress tendineux et articulaire reactif. Concentrez le gros volume de chocs pliometriques sur un seul des deux jours bas, l'autre restant oriente force unilaterale controlee.",
     "sessions": [
       {
         "day_order": 1,
@@ -5838,7 +5977,7 @@
     "audience": "all",
     "days_per_week": 3,
     "summary_fr": "Un programme court de renforcement complet de la sangle abdominale à faire chez soi, sans matériel, trois fois par semaine.",
-    "description_fr": "Trois séances de 20 à 25 minutes couvrant l'ensemble de la ceinture abdominale : grand droit (flexion), obliques (rotation et inclinaison), transverse et anti-rotation, plus les lombaires en équilibre. Chaque séance mêle un travail isométrique de gainage (anti-extension et anti-rotation) à des mouvements dynamiques pour solliciter le muscle sur toute son amplitude. Progressez d'abord en allongeant les temps de gainage et en ajoutant des répétitions propres avant de réduire les temps de repos. Gardez le bas du dos plaqué au sol sur les exercices de flexion et expirez à chaque contraction pour engager le transverse.",
+    "description_fr": "Programme de specialisation et de renforcement de la sangle abdominale, a ajouter en complement d'un programme complet (jambes, dos, pectoraux) plutot qu'a utiliser seul. Trois séances de 15 à 20 minutes couvrant l'ensemble de la ceinture abdominale : grand droit (flexion), obliques (rotation et inclinaison), transverse et anti-rotation, plus les lombaires en équilibre. Le volume a été calibré à environ 24 séries directes par semaine (trois exercices abdominaux par séance), dans la zone de travail efficace et sous le seuil de surentrainement, adapté à la récupération d'un débutant. Chaque séance mêle un travail isométrique de gainage (anti-extension et anti-rotation) à des mouvements dynamiques pour solliciter le muscle sur toute son amplitude. Progressez d'abord en allongeant les temps de gainage et en ajoutant des répétitions propres avant de réduire les temps de repos. Gardez le bas du dos plaqué au sol sur les exercices de flexion et expirez à chaque contraction pour engager le transverse.",
     "sessions": [
       {
         "day_order": 1,
@@ -5852,14 +5991,6 @@
             "reps_max": 45,
             "rest_seconds": 45,
             "notes_fr": "Durée en secondes. Corps gainé en ligne, bassin légèrement rétroversé, ne pas creuser le bas du dos."
-          },
-          {
-            "exercise_id": "dead-bug",
-            "sets": 3,
-            "reps_min": 10,
-            "reps_max": 14,
-            "rest_seconds": 45,
-            "notes_fr": "Comptez les répétitions par côté. Lombaires plaquées au sol pendant tout le mouvement, descente lente et contrôlée."
           },
           {
             "exercise_id": "crunches",
@@ -5891,14 +6022,6 @@
             "reps_max": 40,
             "rest_seconds": 45,
             "notes_fr": "Durée en secondes par côté. Bassin haut et corps aligné, épaule au-dessus du coude."
-          },
-          {
-            "exercise_id": "air-bike",
-            "sets": 3,
-            "reps_min": 14,
-            "reps_max": 20,
-            "rest_seconds": 45,
-            "notes_fr": "Comptez par côté. Mouvement lent coude vers genou opposé, ne tirez pas la tête."
           },
           {
             "exercise_id": "russian-twist",
@@ -5940,14 +6063,6 @@
             "notes_fr": "Relevez le bassin en enroulant, sans balancement, pour cibler le bas du grand droit."
           },
           {
-            "exercise_id": "flutter-kicks",
-            "sets": 3,
-            "reps_min": 20,
-            "reps_max": 30,
-            "rest_seconds": 45,
-            "notes_fr": "Comptez les battements. Bas du dos plaqué au sol, battez les jambes tendues à faible amplitude."
-          },
-          {
             "exercise_id": "superman",
             "sets": 3,
             "reps_min": 12,
@@ -5985,7 +6100,7 @@
           },
           {
             "exercise_id": "dumbbell-bench-press",
-            "sets": 3,
+            "sets": 4,
             "reps_min": 10,
             "reps_max": 12,
             "rest_seconds": 90,
@@ -6028,7 +6143,7 @@
       {
         "day_order": 2,
         "name_fr": "Seance B - Souleve de terre et developpe epaules",
-        "focus_fr": "Chaine posterieure, epaules, dos et abdominaux",
+        "focus_fr": "Chaine posterieure, epaules, pectoraux, dos et abdominaux",
         "exercises": [
           {
             "exercise_id": "stiff-legged-dumbbell-deadlift",
@@ -6053,6 +6168,14 @@
             "reps_max": 12,
             "rest_seconds": 75,
             "notes_fr": "Buste penche a 45 degres, serre les omoplates en fin de tirage."
+          },
+          {
+            "exercise_id": "dumbbell-flyes",
+            "sets": 2,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 75,
+            "notes_fr": "Au sol ou sur banc, bras legerement flechis, ecarte puis rapproche les halteres au-dessus des pectoraux sans descendre les coudes plus bas que les epaules."
           },
           {
             "exercise_id": "split-squat-with-dumbbells",
@@ -6095,7 +6218,7 @@
           },
           {
             "exercise_id": "incline-dumbbell-press",
-            "sets": 3,
+            "sets": 4,
             "reps_min": 10,
             "reps_max": 12,
             "rest_seconds": 90,
@@ -6379,7 +6502,7 @@
     "audience": "all",
     "days_per_week": 3,
     "summary_fr": "Programme full-body au kettlebell sur 3 jours melant explosivite balistique et travail de force-gainage, realisable a la maison ou en exterieur avec une seule charge.",
-    "description_fr": "Trois seances complementaires construites autour des grands patterns du kettlebell : hip hinge balistique (swing, snatch, sumo high pull), squat leste, epaule-developpe et gainage rotatif. Chaque seance ouvre sur un mouvement explosif a faible repetition pour developper la puissance, puis enchaine force et conditioning metabolique avec des temps de repos courts. Progressez d'abord en proprete technique et en amplitude avant d'augmenter la charge ou de reduire le repos ; pour les balistiques, l'explosion vient des hanches, pas des bras, et le dos reste neutre. Alternez systematiquement le cote travaille sur les mouvements a un bras et terminez chaque seance par du gainage pour verrouiller le tronc.",
+    "description_fr": "Trois seances complementaires construites autour des grands patterns du kettlebell : hip hinge balistique (swing, snatch, sumo high pull), squat leste, epaule-developpe et gainage rotatif. Chaque seance ouvre sur un mouvement explosif a faible repetition pour developper la puissance ; sur les jours orientes puissance (J1 et J2), ces balistiques d'ouverture beneficient de repos longs (environ 2 min) afin de maintenir la vitesse d'execution, puis force et conditioning enchainent avec des temps de repos plus courts. Progressez d'abord en proprete technique et en amplitude avant d'augmenter la charge ou de reduire le repos ; pour les balistiques, l'explosion vient des hanches, pas des bras, et le dos reste neutre. Alternez systematiquement le cote travaille sur les mouvements a un bras et terminez chaque seance par du gainage pour verrouiller le tronc.",
     "sessions": [
       {
         "day_order": 1,
@@ -6391,8 +6514,8 @@
             "sets": 4,
             "reps_min": 8,
             "reps_max": 10,
-            "rest_seconds": 75,
-            "notes_fr": "Balistique d'ouverture : projetez le kettlebell par l'extension de hanche, bras relache. Alternez les cotes a chaque serie."
+            "rest_seconds": 120,
+            "notes_fr": "Balistique d'ouverture : projetez le kettlebell par l'extension de hanche, bras relache. Alternez les cotes a chaque serie. Repos long (2 min) pour garder la vitesse, objectif puissance."
           },
           {
             "exercise_id": "goblet-squat",
@@ -6407,8 +6530,8 @@
             "sets": 3,
             "reps_min": 6,
             "reps_max": 8,
-            "rest_seconds": 75,
-            "notes_fr": "Epaule explosif : la cloche se pose en rack sans claquer sur l'avant-bras, gainez a la reception."
+            "rest_seconds": 120,
+            "notes_fr": "Epaule explosif : la cloche se pose en rack sans claquer sur l'avant-bras, gainez a la reception. Repos long (2 min) sur ce mouvement explosif."
           },
           {
             "exercise_id": "two-arm-kettlebell-military-press",
@@ -6446,8 +6569,8 @@
             "sets": 4,
             "reps_min": 5,
             "reps_max": 6,
-            "rest_seconds": 75,
-            "notes_fr": "Mouvement explosif d'ouverture, un cote puis l'autre ; trajectoire proche du corps, poignet neutre en rack."
+            "rest_seconds": 120,
+            "notes_fr": "Mouvement explosif d'ouverture, un cote puis l'autre ; trajectoire proche du corps, poignet neutre en rack. Repos long (2 min) pour maintenir l'explosivite, objectif puissance."
           },
           {
             "exercise_id": "kettlebell-one-legged-deadlift",
@@ -6493,8 +6616,8 @@
             "sets": 4,
             "reps_min": 5,
             "reps_max": 6,
-            "rest_seconds": 75,
-            "notes_fr": "Balistique technique : un seul mouvement du sol au verrouillage haut, alternez les cotes ; reduisez la charge si la cloche claque sur l'avant-bras."
+            "rest_seconds": 90,
+            "notes_fr": "Mouvement technique avance : ne l'aborde qu'apres avoir valide un swing un bras et un epaule un bras propres (acquis en J1/J2) ; sinon remplace-le par le tirage sumo haut ou le swing un bras du programme. Charge legere a moderee obligatoire, un seul mouvement du sol au verrouillage haut, explosion 100 % depuis les hanches, dos neutre. Reduis la charge des que la cloche claque sur l'avant-bras. Repos porte a 90 s pour securiser l'execution."
           },
           {
             "exercise_id": "kettlebell-thruster",
@@ -6558,7 +6681,7 @@
           },
           {
             "exercise_id": "bench-press-with-bands",
-            "sets": 3,
+            "sets": 4,
             "reps_min": 10,
             "reps_max": 15,
             "rest_seconds": 75,
@@ -6586,7 +6709,7 @@
             "reps_min": 12,
             "reps_max": 15,
             "rest_seconds": 45,
-            "notes_fr": "Élastique à la cheville, point d'ancrage latéral. Ramenez la jambe vers la ligne médiane, contrôlez le retour."
+            "notes_fr": "Élastique à la cheville, point d'ancrage latéral. Ramenez la jambe vers la ligne médiane (adduction), contrôlez le retour."
           },
           {
             "exercise_id": "plank",
@@ -6601,7 +6724,7 @@
       {
         "day_order": 2,
         "name_fr": "Séance B – Tout le corps",
-        "focus_fr": "Charnière de hanche, presses, tirage, abductions",
+        "focus_fr": "Charnière de hanche, jambes, presses, tirage",
         "exercises": [
           {
             "exercise_id": "band-good-morning",
@@ -6610,6 +6733,14 @@
             "reps_max": 15,
             "rest_seconds": 90,
             "notes_fr": "Élastique sous les pieds, autour de la nuque. Penchez le buste en gardant le dos plat, sentez les ischios s'étirer."
+          },
+          {
+            "exercise_id": "bodyweight-walking-lunge",
+            "sets": 3,
+            "reps_min": 12,
+            "reps_max": 15,
+            "rest_seconds": 75,
+            "notes_fr": "Quadriceps de cette séance : fentes marchées au poids du corps, genou avant aligné sur la pointe, buste droit. Reps par jambe. Tenez deux haltères ou l'élastique si c'est trop facile."
           },
           {
             "exercise_id": "hip-extension-with-bands",
