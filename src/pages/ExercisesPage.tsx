@@ -28,9 +28,9 @@ export default function ExercisesPage() {
 
   // Matériel renseigné -> le serveur remonte les exercices faisables en premier (+ drapeau
   // canDo). On inclut sa signature dans les deps pour refetcher quand il change (autre
-  // appareil, ou retour depuis « Mon compte » après modification).
+  // appareil, ou retour depuis « Mon compte » après modification).
   const {user} = useAuth();
-  // Préférence renseignée = tableau présent, MÊME vide ([] = « zéro matériel »). La signature
+  // Préférence renseignée = tableau présent, MÊME vide ([] = « zéro matériel »). La signature
   // distingue null (non renseigné) de [] pour refetcher sur cette transition.
   const equip = user && hasEquipmentPref(user.equipment) ? user.equipment : null;
   const prefSet = equip !== null;

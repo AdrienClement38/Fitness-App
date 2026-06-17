@@ -320,7 +320,7 @@ function GenderPref() {
 
 /**
  * Choix du matériel accessible (salle + équipements maison). Présentation pure :
- * utilisé à l'inscription (état local) ET dans « Mon compte » (sauvegarde immédiate).
+ * utilisé à l'inscription (état local) ET dans « Mon compte » (sauvegarde immédiate).
  * Le poids du corps / étirements / cardio extérieur sont toujours dispo (pas de toggle).
  */
 function EquipmentToggles({value, onChange}: {value: string[]; onChange: (next: string[]) => void}) {
@@ -329,7 +329,7 @@ function EquipmentToggles({value, onChange}: {value: string[]; onChange: (next: 
   const allHome = HOME_EQUIPMENT.map((e) => e.id);
   // La salle est un sélecteur MAÎTRE : cochée -> tout le matériel coché ; décochée -> tout vidé.
   const toggleGym = () => onChange(gym ? [] : [GYM_TOKEN, ...allHome]);
-  // Décocher un équipement retire aussi « salle » (on n'a plus accès à TOUT).
+  // Décocher un équipement retire aussi « salle » (on n'a plus accès à TOUT).
   const toggleItem = (id: string) =>
     onChange(has(id) ? value.filter((x) => x !== id && x !== GYM_TOKEN) : [...new Set([...value, id])]);
   return (
@@ -385,7 +385,7 @@ function EquipmentToggles({value, onChange}: {value: string[]; onChange: (next: 
 }
 
 /**
- * « Mon matériel » dans « Mon compte » : état optimiste + sauvegarde débouncée.
+ * « Mon matériel » dans « Mon compte » : état optimiste + sauvegarde débouncée.
  * - débounce : des toggles rapides se coalescent en UNE écriture (pas de course de POST) ;
  * - `sentRef` : on ne resynchronise depuis le serveur que sur un VRAI changement externe
  *   (autre appareil), jamais sur l'écho de notre propre écriture -> l'édition optimiste

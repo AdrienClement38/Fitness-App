@@ -21,7 +21,7 @@ export interface ExerciseListItem {
   images: string[] | null;
   primaryMuscles: MuscleRef[];
   // Faisable avec le matériel de l'utilisateur ? Présent seulement si la préférence
-  // « mon matériel » est renseignée (sinon absent -> aucune mise en avant).
+  // « mon matériel » est renseignée (sinon absent -> aucune mise en avant).
   canDo?: boolean;
 }
 
@@ -189,7 +189,7 @@ export interface ProgramListItem {
   audience: 'female' | 'male' | 'all' | null; // public cible (mise en avant)
   summaryFr: string | null;
   // Faisabilité selon le matériel de l'utilisateur. Présents seulement si la préférence
-  // « mon matériel » est renseignée (sinon absents). canDo = tous les exercices faisables.
+  // « mon matériel » est renseignée (sinon absents). canDo = tous les exercices faisables.
   canDo?: boolean;
   doableCount?: number;
   exerciseCount?: number;

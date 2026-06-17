@@ -15,7 +15,7 @@ const LEVELS = [
 
 // Mise en avant PAR OBJECTIF/PRÉFÉRENCE (pas une nécessité physiologique : cf. recherche
 // — les programmes marchent pareil pour tous, la charge est individuelle). Le programme
-// porte un `audience` curé ; on remonte ceux du sexe + badge « Suggéré ». Tout reste
+// porte un `audience` curé ; on remonte ceux du sexe + badge « Suggéré ». Tout reste
 // accessible ; 'all' = neutre ; 'préfère ne pas dire' (gender null) -> aucun tri.
 const isSuggested = (audience: ProgramListItem['audience'], gender: Gender | null | undefined): boolean =>
   !!gender && audience === gender;
@@ -45,8 +45,8 @@ function useCollapsed(key: string): [boolean, () => void] {
 export default function ProgramsPage() {
   const {user} = useAuth();
   // Signature du matériel : refetch en direct quand il change (autre appareil via WebSocket,
-  // ou retour depuis « Mon compte ») -> les programmes compatibles se mettent à jour live.
-  // Distingue null (non renseigné) de [] (« zéro matériel ») pour refetcher sur la transition.
+  // ou retour depuis « Mon compte ») -> les programmes compatibles se mettent à jour live.
+  // Distingue null (non renseigné) de [] (« zéro matériel ») pour refetcher sur la transition.
   const equip = user && Array.isArray(user.equipment) ? user.equipment : null;
   const equipSig = equip ? `set:${equip.join(',')}` : '∅';
   const {data, error, loading} = useFetch(() => api.programs(), [equipSig]);
@@ -97,7 +97,7 @@ export default function ProgramsPage() {
         </div>
         {mine.length === 0 ? (
           <p className="rounded-xl border border-dashed border-slate-800 p-4 text-sm text-slate-500">
-            Aucun programme perso. Crée-en un de zéro avec « Créer », ou ouvre un programme du catalogue et clique « Dupliquer / personnaliser ».
+            Aucun programme perso. Crée-en un de zéro avec « Créer », ou ouvre un programme du catalogue et clique « Dupliquer / personnaliser ».
           </p>
         ) : (
           <div className="grid gap-3">
