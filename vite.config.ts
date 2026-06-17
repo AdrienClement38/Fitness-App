@@ -40,6 +40,21 @@ export default defineConfig(() => {
               handler: 'NetworkOnly',
             },
             {
+              // Listes dont la réponse DÉPEND du matériel de l'utilisateur (compatibilité
+              // canDo + tri faisable-first) : elles ne sont PAS figées -> toujours frais,
+              // sinon le SW resservirait l'ancienne compatibilité jusqu'à un refresh manuel.
+              // NetworkFirst = frais en ligne, dernier connu en repli hors-ligne.
+              // (Listes exactes uniquement : /api/exercises/facets, /api/exercises/:id et
+              // /api/programs/:id restent figés -> cache via la règle générale ci-dessous.)
+              urlPattern: ({url}) => url.pathname === '/api/programs' || url.pathname === '/api/exercises',
+              handler: 'NetworkFirst',
+              options: {
+                cacheName: 'compat-api',
+                networkTimeoutSeconds: 5,
+                expiration: {maxEntries: 50, maxAgeSeconds: 60 * 60 * 24},
+              },
+            },
+            {
               // Bibliothèque (lecture seule, quasi figée) : servie depuis le cache, revalidée
               // en arrière-plan -> serveur très peu sollicité après le 1er chargement.
               urlPattern: ({url}) => url.pathname.startsWith('/api/'),
