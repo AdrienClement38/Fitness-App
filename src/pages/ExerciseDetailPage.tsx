@@ -204,8 +204,17 @@ function ImageLightbox({
   onIndex: (i: number) => void;
 }) {
   const multi = images.length > 1;
-  const go = (delta: number) => onIndex((index + delta + images.length) % images.length);
-  const touchX = useRef<number | null>(null); // début d'un swipe tactile (mobile)
+  // Navigation (flèches / clavier / swipe) bornée aux extrémités, SANS wrap : évite un
+  // « rewind » visuel du carrousel et reste cohérent avec le geste de swipe.
+  const go = (delta: number) => {
+    const t = index + delta;
+    if (t >= 0 && t < images.length) onIndex(t);
+  };
+  // Carrousel tactile : la piste suit le doigt pendant le drag, puis « snap » animé vers la
+  // photo (transition CSS), comme une galerie photo native.
+  const startX = useRef<number | null>(null);
+  const [drag, setDrag] = useState(0);
+  const [dragging, setDragging] = useState(false);
 
   // Échap pour fermer, flèches pour naviguer, et on bloque le scroll de fond.
   useEffect(() => {
@@ -232,30 +241,47 @@ function ImageLightbox({
         </button>
       </div>
       <div
-        className="flex flex-1 items-center justify-center px-3 pb-8"
+        className="relative flex-1 overflow-hidden"
+        style={{touchAction: 'pan-y'}}
         onTouchStart={(e) => {
-          touchX.current = e.touches[0]?.clientX ?? null;
+          startX.current = e.touches[0]?.clientX ?? null;
+          setDragging(true);
+          setDrag(0);
+        }}
+        onTouchMove={(e) => {
+          if (startX.current !== null) setDrag((e.touches[0]?.clientX ?? startX.current) - startX.current);
         }}
         onTouchEnd={(e) => {
-          if (touchX.current === null) return;
-          const dx = (e.changedTouches[0]?.clientX ?? touchX.current) - touchX.current;
-          touchX.current = null;
-          // Swipe gauche -> image suivante ; swipe droite -> précédente (seuil 40 px pour ne pas
-          // déclencher sur un simple tap). On stoppe la propagation pour ne pas fermer la lightbox.
-          if (multi && Math.abs(dx) > 40) {
-            e.stopPropagation();
-            go(dx < 0 ? 1 : -1);
-          }
+          const dx = startX.current === null ? 0 : (e.changedTouches[0]?.clientX ?? startX.current) - startX.current;
+          startX.current = null;
+          setDragging(false);
+          setDrag(0); // revient à 0 -> avec la transition réactivée, la piste « snap » sur la photo
+          // Au-delà du seuil (40 px), on passe à la photo voisine (go borne aux extrémités).
+          if (multi && Math.abs(dx) > 40) go(dx < 0 ? 1 : -1);
         }}
       >
-        {/* Clic sur l'image : ne ferme pas. Clic n'importe où ailleurs (fond, marges) : ferme. */}
-        <img
-          src={exerciseImageUrl(images[index])}
-          alt={alt}
-          draggable={false}
-          onClick={(e) => e.stopPropagation()}
-          className="max-h-full max-w-full select-none rounded-lg object-contain"
-        />
+        {/* Piste de toutes les photos, translatée de -index*100% (+ le drag en cours) : la photo
+            suit le doigt, puis glisse jusqu'à la suivante via la transition CSS. */}
+        <div
+          className="flex h-full w-full"
+          style={{
+            transform: `translateX(calc(${-index * 100}% + ${drag}px))`,
+            transition: dragging ? 'none' : 'transform 0.3s ease-out',
+          }}
+        >
+          {images.map((img, i) => (
+            <div key={i} className="flex h-full shrink-0 basis-full items-center justify-center px-3 pb-8">
+              {/* Clic sur l'image : ne ferme pas. Ailleurs (fond, marges, en-tête) : ferme. */}
+              <img
+                src={exerciseImageUrl(img)}
+                alt={alt}
+                draggable={false}
+                onClick={(e) => e.stopPropagation()}
+                className="max-h-full max-w-full select-none rounded-lg object-contain"
+              />
+            </div>
+          ))}
+        </div>
       </div>
       {multi && (
         <>
