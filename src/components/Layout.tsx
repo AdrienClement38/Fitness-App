@@ -1,9 +1,10 @@
-import {Suspense, useLayoutEffect} from 'react';
+import {Suspense} from 'react';
 import {Activity, BookOpen, ClipboardList, Dumbbell, Home, LineChart, User, Wrench} from 'lucide-react';
-import {NavLink, Outlet, useLocation, useNavigationType} from 'react-router-dom';
+import {NavLink, Outlet, useLocation} from 'react-router-dom';
 import {useAuth} from '../lib/auth';
 import {useAppStatus} from '../lib/appStatus';
 import {useOnline} from '../lib/useOnline';
+import {useScrollRestoration} from '../lib/useScrollRestoration';
 import {Loading} from './ui';
 import EmailVerifyBanner from './EmailVerifyBanner';
 import Logo from './Logo';
@@ -22,17 +23,14 @@ export default function Layout() {
   const online = useOnline();
   const {announcement, maintenance} = useAppStatus();
   const {pathname} = useLocation();
-  const navType = useNavigationType();
   const isAdmin = user?.role === 'admin';
   // Maintenance : on coupe l'app pour les non-admins, mais on laisse /compte ouvert
   // pour que l'admin (ou qui que ce soit) puisse se connecter et désactiver.
   const blockForMaintenance = maintenance.active && !isAdmin && pathname !== '/compte';
   // Remet la vue en haut sur une navigation « avant » (ex. ouvrir une fiche exercice
-  // depuis une liste scrollée). On laisse le navigateur restaurer la position sur
-  // retour/avance (POP) pour ne pas perdre l'endroit où on en était dans une liste.
-  useLayoutEffect(() => {
-    if (navType !== 'POP') window.scrollTo(0, 0);
-  }, [pathname, navType]);
+  // depuis une liste scrollée). Au retour/avance (POP), on restaure la position
+  // mémorisée (en gérant le contenu chargé en async), voir useScrollRestoration.
+  useScrollRestoration();
 
   return (
     <div className="mx-auto flex min-h-screen max-w-2xl flex-col">
