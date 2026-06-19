@@ -28,6 +28,28 @@ h1 {
   -webkit-tap-highlight-color: transparent;
 }
 
+/*
+ * Champs de saisie à 16px sur écrans tactiles ET sur petits écrans. iOS Safari
+ * zoome automatiquement au focus sur tout champ dont la police est < 16px et ne
+ * dézoome pas ensuite (cf. CSS-Tricks « 16px or Larger Text Prevents iOS Form
+ * Zoom », Defensive CSS). Deux conditions en OU :
+ *  - (pointer: coarse) = écran tactile (iPhone, iPad, Android) -> la vraie
+ *    cible du correctif ;
+ *  - (max-width: 640px) = petit écran -> permet aussi de VOIR le rendu mobile
+ *    dans le preview en rétrécissant la fenêtre (à la souris, pointer n'est
+ *    jamais « coarse »).
+ * Le desktop large (souris, fenêtre large) garde ses champs compacts en text-sm.
+ * On NE désactive PAS le zoom utilisateur (pas de user-scalable=no / WCAG).
+ * Règle hors @layer => gagne sur les utilitaires Tailwind text-sm / text-xs.
+ */
+@media (pointer: coarse), (max-width: 640px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
 /* Survol d'un muscle sur le schéma interactif (page Muscles) — desktop. */
 .bodymap-interactive svg polygon {
   transition: fill 0.1s ease;
