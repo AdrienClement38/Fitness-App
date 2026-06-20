@@ -60,6 +60,7 @@ export default function ProgramsPage() {
   }, [level]);
   const [muscuCollapsed, toggleMuscu] = useCollapsed('programs-collapse-musculation');
   const [cardioCollapsed, toggleCardio] = useCollapsed('programs-collapse-cardio');
+  const [fatLossCollapsed, toggleFatLoss] = useCollapsed('programs-collapse-fat-loss');
 
   const filtered = (data ?? []).filter((p) => p.level === level);
   // Tri : (1) les programmes 100 % compatibles d'abord (tu peux TOUT faire) — entre eux,
@@ -75,8 +76,9 @@ export default function ProgramsPage() {
       }
       return byName(a, b);
     });
-  const muscu = order(filtered.filter((p) => p.theme !== 'cardio'));
+  const muscu = order(filtered.filter((p) => p.theme !== 'cardio' && p.theme !== 'fat-loss'));
   const cardio = order(filtered.filter((p) => p.theme === 'cardio'));
+  const fatLoss = order(filtered.filter((p) => p.theme === 'fat-loss'));
 
   return (
     <div>
@@ -155,6 +157,15 @@ export default function ProgramsPage() {
               hideTheme
               collapsed={cardioCollapsed}
               onToggle={toggleCardio}
+            />
+            <ProgramGroup
+              title="Perte de gras"
+              subtitle="brûler & s'affiner"
+              programs={fatLoss}
+              gender={gender}
+              hideTheme
+              collapsed={fatLossCollapsed}
+              onToggle={toggleFatLoss}
             />
             <ProgramGroup
               title="Musculation"

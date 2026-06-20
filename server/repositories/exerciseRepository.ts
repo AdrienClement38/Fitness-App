@@ -15,6 +15,10 @@ export interface ExerciseFilters {
   level?: string;
   category?: string;
   force?: string;
+  mechanic?: string;
+  // Restreindre le filtre `muscle` au rôle PRIMAIRE (exercices qui CIBLENT le muscle, pas
+  // seulement le sollicitent en secondaire). Utilisé par les pages « zone » (M'affiner).
+  musclePrimary?: boolean;
   ids?: string[];
   page?: number;
   pageSize?: number;
@@ -35,17 +39,23 @@ function buildWhere(f: ExerciseFilters) {
   if (f.level) conds.push(eq(exercises.level, f.level));
   if (f.category) conds.push(eq(exercises.category, f.category));
   if (f.force) conds.push(eq(exercises.force, f.force));
+  if (f.mechanic) conds.push(eq(exercises.mechanic, f.mechanic));
   if (f.equipment) conds.push(eq(exercises.equipmentId, f.equipment));
   if (f.muscle) {
-    conds.push(
-      inArray(
-        exercises.id,
-        db
-          .select({id: exerciseMuscles.exerciseId})
-          .from(exerciseMuscles)
-          .where(eq(exerciseMuscles.muscleId, f.muscle)),
-      ),
-    );
+    // `muscle` accepte un id OU une liste séparée par des virgules (une zone = plusieurs
+    // muscles, ex. bras = biceps,triceps,forearms) : on prend l'union (OR).
+    const muscleIds = f.muscle.split(',').map((s) => s.trim()).filter(Boolean);
+    if (muscleIds.length) {
+      const muscleWhere = f.musclePrimary
+        ? and(inArray(exerciseMuscles.muscleId, muscleIds), eq(exerciseMuscles.role, 'primary'))
+        : inArray(exerciseMuscles.muscleId, muscleIds);
+      conds.push(
+        inArray(
+          exercises.id,
+          db.select({id: exerciseMuscles.exerciseId}).from(exerciseMuscles).where(muscleWhere),
+        ),
+      );
+    }
   }
   return conds.length ? and(...conds) : undefined;
 }

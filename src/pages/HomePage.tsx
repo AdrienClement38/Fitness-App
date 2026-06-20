@@ -1,4 +1,4 @@
-import {ClipboardList, Leaf, LineChart, Play, Search} from 'lucide-react';
+import {ClipboardList, Flame, Leaf, LineChart, Play, Search} from 'lucide-react';
 import {useState, type FormEvent} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {useActiveWorkout, useWorkoutHistory} from '../lib/workoutLogs';
@@ -9,6 +9,7 @@ import Logo from '../components/Logo';
 
 // Accès unique à l'accueil (le cardio, lui, est un exercice -> onglet Exercices).
 const browseCards = [
+  {to: '/affiner', icon: Flame, title: "M'affiner", desc: 'Perdre du gras et galber tes zones.'},
   {to: '/recuperation', icon: Leaf, title: 'Récupération & étirements', desc: 'Étirements et automassages, pour après la séance.'},
 ];
 

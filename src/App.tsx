@@ -20,6 +20,8 @@ const MusclesPage = lazy(() => import('./pages/MusclesPage'));
 const MuscleDetailPage = lazy(() => import('./pages/MuscleDetailPage'));
 const ProgramsPage = lazy(() => import('./pages/ProgramsPage'));
 const ProgramDetailPage = lazy(() => import('./pages/ProgramDetailPage'));
+const AffinerHubPage = lazy(() => import('./pages/AffinerHubPage'));
+const AffinerZonePage = lazy(() => import('./pages/AffinerZonePage'));
 const MyProgramPage = lazy(() => import('./pages/MyProgramPage'));
 const MyProgramDetailPage = lazy(() => import('./pages/MyProgramDetailPage'));
 const SuiviPage = lazy(() => import('./pages/SuiviPage'));
@@ -73,6 +75,8 @@ export default function App() {
           <Route path="/muscles/:id" element={<MuscleDetailPage />} />
           <Route path="/programmes" element={<ProgramsPage />} />
           <Route path="/programmes/:id" element={<ProgramDetailPage />} />
+          <Route path="/affiner" element={<AffinerHubPage />} />
+          <Route path="/affiner/:zone" element={<AffinerZonePage />} />
           <Route path="/mes-programmes/:id" element={<MyProgramDetailPage />} />
           <Route path="/mes-programmes/:id/modifier" element={<MyProgramPage />} />
           <Route path="/suivi" element={<SuiviPage />} />

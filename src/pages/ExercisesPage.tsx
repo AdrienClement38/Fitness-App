@@ -45,6 +45,8 @@ export default function ExercisesPage() {
         equipment: val('equipment') || undefined,
         level: val('level') || undefined,
         category: val('category') || undefined,
+        mechanic: val('mechanic') || undefined,
+        primary: val('primary') || undefined,
         ids: favActive ? (favorites.length ? favorites.join(',') : '__none__') : undefined,
         page,
       }),

@@ -329,6 +329,8 @@ export interface ExerciseQuery {
   level?: string;
   category?: string;
   force?: string;
+  mechanic?: string;
+  primary?: string; // '1' = restreindre le filtre `muscle` au rôle primaire
   ids?: string; // liste d'ids séparés par des virgules (favoris)
   page?: number;
 }

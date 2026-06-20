@@ -47,6 +47,8 @@ router.get('/', async (req, res) => {
       level: q(req.query.level),
       category: q(req.query.category),
       force: q(req.query.force),
+      mechanic: q(req.query.mechanic),
+      musclePrimary: req.query.primary === '1',
       ids: q(req.query.ids)?.split(',').filter(Boolean),
       page: req.query.page ? Number(req.query.page) : undefined,
       pageSize: req.query.pageSize ? Number(req.query.pageSize) : undefined,
