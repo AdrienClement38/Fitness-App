@@ -1,4 +1,4 @@
-import {Heart, Info, X} from 'lucide-react';
+import {Heart, Info, RotateCcw} from 'lucide-react';
 import {useEffect, useRef, useState} from 'react';
 import {Link, useSearchParams} from 'react-router-dom';
 import {api, label, type Facets} from '../lib/api';
@@ -210,7 +210,7 @@ export default function ExercisesPage() {
                 aria-label="Enlever le filtre muscle"
                 className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-800 hover:text-slate-200"
               >
-                <X className="h-4 w-4" />
+                <RotateCcw className="h-4 w-4" />
               </button>
             </div>
           )}
