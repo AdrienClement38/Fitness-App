@@ -1,4 +1,4 @@
-import {ArrowLeft, ArrowRight, Check, ChevronRight, Dumbbell, Flame, HeartPulse, Lightbulb} from 'lucide-react';
+import {ArrowLeft, ArrowRight, Check, ChevronRight, Dumbbell, Flame, Lightbulb} from 'lucide-react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
 import {api, type ExerciseListItem} from '../lib/api';
 import {useAuth} from '../lib/auth';
@@ -42,31 +42,18 @@ export default function AffinerZonePage() {
       <h1 className="text-xl font-bold leading-tight">{zone.label}</h1>
       <p className="mt-1 text-sm text-slate-400">{zone.blurb}</p>
 
-      {/* Bloc 1 — brûler le gras (global, identique pour toutes les zones) */}
-      <div className="mt-4 rounded-2xl border border-slate-800 bg-slate-900/50 p-4">
-        <h2 className="flex items-center gap-2 font-semibold">
-          <Flame className="h-4 w-4 text-emerald-400" /> Brûler le gras
-        </h2>
-        <p className="mt-0.5 text-xs leading-relaxed text-slate-400">
-          Ça, c'est <span className="text-slate-300">global</span> — identique pour toutes les zones (on ne brûle pas le gras à un endroit précis). Déficit alimentaire + dépense d'énergie, c'est ça qui dévoile la zone.
-        </p>
-        <div className="mt-3 grid gap-2">
-          <Link
-            to="/exercices?category=cardio"
-            className="flex items-center justify-between gap-2 rounded-lg border border-slate-800 bg-slate-950/40 px-3 py-2.5 text-sm hover:border-slate-700 hover:bg-slate-900"
-          >
-            <span className="flex items-center gap-2"><HeartPulse className="h-4 w-4 text-emerald-400" /> Cardio</span>
-            <ChevronRight className="h-4 w-4 text-slate-500" />
-          </Link>
-          <Link
-            to="/exercices?preset=gros-mouvements"
-            className="flex items-center justify-between gap-2 rounded-lg border border-slate-800 bg-slate-950/40 px-3 py-2.5 text-sm hover:border-slate-700 hover:bg-slate-900"
-          >
-            <span className="flex items-center gap-2"><Dumbbell className="h-4 w-4 text-emerald-400" /> Gros mouvements dépensiers</span>
-            <ChevronRight className="h-4 w-4 text-slate-500" />
-          </Link>
-        </div>
-      </div>
+      {/* Rappel : brûler le gras est GLOBAL (pas de perte ciblée) -> inutile de répéter
+          cardio / gros mouvements par zone, on renvoie au hub M'affiner qui les centralise. */}
+      <Link
+        to="/affiner"
+        className="mt-4 flex items-center gap-2 rounded-xl border border-slate-800 bg-slate-900/40 px-3 py-2.5 text-xs leading-relaxed text-slate-400 transition-colors hover:border-slate-700 hover:text-slate-300"
+      >
+        <Flame className="h-4 w-4 shrink-0 text-emerald-400" />
+        <span className="flex-1">
+          Brûler le gras est <span className="text-slate-300">global</span> — cardio &amp; gros mouvements dans M'affiner.
+        </span>
+        <ChevronRight className="h-4 w-4 shrink-0 text-slate-500" />
+      </Link>
 
       {/* Bloc 2 — sculpter le muscle de la zone */}
       <div className="mt-3 rounded-2xl border border-slate-800 bg-slate-900/50 p-4">
