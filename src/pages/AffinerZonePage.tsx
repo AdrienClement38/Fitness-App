@@ -1,4 +1,4 @@
-import {ArrowLeft, ArrowRight, Check, ChevronRight, Dumbbell, Flame, Lightbulb} from 'lucide-react';
+import {ArrowLeft, ArrowRight, Check, Dumbbell, Lightbulb} from 'lucide-react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
 import {api, type ExerciseListItem} from '../lib/api';
 import {useAuth} from '../lib/auth';
@@ -42,18 +42,16 @@ export default function AffinerZonePage() {
       <h1 className="text-xl font-bold leading-tight">{zone.label}</h1>
       <p className="mt-1 text-sm text-slate-400">{zone.blurb}</p>
 
-      {/* Rappel : brûler le gras est GLOBAL (pas de perte ciblée) -> inutile de répéter
-          cardio / gros mouvements par zone, on renvoie au hub M'affiner qui les centralise. */}
-      <Link
-        to="/affiner"
-        className="mt-4 flex items-center gap-2 rounded-xl border border-slate-800 bg-slate-900/40 px-3 py-2.5 text-xs leading-relaxed text-slate-400 transition-colors hover:border-slate-700 hover:text-slate-300"
-      >
-        <Flame className="h-4 w-4 shrink-0 text-emerald-400" />
-        <span className="flex-1">
-          Brûler le gras est <span className="text-slate-300">global</span> — cardio &amp; gros mouvements dans M'affiner.
-        </span>
-        <ChevronRight className="h-4 w-4 shrink-0 text-slate-500" />
-      </Link>
+      {/* Conseil de coaching propre à la zone (comment travailler + option hors salle) —
+          affiché seulement si la zone en a un (cf. AffinerZone.advice). */}
+      {zone.advice && (
+        <div className="mt-4 rounded-2xl border border-slate-800 bg-slate-900/50 p-4">
+          <h2 className="flex items-center gap-2 font-semibold">
+            <Lightbulb className="h-4 w-4 text-emerald-400" /> Comment t'y prendre
+          </h2>
+          <p className="mt-1.5 text-sm leading-relaxed text-slate-300">{zone.advice}</p>
+        </div>
+      )}
 
       {/* Bloc 2 — sculpter le muscle de la zone */}
       <div className="mt-3 rounded-2xl border border-slate-800 bg-slate-900/50 p-4">

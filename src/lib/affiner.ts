@@ -17,15 +17,62 @@ export interface AffinerZone {
   label: string;
   blurb: string;
   muscleIds: string[];
+  /** Conseil de coaching propre à la zone : comment la travailler + une option hors salle.
+   *  Présent UNIQUEMENT si c'est justifié (du concret et spécifique à dire). Rédigé/vérifié
+   *  honnête (renforcer/galber, jamais de perte de gras ciblée — la note globale est au pied
+   *  de page). Aucune différence de paramètres selon le sexe. */
+  advice?: string;
 }
 
 export const ZONES: AffinerZone[] = [
-  {id: 'ventre', label: 'Ventre & taille', blurb: "Abdos, sangle, poignées d'amour", muscleIds: ['abdominals']},
-  {id: 'fessiers', label: 'Fessiers', blurb: 'Galber et raffermir', muscleIds: ['glutes']},
-  {id: 'cuisses', label: 'Cuisses', blurb: 'Quadriceps, ischios, intérieur', muscleIds: ['quadriceps', 'hamstrings', 'adductors', 'abductors']},
-  {id: 'bras', label: 'Bras', blurb: 'Biceps, triceps, avant-bras', muscleIds: ['biceps', 'triceps', 'forearms']},
-  {id: 'dos', label: 'Dos', blurb: 'Largeur, épaisseur, posture', muscleIds: ['lats', 'middle-back', 'lower-back', 'traps']},
-  {id: 'poitrine', label: 'Poitrine', blurb: 'Pectoraux', muscleIds: ['chest']},
+  {
+    id: 'ventre',
+    label: 'Ventre & taille',
+    blurb: "Abdos, sangle, poignées d'amour",
+    muscleIds: ['abdominals'],
+    advice:
+      "Les abdos récupèrent vite : tu peux les solliciter 3 à 4 fois par semaine, en séries proche de l'échec (12-20 reps) avec une vraie flexion du tronc — enroule la colonne vertèbre par vertèbre, sans tirer sur la nuque — plutôt qu'un simple maintien. Ajoute du gainage anti-rotation pour le transverse et les obliques. Sans matériel : alterne dead bug et planche latérale, 3 séries de 30-45 s par côté.",
+  },
+  {
+    id: 'fessiers',
+    label: 'Fessiers',
+    blurb: 'Galber et raffermir',
+    muscleIds: ['glutes'],
+    advice:
+      "Les fessiers récupèrent vite : sollicite-les 2 à 3 fois par semaine en grande amplitude (descends profond, serre fort la fesse en haut sans cambrer le bas du dos). Pour le grand fessier, privilégie l'extension de hanche (hip thrust, soulevé de terre roumain) plutôt que le seul squat. Sans matériel : hip thrusts au sol dos calé contre le canapé, fentes et montées de marche, lestés d'un sac à dos quand ça devient trop facile.",
+  },
+  {
+    id: 'cuisses',
+    label: 'Cuisses',
+    blurb: 'Quadriceps, ischios, intérieur',
+    muscleIds: ['quadriceps', 'hamstrings', 'adductors', 'abductors'],
+    advice:
+      "Travaille en grande amplitude : descends en squat ou fente jusqu'à au moins la parallèle — l'amplitude complète développe mieux quadriceps et fessiers que les versions partielles. Ajoute du travail d'ischios (soulevé de terre jambes semi-tendues), que squats et fentes sous-sollicitent. Sans matériel : fentes marchées et squats bulgares (pied arrière sur une chaise), 12 à 20 reps, 2 à 3 fois par semaine.",
+  },
+  {
+    id: 'bras',
+    label: 'Bras',
+    blurb: 'Biceps, triceps, avant-bras',
+    muscleIds: ['biceps', 'triceps', 'forearms'],
+    advice:
+      "Le triceps fait environ deux tiers du volume du bras : priorise-le via les extensions au-dessus de la tête, qui étirent le chef long sous tension (bras près des oreilles, charge descendue derrière la nuque). Ces petits muscles récupèrent vite — 2 séances par semaine proche de l'échec et en amplitude complète. Sans matériel : dips sur une chaise (buste près du bord pour ménager l'épaule) pour les triceps, curls avec un bidon de 5 L pour les biceps, descente contrôlée.",
+  },
+  {
+    id: 'dos',
+    label: 'Dos',
+    blurb: 'Largeur, épaisseur, posture',
+    muscleIds: ['lats', 'middle-back', 'lower-back', 'traps'],
+    advice:
+      "Le dos répond bien à 2 séances par semaine en combinant tirages verticaux (traction) et horizontaux (rowing), en grande amplitude : laisse les omoplates s'écarter en bas puis ramène-les en serrant — c'est ce qui recrute le grand dorsal et le milieu du dos plutôt que les seuls biceps. Sans matériel : rowings inversés sous une table solide (corps gainé, tire la poitrine vers le bord) et Superman au sol pour les lombaires, 2-3 s en haut.",
+  },
+  {
+    id: 'poitrine',
+    label: 'Poitrine',
+    blurb: 'Pectoraux',
+    muscleIds: ['chest'],
+    advice:
+      "Tes pectoraux ramènent les bras vers l'avant et vers le centre : travaille-les 2 fois par semaine avec un grand étirement en bas (développés, écartés) puis un serrage en haut. Charger le muscle bien étiré est au moins aussi efficace pour le faire grossir, donc vise l'amplitude complète. Sans matériel, les pompes suffisent : mains sur deux livres ou le bord de deux chaises pour descendre plus bas que les mains, descente ralentie sur 2-3 s.",
+  },
 ];
 
 export const getZone = (id: string | undefined): AffinerZone | undefined => ZONES.find((z) => z.id === id);
