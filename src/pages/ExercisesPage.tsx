@@ -1,5 +1,5 @@
 import {Heart, Info, RotateCcw} from 'lucide-react';
-import {useEffect, useRef, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Link, useSearchParams} from 'react-router-dom';
 import {api, label, type Facets} from '../lib/api';
 import {useAuth} from '../lib/auth';
@@ -93,26 +93,6 @@ export default function ExercisesPage() {
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
-
-  // Défilement vers la liste d'exercices APRÈS une sélection de muscle sur le body-map.
-  // - jamais au montage / reload (le drapeau n'est armé QUE par un clic utilisateur) ;
-  // - jamais sur une désélection ;
-  // - exécuté dans l'effet (post-rendu) -> position exacte même si l'en-tête de la carte
-  //   grandit quand les icônes apparaissent ;
-  // - décalé de la hauteur du header sticky pour caler la liste juste en dessous.
-  const muscleSel = val('muscle');
-  const resultsRef = useRef<HTMLDivElement>(null);
-  const pendingScroll = useRef(false);
-  useEffect(() => {
-    if (!pendingScroll.current) return;
-    pendingScroll.current = false;
-    const el = resultsRef.current;
-    if (!el) return;
-    const headerH = document.querySelector('header')?.getBoundingClientRect().height ?? 56;
-    const top = el.getBoundingClientRect().top + window.scrollY - headerH - 8;
-    window.scrollTo({top, behavior: 'smooth'});
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [muscleSel]);
 
   const selectClass =
     'rounded-lg border border-slate-800 bg-slate-900 px-2.5 py-2 text-sm text-slate-200 outline-none focus:border-emerald-500/60';
@@ -216,11 +196,7 @@ export default function ExercisesPage() {
           )}
         </div>
         <BodyMap
-          onSelect={(id) => {
-            const next = id === val('muscle') ? '' : id;
-            if (next) pendingScroll.current = true; // arme le scroll : sélection uniquement
-            setParam('muscle', next);
-          }}
+          onSelect={(id) => setParam('muscle', id === val('muscle') ? '' : id)}
           available={facets.data?.muscles.map((m) => m.id)}
           primary={val('muscle') ? [val('muscle')] : []}
           hideLegend
@@ -236,7 +212,6 @@ export default function ExercisesPage() {
         </p>
       )}
 
-      <div ref={resultsRef}>
       {exercises.loading && <Loading />}
       {exercises.error && <ErrorState message={exercises.error} />}
       {exercises.data && (
@@ -281,7 +256,6 @@ export default function ExercisesPage() {
           )}
         </>
       )}
-      </div>
     </div>
   );
 }
