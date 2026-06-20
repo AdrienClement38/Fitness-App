@@ -1,5 +1,5 @@
-import {Heart} from 'lucide-react';
-import {useEffect, useState} from 'react';
+import {Heart, Info, X} from 'lucide-react';
+import {useEffect, useRef, useState} from 'react';
 import {Link, useSearchParams} from 'react-router-dom';
 import {api, label, type Facets} from '../lib/api';
 import {useAuth} from '../lib/auth';
@@ -94,6 +94,14 @@ export default function ExercisesPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 
+  // Sélection d'un muscle sur le body-map -> on défile vers la liste d'exercices
+  // (le schéma est grand : sans ça, les résultats restent hors écran).
+  const muscleSel = val('muscle');
+  const resultsRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (muscleSel) resultsRef.current?.scrollIntoView({behavior: 'smooth', block: 'start'});
+  }, [muscleSel]);
+
   const selectClass =
     'rounded-lg border border-slate-800 bg-slate-900 px-2.5 py-2 text-sm text-slate-200 outline-none focus:border-emerald-500/60';
 
@@ -168,20 +176,29 @@ export default function ExercisesPage() {
                 Muscle : <span className="text-emerald-300">{selectedMuscle.nameFr}</span>
               </>
             ) : (
-              'Filtrer par muscle'
+              <>
+                Filtrer par muscle <span className="text-slate-600">— touche le schéma</span>
+              </>
             )}
           </span>
           {val('muscle') && (
-            <div className="flex items-center gap-3">
-              <Link to={`/muscles/${val('muscle')}`} className="text-xs text-slate-400 hover:text-slate-200">
-                Fiche
+            <div className="flex items-center gap-1">
+              <Link
+                to={`/muscles/${val('muscle')}`}
+                title="Voir la fiche du muscle"
+                aria-label="Voir la fiche du muscle"
+                className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-800 hover:text-slate-200"
+              >
+                <Info className="h-4 w-4" />
               </Link>
               <button
                 type="button"
                 onClick={() => setParam('muscle', '')}
-                className="text-xs font-medium text-emerald-400 hover:underline"
+                title="Enlever le filtre muscle"
+                aria-label="Enlever le filtre muscle"
+                className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-800 hover:text-slate-200"
               >
-                Tous les muscles
+                <X className="h-4 w-4" />
               </button>
             </div>
           )}
@@ -203,6 +220,7 @@ export default function ExercisesPage() {
         </p>
       )}
 
+      <div ref={resultsRef} className="scroll-mt-20">
       {exercises.loading && <Loading />}
       {exercises.error && <ErrorState message={exercises.error} />}
       {exercises.data && (
@@ -247,6 +265,7 @@ export default function ExercisesPage() {
           )}
         </>
       )}
+      </div>
     </div>
   );
 }
