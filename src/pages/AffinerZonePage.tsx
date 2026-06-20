@@ -1,4 +1,4 @@
-import {ArrowLeft, ArrowRight, Check, Dumbbell, Lightbulb} from 'lucide-react';
+import {ArrowLeft, ArrowRight, Check, ChevronDown, Dumbbell, Info, Lightbulb} from 'lucide-react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
 import {api, type ExerciseListItem} from '../lib/api';
 import {useAuth} from '../lib/auth';
@@ -42,15 +42,17 @@ export default function AffinerZonePage() {
       <h1 className="text-xl font-bold leading-tight">{zone.label}</h1>
       <p className="mt-1 text-sm text-slate-400">{zone.blurb}</p>
 
-      {/* Conseil de coaching propre à la zone (comment travailler + option hors salle) —
-          affiché seulement si la zone en a un (cf. AffinerZone.advice). */}
-      {zone.advice && (
-        <div className="mt-4 rounded-2xl border border-slate-800 bg-slate-900/50 p-4">
-          <h2 className="flex items-center gap-2 font-semibold">
-            <Lightbulb className="h-4 w-4 text-emerald-400" /> Comment t'y prendre
-          </h2>
-          <p className="mt-1.5 text-sm leading-relaxed text-slate-300">{zone.advice}</p>
-        </div>
+      {/* « Pourquoi le gras se loge ici » : physiologie propre à la zone, dépliable (fermé par
+          défaut) comme le bandeau du hub. Affiché seulement si la zone a un fatNote justifié. */}
+      {zone.fatNote && (
+        <details className="group mt-4 rounded-2xl border border-sky-500/25 bg-sky-500/10 [&>summary::-webkit-details-marker]:hidden">
+          <summary className="flex cursor-pointer list-none items-center gap-2 p-4 text-sm font-semibold text-sky-200">
+            <Info className="h-4 w-4 shrink-0" />
+            <span className="flex-1">Pourquoi le gras se loge ici</span>
+            <ChevronDown className="h-4 w-4 shrink-0 text-sky-300/70 transition-transform group-open:rotate-180" />
+          </summary>
+          <p className="px-4 pb-4 text-sm leading-relaxed text-slate-300">{zone.fatNote}</p>
+        </details>
       )}
 
       {/* Bloc 2 — sculpter le muscle de la zone */}

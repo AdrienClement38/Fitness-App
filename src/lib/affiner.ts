@@ -17,11 +17,12 @@ export interface AffinerZone {
   label: string;
   blurb: string;
   muscleIds: string[];
-  /** Conseil de coaching propre à la zone : comment la travailler + une option hors salle.
-   *  Présent UNIQUEMENT si c'est justifié (du concret et spécifique à dire). Rédigé/vérifié
-   *  honnête (renforcer/galber, jamais de perte de gras ciblée — la note globale est au pied
-   *  de page). Aucune différence de paramètres selon le sexe. */
-  advice?: string;
+  /** Texte « pourquoi le gras se loge ici » : vulgarisation physiologique propre à la zone
+   *  (génétique, hormones, gras viscéral/sous-cutané, récepteurs alpha-2 des zones tenaces).
+   *  Présent UNIQUEMENT si la zone a une histoire de répartition réellement spécifique.
+   *  Rédigé/vérifié honnête (réaffirme : on ne choisit pas où le gras part, aucune perte
+   *  ciblée) ; différences H/F = tendances physiologiques factuelles, jamais un jugement. */
+  fatNote?: string;
 }
 
 export const ZONES: AffinerZone[] = [
@@ -30,48 +31,48 @@ export const ZONES: AffinerZone[] = [
     label: 'Ventre & taille',
     blurb: "Abdos, sangle, poignées d'amour",
     muscleIds: ['abdominals'],
-    advice:
-      "Les abdos récupèrent vite : tu peux les solliciter 3 à 4 fois par semaine, en séries proche de l'échec (12-20 reps) avec une vraie flexion du tronc — enroule la colonne vertèbre par vertèbre, sans tirer sur la nuque — plutôt qu'un simple maintien. Ajoute du gainage anti-rotation pour le transverse et les obliques. Sans matériel : alterne dead bug et planche latérale, 3 séries de 30-45 s par côté.",
+    fatNote:
+      "Le ventre est la zone où se loge le gras viscéral, celui qui entoure les organes : sa quantité dépend surtout de tes androgènes, de ton cortisol (stress) et de ta sensibilité à l'insuline, ce qui explique pourquoi il a tendance à s'y accumuler plus facilement chez les hommes (silhouette « pomme ») et après la ménopause chez les femmes, quand les œstrogènes baissent. Le sous-cutané des poignées d'amour et du bas-ventre, lui, est souvent l'un des derniers à partir, car il est riche en récepteurs alpha-2 qui freinent la mobilisation des graisses. C'est ta génétique et tes hormones qui décident où et dans quel ordre le gras s'en va : aucun exercice d'abdos ne brûle le gras qui le recouvre.",
   },
   {
     id: 'fessiers',
     label: 'Fessiers',
     blurb: 'Galber et raffermir',
     muscleIds: ['glutes'],
-    advice:
-      "Les fessiers récupèrent vite : sollicite-les 2 à 3 fois par semaine en grande amplitude (descends profond, serre fort la fesse en haut sans cambrer le bas du dos). Pour le grand fessier, privilégie l'extension de hanche (hip thrust, soulevé de terre roumain) plutôt que le seul squat. Sans matériel : hip thrusts au sol dos calé contre le canapé, fentes et montées de marche, lestés d'un sac à dos quand ça devient trop facile.",
+    fatNote:
+      "Les fessiers et le haut des cuisses sont une zone de stockage privilégiée sous l'influence des œstrogènes, ce qui explique pourquoi le gras s'y dépose plus volontiers, en moyenne, chez la femme : c'est une réserve sous-cutanée que le corps a tendance à protéger. Ce gras est aussi riche en récepteurs alpha-2, qui freinent son déstockage : il part donc souvent en dernier, quand le reste a déjà fondu. Cet ordre est dicté par ta génétique et tes hormones, pas par les exercices : travailler les fessiers les renforce, mais ne déloge pas le gras qui les recouvre.",
   },
   {
     id: 'cuisses',
     label: 'Cuisses',
     blurb: 'Quadriceps, ischios, intérieur',
     muscleIds: ['quadriceps', 'hamstrings', 'adductors', 'abductors'],
-    advice:
-      "Travaille en grande amplitude : descends en squat ou fente jusqu'à au moins la parallèle — l'amplitude complète développe mieux quadriceps et fessiers que les versions partielles. Ajoute du travail d'ischios (soulevé de terre jambes semi-tendues), que squats et fentes sous-sollicitent. Sans matériel : fentes marchées et squats bulgares (pied arrière sur une chaise), 12 à 20 reps, 2 à 3 fois par semaine.",
+    fatNote:
+      "Le gras des cuisses (réserve dite glutéo-fémorale) est en grande partie piloté par tes hormones et ta génétique : les œstrogènes favorisent ce stockage bas du corps, ce qui explique qu'il soit en moyenne plus marqué chez la femme. Localement, ces cellules graisseuses sont riches en récepteurs « freins » (alpha-2 adrénergiques) qui les rendent moins faciles à mobiliser : c'est souvent le gras qui s'en va en dernier, après le reste. C'est cet équilibre hormonal et génétique qui décide où et dans quel ordre le gras part, pas le fait de travailler les cuisses : muscler la zone ne déloge pas le gras qui la recouvre.",
   },
   {
     id: 'bras',
     label: 'Bras',
     blurb: 'Biceps, triceps, avant-bras',
     muscleIds: ['biceps', 'triceps', 'forearms'],
-    advice:
-      "Le triceps fait environ deux tiers du volume du bras : priorise-le via les extensions au-dessus de la tête, qui étirent le chef long sous tension (bras près des oreilles, charge descendue derrière la nuque). Ces petits muscles récupèrent vite — 2 séances par semaine proche de l'échec et en amplitude complète. Sans matériel : dips sur une chaise (buste près du bord pour ménager l'épaule) pour les triceps, curls avec un bidon de 5 L pour les biceps, descente contrôlée.",
+    fatNote:
+      "L'arrière du bras est une zone où la graisse logée est purement sous-cutanée, et sa quantité dépend surtout de ta génétique et de tes hormones : chez beaucoup de femmes, les œstrogènes tendent à favoriser un stockage plus marqué au triceps comme aux hanches et aux cuisses, une tendance qui s'accentue souvent avec l'âge. C'est aussi une zone dite « têtue », riche en récepteurs alpha-2 qui ralentissent la libération du gras à cet endroit, donc elle se vide en général parmi les dernières. Travailler le triceps renforce le muscle dessous mais ne déloge pas la graisse au-dessus : c'est ton corps, pas l'exercice ciblé, qui décide d'où et dans quel ordre le gras s'en va.",
   },
   {
     id: 'dos',
     label: 'Dos',
     blurb: 'Largeur, épaisseur, posture',
     muscleIds: ['lats', 'middle-back', 'lower-back', 'traps'],
-    advice:
-      "Le dos répond bien à 2 séances par semaine en combinant tirages verticaux (traction) et horizontaux (rowing), en grande amplitude : laisse les omoplates s'écarter en bas puis ramène-les en serrant — c'est ce qui recrute le grand dorsal et le milieu du dos plutôt que les seuls biceps. Sans matériel : rowings inversés sous une table solide (corps gainé, tire la poitrine vers le bord) et Superman au sol pour les lombaires, 2-3 s en haut.",
+    fatNote:
+      "Le gras du dos (poignées d'amour, haut du dos, ligne du soutien-gorge) est surtout du sous-cutané dont l'emplacement dépend de ta génétique et de tes hormones : les androgènes tendent à favoriser un stockage sur la moitié supérieure du corps et le tronc, plus marqué chez l'homme. Le bas du dos compte souvent parmi les zones « tenaces » riches en récepteurs alpha-2 qui freinent la mobilisation, si bien qu'il part en dernier. Aucun exercice ne déloge le gras de cette zone : c'est ton corps qui décide où et dans quel ordre il puise, en s'affinant globalement.",
   },
   {
     id: 'poitrine',
     label: 'Poitrine',
     blurb: 'Pectoraux',
     muscleIds: ['chest'],
-    advice:
-      "Tes pectoraux ramènent les bras vers l'avant et vers le centre : travaille-les 2 fois par semaine avec un grand étirement en bas (développés, écartés) puis un serrage en haut. Charger le muscle bien étiré est au moins aussi efficace pour le faire grossir, donc vise l'amplitude complète. Sans matériel, les pompes suffisent : mains sur deux livres ou le bord de deux chaises pour descendre plus bas que les mains, descente ralentie sur 2-3 s.",
+    fatNote:
+      "À la poitrine, ce sont surtout tes hormones et ta génétique qui décident. Chez la femme, le sein est en bonne partie du tissu glandulaire, dont le volume dépend des œstrogènes ; le gras n'en est qu'une part, plus ou moins importante selon les personnes. Chez l'homme, il s'agit le plus souvent de gras sous-cutané qui se dépose et part au rythme de ta perte de gras globale (une fermeté plus glandulaire relève, elle, du suivi médical, pas de l'entraînement). Dans les deux cas, travailler les pectoraux renforce le muscle dessous mais ne déloge pas le gras local : l'ordre dans lequel cette zone se vide dépend de ton profil, pas d'un exercice ciblé.",
   },
 ];
 
