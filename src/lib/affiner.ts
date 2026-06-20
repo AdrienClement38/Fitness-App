@@ -32,7 +32,7 @@ export const ZONES: AffinerZone[] = [
     blurb: "Abdos, sangle, poignées d'amour",
     muscleIds: ['abdominals'],
     fatNote:
-      "Le ventre est la zone où se loge le gras viscéral, celui qui entoure les organes : sa quantité dépend surtout de tes androgènes, de ton cortisol (stress) et de ta sensibilité à l'insuline, ce qui explique pourquoi il a tendance à s'y accumuler plus facilement chez les hommes (silhouette « pomme ») et après la ménopause chez les femmes, quand les œstrogènes baissent. Le sous-cutané des poignées d'amour et du bas-ventre, lui, est souvent l'un des derniers à partir, car il est riche en récepteurs alpha-2 qui freinent la mobilisation des graisses. C'est ta génétique et tes hormones qui décident où et dans quel ordre le gras s'en va : aucun exercice d'abdos ne brûle le gras qui le recouvre.",
+      "Le ventre concentre le gras viscéral, celui qui entoure les organes : sa quantité dépend surtout de tes androgènes, de ton cortisol (stress) et de ta sensibilité à l'insuline, ce qui explique qu'il s'y accumule plus facilement chez les hommes (silhouette « pomme ») et après la ménopause chez les femmes, quand les œstrogènes baissent. Le sous-cutané du bas-ventre et des poignées d'amour, lui, est l'un des plus tenaces : riche en récepteurs alpha-2 qui freinent la mobilisation des graisses, il figure souvent parmi les derniers à partir. Tu ne choisis ni l'endroit ni l'ordre dans lequel le gras s'en va, et aucune série d'abdos ne brûle la couche qui le recouvre.",
   },
   {
     id: 'fessiers',
@@ -40,7 +40,7 @@ export const ZONES: AffinerZone[] = [
     blurb: 'Galber et raffermir',
     muscleIds: ['glutes'],
     fatNote:
-      "Les fessiers et le haut des cuisses sont une zone de stockage privilégiée sous l'influence des œstrogènes, ce qui explique pourquoi le gras s'y dépose plus volontiers, en moyenne, chez la femme : c'est une réserve sous-cutanée que le corps a tendance à protéger. Ce gras est aussi riche en récepteurs alpha-2, qui freinent son déstockage : il part donc souvent en dernier, quand le reste a déjà fondu. Cet ordre est dicté par ta génétique et tes hormones, pas par les exercices : travailler les fessiers les renforce, mais ne déloge pas le gras qui les recouvre.",
+      "Les fessiers sont une réserve de stockage privilégiée sous l'influence des œstrogènes, ce qui explique un dépôt en moyenne plus généreux chez la femme : le corps protège cette réserve glutéo-fémorale, autour du grand fessier, comme un capital qu'il garde longtemps. Ce gras est riche en récepteurs alpha-2 qui freinent son déstockage, si bien qu'il fond souvent quand le reste a déjà maigri. C'est ta physiologie qui fixe cet ordre, pas ta volonté : renforcer les fessiers leur donne du galbe, mais ne fait pas fondre la couche qui les habille.",
   },
   {
     id: 'cuisses',
@@ -48,7 +48,7 @@ export const ZONES: AffinerZone[] = [
     blurb: 'Quadriceps, ischios, intérieur',
     muscleIds: ['quadriceps', 'hamstrings', 'adductors', 'abductors'],
     fatNote:
-      "Le gras des cuisses (réserve dite glutéo-fémorale) est en grande partie piloté par tes hormones et ta génétique : les œstrogènes favorisent ce stockage bas du corps, ce qui explique qu'il soit en moyenne plus marqué chez la femme. Localement, ces cellules graisseuses sont riches en récepteurs « freins » (alpha-2 adrénergiques) qui les rendent moins faciles à mobiliser : c'est souvent le gras qui s'en va en dernier, après le reste. C'est cet équilibre hormonal et génétique qui décide où et dans quel ordre le gras part, pas le fait de travailler les cuisses : muscler la zone ne déloge pas le gras qui la recouvre.",
+      "Le gras des cuisses appartient à la même réserve glutéo-fémorale que les fessiers, mais il se répartit plus bas, surtout sur la face interne et le tour de cuisse, et reste en moyenne plus marqué chez la femme sous l'effet des œstrogènes. Ces cellules sont elles aussi riches en récepteurs freins (alpha-2 adrénergiques) qui les rendent lentes à se vider : c'est typiquement un gras qui s'en va tard, après le haut du corps. Muscler les cuisses les raffermit sous la peau, mais ne commande pas l'ordre dans lequel ton corps décide d'y puiser.",
   },
   {
     id: 'bras',
@@ -56,7 +56,7 @@ export const ZONES: AffinerZone[] = [
     blurb: 'Biceps, triceps, avant-bras',
     muscleIds: ['biceps', 'triceps', 'forearms'],
     fatNote:
-      "L'arrière du bras est une zone où la graisse logée est purement sous-cutanée, et sa quantité dépend surtout de ta génétique et de tes hormones : chez beaucoup de femmes, les œstrogènes tendent à favoriser un stockage plus marqué au triceps comme aux hanches et aux cuisses, une tendance qui s'accentue souvent avec l'âge. C'est aussi une zone dite « têtue », riche en récepteurs alpha-2 qui ralentissent la libération du gras à cet endroit, donc elle se vide en général parmi les dernières. Travailler le triceps renforce le muscle dessous mais ne déloge pas la graisse au-dessus : c'est ton corps, pas l'exercice ciblé, qui décide d'où et dans quel ordre le gras s'en va.",
+      "L'arrière du bras ne porte que du gras sous-cutané, et sa quantité tient surtout à ta génétique et à tes hormones : chez beaucoup de femmes, les œstrogènes accentuent un peu le stockage au triceps, une tendance qui se marque souvent avec l'âge. Bonne nouvelle, ce n'est pas un dépôt réputé tenace : il se mobilise plutôt au rythme de ta perte globale, sans figurer parmi les plus récalcitrants. Travailler le triceps renforce le muscle dessous, mais c'est ton corps qui choisit quand et où puiser dans la graisse au-dessus, pas l'exercice ciblé.",
   },
   {
     id: 'dos',
@@ -64,7 +64,7 @@ export const ZONES: AffinerZone[] = [
     blurb: 'Largeur, épaisseur, posture',
     muscleIds: ['lats', 'middle-back', 'lower-back', 'traps'],
     fatNote:
-      "Le gras du dos (poignées d'amour, haut du dos, ligne du soutien-gorge) est surtout du sous-cutané dont l'emplacement dépend de ta génétique et de tes hormones : les androgènes tendent à favoriser un stockage sur la moitié supérieure du corps et le tronc, plus marqué chez l'homme. Le bas du dos compte souvent parmi les zones « tenaces » riches en récepteurs alpha-2 qui freinent la mobilisation, si bien qu'il part en dernier. Aucun exercice ne déloge le gras de cette zone : c'est ton corps qui décide où et dans quel ordre il puise, en s'affinant globalement.",
+      "Le gras du dos (haut du dos, ligne du soutien-gorge, bas du dos) est essentiellement du sous-cutané dont l'emplacement dépend de ta génétique et de tes hormones : les androgènes orientent le stockage vers le tronc et la moitié supérieure du corps, plus marqué chez l'homme. Sur le haut du dos, ce gras se mobilise globalement au fil de ta perte, sans être particulièrement coriace ; seul le bas du dos rejoint la zone des poignées d'amour, plus lente à se vider. Tu ne pilotes pas l'ordre dans lequel ton corps puise : il s'affine d'ensemble, et aucun exercice ne cible le gras d'un secteur précis.",
   },
   {
     id: 'poitrine',
@@ -72,7 +72,7 @@ export const ZONES: AffinerZone[] = [
     blurb: 'Pectoraux',
     muscleIds: ['chest'],
     fatNote:
-      "À la poitrine, ce sont surtout tes hormones et ta génétique qui décident. Chez la femme, le sein est en bonne partie du tissu glandulaire, dont le volume dépend des œstrogènes ; le gras n'en est qu'une part, plus ou moins importante selon les personnes. Chez l'homme, il s'agit le plus souvent de gras sous-cutané qui se dépose et part au rythme de ta perte de gras globale (une fermeté plus glandulaire relève, elle, du suivi médical, pas de l'entraînement). Dans les deux cas, travailler les pectoraux renforce le muscle dessous mais ne déloge pas le gras local : l'ordre dans lequel cette zone se vide dépend de ton profil, pas d'un exercice ciblé.",
+      "À la poitrine, ce sont surtout tes hormones et ta génétique qui mènent la danse. Chez la femme, le sein est en bonne partie du tissu glandulaire dont le volume dépend des œstrogènes ; le gras n'en est qu'une part, plus ou moins importante selon les personnes. Chez l'homme, il s'agit le plus souvent de gras sous-cutané qui se dépose et fond au rythme de ta perte globale (une fermeté plus glandulaire relève, elle, du suivi médical, pas de l'entraînement). Dans les deux cas, renforcer les pectoraux raffermit le muscle dessous sans déloger la graisse locale : la façon dont cette zone se vide dépend de ton profil, pas d'un exercice ciblé.",
   },
 ];
 
