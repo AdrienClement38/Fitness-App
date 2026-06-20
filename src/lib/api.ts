@@ -347,7 +347,14 @@ export const api = {
   exercise: (id: string) => get<ExerciseDetail>(`/exercises/${encodeURIComponent(id)}`),
   stretchSuggestions: (ids: string[]) =>
     get<{items: ExerciseListItem[]}>(`/exercises/stretch-suggestions?ids=${encodeURIComponent(ids.join(','))}`),
-  facets: () => get<Facets>('/exercises/facets'),
+  facets: (query: ExerciseQuery = {}) => {
+    const params = new URLSearchParams();
+    for (const [k, v] of Object.entries(query)) {
+      if (v !== undefined && v !== '' && v !== null) params.set(k, String(v));
+    }
+    const qs = params.toString();
+    return get<Facets>(`/exercises/facets${qs ? `?${qs}` : ''}`);
+  },
   muscles: () => get<MuscleListItem[]>('/muscles'),
   muscle: (id: string) => get<MuscleDetail>(`/muscles/${encodeURIComponent(id)}`),
   principles: () => get<Principle[]>('/knowledge/principles'),

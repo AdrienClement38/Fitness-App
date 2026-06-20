@@ -1,5 +1,18 @@
 @import 'tailwindcss';
 
+/* Variant `ios-standalone:` — applique l'utilitaire UNIQUEMENT sur iOS ET en app
+   installée (PWA standalone). `@supports (-webkit-touch-callout: none)` est une
+   feature WebKit/iOS (fausse sur Android/Chrome) -> on cible l'iPhone, où il faut
+   réserver la safe-area de la barre d'accueil. Sur Android (qui gère déjà son
+   espace) comme en navigateur web : aucun décalage. */
+@custom-variant ios-standalone {
+  @supports (-webkit-touch-callout: none) {
+    @media (display-mode: standalone) {
+      @slot;
+    }
+  }
+}
+
 @theme {
   --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-display: 'Orbitron', system-ui, sans-serif;

@@ -1,4 +1,4 @@
-import {Heart} from 'lucide-react';
+import {Heart, Info, RotateCcw} from 'lucide-react';
 import {useEffect, useState} from 'react';
 import {Link, useSearchParams} from 'react-router-dom';
 import {api, label, type Facets} from '../lib/api';
@@ -6,6 +6,7 @@ import {useAuth} from '../lib/auth';
 import {hasEquipmentPref} from '../lib/equipment';
 import {useFavorites} from '../lib/favorites';
 import {useFetch} from '../lib/useFetch';
+import BodyMap from '../components/BodyMap';
 import ExerciseCard from '../components/ExerciseCard';
 import {Empty, ErrorState, Loading} from '../components/ui';
 
@@ -36,7 +37,27 @@ export default function ExercisesPage() {
   const prefSet = equip !== null;
   const equipSig = equip ? `set:${equip.join(',')}` : '∅';
 
-  const facets = useFetch<Facets>(() => api.facets(), []);
+  // Facettes CONTEXTUELLES : on transmet les filtres actifs (et l'état favoris) -> les <select>
+  // ne proposent que des valeurs qui donnent des résultats. Refetch à chaque changement.
+  const facetIds = favActive ? (favorites.length ? favorites.join(',') : '__none__') : undefined;
+  const facetSig = [
+    val('search'), val('muscle'), val('equipment'), val('level'), val('category'), val('mechanic'), val('primary'), facetIds ?? '',
+  ].join('|');
+  const facets = useFetch<Facets>(
+    () =>
+      api.facets({
+        search: val('search') || undefined,
+        muscle: val('muscle') || undefined,
+        equipment: val('equipment') || undefined,
+        level: val('level') || undefined,
+        category: val('category') || undefined,
+        mechanic: val('mechanic') || undefined,
+        primary: val('primary') || undefined,
+        ids: facetIds,
+      }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [facetSig],
+  );
   const exercises = useFetch(
     () =>
       api.exercises({
@@ -76,6 +97,10 @@ export default function ExercisesPage() {
   const selectClass =
     'rounded-lg border border-slate-800 bg-slate-900 px-2.5 py-2 text-sm text-slate-200 outline-none focus:border-emerald-500/60';
 
+  // Muscle filtré (pour le titre du body-map). Présent dans les facettes contextuelles
+  // puisqu'on ne peut sélectionner qu'un muscle disponible.
+  const selectedMuscle = facets.data?.muscles.find((m) => m.id === val('muscle'));
+
   return (
     <div>
       <input
@@ -85,20 +110,30 @@ export default function ExercisesPage() {
         className="w-full rounded-xl border border-slate-800 bg-slate-900 px-4 py-3 text-sm outline-none placeholder:text-slate-500 focus:border-emerald-500/60"
       />
 
-      {/* Niveau en haut : sélecteur segmenté (cohérent avec Programmes / Muscles). */}
+      {/* Niveau : sélecteur segmenté contextuel. « Tous » (id vide) reste toujours actif ;
+          un niveau sans exercice pour les filtres en cours (type/matériel/muscle) est grisé
+          et non cliquable — comme les options absentes des selects. */}
       <div className="mt-3 flex gap-1 rounded-xl bg-slate-900 p-1">
-        {LEVELS.map((lv) => (
-          <button
-            key={lv.id || 'all'}
-            type="button"
-            onClick={() => setParam('level', lv.id)}
-            className={`flex-1 rounded-lg py-2 text-sm font-medium transition-colors ${
-              val('level') === lv.id ? 'bg-emerald-500/20 text-emerald-300' : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            {lv.label}
-          </button>
-        ))}
+        {LEVELS.map((lv) => {
+          const disabled = lv.id !== '' && !!facets.data && !facets.data.levels.includes(lv.id);
+          return (
+            <button
+              key={lv.id || 'all'}
+              type="button"
+              disabled={disabled}
+              onClick={() => setParam('level', lv.id)}
+              className={`flex-1 rounded-lg py-2 text-sm font-medium transition-colors ${
+                val('level') === lv.id
+                  ? 'bg-emerald-500/20 text-emerald-300'
+                  : disabled
+                    ? 'cursor-not-allowed text-slate-700'
+                    : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              {lv.label}
+            </button>
+          );
+        })}
       </div>
 
       {/* Filtres : Favoris · Type · Matériel · Muscles. */}
@@ -130,12 +165,52 @@ export default function ExercisesPage() {
             <option key={eq.id} value={eq.id}>{eq.nameFr}</option>
           ))}
         </select>
-        <select className={selectClass} value={val('muscle')} onChange={(e) => setParam('muscle', e.target.value)}>
-          <option value="">Tous les muscles</option>
-          {facets.data?.muscles.map((m) => (
-            <option key={m.id} value={m.id}>{m.nameFr}</option>
-          ))}
-        </select>
+      </div>
+
+      {/* Filtre par muscle : body-map (remplace le select). Les muscles sans exercice
+          pour les filtres actifs (type / matériel) sont grisés et non cliquables. Clic
+          sur un muscle = filtre ; clic sur le muscle actif = on enlève le filtre. */}
+      <div className="mt-3 rounded-2xl border border-slate-800 bg-slate-900/40 p-3">
+        <div className="mb-1 flex items-center justify-between gap-2">
+          <span className="text-xs font-medium text-slate-400">
+            {selectedMuscle ? (
+              <>
+                Muscle : <span className="text-emerald-300">{selectedMuscle.nameFr}</span>
+              </>
+            ) : (
+              <>
+                Filtrer par muscle <span className="text-slate-600">— touche le schéma</span>
+              </>
+            )}
+          </span>
+          {val('muscle') && (
+            <div className="flex items-center gap-1">
+              <Link
+                to={`/muscles/${val('muscle')}`}
+                title="Voir la fiche du muscle"
+                aria-label="Voir la fiche du muscle"
+                className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-800 hover:text-slate-200"
+              >
+                <Info className="h-4 w-4" />
+              </Link>
+              <button
+                type="button"
+                onClick={() => setParam('muscle', '')}
+                title="Enlever le filtre muscle"
+                aria-label="Enlever le filtre muscle"
+                className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-800 hover:text-slate-200"
+              >
+                <RotateCcw className="h-4 w-4" />
+              </button>
+            </div>
+          )}
+        </div>
+        <BodyMap
+          onSelect={(id) => setParam('muscle', id === val('muscle') ? '' : id)}
+          available={facets.data?.muscles.map((m) => m.id)}
+          primary={val('muscle') ? [val('muscle')] : []}
+          hideLegend
+        />
       </div>
 
       {user && !prefSet && (

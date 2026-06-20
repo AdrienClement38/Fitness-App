@@ -249,3 +249,70 @@ export async function getFacets() {
     categories: ['strength', 'stretching', 'plyometrics', 'powerlifting', 'olympic_weightlifting', 'strongman', 'cardio'],
   };
 }
+
+/**
+ * Facettes CONTEXTUELLES (filtres « intelligents »). Pour chaque dimension de filtre
+ * (type/categorie, materiel, muscle), renvoie uniquement les valeurs qui ont >= 1 resultat
+ * compte tenu des AUTRES filtres actifs — on exclut le filtre de la dimension elle-meme
+ * pour qu'on puisse encore y changer de valeur. Resultat : un select ne propose jamais une
+ * option menant a 0 ; on ne peut naviguer que dans des combinaisons valides. Sans aucun
+ * filtre -> catalogue complet (meme sortie que getFacets).
+ */
+export async function getContextualFacets(f: ExerciseFilters) {
+  const build = (exclude: 'category' | 'equipment' | 'muscle' | 'level') => {
+    const c = [];
+    if (f.ids && f.ids.length) c.push(inArray(exercises.id, f.ids)); // mode favoris
+    if (f.search?.trim()) {
+      const qq = `%${f.search.trim()}%`;
+      c.push(or(ilike(exercises.nameFr, qq), ilike(exercises.nameEn, qq)));
+    }
+    if (exclude !== 'level' && f.level) c.push(eq(exercises.level, f.level));
+    if (f.force) c.push(eq(exercises.force, f.force));
+    if (f.mechanic) c.push(eq(exercises.mechanic, f.mechanic));
+    if (exclude !== 'category' && f.category) c.push(eq(exercises.category, f.category));
+    if (exclude !== 'equipment' && f.equipment) c.push(eq(exercises.equipmentId, f.equipment));
+    if (exclude !== 'muscle' && f.muscle) {
+      const ids = f.muscle.split(',').map((s) => s.trim()).filter(Boolean);
+      if (ids.length) {
+        const w = f.musclePrimary
+          ? and(inArray(exerciseMuscles.muscleId, ids), eq(exerciseMuscles.role, 'primary'))
+          : inArray(exerciseMuscles.muscleId, ids);
+        c.push(inArray(exercises.id, db.select({id: exerciseMuscles.exerciseId}).from(exerciseMuscles).where(w)));
+      }
+    }
+    return c.length ? and(...c) : undefined;
+  };
+
+  const [cats, equipRows, muscleRows, levelRows] = await Promise.all([
+    db.selectDistinct({v: exercises.category}).from(exercises).where(build('category')),
+    db.selectDistinct({v: exercises.equipmentId}).from(exercises).where(build('equipment')),
+    db
+      .selectDistinct({v: exerciseMuscles.muscleId})
+      .from(exerciseMuscles)
+      .innerJoin(exercises, eq(exercises.id, exerciseMuscles.exerciseId))
+      .where(build('muscle')),
+    db.selectDistinct({v: exercises.level}).from(exercises).where(build('level')),
+  ]);
+
+  const equipIds = equipRows.map((r) => r.v).filter((x): x is string => !!x);
+  const muscleIds = muscleRows.map((r) => r.v);
+  const equipmentList = equipIds.length
+    ? await db.select({id: equipment.id, nameFr: equipment.nameFr}).from(equipment).where(inArray(equipment.id, equipIds)).orderBy(asc(equipment.nameFr))
+    : [];
+  const muscleList = muscleIds.length
+    ? await db.select({id: muscles.id, nameFr: muscles.nameFr, groupId: muscles.groupId}).from(muscles).where(inArray(muscles.id, muscleIds)).orderBy(asc(muscles.nameFr))
+    : [];
+
+  // Niveaux CONTEXTUELS : seuls ceux ayant >= 1 exercice pour les autres filtres,
+  // dans l'ordre canonique (le client grise/desactive les niveaux absents).
+  const LEVEL_ORDER = ['beginner', 'intermediate', 'advanced'];
+  const levelVals = new Set(levelRows.map((r) => r.v).filter((x): x is string => !!x));
+
+  return {
+    muscles: muscleList,
+    equipment: equipmentList,
+    levels: LEVEL_ORDER.filter((l) => levelVals.has(l)),
+    forces: ['push', 'pull', 'static'],
+    categories: cats.map((r) => r.v).filter((x): x is string => !!x).sort(),
+  };
+}
