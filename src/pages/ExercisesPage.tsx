@@ -36,7 +36,27 @@ export default function ExercisesPage() {
   const prefSet = equip !== null;
   const equipSig = equip ? `set:${equip.join(',')}` : '∅';
 
-  const facets = useFetch<Facets>(() => api.facets(), []);
+  // Facettes CONTEXTUELLES : on transmet les filtres actifs (et l'état favoris) -> les <select>
+  // ne proposent que des valeurs qui donnent des résultats. Refetch à chaque changement.
+  const facetIds = favActive ? (favorites.length ? favorites.join(',') : '__none__') : undefined;
+  const facetSig = [
+    val('search'), val('muscle'), val('equipment'), val('level'), val('category'), val('mechanic'), val('primary'), facetIds ?? '',
+  ].join('|');
+  const facets = useFetch<Facets>(
+    () =>
+      api.facets({
+        search: val('search') || undefined,
+        muscle: val('muscle') || undefined,
+        equipment: val('equipment') || undefined,
+        level: val('level') || undefined,
+        category: val('category') || undefined,
+        mechanic: val('mechanic') || undefined,
+        primary: val('primary') || undefined,
+        ids: facetIds,
+      }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [facetSig],
+  );
   const exercises = useFetch(
     () =>
       api.exercises({
@@ -45,6 +65,8 @@ export default function ExercisesPage() {
         equipment: val('equipment') || undefined,
         level: val('level') || undefined,
         category: val('category') || undefined,
+        mechanic: val('mechanic') || undefined,
+        primary: val('primary') || undefined,
         ids: favActive ? (favorites.length ? favorites.join(',') : '__none__') : undefined,
         page,
       }),

@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {getExerciseById, getFacets, listExercises, stretchSuggestionsFor} from '../repositories/exerciseRepository';
+import {getContextualFacets, getExerciseById, listExercises, stretchSuggestionsFor} from '../repositories/exerciseRepository';
 import {getUserFromRequest} from '../auth';
 import {hasEquipmentPref} from '../../src/lib/equipment';
 
@@ -9,9 +9,21 @@ const router = Router();
 const q = (v: unknown): string | undefined => (typeof v === 'string' && v.trim() ? v : undefined);
 
 // GET /api/exercises/facets — valeurs disponibles pour les filtres.
-router.get('/facets', async (_req, res) => {
+router.get('/facets', async (req, res) => {
   try {
-    res.json(await getFacets());
+    res.json(
+      await getContextualFacets({
+        search: q(req.query.search),
+        muscle: q(req.query.muscle),
+        equipment: q(req.query.equipment),
+        level: q(req.query.level),
+        category: q(req.query.category),
+        force: q(req.query.force),
+        mechanic: q(req.query.mechanic),
+        musclePrimary: req.query.primary === '1',
+        ids: q(req.query.ids)?.split(',').filter(Boolean),
+      }),
+    );
   } catch (err) {
     console.error('[exercises/facets]', err);
     res.status(500).json({error: 'Erreur serveur.'});
@@ -47,6 +59,8 @@ router.get('/', async (req, res) => {
       level: q(req.query.level),
       category: q(req.query.category),
       force: q(req.query.force),
+      mechanic: q(req.query.mechanic),
+      musclePrimary: req.query.primary === '1',
       ids: q(req.query.ids)?.split(',').filter(Boolean),
       page: req.query.page ? Number(req.query.page) : undefined,
       pageSize: req.query.pageSize ? Number(req.query.pageSize) : undefined,
