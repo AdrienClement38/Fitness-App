@@ -1,4 +1,4 @@
-import {ChevronRight, Dumbbell, HeartPulse} from 'lucide-react';
+import {ArrowLeft, ChevronRight, Dumbbell, HeartPulse} from 'lucide-react';
 import {Link} from 'react-router-dom';
 import {api, type ProgramListItem} from '../lib/api';
 import {useAuth} from '../lib/auth';
@@ -18,13 +18,15 @@ export default function AffinerHubPage() {
 
   return (
     <div>
+      <Link to="/" className="mb-3 flex items-center gap-1 text-sm text-slate-400 hover:text-slate-200">
+        <ArrowLeft className="h-4 w-4" /> Accueil
+      </Link>
       <h1 className="text-xl font-bold">M'affiner</h1>
       <p className="mt-1 text-sm text-slate-400">Perdre du gras et galber tes zones — la méthode qui marche vraiment.</p>
 
       <div className="mt-4">
-        <FatLossFraming />
+        <FatLossFraming note={note} />
       </div>
-      {note && <p className="mt-2 text-xs leading-relaxed text-slate-400">{note}</p>}
 
       <SectionTitle>Cible une zone</SectionTitle>
       <div className="grid grid-cols-2 gap-2.5">
