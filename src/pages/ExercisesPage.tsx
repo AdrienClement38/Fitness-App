@@ -6,6 +6,7 @@ import {useAuth} from '../lib/auth';
 import {hasEquipmentPref} from '../lib/equipment';
 import {useFavorites} from '../lib/favorites';
 import {useFetch} from '../lib/useFetch';
+import {getPreset} from '../lib/presets';
 import BodyMap from '../components/BodyMap';
 import ExerciseCard from '../components/ExerciseCard';
 import {Empty, ErrorState, Loading} from '../components/ui';
@@ -37,9 +38,16 @@ export default function ExercisesPage() {
   const prefSet = equip !== null;
   const equipSig = equip ? `set:${equip.join(',')}` : '∅';
 
-  // Facettes CONTEXTUELLES : on transmet les filtres actifs (et l'état favoris) -> les <select>
-  // ne proposent que des valeurs qui donnent des résultats. Refetch à chaque changement.
-  const facetIds = favActive ? (favorites.length ? favorites.join(',') : '__none__') : undefined;
+  // Collection curée (preset) : ?preset=<clé> -> on restreint la liste à des ids choisis
+  // (ex. « Gros mouvements dépensiers »). Les filtres normaux s'appliquent EN PLUS.
+  const preset = getPreset(val('preset'));
+  const presetIds = preset ? preset.ids.join(',') : undefined;
+
+  // Facettes CONTEXTUELLES : on transmet les filtres actifs (et l'état favoris / preset) ->
+  // les <select> ne proposent que des valeurs qui donnent des résultats. Refetch à chaque
+  // changement. Jeu d'ids actif : favoris (prioritaire) sinon preset sinon aucun.
+  const listIds = favActive ? (favorites.length ? favorites.join(',') : '__none__') : presetIds;
+  const facetIds = listIds;
   const facetSig = [
     val('search'), val('muscle'), val('equipment'), val('level'), val('category'), val('mechanic'), val('primary'), facetIds ?? '',
   ].join('|');
@@ -68,7 +76,7 @@ export default function ExercisesPage() {
         category: val('category') || undefined,
         mechanic: val('mechanic') || undefined,
         primary: val('primary') || undefined,
-        ids: favActive ? (favorites.length ? favorites.join(',') : '__none__') : undefined,
+        ids: listIds,
         page,
       }),
     [params.toString(), favActive ? favorites.join(',') : '', equipSig],
@@ -103,6 +111,19 @@ export default function ExercisesPage() {
 
   return (
     <div>
+      {/* Collection curée active (preset) : on annonce le contexte + sortie vers le catalogue. */}
+      {preset && !favActive && (
+        <div className="mb-3 rounded-xl border border-emerald-500/25 bg-emerald-500/10 px-3 py-2.5">
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-sm font-semibold text-emerald-200">{preset.label}</span>
+            <Link to="/exercices" className="shrink-0 text-xs text-slate-400 hover:text-slate-200">
+              Tout le catalogue
+            </Link>
+          </div>
+          <p className="mt-0.5 text-xs leading-relaxed text-slate-300">{preset.intro}</p>
+        </div>
+      )}
+
       <input
         value={search}
         onChange={(e) => setSearch(e.target.value)}

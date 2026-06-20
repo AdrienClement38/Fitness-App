@@ -61,7 +61,7 @@ export default function AffinerHubPage() {
           <ChevronRight className="h-4 w-4 shrink-0 text-slate-500" />
         </Link>
         <Link
-          to="/exercices?category=strength&mechanic=compound"
+          to="/exercices?preset=gros-mouvements"
           className="flex items-center gap-3 rounded-xl border border-slate-800 bg-slate-900/50 p-3.5 transition-colors hover:border-slate-700 hover:bg-slate-900"
         >
           <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-400">

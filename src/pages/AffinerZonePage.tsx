@@ -59,7 +59,7 @@ export default function AffinerZonePage() {
             <ChevronRight className="h-4 w-4 text-slate-500" />
           </Link>
           <Link
-            to="/exercices?category=strength&mechanic=compound"
+            to="/exercices?preset=gros-mouvements"
             className="flex items-center justify-between gap-2 rounded-lg border border-slate-800 bg-slate-950/40 px-3 py-2.5 text-sm hover:border-slate-700 hover:bg-slate-900"
           >
             <span className="flex items-center gap-2"><Dumbbell className="h-4 w-4 text-emerald-400" /> Gros mouvements dépensiers</span>

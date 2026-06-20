@@ -44,7 +44,7 @@ export function orderedZones(gender: Gender | null | undefined): AffinerZone[] {
 
 // Cadrage anti-mythe, identique pour tous (la science ne dépend pas du sexe).
 export const FRAMING = {
-  title: "On ne choisit pas où le gras part",
+  title: "Le gras part où il veut, pas où tu cibles",
   body:
     "La perte de gras ciblée est un mythe : aucun exercice ne fait fondre la graisse d'un endroit précis. Ce qui dévoile une zone, c'est baisser ton gras GLOBAL (déficit alimentaire + cardio + gros mouvements). Le travail ciblé, lui, renforce et galbe le muscle — visible une fois le gras réduit.",
   footnote:
