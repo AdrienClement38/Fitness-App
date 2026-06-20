@@ -47,7 +47,9 @@ export default function AffinerZonePage() {
         <h2 className="flex items-center gap-2 font-semibold">
           <Flame className="h-4 w-4 text-emerald-400" /> Brûler le gras
         </h2>
-        <p className="mt-0.5 text-xs leading-relaxed text-slate-400">C'est ça qui dévoile la zone : déficit alimentaire + dépense d'énergie.</p>
+        <p className="mt-0.5 text-xs leading-relaxed text-slate-400">
+          Ça, c'est <span className="text-slate-300">global</span> — identique pour toutes les zones (on ne brûle pas le gras à un endroit précis). Déficit alimentaire + dépense d'énergie, c'est ça qui dévoile la zone.
+        </p>
         <div className="mt-3 grid gap-2">
           <Link
             to="/exercices?category=cardio"
@@ -69,9 +71,9 @@ export default function AffinerZonePage() {
       {/* Bloc 2 — sculpter le muscle de la zone */}
       <div className="mt-3 rounded-2xl border border-slate-800 bg-slate-900/50 p-4">
         <h2 className="flex items-center gap-2 font-semibold">
-          <Dumbbell className="h-4 w-4 text-emerald-400" /> Sculpter le muscle
+          <Dumbbell className="h-4 w-4 text-emerald-400" /> Exercices pour travailler la zone
         </h2>
-        <p className="mt-0.5 text-xs leading-relaxed text-slate-400">Le galbe de la zone, visible une fois le gras réduit.</p>
+        <p className="mt-0.5 text-xs leading-relaxed text-slate-400">Pour renforcer et galber la zone — le galbe est visible une fois le gras réduit.</p>
 
         {loading && <Loading />}
         {error && <ErrorState message={error} />}
