@@ -6,6 +6,7 @@ import {useAuth} from '../lib/auth';
 import {hasEquipmentPref} from '../lib/equipment';
 import {useFavorites} from '../lib/favorites';
 import {useFetch} from '../lib/useFetch';
+import BodyMap from '../components/BodyMap';
 import ExerciseCard from '../components/ExerciseCard';
 import {Empty, ErrorState, Loading} from '../components/ui';
 
@@ -96,6 +97,10 @@ export default function ExercisesPage() {
   const selectClass =
     'rounded-lg border border-slate-800 bg-slate-900 px-2.5 py-2 text-sm text-slate-200 outline-none focus:border-emerald-500/60';
 
+  // Muscle filtré (pour le titre du body-map). Présent dans les facettes contextuelles
+  // puisqu'on ne peut sélectionner qu'un muscle disponible.
+  const selectedMuscle = facets.data?.muscles.find((m) => m.id === val('muscle'));
+
   return (
     <div>
       <input
@@ -150,12 +155,43 @@ export default function ExercisesPage() {
             <option key={eq.id} value={eq.id}>{eq.nameFr}</option>
           ))}
         </select>
-        <select className={selectClass} value={val('muscle')} onChange={(e) => setParam('muscle', e.target.value)}>
-          <option value="">Tous les muscles</option>
-          {facets.data?.muscles.map((m) => (
-            <option key={m.id} value={m.id}>{m.nameFr}</option>
-          ))}
-        </select>
+      </div>
+
+      {/* Filtre par muscle : body-map (remplace le select). Les muscles sans exercice
+          pour les filtres actifs (type / matériel) sont grisés et non cliquables. Clic
+          sur un muscle = filtre ; clic sur le muscle actif = on enlève le filtre. */}
+      <div className="mt-3 rounded-2xl border border-slate-800 bg-slate-900/40 p-3">
+        <div className="mb-1 flex items-center justify-between gap-2">
+          <span className="text-xs font-medium text-slate-400">
+            {selectedMuscle ? (
+              <>
+                Muscle : <span className="text-emerald-300">{selectedMuscle.nameFr}</span>
+              </>
+            ) : (
+              'Filtrer par muscle'
+            )}
+          </span>
+          {val('muscle') && (
+            <div className="flex items-center gap-3">
+              <Link to={`/muscles/${val('muscle')}`} className="text-xs text-slate-400 hover:text-slate-200">
+                Fiche
+              </Link>
+              <button
+                type="button"
+                onClick={() => setParam('muscle', '')}
+                className="text-xs font-medium text-emerald-400 hover:underline"
+              >
+                Tous les muscles
+              </button>
+            </div>
+          )}
+        </div>
+        <BodyMap
+          onSelect={(id) => setParam('muscle', id === val('muscle') ? '' : id)}
+          available={facets.data?.muscles.map((m) => m.id)}
+          primary={val('muscle') ? [val('muscle')] : []}
+          hideLegend
+        />
       </div>
 
       {user && !prefSet && (

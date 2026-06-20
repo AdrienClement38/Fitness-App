@@ -13,6 +13,12 @@ type Props = {
   className?: string;
   /** Si fourni, le corps devient cliquable : clic sur un muscle → onSelect(ourId). */
   onSelect?: (muscleId: string) => void;
+  /** Mode filtre : si fourni, les muscles ABSENTS de cette liste sont grisés (comme la
+   *  tête / les genoux) et NON cliquables — typiquement ceux sans exercice pour les
+   *  filtres actifs. `undefined` = tout cliquable (comportement par défaut). */
+  available?: string[];
+  /** Masque la légende « Principaux / Secondaires » (utile en mode filtre). */
+  hideLegend?: boolean;
 };
 
 // Zones dessinées par la lib mais qui NE sont PAS des muscles (tête, genoux) :
@@ -72,29 +78,36 @@ const BODY_COLOR = '#475569'; // slate-600 (muscle non sollicité)
 // 3 = muscle SANS exercice (gris foncé, ajouté 3× ci-dessous).
 const COLORS = ['#fca5a5', '#ef4444', '#1e293b'];
 
-export default function BodyMap({primary = [], secondary = [], className, onSelect}: Props) {
+export default function BodyMap({primary = [], secondary = [], className, onSelect, available, hideLegend}: Props) {
   const prim = map(primary);
   const sec = map(secondary);
+  // Mode filtre : on grise (comme tête/genoux) les slugs dont le muscle cible n'est PAS
+  // dans `available` (= aucun exercice pour les filtres actifs) → éteints + non cliquables.
+  const dimmedSlugs: Muscle[] = available
+    ? (Object.keys(SLUG_TO_MUSCLE) as Muscle[]).filter((slug) => !available.includes(SLUG_TO_MUSCLE[slug]))
+    : [];
+  const inert = [...NON_MUSCLE_SLUGS, ...dimmedSlugs];
   const data: IExerciseData[] = [
     {name: 'primaires', muscles: prim},
     {name: 'primaires', muscles: prim}, // compté 2× → rouge
     {name: 'secondaires', muscles: sec}, // compté 1× → rouge clair
-    // compté 3× → COLORS[2] (gris foncé) : zones non-muscles (tête, genoux), inertes
-    {name: 'inertes', muscles: NON_MUSCLE_SLUGS},
-    {name: 'inertes', muscles: NON_MUSCLE_SLUGS},
-    {name: 'inertes', muscles: NON_MUSCLE_SLUGS},
+    // compté 3× → COLORS[2] (gris foncé) : non-muscles (tête, genoux) + muscles indisponibles
+    {name: 'inertes', muscles: inert},
+    {name: 'inertes', muscles: inert},
+    {name: 'inertes', muscles: inert},
   ];
 
-  // head/knees ne sont pas dans SLUG_TO_MUSCLE → le clic est déjà ignoré (id undefined).
+  // Clic ignoré sur head/knees (id undefined) ET sur les muscles grisés (non disponibles).
   const handleClick = onSelect
     ? (e: IMuscleStats) => {
         const id = SLUG_TO_MUSCLE[e.muscle];
-        if (id) onSelect(id);
+        if (!id || (available && !available.includes(id))) return;
+        onSelect(id);
       }
     : undefined;
   const svgStyle = onSelect ? {cursor: 'pointer'} : undefined;
 
-  const showLegend = primary.length > 0 || secondary.length > 0;
+  const showLegend = !hideLegend && (primary.length > 0 || secondary.length > 0);
   // Interactif (sélection de muscle) : silhouettes agrandies pour faciliter le tap
   // sur mobile -> elles remplissent la largeur (chacune ~moitié, plafonnée). Sinon
   // (affichage seul, ex. fiche exercice) : taille compacte fixe.

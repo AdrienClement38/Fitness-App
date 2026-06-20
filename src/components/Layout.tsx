@@ -1,5 +1,5 @@
 import {Suspense} from 'react';
-import {Activity, BookOpen, ClipboardList, Dumbbell, Home, LineChart, User, Wrench} from 'lucide-react';
+import {BookOpen, ClipboardList, Dumbbell, Home, LineChart, User, Wrench} from 'lucide-react';
 import {NavLink, Outlet, useLocation} from 'react-router-dom';
 import {useAuth} from '../lib/auth';
 import {useAppStatus} from '../lib/appStatus';
@@ -14,7 +14,6 @@ const tabs = [
   {to: '/exercices', label: 'Exercices', icon: Dumbbell, end: false},
   {to: '/programmes', label: 'Programmes', icon: ClipboardList, end: false},
   {to: '/suivi', label: 'Suivi', icon: LineChart, end: false},
-  {to: '/muscles', label: 'Muscles', icon: Activity, end: false},
   {to: '/savoir', label: 'Savoir', icon: BookOpen, end: false},
 ];
 
