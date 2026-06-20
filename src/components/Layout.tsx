@@ -70,7 +70,7 @@ export default function Layout() {
       )}
       <EmailVerifyBanner />
 
-      <main className="flex-1 px-4 pb-24 pt-4">
+      <main className="flex-1 px-4 pb-24 pt-4 ios-standalone:pb-[calc(6rem_+_env(safe-area-inset-bottom))]">
         {blockForMaintenance ? (
           <div className="flex flex-col items-center justify-center gap-3 py-24 text-center">
             <Wrench className="h-10 w-10 text-orange-400" />
@@ -85,7 +85,7 @@ export default function Layout() {
       </main>
 
       {user && !blockForMaintenance && (
-        <nav className="fixed inset-x-0 bottom-0 z-10 border-t border-slate-800 bg-slate-950/95 backdrop-blur">
+        <nav className="fixed inset-x-0 bottom-0 z-10 border-t border-slate-800 bg-slate-950/95 ios-standalone:pb-[env(safe-area-inset-bottom)] backdrop-blur">
           <div className="mx-auto flex max-w-2xl">
             {tabs.map(({to, label, icon: Icon, end}) => (
               <NavLink
