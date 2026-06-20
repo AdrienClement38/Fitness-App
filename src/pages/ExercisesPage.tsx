@@ -110,20 +110,30 @@ export default function ExercisesPage() {
         className="w-full rounded-xl border border-slate-800 bg-slate-900 px-4 py-3 text-sm outline-none placeholder:text-slate-500 focus:border-emerald-500/60"
       />
 
-      {/* Niveau en haut : sélecteur segmenté (cohérent avec Programmes / Muscles). */}
+      {/* Niveau : sélecteur segmenté contextuel. « Tous » (id vide) reste toujours actif ;
+          un niveau sans exercice pour les filtres en cours (type/matériel/muscle) est grisé
+          et non cliquable — comme les options absentes des selects. */}
       <div className="mt-3 flex gap-1 rounded-xl bg-slate-900 p-1">
-        {LEVELS.map((lv) => (
-          <button
-            key={lv.id || 'all'}
-            type="button"
-            onClick={() => setParam('level', lv.id)}
-            className={`flex-1 rounded-lg py-2 text-sm font-medium transition-colors ${
-              val('level') === lv.id ? 'bg-emerald-500/20 text-emerald-300' : 'text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            {lv.label}
-          </button>
-        ))}
+        {LEVELS.map((lv) => {
+          const disabled = lv.id !== '' && !!facets.data && !facets.data.levels.includes(lv.id);
+          return (
+            <button
+              key={lv.id || 'all'}
+              type="button"
+              disabled={disabled}
+              onClick={() => setParam('level', lv.id)}
+              className={`flex-1 rounded-lg py-2 text-sm font-medium transition-colors ${
+                val('level') === lv.id
+                  ? 'bg-emerald-500/20 text-emerald-300'
+                  : disabled
+                    ? 'cursor-not-allowed text-slate-700'
+                    : 'text-slate-400 hover:text-slate-200'
+              }`}
+            >
+              {lv.label}
+            </button>
+          );
+        })}
       </div>
 
       {/* Filtres : Favoris · Type · Matériel · Muscles. */}

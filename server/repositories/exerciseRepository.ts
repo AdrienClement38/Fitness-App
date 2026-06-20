@@ -259,14 +259,14 @@ export async function getFacets() {
  * filtre -> catalogue complet (meme sortie que getFacets).
  */
 export async function getContextualFacets(f: ExerciseFilters) {
-  const build = (exclude: 'category' | 'equipment' | 'muscle') => {
+  const build = (exclude: 'category' | 'equipment' | 'muscle' | 'level') => {
     const c = [];
     if (f.ids && f.ids.length) c.push(inArray(exercises.id, f.ids)); // mode favoris
     if (f.search?.trim()) {
       const qq = `%${f.search.trim()}%`;
       c.push(or(ilike(exercises.nameFr, qq), ilike(exercises.nameEn, qq)));
     }
-    if (f.level) c.push(eq(exercises.level, f.level));
+    if (exclude !== 'level' && f.level) c.push(eq(exercises.level, f.level));
     if (f.force) c.push(eq(exercises.force, f.force));
     if (f.mechanic) c.push(eq(exercises.mechanic, f.mechanic));
     if (exclude !== 'category' && f.category) c.push(eq(exercises.category, f.category));
@@ -283,7 +283,7 @@ export async function getContextualFacets(f: ExerciseFilters) {
     return c.length ? and(...c) : undefined;
   };
 
-  const [cats, equipRows, muscleRows] = await Promise.all([
+  const [cats, equipRows, muscleRows, levelRows] = await Promise.all([
     db.selectDistinct({v: exercises.category}).from(exercises).where(build('category')),
     db.selectDistinct({v: exercises.equipmentId}).from(exercises).where(build('equipment')),
     db
@@ -291,6 +291,7 @@ export async function getContextualFacets(f: ExerciseFilters) {
       .from(exerciseMuscles)
       .innerJoin(exercises, eq(exercises.id, exerciseMuscles.exerciseId))
       .where(build('muscle')),
+    db.selectDistinct({v: exercises.level}).from(exercises).where(build('level')),
   ]);
 
   const equipIds = equipRows.map((r) => r.v).filter((x): x is string => !!x);
@@ -302,10 +303,15 @@ export async function getContextualFacets(f: ExerciseFilters) {
     ? await db.select({id: muscles.id, nameFr: muscles.nameFr, groupId: muscles.groupId}).from(muscles).where(inArray(muscles.id, muscleIds)).orderBy(asc(muscles.nameFr))
     : [];
 
+  // Niveaux CONTEXTUELS : seuls ceux ayant >= 1 exercice pour les autres filtres,
+  // dans l'ordre canonique (le client grise/desactive les niveaux absents).
+  const LEVEL_ORDER = ['beginner', 'intermediate', 'advanced'];
+  const levelVals = new Set(levelRows.map((r) => r.v).filter((x): x is string => !!x));
+
   return {
     muscles: muscleList,
     equipment: equipmentList,
-    levels: ['beginner', 'intermediate', 'advanced'],
+    levels: LEVEL_ORDER.filter((l) => levelVals.has(l)),
     forces: ['push', 'pull', 'static'],
     categories: cats.map((r) => r.v).filter((x): x is string => !!x).sort(),
   };
