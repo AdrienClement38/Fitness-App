@@ -22,13 +22,13 @@ export default function AffinerHubPage() {
         <ArrowLeft className="h-4 w-4" /> Accueil
       </Link>
       <h1 className="text-xl font-bold">M'affiner</h1>
-      <p className="mt-1 text-sm text-slate-400">Perdre du gras et galber tes zones — la méthode qui marche vraiment.</p>
+      <p className="mt-1 text-sm text-slate-400">Muscle la zone que tu veux galber, révèle-la en baissant ton gras global.</p>
 
       <div className="mt-4">
         <FatLossFraming note={note} />
       </div>
 
-      <SectionTitle>Cible une zone</SectionTitle>
+      <SectionTitle>Choisis une zone à travailler</SectionTitle>
       <div className="grid grid-cols-2 gap-2.5">
         {zones.map((z) => (
           <Link

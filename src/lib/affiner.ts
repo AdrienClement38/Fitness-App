@@ -92,9 +92,9 @@ export function orderedZones(gender: Gender | null | undefined): AffinerZone[] {
 
 // Cadrage anti-mythe, identique pour tous (la science ne dépend pas du sexe).
 export const FRAMING = {
-  title: "Le gras part où il veut, pas où tu cibles",
+  title: 'Muscle vs gras : comment ça marche',
   body:
-    "La perte de gras ciblée est un mythe : aucun exercice ne fait fondre la graisse d'un endroit précis. Ce qui dévoile une zone, c'est baisser ton gras GLOBAL (déficit alimentaire + cardio + gros mouvements). Le travail ciblé, lui, renforce et galbe le muscle — visible une fois le gras réduit.",
+    "Deux leviers, deux rôles : tu muscles la zone pour la galber (ça, c'est local et ça marche), et tu baisses ton gras GLOBAL (déficit + cardio + gros mouvements) pour la révéler. Ce qui n'existe pas, c'est faire fondre le gras d'un seul endroit en l'entraînant — aucun exercice ne déstocke localement.",
   footnote:
     "Le travail local renforce et galbe le muscle, mais ne brûle pas le gras au-dessus. Le gras part de façon générale, dans un ordre dicté par ta génétique et tes hormones — pas par l'exercice choisi.",
 };
