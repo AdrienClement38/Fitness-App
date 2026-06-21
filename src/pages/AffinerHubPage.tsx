@@ -21,8 +21,10 @@ export default function AffinerHubPage() {
       <Link to="/" className="mb-3 flex items-center gap-1 text-sm text-slate-400 hover:text-slate-200">
         <ArrowLeft className="h-4 w-4" /> Accueil
       </Link>
-      <h1 className="text-xl font-bold">M'affiner</h1>
-      <p className="mt-1 text-sm text-slate-400">Muscle la zone que tu veux galber, révèle-la en baissant ton gras global.</p>
+      <h1 className="text-xl font-bold">Me sculpter</h1>
+      <p className="mt-1 text-sm text-slate-400">
+        Muscle et galbe la zone qui te tient à cœur — le gras qui la couvre, lui, part en t'affinant globalement.
+      </p>
 
       <div className="mt-4">
         <FatLossFraming note={note} />

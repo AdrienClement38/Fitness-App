@@ -1,13 +1,13 @@
 import type {Gender} from './api';
 
 /**
- * Module « M'affiner / perdre du gras ».
+ * Module « Me sculpter » (ex-« M'affiner » ; route interne /affiner).
  *
  * Principe NON négociable (cf. recherche sourcée) : la perte de gras ciblée est un
  * MYTHE. On ne fait pas fondre une zone en l'entraînant — la perte est GLOBALE
  * (déficit + cardio + gros mouvements). Le travail local muscle/galbe la zone, visible
- * une fois le gras réduit. Tous les libellés respectent ça : jamais « perdre le gras de
- * [zone] », toujours « tonifier / galber ».
+ * une fois le gras réduit. D'où le nom « sculpter » (le muscle) et non « affiner » (le
+ * gras) : jamais « perdre le gras de [zone] », toujours « tonifier / galber ».
  *
  * Les zones sont adossées aux muscles réellement présents en base (filtre
  * /exercices?muscle=<ids>, qui accepte une liste séparée par des virgules).

@@ -1,7 +1,7 @@
 /**
  * Collections d'exercices CURÉES (presets), affichables via /exercices?preset=<clé>.
  *
- * Le module « M'affiner » s'en sert pour « Gros mouvements dépensiers » : une liste
+ * Le module « Me sculpter » s'en sert pour « Gros mouvements dépensiers » : une liste
  * courte et triée de VRAIS gros mouvements poly-articulaires. On ne peut pas la générer
  * par filtre — le champ mechanic=compound du dataset est trop bruité (il étiquette
  * « compound » des isolations d'abdos/bras → 300+ résultats). On cure donc à la main,
