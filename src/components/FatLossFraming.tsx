@@ -1,4 +1,4 @@
-import {ChevronDown, Info} from 'lucide-react';
+import {AlertTriangle, ChevronDown, Info} from 'lucide-react';
 import {FRAMING} from '../lib/affiner';
 
 /**
@@ -25,6 +25,11 @@ export default function FatLossFraming({note, compact}: {note?: string | null; c
       </summary>
       <div className="px-4 pb-4">
         <p className="text-sm leading-relaxed text-slate-300">{FRAMING.body}</p>
+        {/* Avertissement santé sur le déficit (modéré/contrôlé, danger si trop agressif). */}
+        <div className="mt-2.5 flex gap-2 rounded-lg border border-amber-500/25 bg-amber-500/10 p-2.5 text-xs leading-relaxed text-amber-200/90">
+          <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-400" />
+          <span>{FRAMING.deficitNote}</span>
+        </div>
         {note && <p className="mt-2.5 text-sm leading-relaxed text-slate-400">{note}</p>}
       </div>
     </details>

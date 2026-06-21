@@ -95,6 +95,10 @@ export const FRAMING = {
   title: 'Muscle vs gras : comment ça marche',
   body:
     "Deux leviers, deux rôles : tu muscles la zone pour la galber (ça, c'est local et ça marche), et tu baisses ton gras GLOBAL (déficit + cardio + gros mouvements) pour la révéler. Ce qui n'existe pas, c'est faire fondre le gras d'un seul endroit en l'entraînant — aucun exercice ne déstocke localement.",
+  // Avertissement santé sur le déficit calorique : modéré/contrôlé, et danger si trop agressif.
+  // Vérifié (workflow) : aucun chiffre ni protocole de restriction (risque TCA), renvoi vers un pro.
+  deficitNote:
+    "Le déficit calorique est le moteur de la perte de gras, mais il doit rester modéré et adapté à tes besoins — d'autant plus que tu t'entraînes : ton corps a besoin de carburant pour récupérer et préserver ton muscle. Un déficit trop agressif est contre-productif (fonte musculaire, fatigue, perfs et hormones en berne) et peut nuire à ta santé : vise une perte lente et régulière, et demande l'avis d'un médecin ou d'un diététicien au moindre doute.",
   footnote:
     "Le travail local renforce et galbe le muscle, mais ne brûle pas le gras au-dessus. Le gras part de façon générale, dans un ordre dicté par ta génétique et tes hormones — pas par l'exercice choisi.",
 };
@@ -103,8 +107,8 @@ export const FRAMING = {
 // à reconnaître le ressenti de l'utilisateur, jamais à promettre une perte ciblée.
 export function genderNote(gender: Gender | null | undefined): string | null {
   if (gender === 'male')
-    return "Chez les hommes, le gras se loge surtout sur le ventre (graisse viscérale) — un enjeu de santé en plus de l'esthétique, et souvent la zone qui part en dernier.";
+    return "Chez les hommes, le gras se loge en moyenne surtout sur le ventre, avec une part de graisse viscérale autour des organes — un enjeu de santé en plus de l'esthétique. Bonne nouvelle : cette graisse viscérale est métaboliquement active et répond plutôt bien, et assez tôt, à l'entraînement combiné à un déficit raisonnable. Ce qui s'attarde, c'est le sous-cutané du bas-ventre et des poignées d'amour, plus tenace — pas la viscérale.";
   if (gender === 'female')
-    return "Chez les femmes, le gras se loge plutôt sur les hanches, cuisses et fessiers — une réserve naturelle, souvent la dernière à partir. C'est normal, pas un échec.";
+    return "Chez les femmes, le gras se loge en moyenne plutôt sur les hanches, les cuisses et les fessiers — une réserve glutéo-fémorale liée aux œstrogènes, que le corps garde longtemps. C'est en moyenne la dernière zone à partir, et c'est parfaitement naturel : de la physiologie, pas un échec. Elle finit par s'affiner avec le reste, simplement plus tard que les autres.";
   return null;
 }

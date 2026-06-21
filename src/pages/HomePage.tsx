@@ -9,7 +9,7 @@ import Logo from '../components/Logo';
 
 // Accès unique à l'accueil (le cardio, lui, est un exercice -> onglet Exercices).
 const browseCards = [
-  {to: '/affiner', icon: Flame, title: 'Me sculpter', desc: 'Galbe le muscle de tes zones ; révèle-les en perdant du gras globalement.'},
+  {to: '/affiner', icon: Flame, title: 'Me sculpter', desc: 'Galbe le muscle de tes zones — révèle-les en perdant du gras.'},
   {to: '/recuperation', icon: Leaf, title: 'Récupération & étirements', desc: 'Étirements et automassages, pour après la séance.'},
 ];
 
