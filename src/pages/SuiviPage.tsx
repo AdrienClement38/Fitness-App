@@ -140,12 +140,11 @@ export default function SuiviPage() {
             {history.map((log) => {
               const vol = logVolume(log);
               const dur = durationMinutes(log);
-              return (
-                <Link
-                  key={log.id}
-                  to={`/suivi/${log.id}`}
-                  className="block rounded-xl border border-slate-800 bg-slate-900/50 p-4 transition-colors hover:border-slate-700 hover:bg-slate-900"
-                >
+              // Séance d'un seul exercice -> la carte mène à sa fiche (pour le relancer).
+              // Multi-exercices -> carte simple (pas de cible unique évidente).
+              const single = log.exercises.length === 1 ? log.exercises[0] : null;
+              const body = (
+                <>
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
                       <h3 className="font-semibold">{log.sessionName}</h3>
@@ -156,7 +155,7 @@ export default function SuiviPage() {
                     </div>
                     <button
                       onClick={(e) => {
-                        e.preventDefault(); // ne pas suivre le lien de la carte
+                        e.preventDefault(); // ne pas suivre le lien éventuel de la carte
                         e.stopPropagation();
                         if (confirm('Supprimer cette séance de l’historique ?')) deleteLog(log.id);
                       }}
@@ -172,7 +171,20 @@ export default function SuiviPage() {
                     {vol > 0 && <Badge tone="indigo">{vol.toLocaleString('fr-FR')} kg de volume</Badge>}
                     {dur != null && <Badge>{dur} min</Badge>}
                   </div>
+                </>
+              );
+              return single ? (
+                <Link
+                  key={log.id}
+                  to={`/exercices/${single.exerciseId}`}
+                  className="block rounded-xl border border-slate-800 bg-slate-900/50 p-4 transition-colors hover:border-slate-700 hover:bg-slate-900"
+                >
+                  {body}
                 </Link>
+              ) : (
+                <div key={log.id} className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+                  {body}
+                </div>
               );
             })}
           </div>
