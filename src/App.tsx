@@ -25,6 +25,7 @@ const AffinerZonePage = lazy(() => import('./pages/AffinerZonePage'));
 const MyProgramPage = lazy(() => import('./pages/MyProgramPage'));
 const MyProgramDetailPage = lazy(() => import('./pages/MyProgramDetailPage'));
 const SuiviPage = lazy(() => import('./pages/SuiviPage'));
+const SessionLogPage = lazy(() => import('./pages/SessionLogPage'));
 const WorkoutPage = lazy(() => import('./pages/WorkoutPage'));
 const PostSessionPage = lazy(() => import('./pages/PostSessionPage'));
 const KnowledgePage = lazy(() => import('./pages/KnowledgePage'));
@@ -80,6 +81,7 @@ export default function App() {
           <Route path="/mes-programmes/:id" element={<MyProgramDetailPage />} />
           <Route path="/mes-programmes/:id/modifier" element={<MyProgramPage />} />
           <Route path="/suivi" element={<SuiviPage />} />
+          <Route path="/suivi/:logId" element={<SessionLogPage />} />
           <Route path="/seance" element={<WorkoutPage />} />
           <Route path="/seance/fin" element={<PostSessionPage />} />
           <Route

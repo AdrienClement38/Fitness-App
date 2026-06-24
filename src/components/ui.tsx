@@ -42,6 +42,16 @@ export function SectionTitle({children}: {children: ReactNode}) {
   return <h2 className="mb-2 mt-6 font-heading text-lg uppercase tracking-wider text-slate-300">{children}</h2>;
 }
 
+/** Petit carré de stat (valeur en avant + légende). Utilisé sur Accueil et Suivi. */
+export function StatCard({label, value, title}: {label: string; value: string | number; title?: string}) {
+  return (
+    <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-center" title={title}>
+      <div className="truncate text-lg font-bold tabular-nums text-emerald-300">{value}</div>
+      <div className="mt-0.5 truncate text-xs text-slate-500">{label}</div>
+    </div>
+  );
+}
+
 /** Interrupteur (on/off) — toute la ligne est cliquable. Réglage par appareil. */
 export function ToggleSwitch({checked, onChange, label, srLabel}: {checked: boolean; onChange: (v: boolean) => void; label: ReactNode; srLabel?: string}) {
   return (

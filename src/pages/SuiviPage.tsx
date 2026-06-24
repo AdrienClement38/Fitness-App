@@ -2,11 +2,11 @@ import {useMemo, useState} from 'react';
 import {Play, Trash2} from 'lucide-react';
 import {Link} from 'react-router-dom';
 import {deleteLog, logVolume, setsDone, useActiveWorkout, useWorkoutHistory} from '../lib/workoutLogs';
-import {combineRecords, durationMinutes, exerciseStats, progression, summary, weeklyVolume} from '../lib/stats';
+import {combineRecords, durationMinutes, exerciseStats, progression, recordLabel, summary, weeklyVolume} from '../lib/stats';
 import {useRecords} from '../lib/records';
 import type {MeasureKind} from '../lib/api';
 import {BarChart, LineChart} from '../components/Charts';
-import {Badge, Empty, SectionTitle} from '../components/ui';
+import {Badge, Empty, SectionTitle, StatCard} from '../components/ui';
 
 const fmtDay = (iso: string) => new Date(iso).toLocaleDateString('fr-FR', {weekday: 'short', day: 'numeric', month: 'short'});
 const fmtShort = (iso: string) => new Date(iso).toLocaleDateString('fr-FR', {day: '2-digit', month: '2-digit'});
@@ -20,21 +20,6 @@ const progCaption = (k: MeasureKind): string =>
       : k === 'duration'
         ? 'Meilleure durée par séance (secondes)'
         : 'Meilleure durée par séance (minutes)';
-const recordLabel = (s: {kind: MeasureKind; heaviest: {weight: number; reps: number} | null; bestValue: number | null}): string => {
-  if (s.kind === 'load') return s.heaviest ? `${s.heaviest.weight} kg × ${s.heaviest.reps}` : '–';
-  if (s.bestValue == null) return '–';
-  return `${s.bestValue}${s.kind === 'duration' ? ' s' : s.kind === 'cardio' ? ' min' : ' reps'}`;
-};
-
-function StatCard({label, value}: {label: string; value: string | number}) {
-  return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-center">
-      <div className="text-lg font-bold tabular-nums text-emerald-300">{value}</div>
-      <div className="mt-0.5 text-xs text-slate-500">{label}</div>
-    </div>
-  );
-}
-
 export default function SuiviPage() {
   const active = useActiveWorkout();
   const history = useWorkoutHistory();
@@ -156,7 +141,11 @@ export default function SuiviPage() {
               const vol = logVolume(log);
               const dur = durationMinutes(log);
               return (
-                <div key={log.id} className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+                <Link
+                  key={log.id}
+                  to={`/suivi/${log.id}`}
+                  className="block rounded-xl border border-slate-800 bg-slate-900/50 p-4 transition-colors hover:border-slate-700 hover:bg-slate-900"
+                >
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0">
                       <h3 className="font-semibold">{log.sessionName}</h3>
@@ -166,7 +155,9 @@ export default function SuiviPage() {
                       </p>
                     </div>
                     <button
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.preventDefault(); // ne pas suivre le lien de la carte
+                        e.stopPropagation();
                         if (confirm('Supprimer cette séance de l’historique ?')) deleteLog(log.id);
                       }}
                       aria-label="Supprimer la séance"
@@ -181,7 +172,7 @@ export default function SuiviPage() {
                     {vol > 0 && <Badge tone="indigo">{vol.toLocaleString('fr-FR')} kg de volume</Badge>}
                     {dur != null && <Badge>{dur} min</Badge>}
                   </div>
-                </div>
+                </Link>
               );
             })}
           </div>

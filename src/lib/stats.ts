@@ -233,6 +233,13 @@ export function betterRecord(a: ExerciseRecord | undefined, b: ExerciseRecord): 
   };
 }
 
+/** Libellé d'affichage d'un record dans son unité (kg×reps / s / min / reps). */
+export function recordLabel(s: {kind: MeasureKind; heaviest: {weight: number; reps: number} | null; bestValue: number | null}): string {
+  if (s.kind === 'load') return s.heaviest ? `${s.heaviest.weight} kg × ${s.heaviest.reps}` : '–';
+  if (s.bestValue == null) return '–';
+  return `${s.bestValue}${s.kind === 'duration' ? ' s' : s.kind === 'cardio' ? ' min' : ' reps'}`;
+}
+
 export interface DisplayRecord {
   exerciseId: string;
   name: string;

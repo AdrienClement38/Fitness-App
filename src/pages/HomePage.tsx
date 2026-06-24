@@ -1,10 +1,12 @@
-import {ClipboardList, Flame, Leaf, LineChart, Play, Search} from 'lucide-react';
-import {useState, type FormEvent} from 'react';
+import {ClipboardList, Flame, Leaf, Play, Search} from 'lucide-react';
+import {useMemo, useState, type FormEvent} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {useActiveWorkout, useWorkoutHistory} from '../lib/workoutLogs';
 import {useMyPrograms} from '../lib/myPrograms';
-import {summary} from '../lib/stats';
+import {combineRecords, exerciseStats, recordLabel, summary} from '../lib/stats';
+import {useRecords} from '../lib/records';
 import {useAuth} from '../lib/auth';
+import {StatCard} from '../components/ui';
 import Logo from '../components/Logo';
 
 // Accès unique à l'accueil (le cardio, lui, est un exercice -> onglet Exercices).
@@ -21,6 +23,11 @@ export default function HomePage() {
   const myPrograms = useMyPrograms();
   const history = useWorkoutHistory();
   const stats = summary(history);
+  // Record « signature » = l'exercice le plus travaillé (records triés par fréquence),
+  // affiché dans son unité (kg×reps / min / s / reps). All-time (inclut les séances purgées).
+  const storeRecords = useRecords();
+  const records = useMemo(() => combineRecords(exerciseStats(history), storeRecords), [history, storeRecords]);
+  const topRecord = records[0] ?? null;
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
@@ -65,23 +72,17 @@ export default function HomePage() {
         </Link>
       )}
 
-      {/* Aperçu suivi */}
+      {/* Aperçu suivi : 3 stats clés (tap -> /suivi). Le bouton « Suivi » est déjà dans la nav,
+          donc ici on montre de la valeur (stats) plutôt qu'un second lien redondant. */}
       {stats.sessions > 0 && (
-        <Link
-          to="/suivi"
-          className="mt-3 flex items-center gap-4 rounded-2xl border border-slate-800 bg-slate-900/50 p-4 transition-colors hover:border-slate-700 hover:bg-slate-900"
-        >
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-emerald-500/15 text-emerald-400">
-            <LineChart className="h-5 w-5" />
-          </div>
-          <div className="min-w-0">
-            <h2 className="font-semibold">
-              {stats.sessions} séance{stats.sessions > 1 ? 's' : ''}
-            </h2>
-            <p className="text-sm text-slate-400">
-              {stats.thisWeek > 0 ? `${stats.thisWeek} cette semaine — ` : ''}voir ta progression
-            </p>
-          </div>
+        <Link to="/suivi" className="mt-4 grid grid-cols-3 gap-2" aria-label="Voir mon suivi">
+          <StatCard label="Séances" value={stats.sessions} />
+          <StatCard label="Cette semaine" value={stats.thisWeek} />
+          <StatCard
+            label={topRecord ? topRecord.name : 'Record'}
+            value={topRecord ? recordLabel(topRecord) : '—'}
+            title={topRecord ? `Record · ${topRecord.name}` : undefined}
+          />
         </Link>
       )}
 
