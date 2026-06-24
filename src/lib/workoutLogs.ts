@@ -40,6 +40,11 @@ export interface WorkoutLog {
   finishedIso: string | null;
   programName: string | null;
   sessionName: string;
+  // Référence du programme d'origine -> relancer la séance depuis l'historique du Suivi.
+  // programMine: true = programme perso (/mes-programmes/:id) ; false/absent = curated
+  // (/programmes/:id). Absents sur les logs d'avant (fallback par nom dans le Suivi).
+  programId?: string | null;
+  programMine?: boolean;
   exercises: LoggedExercise[];
   rest?: RestState | null; // séance active uniquement
   updatedAt?: string; // pour la sync (last-write-wins)
@@ -49,6 +54,8 @@ export interface WorkoutLog {
 export interface SessionSeed {
   programName: string | null;
   sessionName: string;
+  programId?: string | null;
+  programMine?: boolean;
   exercises: {
     exerciseId: string;
     nameFr: string | null;
@@ -159,6 +166,8 @@ export function startSession(seed: SessionSeed): string {
     finishedIso: null,
     programName: seed.programName,
     sessionName: seed.sessionName,
+    programId: seed.programId ?? null,
+    programMine: seed.programMine ?? false,
     exercises: seed.exercises.map((e) => {
       const count = e.sets && e.sets > 0 ? e.sets : 1;
       const w = lastWeight(e.exerciseId);

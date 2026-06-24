@@ -1,7 +1,8 @@
 import {useMemo, useState} from 'react';
 import {Play, Trash2} from 'lucide-react';
 import {Link} from 'react-router-dom';
-import {deleteLog, logVolume, setsDone, useActiveWorkout, useWorkoutHistory} from '../lib/workoutLogs';
+import {deleteLog, logVolume, setsDone, useActiveWorkout, useWorkoutHistory, type WorkoutLog} from '../lib/workoutLogs';
+import {useMyPrograms, type MyProgram} from '../lib/myPrograms';
 import {combineRecords, durationMinutes, exerciseStats, progression, recordLabel, summary, weeklyVolume} from '../lib/stats';
 import {useRecords} from '../lib/records';
 import type {MeasureKind} from '../lib/api';
@@ -20,9 +21,30 @@ const progCaption = (k: MeasureKind): string =>
       : k === 'duration'
         ? 'Meilleure durée par séance (secondes)'
         : 'Meilleure durée par séance (minutes)';
+/**
+ * Cible du clic sur une séance d'historique : on relance la SÉANCE (son programme).
+ *  - programId stocké (nouveaux logs) : perso -> /mes-programmes/:id si le programme
+ *    existe encore (sinon null = « n'existe plus ») ; curated -> /programmes/:id.
+ *  - vieux logs sans id : on retrouve un programme PERSO par nom (+ séance par nom).
+ * Renvoie null si la séance n'est plus rattachable (programme supprimé) -> l'appelant
+ * retombe alors sur la fiche de l'exercice (séance mono) ou rend la carte non cliquable.
+ */
+function sessionHref(log: WorkoutLog, myPrograms: MyProgram[]): string | null {
+  if (log.programId) {
+    if (log.programMine) return myPrograms.some((p) => p.id === log.programId) ? `/mes-programmes/${log.programId}` : null;
+    return `/programmes/${log.programId}`;
+  }
+  if (log.programName) {
+    const p = myPrograms.find((mp) => mp.nameFr === log.programName && mp.sessions.some((s) => s.nameFr === log.sessionName));
+    return p ? `/mes-programmes/${p.id}` : null;
+  }
+  return null;
+}
+
 export default function SuiviPage() {
   const active = useActiveWorkout();
   const history = useWorkoutHistory();
+  const myPrograms = useMyPrograms();
 
   const stats = useMemo(() => exerciseStats(history), [history]);
   const sum = useMemo(() => summary(history), [history]);
@@ -140,9 +162,10 @@ export default function SuiviPage() {
             {history.map((log) => {
               const vol = logVolume(log);
               const dur = durationMinutes(log);
-              // Séance d'un seul exercice -> la carte mène à sa fiche (pour le relancer).
-              // Multi-exercices -> carte simple (pas de cible unique évidente).
+              // Cible du clic : la SÉANCE (son programme) si rattachable ; sinon, pour une séance
+              // d'un seul exercice, sa fiche (pour le relancer) ; sinon carte non cliquable.
               const single = log.exercises.length === 1 ? log.exercises[0] : null;
+              const href = sessionHref(log, myPrograms) ?? (single ? `/exercices/${single.exerciseId}` : null);
               const body = (
                 <>
                   <div className="flex items-start justify-between gap-2">
@@ -173,10 +196,10 @@ export default function SuiviPage() {
                   </div>
                 </>
               );
-              return single ? (
+              return href ? (
                 <Link
                   key={log.id}
-                  to={`/exercices/${single.exerciseId}`}
+                  to={href}
                   className="block rounded-xl border border-slate-800 bg-slate-900/50 p-4 transition-colors hover:border-slate-700 hover:bg-slate-900"
                 >
                   {body}

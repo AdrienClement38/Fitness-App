@@ -40,6 +40,8 @@ export default function MyProgramDetailPage() {
     startSession({
       programName: p.nameFr,
       sessionName: s.nameFr,
+      programId: p.id,
+      programMine: true,
       exercises: s.exercises.map((e) => ({
         exerciseId: e.exerciseId,
         nameFr: e.nameFr,
