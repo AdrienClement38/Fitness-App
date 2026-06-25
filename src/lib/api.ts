@@ -371,6 +371,7 @@ export const api = {
 export interface PublicAppStatus {
   announcement: {message: string; tone: 'info' | 'warn'} | null;
   maintenance: {active: boolean; message: string};
+  googleAuth?: boolean; // « Continuer avec Google » disponible (OAuth configuré côté serveur)
 }
 
 export type Gender = 'male' | 'female';

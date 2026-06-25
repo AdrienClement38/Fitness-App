@@ -5,6 +5,7 @@ import {changePassword, deleteAccount, login, logout, register, setEquipment, se
 import {authApi, type Gender} from '../lib/api';
 import {GYM_TOKEN, HOME_EQUIPMENT} from '../lib/equipment';
 import {useSyncConnected} from '../lib/sync';
+import {useAppStatus} from '../lib/appStatus';
 import {exportMyData} from '../lib/exportData';
 import {setExplanations, setStretchSuggestions, useExplanations, useStretchSuggestions} from '../lib/settings';
 import {setWeightKg, useProfile} from '../lib/userProfile';
@@ -482,6 +483,17 @@ export default function AccountPage() {
   const [website, setWebsite] = useState(''); // honeypot anti-bot (reste vide pour un humain)
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const {googleAuth} = useAppStatus();
+  // Retour d'un échec OAuth Google (le callback redirige vers /compte?error=...).
+  const googleErr = new URLSearchParams(location.search).get('error');
+  const googleErrMsg =
+    googleErr === 'google_unverified'
+      ? "Ce compte Google n'a pas d'email vérifié — impossible de l'utiliser."
+      : googleErr === 'google_off'
+        ? "La connexion Google n'est pas disponible pour le moment."
+        : googleErr && googleErr.startsWith('google')
+          ? 'La connexion Google a échoué. Réessaie.'
+          : '';
 
   if (loading) return <Loading />;
 
@@ -571,6 +583,10 @@ export default function AccountPage() {
           : 'Crée ton compte (gratuit) pour accéder à l’application : tes séances, programmes et favoris te suivent partout.'}
       </p>
 
+      {googleErrMsg && (
+        <p className="mt-3 rounded-lg border border-red-900/50 bg-red-950/30 px-3 py-2 text-sm text-red-300">{googleErrMsg}</p>
+      )}
+
       <form onSubmit={submit} className="mt-4 grid gap-3">
         {/* Honeypot anti-bot : hors écran, ignoré des humains, rempli par les bots -> inscription rejetée. */}
         <div aria-hidden="true" style={{position: 'absolute', left: '-5000px'}}>
@@ -659,6 +675,24 @@ export default function AccountPage() {
           {busy ? '…' : mode === 'login' ? 'Se connecter' : 'Créer le compte'}
         </button>
       </form>
+
+      {googleAuth && (
+        <div className="mt-4">
+          <div className="flex items-center gap-3 text-xs text-slate-500">
+            <span className="h-px flex-1 bg-slate-800" />
+            ou
+            <span className="h-px flex-1 bg-slate-800" />
+          </div>
+          {/* Vraie navigation (pas un <Link> SPA) : /api/auth/google est servi par Express. */}
+          <a
+            href="/api/auth/google"
+            className="mt-3 flex items-center justify-center gap-2 rounded-lg border border-slate-700 bg-slate-900 py-2.5 text-sm font-medium text-slate-200 transition-colors hover:bg-slate-800"
+          >
+            <span aria-hidden="true" className="text-base font-bold leading-none">G</span>
+            Continuer avec Google
+          </a>
+        </div>
+      )}
 
       <button
         onClick={() => {

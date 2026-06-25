@@ -32,6 +32,7 @@ import {
   verifyEmailByToken,
 } from '../repositories/userRepository';
 import {isEmailConfigured, sendPasswordResetEmail, sendVerificationEmail} from '../email';
+import {exchangeCodeForIdentity, googleAuthUrl, googleConfigured} from '../google';
 import {isDisposableEmail} from '../disposableEmails';
 import {closeUserSockets, notifyUser} from '../sync';
 import {sanitizeEquipment} from '../../src/lib/equipment';
@@ -155,6 +156,62 @@ router.post('/login', async (req, res) => {
     gender: user.gender,
     equipment: user.equipment,
   });
+});
+
+/* ---- « Sign in with Google » (OAuth 2.0) -------------------------------- */
+const GOOGLE_STATE_COOKIE = 'sds_oauth_state';
+const googleRedirectUri = (req: {protocol: string; get: (h: string) => string | undefined}) =>
+  `${appBase(req)}/api/auth/google/callback`;
+
+// Lance le flux : pose un cookie `state` (anti-CSRF) puis redirige vers le consentement Google.
+router.get('/google', (req, res) => {
+  if (!googleConfigured()) return res.redirect('/compte?error=google_off');
+  if (rateLimited(`goog:${req.ip}`, 30)) return res.redirect('/compte?error=google');
+  const state = newToken();
+  res.cookie(GOOGLE_STATE_COOKIE, state, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+    maxAge: 10 * 60 * 1000,
+  });
+  return res.redirect(googleAuthUrl(googleRedirectUri(req), state));
+});
+
+// Retour de Google : vérifie le `state`, échange le code, lie/crée le compte (par email),
+// ouvre une session. Le rattachement par email vérifié est sûr (Google a prouvé la propriété).
+router.get('/google/callback', async (req, res) => {
+  res.clearCookie(GOOGLE_STATE_COOKIE, {path: '/'});
+  try {
+    if (!googleConfigured()) return res.redirect('/compte?error=google_off');
+    const code = typeof req.query.code === 'string' ? req.query.code : '';
+    const state = typeof req.query.state === 'string' ? req.query.state : '';
+    const cookieState = parseCookies(req.headers.cookie)[GOOGLE_STATE_COOKIE];
+    if (!code || !state || !cookieState || state !== cookieState) return res.redirect('/compte?error=google');
+
+    const id = await exchangeCodeForIdentity(code, googleRedirectUri(req));
+    if (!id.emailVerified) return res.redirect('/compte?error=google_unverified');
+
+    let user = await getUserByEmail(id.email);
+    if (!user) {
+      // Compte créé via Google : mot de passe aléatoire INUTILISABLE (l'utilisateur ne le
+      // connaît pas) ; email réputé vérifié (Google l'a vérifié). Il pourra définir un mot de
+      // passe plus tard via « mot de passe oublié » s'il veut aussi la connexion email.
+      user = await createUser(id.email, await hashPassword(newToken()), undefined, undefined, null, null);
+      await markUserVerified(user.id);
+      const role: 'user' | 'admin' = adminEmails().includes(id.email) ? 'admin' : 'user';
+      if (role !== user.role) await setUserRole(user.id, role);
+    } else if (!user.emailVerified) {
+      await markUserVerified(user.id); // Google prouve la propriété de l'email -> on régularise
+    }
+    const token = newToken();
+    await createSession(user.id, token, sessionExpiry());
+    res.cookie(SESSION_COOKIE, token, cookieOptions());
+    return res.redirect('/');
+  } catch (e) {
+    console.error('[google] callback échoué :', (e as Error).message);
+    return res.redirect('/compte?error=google');
+  }
 });
 
 const verifyBody = z.object({token: z.string().min(1).max(256)});

@@ -6,6 +6,7 @@
  * chaque écriture admin. Instance unique sur AlwaysData → cache simple suffisant.
  */
 import {getSetting, setSetting} from './repositories/settingsRepository';
+import {googleConfigured} from './google';
 
 export interface Announcement {
   message: string;
@@ -53,6 +54,8 @@ export function getPublicAppStatus() {
       active: maintenance.active,
       message: maintenance.message.trim() || DEFAULT_MAINTENANCE_MSG,
     },
+    // Le client n'affiche le bouton « Continuer avec Google » que si l'OAuth est configuré.
+    googleAuth: googleConfigured(),
   };
 }
 
