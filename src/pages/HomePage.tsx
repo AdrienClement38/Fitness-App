@@ -3,8 +3,7 @@ import {useMemo, useState, type FormEvent} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {useActiveWorkout, useWorkoutHistory} from '../lib/workoutLogs';
 import {useMyPrograms} from '../lib/myPrograms';
-import {combineRecords, exerciseStats, recordLabel, summary} from '../lib/stats';
-import {useRecords} from '../lib/records';
+import {durationMinutes, summary} from '../lib/stats';
 import {useAuth} from '../lib/auth';
 import {StatCard} from '../components/ui';
 import Logo from '../components/Logo';
@@ -15,6 +14,14 @@ const browseCards = [
   {to: '/recuperation', icon: Leaf, title: 'Récupération & étirements', desc: 'Étirements et automassages, pour après la séance.'},
 ];
 
+// Temps en séance compact : « 45 min » sous l'heure, sinon « 1h05 » / « 2h ».
+const fmtDuration = (min: number): string => {
+  if (min < 60) return `${min} min`;
+  const h = Math.floor(min / 60);
+  const m = min % 60;
+  return m ? `${h}h${String(m).padStart(2, '0')}` : `${h}h`;
+};
+
 export default function HomePage() {
   const [q, setQ] = useState('');
   const navigate = useNavigate();
@@ -23,11 +30,8 @@ export default function HomePage() {
   const myPrograms = useMyPrograms();
   const history = useWorkoutHistory();
   const stats = summary(history);
-  // Record « signature » = l'exercice le plus travaillé (records triés par fréquence),
-  // affiché dans son unité (kg×reps / min / s / reps). All-time (inclut les séances purgées).
-  const storeRecords = useRecords();
-  const records = useMemo(() => combineRecords(exerciseStats(history), storeRecords), [history, storeRecords]);
-  const topRecord = records[0] ?? null;
+  // Temps total passé en séance (somme des durées chronométrées ; 0 si chrono non lancé).
+  const totalMin = useMemo(() => history.reduce((a, l) => a + (durationMinutes(l) ?? 0), 0), [history]);
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
@@ -78,11 +82,7 @@ export default function HomePage() {
         <Link to="/suivi" className="mt-4 grid grid-cols-3 gap-2" aria-label="Voir mon suivi">
           <StatCard label="Séances" value={stats.sessions} />
           <StatCard label="Cette semaine" value={stats.thisWeek} />
-          <StatCard
-            label={topRecord ? topRecord.name : 'Record'}
-            value={topRecord ? recordLabel(topRecord) : '—'}
-            title={topRecord ? `Record · ${topRecord.name}` : undefined}
-          />
+          <StatCard label="Temps total" value={fmtDuration(totalMin)} />
         </Link>
       )}
 
