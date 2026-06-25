@@ -8,3 +8,4 @@ import './favorites';
 import './workoutLogs';
 import './myPrograms';
 import './records';
+import './userProfile';

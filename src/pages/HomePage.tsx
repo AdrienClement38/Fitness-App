@@ -4,6 +4,8 @@ import {Link, useNavigate} from 'react-router-dom';
 import {useActiveWorkout, useWorkoutHistory} from '../lib/workoutLogs';
 import {useMyPrograms} from '../lib/myPrograms';
 import {durationMinutes, summary} from '../lib/stats';
+import {useProfile} from '../lib/userProfile';
+import {defaultWeightKg, kcalSince, startOfMonthIso, startOfWeekIso} from '../lib/calories';
 import {useAuth} from '../lib/auth';
 import {StatCard} from '../components/ui';
 import Logo from '../components/Logo';
@@ -32,6 +34,11 @@ export default function HomePage() {
   const stats = summary(history);
   // Temps total passé en séance (somme des durées chronométrées ; 0 si chrono non lancé).
   const totalMin = useMemo(() => history.reduce((a, l) => a + (durationMinutes(l) ?? 0), 0), [history]);
+  // Calories estimées (METs) : poids saisi sinon gabarit moyen par sexe. Semaine + mois.
+  const profile = useProfile();
+  const weightKg = profile.weightKg ?? defaultWeightKg(user?.gender);
+  const kcalWeek = useMemo(() => kcalSince(history, startOfWeekIso(), weightKg), [history, weightKg]);
+  const kcalMonth = useMemo(() => kcalSince(history, startOfMonthIso(), weightKg), [history, weightKg]);
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
@@ -84,6 +91,44 @@ export default function HomePage() {
           <StatCard label="Cette semaine" value={stats.thisWeek} />
           <StatCard label="Temps total" value={fmtDuration(totalMin)} />
         </Link>
+      )}
+
+      {/* Calories brûlées (estimation METs) : semaine + mois. */}
+      {stats.sessions > 0 && (
+        <div className="mt-3 rounded-2xl border border-slate-800 bg-slate-900/50 p-4">
+          <div className="flex items-center gap-2">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-orange-500/15 text-orange-400">
+              <Flame className="h-5 w-5" />
+            </span>
+            <h2 className="font-semibold">
+              Calories brûlées <span className="text-xs font-normal text-slate-500">· estimation</span>
+            </h2>
+          </div>
+          <div className="mt-3 flex gap-3">
+            <div className="flex-1 rounded-xl border border-slate-800 bg-slate-950/40 p-3 text-center">
+              <div className="text-lg font-bold tabular-nums text-orange-300">≈ {kcalWeek.toLocaleString('fr-FR')}</div>
+              <div className="mt-0.5 text-xs text-slate-500">kcal cette semaine</div>
+            </div>
+            <div className="flex-1 rounded-xl border border-slate-800 bg-slate-950/40 p-3 text-center">
+              <div className="text-lg font-bold tabular-nums text-orange-300">≈ {kcalMonth.toLocaleString('fr-FR')}</div>
+              <div className="mt-0.5 text-xs text-slate-500">kcal ce mois</div>
+            </div>
+          </div>
+          <p className="mt-2.5 text-xs leading-relaxed text-slate-500">
+            {profile.weightKg ? (
+              `Estimation selon ton poids (${profile.weightKg} kg), `
+            ) : (
+              <>
+                Estimation selon un gabarit moyen{user?.gender === 'female' ? ' femme' : user?.gender === 'male' ? ' homme' : ''} (~{weightKg} kg) —{' '}
+                <Link to="/compte" className="font-medium text-emerald-400 hover:underline">
+                  renseigne ton poids
+                </Link>{' '}
+                pour affiner. Indicative,{' '}
+              </>
+            )}
+            ±25 %, hors intensité réelle.
+          </p>
+        </div>
       )}
 
       {/* Mes programmes */}

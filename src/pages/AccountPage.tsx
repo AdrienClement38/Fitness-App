@@ -7,6 +7,7 @@ import {GYM_TOKEN, HOME_EQUIPMENT} from '../lib/equipment';
 import {useSyncConnected} from '../lib/sync';
 import {exportMyData} from '../lib/exportData';
 import {setExplanations, setStretchSuggestions, useExplanations, useStretchSuggestions} from '../lib/settings';
+import {setWeightKg, useProfile} from '../lib/userProfile';
 import {Loading, ToggleSwitch} from '../components/ui';
 
 const inputClass =
@@ -318,6 +319,54 @@ function GenderPref() {
   );
 }
 
+/** Poids (kg) optionnel dans « Mon compte » : affine l'estimation des calories. Synchronisé. */
+function WeightPref() {
+  const profile = useProfile();
+  const [val, setVal] = useState(profile.weightKg != null ? String(profile.weightKg) : '');
+  const sentRef = useRef(profile.weightKg);
+  // Aligne le champ si le poids change ailleurs (autre appareil).
+  useEffect(() => {
+    if (profile.weightKg !== sentRef.current) {
+      sentRef.current = profile.weightKg;
+      setVal(profile.weightKg != null ? String(profile.weightKg) : '');
+    }
+  }, [profile.weightKg]);
+  const commit = (raw: string) => {
+    const n = parseFloat(raw.replace(',', '.'));
+    const next = Number.isFinite(n) && n >= 30 && n <= 300 ? Math.round(n) : null;
+    sentRef.current = next;
+    setVal(next != null ? String(next) : '');
+    setWeightKg(next);
+  };
+  return (
+    <div className="mt-3 rounded-xl border border-slate-800 bg-slate-900/50 p-4">
+      <p className="text-sm font-medium">Mon poids</p>
+      <p className="mt-0.5 text-xs text-slate-500">
+        Sert à estimer les calories dépensées. Optionnel — sinon on part d'un gabarit moyen. La taille n'entre pas dans ce calcul.
+      </p>
+      <div className="mt-2 flex items-center gap-2">
+        <input
+          type="number"
+          inputMode="numeric"
+          min={30}
+          max={300}
+          value={val}
+          onChange={(e) => setVal(e.target.value)}
+          onBlur={(e) => commit(e.target.value)}
+          placeholder="ex. 75"
+          className="w-24 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-sm outline-none focus:border-emerald-500/60"
+        />
+        <span className="text-sm text-slate-400">kg</span>
+        {profile.weightKg != null && (
+          <button type="button" onClick={() => commit('')} className="ml-auto text-xs text-slate-500 hover:text-slate-300">
+            Effacer
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
 /**
  * Choix du matériel accessible (salle + équipements maison). Présentation pure :
  * utilisé à l'inscription (état local) ET dans « Mon compte » (sauvegarde immédiate).
@@ -472,6 +521,7 @@ export default function AccountPage() {
         )}
 
         <GenderPref />
+        <WeightPref />
         <EquipmentPref />
         <ExplanationsPref />
         <StretchPref />
