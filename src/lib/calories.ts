@@ -74,6 +74,49 @@ export function kcalSince(logs: WorkoutLog[], sinceIso: string, weightKg: number
   return logs.reduce((a, l) => (logDate(l) >= sinceIso ? a + sessionKcal(l, weightKg) : a), 0);
 }
 
+/** Temps total (minutes) sur toutes les séances (chrono si dispo, sinon estimé). */
+export function totalMinutes(logs: WorkoutLog[]): number {
+  return logs.reduce((a, l) => a + sessionMinutes(l), 0);
+}
+
+const weekKey = (iso: string): string => {
+  const d = new Date(iso);
+  const day = (d.getDay() + 6) % 7; // 0 = lundi
+  d.setDate(d.getDate() - day);
+  d.setHours(0, 0, 0, 0);
+  return d.toISOString().slice(0, 10);
+};
+
+/** Temps (minutes) agrégé par semaine, du plus ancien au plus récent. */
+export function weeklyMinutes(logs: WorkoutLog[]): {weekStartIso: string; minutes: number}[] {
+  const map = new Map<string, number>();
+  for (const log of logs) {
+    const wk = weekKey(logDate(log));
+    map.set(wk, (map.get(wk) ?? 0) + sessionMinutes(log));
+  }
+  return [...map.entries()]
+    .map(([weekStartIso, minutes]) => ({weekStartIso, minutes}))
+    .sort((a, b) => (a.weekStartIso < b.weekStartIso ? -1 : 1));
+}
+
+/**
+ * Métrique dominante : 'time' si l'utilisateur fait surtout des exercices au CHRONO
+ * (cardio + tenue/isométrie), 'volume' s'il fait surtout du POIDS (charge). Le poids du
+ * corps (reps, ni chrono ni charge) ne tranche pas. Défaut 'volume' (cas le plus courant).
+ */
+export function dominantMetric(logs: WorkoutLog[]): 'volume' | 'time' {
+  let chrono = 0;
+  let weight = 0;
+  for (const log of logs) {
+    for (const ex of log.exercises) {
+      const done = ex.sets.filter((s) => s.done).length;
+      if (ex.kind === 'load') weight += done;
+      else if (ex.kind === 'cardio' || ex.kind === 'duration') chrono += done;
+    }
+  }
+  return chrono > weight ? 'time' : 'volume';
+}
+
 /** Début (lundi 00:00, heure locale) de la semaine courante, en ISO. */
 export function startOfWeekIso(): string {
   const d = new Date();

@@ -3,9 +3,10 @@ import {useMemo, useState, type FormEvent} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {useActiveWorkout, useWorkoutHistory} from '../lib/workoutLogs';
 import {useMyPrograms} from '../lib/myPrograms';
-import {durationMinutes, summary} from '../lib/stats';
+import {summary} from '../lib/stats';
 import {useProfile} from '../lib/userProfile';
-import {defaultWeightKg, kcalSince, startOfMonthIso, startOfWeekIso} from '../lib/calories';
+import {defaultWeightKg, kcalSince, startOfMonthIso, startOfWeekIso, totalMinutes} from '../lib/calories';
+import {humanMinutes} from '../lib/time';
 import {useAuth} from '../lib/auth';
 import {StatCard} from '../components/ui';
 import Logo from '../components/Logo';
@@ -16,14 +17,6 @@ const browseCards = [
   {to: '/recuperation', icon: Leaf, title: 'Récupération & étirements', desc: 'Étirements et automassages, pour après la séance.'},
 ];
 
-// Temps en séance compact : « 45 min » sous l'heure, sinon « 1h05 » / « 2h ».
-const fmtDuration = (min: number): string => {
-  if (min < 60) return `${min} min`;
-  const h = Math.floor(min / 60);
-  const m = min % 60;
-  return m ? `${h}h${String(m).padStart(2, '0')}` : `${h}h`;
-};
-
 export default function HomePage() {
   const [q, setQ] = useState('');
   const navigate = useNavigate();
@@ -32,8 +25,8 @@ export default function HomePage() {
   const myPrograms = useMyPrograms();
   const history = useWorkoutHistory();
   const stats = summary(history);
-  // Temps total passé en séance (somme des durées chronométrées ; 0 si chrono non lancé).
-  const totalMin = useMemo(() => history.reduce((a, l) => a + (durationMinutes(l) ?? 0), 0), [history]);
+  // Temps total passé en séance (chrono si dispo, sinon estimé depuis les séries).
+  const totalMin = useMemo(() => totalMinutes(history), [history]);
   // Calories estimées (METs) : poids saisi sinon gabarit moyen par sexe. Semaine + mois.
   const profile = useProfile();
   const weightKg = profile.weightKg ?? defaultWeightKg(user?.gender);
@@ -89,7 +82,7 @@ export default function HomePage() {
         <Link to="/suivi" className="mt-4 grid grid-cols-3 gap-2" aria-label="Voir mon suivi">
           <StatCard label="Séances" value={stats.sessions} />
           <StatCard label="Cette semaine" value={stats.thisWeek} />
-          <StatCard label="Temps total" value={fmtDuration(totalMin)} />
+          <StatCard label="Temps total" value={humanMinutes(totalMin)} />
         </Link>
       )}
 

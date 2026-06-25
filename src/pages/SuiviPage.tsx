@@ -4,6 +4,8 @@ import {Link} from 'react-router-dom';
 import {deleteLog, logVolume, setsDone, useActiveWorkout, useWorkoutHistory, type WorkoutLog} from '../lib/workoutLogs';
 import {useMyPrograms, type MyProgram} from '../lib/myPrograms';
 import {combineRecords, durationMinutes, exerciseStats, progression, recordLabel, summary, weeklyVolume} from '../lib/stats';
+import {dominantMetric, totalMinutes, weeklyMinutes} from '../lib/calories';
+import {humanMinutes} from '../lib/time';
 import {useRecords} from '../lib/records';
 import type {MeasureKind} from '../lib/api';
 import {BarChart, LineChart} from '../components/Charts';
@@ -49,6 +51,10 @@ export default function SuiviPage() {
   const stats = useMemo(() => exerciseStats(history), [history]);
   const sum = useMemo(() => summary(history), [history]);
   const weeks = useMemo(() => weeklyVolume(history), [history]);
+  // Métrique dominante : poids (volume kg) vs chrono (temps). Les stats agrégées s'y adaptent.
+  const metric = useMemo(() => dominantMetric(history), [history]);
+  const totalMin = useMemo(() => totalMinutes(history), [history]);
+  const weekMinutes = useMemo(() => weeklyMinutes(history), [history]);
   // Records all-time : meilleur entre l'historique courant et le store persistant (qui retient les séances purgées).
   const storeRecords = useRecords();
   const records = useMemo(() => combineRecords(stats, storeRecords), [stats, storeRecords]);
@@ -98,7 +104,11 @@ export default function SuiviPage() {
           <div className="mt-4 grid grid-cols-3 gap-2">
             <StatCard label="Séances" value={sum.sessions} />
             <StatCard label="Cette semaine" value={sum.thisWeek} />
-            <StatCard label="Volume total" value={`${(sum.totalVolume / 1000).toFixed(1)} t`} />
+            {metric === 'time' ? (
+              <StatCard label="Temps total" value={humanMinutes(totalMin)} />
+            ) : (
+              <StatCard label="Volume total" value={`${(sum.totalVolume / 1000).toFixed(1)} t`} />
+            )}
           </div>
 
           {/* Progression */}
@@ -146,12 +156,19 @@ export default function SuiviPage() {
             </div>
           </section>
 
-          {/* Volume hebdo */}
-          {weeks.length > 1 && (
+          {/* Hebdo : volume (kg) pour le poids, temps (min) pour le chrono — selon la métrique dominante. */}
+          {(metric === 'time' ? weekMinutes : weeks).length > 1 && (
             <section>
-              <SectionTitle>Volume par semaine</SectionTitle>
+              <SectionTitle>{metric === 'time' ? 'Temps par semaine' : 'Volume par semaine'}</SectionTitle>
               <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-3">
-                <BarChart data={weeks.slice(-8).map((w) => ({label: fmtShort(w.weekStartIso), value: w.volume}))} unit=" kg" />
+                <BarChart
+                  data={
+                    metric === 'time'
+                      ? weekMinutes.slice(-8).map((w) => ({label: fmtShort(w.weekStartIso), value: w.minutes}))
+                      : weeks.slice(-8).map((w) => ({label: fmtShort(w.weekStartIso), value: w.volume}))
+                  }
+                  unit={metric === 'time' ? ' min' : ' kg'}
+                />
               </div>
             </section>
           )}
