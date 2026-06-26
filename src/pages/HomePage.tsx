@@ -1,11 +1,10 @@
-import {CalendarDays, ChevronRight, ClipboardList, Flame, Leaf, Play, Search} from 'lucide-react';
+import {ClipboardList, Flame, Leaf, Play, Search} from 'lucide-react';
 import {useMemo, useState, type FormEvent} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {useActiveWorkout, useWorkoutHistory} from '../lib/workoutLogs';
 import {useMyPrograms} from '../lib/myPrograms';
 import {summary} from '../lib/stats';
 import {useProfile} from '../lib/userProfile';
-import {DAY_LABELS, nextPlanned, useWeeklyPlan} from '../lib/weeklyPlan';
 import {defaultWeightKg, kcalSince, startOfMonthIso, startOfWeekIso, totalMinutes} from '../lib/calories';
 import {humanMinutes} from '../lib/time';
 import {useAuth} from '../lib/auth';
@@ -33,10 +32,6 @@ export default function HomePage() {
   const weightKg = profile.weightKg ?? defaultWeightKg(user?.gender);
   const kcalWeek = useMemo(() => kcalSince(history, startOfWeekIso(), weightKg), [history, weightKg]);
   const kcalMonth = useMemo(() => kcalSince(history, startOfMonthIso(), weightKg), [history, weightKg]);
-  // Planning hebdo : prochaine séance planifiée (carte d'accès -> /planning).
-  const plan = useWeeklyPlan();
-  const nextSess = useMemo(() => nextPlanned(plan), [plan]);
-  const whenNext = nextSess ? (nextSess.inDays === 0 ? " · aujourd'hui" : nextSess.inDays === 1 ? ' · demain' : '') : '';
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
@@ -78,36 +73,6 @@ export default function HomePage() {
           <span className="flex shrink-0 items-center gap-1 text-sm font-medium text-emerald-300">
             <Play className="h-4 w-4" /> Reprendre
           </span>
-        </Link>
-      )}
-
-      {/* Planning hebdo : prochaine séance, ou invitation à planifier sa semaine. */}
-      {nextSess ? (
-        <Link
-          to="/planning"
-          className="mt-4 flex items-center justify-between gap-2 rounded-2xl border border-slate-800 bg-slate-900/50 p-4 transition-colors hover:border-emerald-700/50"
-        >
-          <span className="min-w-0">
-            <span className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-slate-500">
-              <CalendarDays className="h-3.5 w-3.5" /> Prochaine séance
-            </span>
-            <span className="mt-0.5 block truncate text-sm font-semibold text-slate-200">{nextSess.slot.sessionName}</span>
-            <span className="block truncate text-xs text-slate-500">
-              {DAY_LABELS[nextSess.day]}
-              {whenNext} · {nextSess.slot.programName}
-            </span>
-          </span>
-          <ChevronRight className="h-5 w-5 shrink-0 text-slate-500" />
-        </Link>
-      ) : (
-        <Link
-          to="/planning"
-          className="mt-4 flex items-center justify-between gap-2 rounded-2xl border border-dashed border-slate-700 bg-slate-900/30 p-4 text-slate-400 transition-colors hover:border-emerald-700/50 hover:text-slate-200"
-        >
-          <span className="flex items-center gap-2 text-sm font-medium">
-            <CalendarDays className="h-4 w-4" /> Planifie ta semaine
-          </span>
-          <ChevronRight className="h-5 w-5 shrink-0" />
         </Link>
       )}
 

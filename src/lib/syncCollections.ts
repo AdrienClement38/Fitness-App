@@ -9,4 +9,3 @@ import './workoutLogs';
 import './myPrograms';
 import './records';
 import './userProfile';
-import './weeklyPlan';
