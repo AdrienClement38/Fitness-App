@@ -27,6 +27,11 @@ export default function HomePage() {
   const stats = summary(history);
   // Temps total passé en séance (chrono si dispo, sinon estimé depuis les séries).
   const totalMin = useMemo(() => totalMinutes(history), [history]);
+  // Exercices réalisés cette semaine (1re case du résumé) — fenêtre = semaine en cours (lun.).
+  const exosThisWeek = useMemo(() => {
+    const since = startOfWeekIso();
+    return history.filter((l) => (l.finishedIso ?? l.startedIso ?? '') >= since).reduce((n, l) => n + l.exercises.length, 0);
+  }, [history]);
   // Calories estimées (METs) : poids saisi sinon gabarit moyen par sexe. Semaine + mois.
   const profile = useProfile();
   const weightKg = profile.weightKg ?? defaultWeightKg(user?.gender);
@@ -80,8 +85,8 @@ export default function HomePage() {
           donc ici on montre de la valeur (stats) plutôt qu'un second lien redondant. */}
       {stats.sessions > 0 && (
         <Link to="/suivi" className="mt-4 grid grid-cols-3 gap-2" aria-label="Voir mon suivi">
+          <StatCard label="Exercices/sem." value={exosThisWeek} />
           <StatCard label="Séances" value={stats.sessions} />
-          <StatCard label="Cette semaine" value={stats.thisWeek} />
           <StatCard label="Temps total" value={humanMinutes(totalMin)} />
         </Link>
       )}
