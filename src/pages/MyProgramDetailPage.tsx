@@ -80,9 +80,9 @@ export default function MyProgramDetailPage() {
       <div className="mt-4 grid gap-4">
         {p.sessions.map((s, si) => (
           <div key={si} className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
-            <div className="flex items-baseline justify-between gap-2">
+            <div>
               <h2 className="font-semibold">{s.nameFr}</h2>
-              {s.focusFr && <span className="text-right text-xs text-slate-500">{s.focusFr}</span>}
+              {s.focusFr && <p className="mt-0.5 text-xs leading-relaxed text-slate-500">{s.focusFr}</p>}
             </div>
 
             {s.exercises.length === 0 ? (
