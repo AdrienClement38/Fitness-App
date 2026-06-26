@@ -6,6 +6,7 @@ import {
   getSplits,
   getVolumeLandmarks,
 } from '../repositories/knowledgeRepository';
+import {cacheStatic} from '../cache';
 
 const router = Router();
 
@@ -18,10 +19,10 @@ const handle = (fn: () => Promise<unknown>, label: string) => async (_req: unkno
   }
 };
 
-router.get('/principles', handle(getPrinciples, 'principles'));
-router.get('/rep-schemes', handle(getRepSchemes, 'rep-schemes'));
-router.get('/volume-landmarks', handle(getVolumeLandmarks, 'volume-landmarks'));
-router.get('/splits', handle(getSplits, 'splits'));
-router.get('/sources', handle(getSources, 'sources'));
+router.get('/principles', cacheStatic(), handle(getPrinciples, 'principles'));
+router.get('/rep-schemes', cacheStatic(), handle(getRepSchemes, 'rep-schemes'));
+router.get('/volume-landmarks', cacheStatic(), handle(getVolumeLandmarks, 'volume-landmarks'));
+router.get('/splits', cacheStatic(), handle(getSplits, 'splits'));
+router.get('/sources', cacheStatic(), handle(getSources, 'sources'));
 
 export default router;

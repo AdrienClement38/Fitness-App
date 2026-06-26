@@ -2,11 +2,12 @@ import {Router} from 'express';
 import {getProgramById, listPrograms} from '../repositories/programRepository';
 import {getUserFromRequest} from '../auth';
 import {hasEquipmentPref} from '../../src/lib/equipment';
+import {cacheEquipmentList, cacheStatic} from '../cache';
 
 const router = Router();
 
 // GET /api/programs — liste des programmes (+ drapeau « faisable » si matériel renseigné).
-router.get('/', async (req, res) => {
+router.get('/', cacheEquipmentList(), async (req, res) => {
   try {
     const user = await getUserFromRequest(req);
     // Préférence renseignée (même vide = « zéro matériel ») -> faisabilité calculée ; sinon neutre.
@@ -19,7 +20,7 @@ router.get('/', async (req, res) => {
 });
 
 // GET /api/programs/:id — programme détaillé (séances + exercices).
-router.get('/:id', async (req, res) => {
+router.get('/:id', cacheStatic(), async (req, res) => {
   try {
     const program = await getProgramById(req.params.id);
     if (!program) {

@@ -1,10 +1,11 @@
 import {Router} from 'express';
 import {getMuscleById, listMuscles} from '../repositories/muscleRepository';
+import {cacheStatic} from '../cache';
 
 const router = Router();
 
 // GET /api/muscles — liste (avec groupe).
-router.get('/', async (_req, res) => {
+router.get('/', cacheStatic(), async (_req, res) => {
   try {
     res.json(await listMuscles());
   } catch (err) {
@@ -14,7 +15,7 @@ router.get('/', async (_req, res) => {
 });
 
 // GET /api/muscles/:id — fiche muscle + exercices ciblant ce muscle.
-router.get('/:id', async (req, res) => {
+router.get('/:id', cacheStatic(), async (req, res) => {
   try {
     const muscle = await getMuscleById(req.params.id);
     if (!muscle) {

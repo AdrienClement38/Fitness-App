@@ -2,6 +2,7 @@ import {Router} from 'express';
 import {getContextualFacets, getExerciseById, listExercises, stretchSuggestionsFor} from '../repositories/exerciseRepository';
 import {getUserFromRequest} from '../auth';
 import {hasEquipmentPref} from '../../src/lib/equipment';
+import {cacheEquipmentList, cacheStatic} from '../cache';
 
 const router = Router();
 
@@ -9,7 +10,7 @@ const router = Router();
 const q = (v: unknown): string | undefined => (typeof v === 'string' && v.trim() ? v : undefined);
 
 // GET /api/exercises/facets — valeurs disponibles pour les filtres.
-router.get('/facets', async (req, res) => {
+router.get('/facets', cacheStatic(), async (req, res) => {
   try {
     res.json(
       await getContextualFacets({
@@ -31,7 +32,7 @@ router.get('/facets', async (req, res) => {
 });
 
 // GET /api/exercises/stretch-suggestions?ids=... — étirements ciblant les muscles travaillés.
-router.get('/stretch-suggestions', async (req, res) => {
+router.get('/stretch-suggestions', cacheStatic(), async (req, res) => {
   try {
     const ids = q(req.query.ids)?.split(',').map((s) => s.trim()).filter(Boolean).slice(0, 60) ?? [];
     res.json({items: await stretchSuggestionsFor(ids)});
@@ -42,7 +43,7 @@ router.get('/stretch-suggestions', async (req, res) => {
 });
 
 // GET /api/exercises — liste filtrée + paginée.
-router.get('/', async (req, res) => {
+router.get('/', cacheEquipmentList(), async (req, res) => {
   try {
     // Matériel de l'utilisateur connecté (cookie de session) : si renseigné, la liste
     // remonte les exercices faisables en premier (mise en avant). Sinon liste neutre.
@@ -74,7 +75,7 @@ router.get('/', async (req, res) => {
 });
 
 // GET /api/exercises/:id — fiche détaillée.
-router.get('/:id', async (req, res) => {
+router.get('/:id', cacheStatic(), async (req, res) => {
   try {
     const exercise = await getExerciseById(req.params.id);
     if (!exercise) {
