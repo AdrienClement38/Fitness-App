@@ -1,5 +1,5 @@
 import {useEffect, useRef, useState} from 'react';
-import {Check, Minus, Play, Plus, Timer, X} from 'lucide-react';
+import {Check, Minus, Play, Plus, Timer, TrendingUp, X} from 'lucide-react';
 import {Link, useNavigate} from 'react-router-dom';
 import {mmss} from '../lib/time';
 import {
@@ -12,8 +12,10 @@ import {
   toggleSetDone,
   updateActive,
   useActiveWorkout,
+  useWorkoutHistory,
   type LoggedSet,
 } from '../lib/workoutLogs';
+import {overloadHint, type OverloadHint} from '../lib/overload';
 import {stretchSuggestionsEnabled} from '../lib/settings';
 
 function NumCell({
@@ -54,6 +56,7 @@ const hms = (s: number) => {
 export default function WorkoutPage() {
   const navigate = useNavigate();
   const w = useActiveWorkout();
+  const history = useWorkoutHistory(); // séances terminées -> suggestion de surcharge progressive
 
   // Tique chaque seconde pendant la séance : horloge + compte à rebours du repos.
   const [, setTick] = useState(0);
@@ -108,6 +111,15 @@ export default function WorkoutPage() {
     updateActive((d) => {
       d.exercises[ei].sets.splice(si, 1);
       if (d.rest && d.rest.ei === ei && d.rest.si === si) d.rest = null;
+    });
+  // Applique l'objectif de surcharge aux séries PAS ENCORE faites (on ne touche pas à l'historique de la séance).
+  const applyHint = (ei: number, hint: OverloadHint) =>
+    updateActive((d) => {
+      for (const s of d.exercises[ei].sets) {
+        if (s.done) continue;
+        if (hint.weight != null) s.weight = hint.weight;
+        s.reps = hint.reps;
+      }
     });
 
   const total = w.exercises.reduce((a, e) => a + e.sets.length, 0);
@@ -167,6 +179,7 @@ export default function WorkoutPage() {
           const cols = load
             ? 'grid grid-cols-[1.5rem_1fr_1fr_2.5rem_2rem] items-center gap-2'
             : 'grid grid-cols-[1.5rem_1fr_2.5rem_2rem] items-center gap-2';
+          const hint = overloadHint(e.kind, e.targetReps, history, e.exerciseId);
           return (
             <div key={ei} className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
               <div className="flex items-baseline justify-between gap-2">
@@ -180,6 +193,22 @@ export default function WorkoutPage() {
                   </span>
                 )}
               </div>
+
+              {/* Surcharge progressive : objectif déduit de ta dernière séance. Tap = pré-remplir. */}
+              {hint && (
+                <button
+                  type="button"
+                  onClick={() => applyHint(ei, hint)}
+                  className="mt-2 flex w-full items-center justify-between gap-2 rounded-lg border border-emerald-500/20 bg-emerald-500/5 px-2.5 py-1.5 text-left transition-colors hover:bg-emerald-500/10"
+                >
+                  <span className="flex min-w-0 items-center gap-1.5 text-xs">
+                    <TrendingUp className="h-3.5 w-3.5 shrink-0 text-emerald-400" />
+                    <span className="font-medium text-emerald-300">Vise {hint.text}</span>
+                    <span className="truncate text-slate-500">· dernière fois {hint.lastText}</span>
+                  </span>
+                  <span className="shrink-0 text-xs font-medium text-emerald-400">Appliquer</span>
+                </button>
+              )}
 
               <div className={`mt-3 ${cols} text-xs text-slate-500`}>
                 <span />
