@@ -77,3 +77,44 @@ export function useExplanations(): boolean {
     () => true,
   );
 }
+
+/* ---- Bip sonore de fin de repos (par appareil) ----------------------- */
+const SOUND_KEY = 'pref-rest-sound';
+
+function readSound(): boolean {
+  try {
+    const v = localStorage.getItem(SOUND_KEY);
+    return v === null ? true : v === '1'; // activé par défaut
+  } catch {
+    return true;
+  }
+}
+
+let soundValue = readSound();
+const soundListeners = new Set<() => void>();
+
+export function setRestSound(on: boolean) {
+  soundValue = on;
+  try {
+    localStorage.setItem(SOUND_KEY, on ? '1' : '0');
+  } catch {
+    /* quota / mode privé */
+  }
+  soundListeners.forEach((l) => l());
+}
+
+/** Lecture non réactive (au moment où le repos se termine). */
+export function restSoundEnabled(): boolean {
+  return soundValue;
+}
+
+export function useRestSound(): boolean {
+  return useSyncExternalStore(
+    (cb) => {
+      soundListeners.add(cb);
+      return () => soundListeners.delete(cb);
+    },
+    () => soundValue,
+    () => true,
+  );
+}

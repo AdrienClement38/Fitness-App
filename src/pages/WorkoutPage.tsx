@@ -1,5 +1,5 @@
 import {useEffect, useRef, useState} from 'react';
-import {Check, Minus, Play, Plus, Timer, TrendingUp, X} from 'lucide-react';
+import {Check, Minus, Play, Plus, Timer, TrendingUp, Volume2, VolumeX, X} from 'lucide-react';
 import {Link, useNavigate} from 'react-router-dom';
 import {mmss} from '../lib/time';
 import {
@@ -16,7 +16,9 @@ import {
   type LoggedSet,
 } from '../lib/workoutLogs';
 import {overloadHint, type OverloadHint} from '../lib/overload';
-import {stretchSuggestionsEnabled} from '../lib/settings';
+import {restSoundEnabled, setRestSound, stretchSuggestionsEnabled, useRestSound} from '../lib/settings';
+import {armAudio, beep} from '../lib/restAlert';
+import {useWakeLock} from '../lib/useWakeLock';
 
 function NumCell({
   value,
@@ -57,6 +59,8 @@ export default function WorkoutPage() {
   const navigate = useNavigate();
   const w = useActiveWorkout();
   const history = useWorkoutHistory(); // séances terminées -> suggestion de surcharge progressive
+  useWakeLock(!!w); // garde l'écran allumé pendant la séance -> l'alerte de fin de repos part à l'heure
+  const soundOn = useRestSound();
 
   // Tique chaque seconde pendant la séance : horloge + compte à rebours du repos.
   const [, setTick] = useState(0);
@@ -70,7 +74,8 @@ export default function WorkoutPage() {
   const rest = w?.rest ?? null;
   const remaining = rest ? rest.targetSeconds - Math.floor((now - Date.parse(rest.startedIso)) / 1000) : null;
 
-  // Vibre (mobile) au moment précis où le repos se termine.
+  // Alerte au moment précis où le repos se termine : vibration (Android) + bip (si activé).
+  // Le flash visuel, lui, est porté par la barre (classe animate-flash-alert quand restOver).
   const prevRemaining = useRef<number | null>(null);
   useEffect(() => {
     if (remaining != null && remaining <= 0 && prevRemaining.current != null && prevRemaining.current > 0) {
@@ -79,6 +84,7 @@ export default function WorkoutPage() {
       } catch {
         /* non supporté */
       }
+      if (restSoundEnabled()) beep();
     }
     prevRemaining.current = remaining;
   });
@@ -240,7 +246,10 @@ export default function WorkoutPage() {
                     <NumCell value={s.reps} onChange={(v) => setField(ei, si, {reps: v})} step={e.kind === 'duration' ? 5 : 1} placeholder={valLabel} />
                   )}
                   <button
-                    onClick={() => toggleSetDone(ei, si)}
+                    onClick={() => {
+                      armAudio(); // débloque l'audio sur ce geste -> le bip pourra sonner en fin de repos
+                      toggleSetDone(ei, si);
+                    }}
                     aria-label="Série faite (lance le repos)"
                     className={`mx-auto flex h-9 w-9 items-center justify-center rounded-full border transition-colors ${
                       s.done ? 'border-emerald-500 bg-emerald-500 text-slate-950' : 'border-slate-600 text-transparent hover:border-emerald-500'
@@ -283,10 +292,10 @@ export default function WorkoutPage() {
 
       {/* Minuteur de repos : barre flottante au-dessus de la nav. */}
       {rest && (
-        <div className="fixed inset-x-0 bottom-16 z-10 px-4">
+        <div className="fixed inset-x-0 bottom-20 z-10 px-4">
           <div
             className={`mx-auto max-w-2xl rounded-2xl border p-3 shadow-xl backdrop-blur ${
-              restOver ? 'border-emerald-500/60 bg-emerald-950/95' : 'border-slate-700 bg-slate-900/95'
+              restOver ? 'animate-flash-alert border-emerald-400 bg-emerald-950/95 ring-2 ring-emerald-400/70' : 'border-slate-700 bg-slate-900/95'
             }`}
           >
             {restOver ? (
@@ -312,6 +321,14 @@ export default function WorkoutPage() {
                     <p className="text-2xl font-bold tabular-nums">{mmss(remaining ?? 0)}</p>
                   </div>
                   <div className="flex shrink-0 items-center gap-1.5">
+                    <button
+                      onClick={() => setRestSound(!soundOn)}
+                      aria-label={soundOn ? 'Couper le bip de fin de repos' : 'Activer le bip de fin de repos'}
+                      title={soundOn ? 'Bip activé' : 'Bip coupé'}
+                      className={`flex items-center justify-center rounded-lg border border-slate-700 p-1.5 hover:bg-slate-800 ${soundOn ? 'text-emerald-300' : 'text-slate-500'}`}
+                    >
+                      {soundOn ? <Volume2 className="h-3.5 w-3.5" /> : <VolumeX className="h-3.5 w-3.5" />}
+                    </button>
                     <button
                       onClick={() => adjustRest(-15)}
                       className="flex items-center gap-0.5 rounded-lg border border-slate-700 px-2 py-1.5 text-xs text-slate-300 hover:bg-slate-800"

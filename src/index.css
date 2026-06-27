@@ -70,3 +70,17 @@ h1 {
 .bodymap-interactive svg polygon:hover {
   fill: #ef4444 !important;
 }
+
+/* Fin de repos : flash voyant de la barre de minuteur (en plus du bip + vibration). */
+@keyframes flash-alert {
+  0%,
+  100% {
+    background-color: rgba(5, 46, 22, 0.95); /* emerald-950/95 */
+  }
+  50% {
+    background-color: rgba(16, 185, 129, 0.45); /* emerald-500/45 */
+  }
+}
+.animate-flash-alert {
+  animation: flash-alert 0.7s ease-in-out infinite;
+}
