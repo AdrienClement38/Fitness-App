@@ -136,9 +136,10 @@ export default function WorkoutPage() {
   const start = () => startChrono();
   const finish = () => {
     const ids = [...new Set(w.exercises.map((e) => e.exerciseId))];
+    const logId = w.id;
     finishActive();
-    if (stretchSuggestionsEnabled()) navigate(`/seance/fin?ids=${encodeURIComponent(ids.join(','))}`);
-    else navigate('/suivi');
+    const idsParam = stretchSuggestionsEnabled() ? `ids=${encodeURIComponent(ids.join(','))}` : '';
+    navigate(`/seance/fin?${idsParam}&logId=${logId}`);
   };
   const abandon = () => {
     if (confirm('Abandonner la séance ? Rien ne sera enregistré.')) {
