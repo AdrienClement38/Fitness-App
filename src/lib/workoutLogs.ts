@@ -66,6 +66,8 @@ export interface SessionSeed {
     repsMax: number | null;
     restSeconds: number | null;
     weight?: number | null; // poids de base (programme perso) : pré-remplissage si aucun historique
+    progressive?: boolean;
+    setConfigs?: { repsMin: number | null; repsMax: number | null; weight: number | null }[] | null;
   }[];
 }
 
@@ -171,17 +173,22 @@ export function startSession(seed: SessionSeed): string {
     programMine: seed.programMine ?? false,
     exercises: seed.exercises.map((e) => {
       const count = e.sets && e.sets > 0 ? e.sets : 1;
-      // Poids de base du programme s'il est défini (plan explicite que l'utilisateur peut modifier) ;
-      // sinon dernier poids réellement loggé (progression — cas des programmes du catalogue, sans poids de base).
-      const w = e.weight ?? lastWeight(e.exerciseId) ?? null;
+      const sets = Array.from({length: count}, (_, index) => {
+        const config = e.setConfigs?.[index];
+        const reps = config?.repsMin ?? e.repsMin;
+        const weight = config?.weight ?? e.weight ?? lastWeight(e.exerciseId) ?? null;
+        return { weight, reps, done: false };
+      });
       return {
         exerciseId: e.exerciseId,
         nameFr: e.nameFr,
         nameEn: e.nameEn,
-        targetReps: repsLabel(e.repsMin, e.repsMax),
+        targetReps: e.setConfigs && e.setConfigs.length > 0
+          ? e.setConfigs.map(sc => sc.repsMin ?? '–').join('/')
+          : repsLabel(e.repsMin, e.repsMax),
         kind: e.kind,
         restSeconds: e.restSeconds,
-        sets: Array.from({length: count}, () => ({weight: w, reps: e.repsMin, done: false})),
+        sets,
       };
     }),
   };
@@ -344,6 +351,9 @@ export function setsDone(log: WorkoutLog): number {
 
 export function useActiveWorkout(): WorkoutLog | null {
   return useSyncExternalStore(subscribe, () => active, () => active);
+}
+export function getActiveWorkout(): WorkoutLog | null {
+  return active;
 }
 export function useWorkoutHistory(): WorkoutLog[] {
   return useSyncExternalStore(subscribe, () => history, () => history);

@@ -17,6 +17,17 @@ function unitSuffix(e: MyProgramExercise): string {
   return u ? ` ${u}` : '';
 }
 
+function formatProgressiveDetails(e: MyProgramExercise): string | null {
+  if (!e.progressive || !e.setConfigs || e.setConfigs.length === 0) return null;
+  const isLoad = measureKind(e) === 'load';
+  const parts = e.setConfigs.map((cfg, idx) => {
+    const wStr = isLoad && cfg.weight != null ? `${cfg.weight} kg` : '';
+    const rStr = cfg.repsMin != null ? `${cfg.repsMin} reps` : '';
+    return `${idx + 1}: ${wStr && rStr ? `${wStr} × ${rStr}` : wStr || rStr || '–'}`;
+  });
+  return parts.join(' · ');
+}
+
 export default function MyProgramDetailPage() {
   const {id} = useParams<{id: string}>();
   const navigate = useNavigate();
@@ -52,6 +63,7 @@ export default function MyProgramDetailPage() {
         repsMax: e.repsMax,
         restSeconds: e.restSeconds,
         weight: e.weight,
+        setConfigs: e.setConfigs,
       })),
     });
     navigate('/seance');
@@ -98,16 +110,24 @@ export default function MyProgramDetailPage() {
                           {e.nameFr ?? e.nameEn}
                         </Link>
                         <span className="shrink-0 text-sm font-semibold text-slate-200">
-                          {e.sets ?? '–'} × {reps(e) || '–'}
-                          {unitSuffix(e)}
-                          {e.weight != null && measureKind(e) === 'load' ? ` · ${e.weight} kg` : ''}
+                          {e.progressive ? (
+                            `${e.sets ?? '–'} séries (prog.)`
+                          ) : (
+                            <>
+                              {e.sets ?? '–'} × {reps(e) || '–'}
+                              {unitSuffix(e)}
+                              {e.weight != null && measureKind(e) === 'load' ? ` · ${e.weight} kg` : ''}
+                            </>
+                          )}
                         </span>
                       </div>
-                      {(e.restSeconds || e.notesFr) && (
+                      {(e.restSeconds || e.notesFr || formatProgressiveDetails(e)) && (
                         <p className="mt-0.5 text-xs text-slate-500">
                           {e.restSeconds ? `Repos ${mmss(e.restSeconds)}` : ''}
-                          {e.restSeconds && e.notesFr ? ' · ' : ''}
+                          {e.restSeconds && (e.notesFr || formatProgressiveDetails(e)) ? ' · ' : ''}
                           {e.notesFr ?? ''}
+                          {e.notesFr && formatProgressiveDetails(e) ? ' · ' : ''}
+                          {formatProgressiveDetails(e) ?? ''}
                         </p>
                       )}
                     </div>

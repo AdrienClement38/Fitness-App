@@ -172,21 +172,114 @@ export default function MyProgramPage() {
                     <div className="mt-2 flex flex-col gap-1.5 text-xs text-slate-400">
                       <label className="flex items-center gap-2">
                         <span className="w-20 shrink-0 text-slate-500">Séries</span>
-                        <Num value={e.sets} onChange={(v) => patchEx(si, ei, {sets: v})} title="Séries" />
+                        <Num
+                          value={e.sets}
+                          onChange={(v) => {
+                            let nextConfigs = e.setConfigs;
+                            if (e.progressive && nextConfigs) {
+                              const targetLen = v || 1;
+                              if (nextConfigs.length < targetLen) {
+                                nextConfigs = [...nextConfigs];
+                                while (nextConfigs.length < targetLen) {
+                                  const last = nextConfigs[nextConfigs.length - 1] || { repsMin: e.repsMin, repsMax: e.repsMax, weight: e.weight ?? null };
+                                  nextConfigs.push({ ...last });
+                                }
+                              } else if (nextConfigs.length > targetLen) {
+                                nextConfigs = nextConfigs.slice(0, targetLen);
+                              }
+                            }
+                            patchEx(si, ei, {
+                              sets: v,
+                              setConfigs: nextConfigs,
+                            });
+                          }}
+                          title="Séries"
+                        />
                       </label>
-                      <label className="flex items-center gap-2">
-                        <span className="w-20 shrink-0 text-slate-500">{repLabel(e)}</span>
-                        <Num value={e.repsMin} onChange={(v) => patchEx(si, ei, {repsMin: v})} title="min" />
-                        <span className="text-slate-500">–</span>
-                        <Num value={e.repsMax} onChange={(v) => patchEx(si, ei, {repsMax: v})} title="max" />
-                      </label>
-                      {measureKind(e) === 'load' && (
-                        <label className="flex items-center gap-2">
-                          <span className="w-20 shrink-0 text-slate-500">Poids</span>
-                          <Num value={e.weight ?? null} step={0.5} onChange={(v) => patchEx(si, ei, {weight: v})} title="Poids de base (kg)" />
-                          <span className="text-slate-500">kg</span>
-                        </label>
+                      <div className="flex items-center gap-2 py-0.5">
+                        <span className="w-20 shrink-0 text-slate-500">Série progressive</span>
+                        <button
+                          type="button"
+                          role="switch"
+                          aria-checked={e.progressive || false}
+                          onClick={() => {
+                            const nextVal = !(e.progressive || false);
+                            let setConfigs = e.setConfigs;
+                            if (nextVal && (!setConfigs || setConfigs.length === 0)) {
+                              const count = e.sets && e.sets > 0 ? e.sets : 1;
+                              setConfigs = Array.from({length: count}, () => ({
+                                repsMin: e.repsMin,
+                                repsMax: e.repsMax,
+                                weight: e.weight ?? null,
+                              }));
+                            }
+                            patchEx(si, ei, {
+                              progressive: nextVal,
+                              setConfigs: nextVal ? setConfigs : null,
+                            });
+                          }}
+                          className="flex items-center focus:outline-none"
+                        >
+                          <span className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors duration-200 ${(e.progressive || false) ? 'bg-emerald-500' : 'bg-slate-700'}`}>
+                            <span className={`inline-block h-4 w-4 rounded-full bg-slate-100 shadow-sm transition-transform duration-200 ${(e.progressive || false) ? 'translate-x-[18px]' : 'translate-x-0.5'}`} />
+                          </span>
+                        </button>
+                      </div>
+
+                      {!e.progressive ? (
+                        <>
+                          <label className="flex items-center gap-2">
+                            <span className="w-20 shrink-0 text-slate-500">{repLabel(e)}</span>
+                            <Num value={e.repsMin} onChange={(v) => patchEx(si, ei, {repsMin: v})} title="min" />
+                            <span className="text-slate-500">–</span>
+                            <Num value={e.repsMax} onChange={(v) => patchEx(si, ei, {repsMax: v})} title="max" />
+                          </label>
+                          {measureKind(e) === 'load' && (
+                            <label className="flex items-center gap-2">
+                              <span className="w-20 shrink-0 text-slate-500">Poids</span>
+                              <Num value={e.weight ?? null} step={0.5} onChange={(v) => patchEx(si, ei, {weight: v})} title="Poids de base (kg)" />
+                              <span className="text-slate-500">kg</span>
+                            </label>
+                          )}
+                        </>
+                      ) : (
+                        <div className="mt-1 flex flex-col gap-2 rounded-lg border border-slate-800 bg-slate-950/20 p-2.5">
+                          {Array.from({length: e.sets || 1}).map((_, index) => {
+                            const config = e.setConfigs?.[index] || { repsMin: e.repsMin, repsMax: e.repsMax, weight: e.weight ?? null };
+                            const isLoad = measureKind(e) === 'load';
+
+                            const updateConfig = (patch: Partial<{repsMin: number | null; repsMax: number | null; weight: number | null}>) => {
+                              const nextConfigs = [...(e.setConfigs || [])];
+                              while (nextConfigs.length <= index) {
+                                nextConfigs.push({ repsMin: e.repsMin, repsMax: e.repsMax, weight: e.weight ?? null });
+                              }
+                              nextConfigs[index] = { ...nextConfigs[index], ...patch };
+                              patchEx(si, ei, { setConfigs: nextConfigs });
+                            };
+
+                            return (
+                              <div key={index} className="flex items-center gap-3 text-[11px]">
+                                <span className="w-14 shrink-0 text-slate-500 font-semibold tabular-nums">Série {index + 1}</span>
+                                {isLoad ? (
+                                  <div className="flex items-center gap-1.5">
+                                    <Num value={config.weight} step={0.5} onChange={(v) => updateConfig({ weight: v })} title="kg" />
+                                    <span className="text-slate-500">kg</span>
+                                    <span className="text-slate-700">·</span>
+                                    <Num value={config.repsMin} onChange={(v) => updateConfig({ repsMin: v, repsMax: v })} title="reps" />
+                                    <span className="text-slate-500">reps</span>
+                                  </div>
+                                ) : (
+                                  <div className="flex items-center gap-1.5">
+                                    <Num value={config.repsMin} onChange={(v) => updateConfig({ repsMin: v, repsMax: v })} title={repLabel(e)} />
+                                    <span className="text-slate-500">{repLabel(e).toLowerCase()}</span>
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
                       )}
+
                       <label className="flex items-center gap-2">
                         <span className="w-20 shrink-0 text-slate-500">Repos</span>
                         <Num value={e.restSeconds} onChange={(v) => patchEx(si, ei, {restSeconds: v})} title="Repos (s)" />

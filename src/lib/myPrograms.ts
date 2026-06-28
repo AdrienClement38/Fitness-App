@@ -22,6 +22,8 @@ export interface MyProgramExercise {
   restSeconds: number | null;
   weight?: number | null; // poids de base (kg) — exos avec charge ; sert de point de départ au lancement
   notesFr: string | null;
+  progressive?: boolean;
+  setConfigs?: { repsMin: number | null; repsMax: number | null; weight: number | null }[] | null;
 }
 export interface MyProgramSession {
   nameFr: string;
@@ -124,6 +126,8 @@ export function duplicateProgram(source: ProgramDetail): string {
         restSeconds: e.restSeconds,
         weight: null, // les programmes du catalogue n'ont pas de poids de base
         notesFr: e.notesFr,
+        progressive: (e as any).progressive ?? false,
+        setConfigs: (e as any).setConfigs ? structuredClone((e as any).setConfigs) : null,
       })),
     })),
   };
