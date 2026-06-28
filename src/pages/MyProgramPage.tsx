@@ -170,7 +170,7 @@ export default function MyProgramPage() {
                       </button>
                     </div>
                     <div className="mt-2 flex flex-col gap-1.5 text-xs text-slate-400">
-                      <div className="flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-6">
                         <label className="flex items-center gap-2">
                           <span className="w-20 shrink-0 text-slate-500">Séries</span>
                           <Num
