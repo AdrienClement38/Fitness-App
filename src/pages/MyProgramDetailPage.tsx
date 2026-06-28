@@ -51,6 +51,7 @@ export default function MyProgramDetailPage() {
         repsMin: e.repsMin,
         repsMax: e.repsMax,
         restSeconds: e.restSeconds,
+        weight: e.weight,
       })),
     });
     navigate('/seance');
@@ -99,6 +100,7 @@ export default function MyProgramDetailPage() {
                         <span className="shrink-0 text-sm font-semibold text-slate-200">
                           {e.sets ?? '–'} × {reps(e) || '–'}
                           {unitSuffix(e)}
+                          {e.weight != null && measureKind(e) === 'load' ? ` · ${e.weight} kg` : ''}
                         </span>
                       </div>
                       {(e.restSeconds || e.notesFr) && (

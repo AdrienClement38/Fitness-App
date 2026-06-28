@@ -20,6 +20,7 @@ export interface MyProgramExercise {
   repsMin: number | null;
   repsMax: number | null;
   restSeconds: number | null;
+  weight?: number | null; // poids de base (kg) — exos avec charge ; sert de point de départ au lancement
   notesFr: string | null;
 }
 export interface MyProgramSession {
@@ -121,6 +122,7 @@ export function duplicateProgram(source: ProgramDetail): string {
         repsMin: e.repsMin,
         repsMax: e.repsMax,
         restSeconds: e.restSeconds,
+        weight: null, // les programmes du catalogue n'ont pas de poids de base
         notesFr: e.notesFr,
       })),
     })),
@@ -157,6 +159,7 @@ function buildEntry(ex: AddableExercise): MyProgramExercise {
     repsMin: def.min,
     repsMax: def.max,
     restSeconds: def.rest,
+    weight: null, // poids de base saisi ensuite dans l'éditeur (exos avec charge)
     notesFr: null,
   };
 }
@@ -185,6 +188,19 @@ export function addExerciseToNewSession(programId: string, ex: AddableExercise):
   draft.sessions.push({nameFr: name, focusFr: null, exercises: [buildEntry(ex)]});
   updateMyProgram(draft);
   return name;
+}
+
+/** Duplique une séance (avec ses exercices et leurs réglages) juste après l'originale. Retourne false si la cible est introuvable. */
+export function duplicateSession(programId: string, sessionIndex: number): boolean {
+  const program = getMyProgram(programId);
+  const session = program?.sessions[sessionIndex];
+  if (!program || !session) return false;
+  const draft = structuredClone(program);
+  const copy = structuredClone(session);
+  copy.nameFr = `${copy.nameFr} (copie)`;
+  draft.sessions.splice(sessionIndex + 1, 0, copy);
+  updateMyProgram(draft);
+  return true;
 }
 
 /** Contenu d'un programme hors métadonnée de sync (pour détecter une vraie modif). */

@@ -65,6 +65,7 @@ export interface SessionSeed {
     repsMin: number | null;
     repsMax: number | null;
     restSeconds: number | null;
+    weight?: number | null; // poids de base (programme perso) : pré-remplissage si aucun historique
   }[];
 }
 
@@ -170,7 +171,9 @@ export function startSession(seed: SessionSeed): string {
     programMine: seed.programMine ?? false,
     exercises: seed.exercises.map((e) => {
       const count = e.sets && e.sets > 0 ? e.sets : 1;
-      const w = lastWeight(e.exerciseId);
+      // Poids de base du programme s'il est défini (plan explicite que l'utilisateur peut modifier) ;
+      // sinon dernier poids réellement loggé (progression — cas des programmes du catalogue, sans poids de base).
+      const w = e.weight ?? lastWeight(e.exerciseId) ?? null;
       return {
         exerciseId: e.exerciseId,
         nameFr: e.nameFr,

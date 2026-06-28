@@ -1,11 +1,12 @@
 import {useEffect, useState} from 'react';
-import {ArrowLeft, Check, Plus, Trash2} from 'lucide-react';
+import {ArrowLeft, Check, Copy, Plus, Trash2} from 'lucide-react';
 import {Link, useNavigate, useParams} from 'react-router-dom';
 import {label, measureKind, type ExerciseListItem} from '../lib/api';
 import {Badge, Empty} from '../components/ui';
 import ExercisePicker from '../components/ExercisePicker';
 import {
   addExerciseToSession,
+  duplicateSession,
   getMyProgram,
   removeMyProgram,
   updateMyProgram,
@@ -20,13 +21,14 @@ const repLabel = (e: {category: string | null; force: string | null; equipmentId
   return k === 'duration' ? 'Durée (s)' : k === 'cardio' ? 'Durée (min)' : 'Reps';
 };
 
-/** Petit champ numérique : vide -> null. */
-function Num({value, onChange, title}: {value: number | null; onChange: (v: number | null) => void; title?: string}) {
+/** Petit champ numérique : vide -> null. `step < 1` -> clavier décimal (poids en demi-kilos). */
+function Num({value, onChange, title, step = 1}: {value: number | null; onChange: (v: number | null) => void; title?: string; step?: number}) {
   return (
     <input
       type="number"
-      inputMode="numeric"
+      inputMode={step < 1 ? 'decimal' : 'numeric'}
       min={0}
+      step={step}
       title={title}
       value={value ?? ''}
       onChange={(e) => onChange(e.target.value === '' ? null : Math.max(0, Number(e.target.value)))}
@@ -128,13 +130,25 @@ export default function MyProgramPage() {
                 aria-label="Nom de la séance"
                 className="min-w-0 flex-1 rounded-md border border-transparent bg-transparent font-semibold hover:border-slate-700 focus:border-emerald-500 focus:bg-slate-800 focus:outline-none"
               />
-              <button
-                onClick={() => removeSession(si)}
-                aria-label="Supprimer la séance"
-                className="shrink-0 rounded-md p-1 text-slate-500 hover:bg-red-950/40 hover:text-red-300"
-              >
-                <Trash2 className="h-4 w-4" />
-              </button>
+              <div className="flex shrink-0 items-center gap-0.5">
+                <button
+                  onClick={() => {
+                    if (duplicateSession(program.id, si)) setFlash(true);
+                  }}
+                  aria-label="Dupliquer la séance"
+                  title="Dupliquer la séance"
+                  className="rounded-md p-1 text-slate-500 hover:bg-slate-800 hover:text-emerald-300"
+                >
+                  <Copy className="h-4 w-4" />
+                </button>
+                <button
+                  onClick={() => removeSession(si)}
+                  aria-label="Supprimer la séance"
+                  className="rounded-md p-1 text-slate-500 hover:bg-red-950/40 hover:text-red-300"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
             </div>
 
             {s.exercises.length === 0 ? (
@@ -165,6 +179,12 @@ export default function MyProgramPage() {
                         <span>–</span>
                         <Num value={e.repsMax} onChange={(v) => patchEx(si, ei, {repsMax: v})} title="max" />
                       </label>
+                      {measureKind(e) === 'load' && (
+                        <label className="flex items-center gap-1">
+                          Poids <Num value={e.weight ?? null} step={0.5} onChange={(v) => patchEx(si, ei, {weight: v})} title="Poids de base (kg)" />
+                          kg
+                        </label>
+                      )}
                       <label className="flex items-center gap-1">
                         Repos <Num value={e.restSeconds} onChange={(v) => patchEx(si, ei, {restSeconds: v})} title="Repos (s)" />s
                       </label>
