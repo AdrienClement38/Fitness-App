@@ -233,7 +233,7 @@ export default function MyProgramPage() {
                           <label className="flex items-center gap-2">
                             <span className="w-20 shrink-0 text-slate-500">{repLabel(e)}</span>
                             <Num
-                              value={e.repsMin != null ? e.repsMin + 2 : null}
+                              value={e.repsMax != null ? e.repsMax - 2 : null}
                               onChange={(v) => {
                                 patchEx(si, ei, {
                                   repsMin: v === null ? null : Math.max(1, v - 2),

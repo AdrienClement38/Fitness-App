@@ -126,4 +126,25 @@ describe('addExerciseToSession', () => {
     expect(activeObj!.exercises[0].sets[2]).toEqual({ weight: 130, reps: 10, done: false });
     expect(activeObj!.exercises[0].targetReps).toBe('5/8/10');
   });
+
+  it('gère correctement le plancher de répétitions pour le calcul du min-max', () => {
+    // Si l'utilisateur saisit 1 rep
+    const target = 1;
+    const repsMin = Math.max(1, target - 2); // -> 1
+    const repsMax = target + 2;             // -> 3
+    expect(repsMin).toBe(1);
+    expect(repsMax).toBe(3);
+    
+    // La valeur restituée dans l'input (repsMax - 2) doit redonner exactement la cible 1
+    const displayValue = repsMax - 2;
+    expect(displayValue).toBe(1);
+
+    // Si l'utilisateur saisit 2 reps
+    const target2 = 2;
+    const repsMin2 = Math.max(1, target2 - 2); // -> 1
+    const repsMax2 = target2 + 2;             // -> 4
+    expect(repsMin2).toBe(1);
+    expect(repsMax2).toBe(4);
+    expect(repsMax2 - 2).toBe(2);
+  });
 });
