@@ -232,9 +232,16 @@ export default function MyProgramPage() {
                         <>
                           <label className="flex items-center gap-2">
                             <span className="w-20 shrink-0 text-slate-500">{repLabel(e)}</span>
-                            <Num value={e.repsMin} onChange={(v) => patchEx(si, ei, {repsMin: v})} title="min" />
-                            <span className="text-slate-500">–</span>
-                            <Num value={e.repsMax} onChange={(v) => patchEx(si, ei, {repsMax: v})} title="max" />
+                            <Num
+                              value={e.repsMin != null ? e.repsMin + 2 : null}
+                              onChange={(v) => {
+                                patchEx(si, ei, {
+                                  repsMin: v === null ? null : Math.max(1, v - 2),
+                                  repsMax: v === null ? null : v + 2,
+                                });
+                              }}
+                              title={repLabel(e)}
+                            />
                           </label>
                           {measureKind(e) === 'load' && (
                             <label className="flex items-center gap-2">
