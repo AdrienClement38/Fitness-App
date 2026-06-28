@@ -1,8 +1,10 @@
 import {Suspense} from 'react';
-import {BookOpen, ClipboardList, Dumbbell, Home, LineChart, User, Wrench} from 'lucide-react';
+import {BookOpen, ClipboardList, Dumbbell, Home, LineChart, User, Wrench, X} from 'lucide-react';
 import {NavLink, Outlet, useLocation} from 'react-router-dom';
 import {useAuth} from '../lib/auth';
 import {useAppStatus} from '../lib/appStatus';
+import {announcementVersion, shouldShowAnnouncement} from '../lib/announcement';
+import {dismissAnnouncement, useDismissedAnnouncement} from '../lib/announcementDismiss';
 import {useOnline} from '../lib/useOnline';
 import {useScrollRestoration} from '../lib/useScrollRestoration';
 import {Loading} from './ui';
@@ -21,6 +23,11 @@ export default function Layout() {
   const {user} = useAuth();
   const online = useOnline();
   const {announcement, maintenance} = useAppStatus();
+  // Bandeau affiché tant que sa version n'a pas été FERMÉE (croix) par l'utilisateur ; ce « vu »
+  // est synchronisé par compte (multi-appareils). (Re)publier une annonce change sa version
+  // côté serveur -> elle réapparaît. Cf. lib/announcement + lib/announcementDismiss.
+  const dismissedVersion = useDismissedAnnouncement();
+  const showAnnouncement = shouldShowAnnouncement(announcement, dismissedVersion);
   const {pathname} = useLocation();
   const isAdmin = user?.role === 'admin';
   // Maintenance : on coupe l'app pour les non-admins, mais on laisse /compte ouvert
@@ -58,13 +65,22 @@ export default function Layout() {
           <Wrench className="h-3.5 w-3.5" /> Mode maintenance ACTIF — l'app est coupée pour les non-admins (toi tu la vois).
         </div>
       )}
-      {announcement && (
+      {announcement && showAnnouncement && (
         <div
-          className={`px-4 py-1.5 text-center text-xs font-medium ${
+          className={`relative flex items-center justify-center px-9 py-1.5 text-center text-xs font-medium ${
             announcement.tone === 'warn' ? 'bg-amber-500/15 text-amber-300' : 'bg-sky-500/15 text-sky-300'
           }`}
         >
-          {announcement.message}
+          <span>{announcement.message}</span>
+          {announcement.tone !== 'warn' && (
+            <button
+              onClick={() => dismissAnnouncement(announcementVersion(announcement))}
+              aria-label="Fermer l'annonce"
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-0.5 opacity-70 transition hover:bg-white/10 hover:opacity-100"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          )}
         </div>
       )}
       <EmailVerifyBanner />

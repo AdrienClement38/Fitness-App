@@ -5,6 +5,7 @@
  * de maintenance + l'endpoint public d'état). Chargé au démarrage, rafraîchi à
  * chaque écriture admin. Instance unique sur AlwaysData → cache simple suffisant.
  */
+import {randomBytes} from 'node:crypto';
 import {getSetting, setSetting} from './repositories/settingsRepository';
 import {googleConfigured} from './google';
 
@@ -12,6 +13,7 @@ export interface Announcement {
   message: string;
   tone: 'info' | 'warn';
   active: boolean;
+  version: string; // régénéré à chaque (re)publication active -> le bandeau réapparaît pour tous
 }
 export interface Maintenance {
   active: boolean;
@@ -22,13 +24,13 @@ const ANNOUNCEMENT_KEY = 'announcement';
 const MAINTENANCE_KEY = 'maintenance';
 const DEFAULT_MAINTENANCE_MSG = 'Maintenance en cours, on revient très vite.';
 
-let announcement: Announcement = {message: '', tone: 'info', active: false};
+let announcement: Announcement = {message: '', tone: 'info', active: false, version: ''};
 let maintenance: Maintenance = {active: false, message: ''};
 
 /** Charge l'état depuis la base (au démarrage). */
 export async function loadAppStatus(): Promise<void> {
   const a = await getSetting<Partial<Announcement>>(ANNOUNCEMENT_KEY);
-  if (a) announcement = {message: a.message ?? '', tone: a.tone === 'warn' ? 'warn' : 'info', active: !!a.active};
+  if (a) announcement = {message: a.message ?? '', tone: a.tone === 'warn' ? 'warn' : 'info', active: !!a.active, version: a.version ?? ''};
   const m = await getSetting<Partial<Maintenance>>(MAINTENANCE_KEY);
   if (m) maintenance = {active: !!m.active, message: m.message ?? ''};
 }
@@ -48,7 +50,7 @@ export function getPublicAppStatus() {
   return {
     announcement:
       announcement.active && announcement.message.trim()
-        ? {message: announcement.message, tone: announcement.tone}
+        ? {message: announcement.message, tone: announcement.tone, version: announcement.version}
         : null,
     maintenance: {
       active: maintenance.active,
@@ -59,8 +61,16 @@ export function getPublicAppStatus() {
   };
 }
 
-export async function setAnnouncement(a: Announcement): Promise<void> {
-  announcement = {message: a.message.trim(), tone: a.tone === 'warn' ? 'warn' : 'info', active: !!a.active};
+export async function setAnnouncement(a: {message: string; tone: 'info' | 'warn'; active: boolean}): Promise<void> {
+  const active = !!a.active;
+  announcement = {
+    message: a.message.trim(),
+    tone: a.tone === 'warn' ? 'warn' : 'info',
+    active,
+    // Nouvelle version à chaque publication active : tous les clients reverront le bandeau
+    // (leur « version fermée » ne correspond plus). Vidée si on désactive l'annonce.
+    version: active ? randomBytes(6).toString('hex') : '',
+  };
   await setSetting(ANNOUNCEMENT_KEY, announcement);
 }
 

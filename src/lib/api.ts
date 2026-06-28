@@ -369,7 +369,7 @@ export const api = {
 
 /** État applicatif public : bandeau d'annonce (si actif) + mode maintenance. */
 export interface PublicAppStatus {
-  announcement: {message: string; tone: 'info' | 'warn'} | null;
+  announcement: {message: string; tone: 'info' | 'warn'; version?: string} | null;
   maintenance: {active: boolean; message: string};
   googleAuth?: boolean; // « Continuer avec Google » disponible (OAuth configuré côté serveur)
 }
