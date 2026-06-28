@@ -170,60 +170,62 @@ export default function MyProgramPage() {
                       </button>
                     </div>
                     <div className="mt-2 flex flex-col gap-1.5 text-xs text-slate-400">
-                      <label className="flex items-center gap-2">
-                        <span className="w-20 shrink-0 text-slate-500">Séries</span>
-                        <Num
-                          value={e.sets}
-                          onChange={(v) => {
-                            let nextConfigs = e.setConfigs;
-                            if (e.progressive && nextConfigs) {
-                              const targetLen = v || 1;
-                              if (nextConfigs.length < targetLen) {
-                                nextConfigs = [...nextConfigs];
-                                while (nextConfigs.length < targetLen) {
-                                  const last = nextConfigs[nextConfigs.length - 1] || { repsMin: e.repsMin, repsMax: e.repsMax, weight: e.weight ?? null };
-                                  nextConfigs.push({ ...last });
+                      <div className="flex items-center justify-between gap-4">
+                        <label className="flex items-center gap-2">
+                          <span className="w-20 shrink-0 text-slate-500">Séries</span>
+                          <Num
+                            value={e.sets}
+                            onChange={(v) => {
+                              let nextConfigs = e.setConfigs;
+                              if (e.progressive && nextConfigs) {
+                                const targetLen = v || 1;
+                                if (nextConfigs.length < targetLen) {
+                                  nextConfigs = [...nextConfigs];
+                                  while (nextConfigs.length < targetLen) {
+                                    const last = nextConfigs[nextConfigs.length - 1] || { repsMin: e.repsMin, repsMax: e.repsMax, weight: e.weight ?? null };
+                                    nextConfigs.push({ ...last });
+                                  }
+                                } else if (nextConfigs.length > targetLen) {
+                                  nextConfigs = nextConfigs.slice(0, targetLen);
                                 }
-                              } else if (nextConfigs.length > targetLen) {
-                                nextConfigs = nextConfigs.slice(0, targetLen);
                               }
-                            }
-                            patchEx(si, ei, {
-                              sets: v,
-                              setConfigs: nextConfigs,
-                            });
-                          }}
-                          title="Séries"
-                        />
-                      </label>
-                      <div className="flex items-center gap-2 py-0.5">
-                        <span className="w-20 shrink-0 text-slate-500">Série progressive</span>
-                        <button
-                          type="button"
-                          role="switch"
-                          aria-checked={e.progressive || false}
-                          onClick={() => {
-                            const nextVal = !(e.progressive || false);
-                            let setConfigs = e.setConfigs;
-                            if (nextVal && (!setConfigs || setConfigs.length === 0)) {
-                              const count = e.sets && e.sets > 0 ? e.sets : 1;
-                              setConfigs = Array.from({length: count}, () => ({
-                                repsMin: e.repsMin,
-                                repsMax: e.repsMax,
-                                weight: e.weight ?? null,
-                              }));
-                            }
-                            patchEx(si, ei, {
-                              progressive: nextVal,
-                              setConfigs: nextVal ? setConfigs : null,
-                            });
-                          }}
-                          className="flex items-center focus:outline-none"
-                        >
-                          <span className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors duration-200 ${(e.progressive || false) ? 'bg-emerald-500' : 'bg-slate-700'}`}>
-                            <span className={`inline-block h-4 w-4 rounded-full bg-slate-100 shadow-sm transition-transform duration-200 ${(e.progressive || false) ? 'translate-x-[18px]' : 'translate-x-0.5'}`} />
-                          </span>
-                        </button>
+                              patchEx(si, ei, {
+                                sets: v,
+                                setConfigs: nextConfigs,
+                              });
+                            }}
+                            title="Séries"
+                          />
+                        </label>
+                        <div className="flex items-center gap-2">
+                          <span className="text-slate-500">progressive</span>
+                          <button
+                            type="button"
+                            role="switch"
+                            aria-checked={e.progressive || false}
+                            onClick={() => {
+                              const nextVal = !(e.progressive || false);
+                              let setConfigs = e.setConfigs;
+                              if (nextVal && (!setConfigs || setConfigs.length === 0)) {
+                                const count = e.sets && e.sets > 0 ? e.sets : 1;
+                                setConfigs = Array.from({length: count}, () => ({
+                                  repsMin: e.repsMin,
+                                  repsMax: e.repsMax,
+                                  weight: e.weight ?? null,
+                                }));
+                              }
+                              patchEx(si, ei, {
+                                progressive: nextVal,
+                                setConfigs: nextVal ? setConfigs : null,
+                              });
+                            }}
+                            className="flex items-center focus:outline-none"
+                          >
+                            <span className={`relative inline-flex h-5 w-9 shrink-0 items-center rounded-full transition-colors duration-200 ${(e.progressive || false) ? 'bg-emerald-500' : 'bg-slate-700'}`}>
+                              <span className={`inline-block h-4 w-4 rounded-full bg-slate-100 shadow-sm transition-transform duration-200 ${(e.progressive || false) ? 'translate-x-[18px]' : 'translate-x-0.5'}`} />
+                            </span>
+                          </button>
+                        </div>
                       </div>
 
                       {!e.progressive ? (
