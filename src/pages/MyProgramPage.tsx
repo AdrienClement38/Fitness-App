@@ -208,9 +208,10 @@ export default function MyProgramPage() {
                               let setConfigs = e.setConfigs;
                               if (nextVal && (!setConfigs || setConfigs.length === 0)) {
                                 const count = e.sets && e.sets > 0 ? e.sets : 1;
+                                const baseReps = e.repsMax != null ? e.repsMax - 2 : e.repsMin;
                                 setConfigs = Array.from({length: count}, () => ({
-                                  repsMin: e.repsMin,
-                                  repsMax: e.repsMax,
+                                  repsMin: baseReps,
+                                  repsMax: baseReps,
                                   weight: e.weight ?? null,
                                 }));
                               }
@@ -230,6 +231,13 @@ export default function MyProgramPage() {
 
                       {!e.progressive ? (
                         <>
+                          {measureKind(e) === 'load' && (
+                            <label className="flex items-center gap-2">
+                              <span className="w-20 shrink-0 text-slate-500">Poids</span>
+                              <Num value={e.weight ?? null} step={0.5} onChange={(v) => patchEx(si, ei, {weight: v})} title="Poids de base (kg)" />
+                              <span className="text-slate-500">kg</span>
+                            </label>
+                          )}
                           <label className="flex items-center gap-2">
                             <span className="w-20 shrink-0 text-slate-500">{repLabel(e)}</span>
                             <Num
@@ -243,13 +251,6 @@ export default function MyProgramPage() {
                               title={repLabel(e)}
                             />
                           </label>
-                          {measureKind(e) === 'load' && (
-                            <label className="flex items-center gap-2">
-                              <span className="w-20 shrink-0 text-slate-500">Poids</span>
-                              <Num value={e.weight ?? null} step={0.5} onChange={(v) => patchEx(si, ei, {weight: v})} title="Poids de base (kg)" />
-                              <span className="text-slate-500">kg</span>
-                            </label>
-                          )}
                         </>
                       ) : (
                         <div className="mt-1 flex flex-col gap-2 rounded-lg border border-slate-800 bg-slate-950/20 p-2.5">
