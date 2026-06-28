@@ -12,7 +12,6 @@
  */
 import type {Gender, MeasureKind} from './api';
 import type {WorkoutLog} from './workoutLogs';
-import {durationMinutes} from './stats';
 
 // MET par mode de saisie (le log ne conserve pas la catégorie fine). Valeurs vérifiées :
 // renforcement (load / poids du corps) = 5 ; cardio = 7 ; tenue/isométrie (duration) ≈ 2.5.
@@ -28,10 +27,14 @@ const SECONDS_PER_REP = 3; // tempo moyen d'une répétition (concentrique + exc
 const DEFAULT_REST = 60; // repos par défaut si non prescrit (hors cardio continu)
 const logDate = (l: WorkoutLog) => l.finishedIso ?? l.startedIso ?? '';
 
-/** Durée d'une séance en minutes : chrono si disponible, sinon estimée depuis les séries faites. */
-export function sessionMinutes(log: WorkoutLog): number {
-  const chrono = durationMinutes(log);
-  if (chrono != null && chrono > 0) return chrono;
+/** Durée d'une séance en secondes : chrono réel si disponible, sinon estimée depuis les séries faites. */
+export function sessionSeconds(log: WorkoutLog): number {
+  if (log.finishedIso && log.startedIso) {
+    const ms = new Date(log.finishedIso).getTime() - new Date(log.startedIso).getTime();
+    if (Number.isFinite(ms) && ms > 0) {
+      return Math.round(ms / 1000);
+    }
+  }
   let sec = 0;
   for (const ex of log.exercises) {
     const rest = ex.kind === 'cardio' ? (ex.restSeconds ?? 0) : (ex.restSeconds ?? DEFAULT_REST);
@@ -46,7 +49,12 @@ export function sessionMinutes(log: WorkoutLog): number {
       sec += work + rest;
     }
   }
-  return Math.round(sec / 60);
+  return sec;
+}
+
+/** Durée d'une séance en minutes : chrono si disponible, sinon estimée depuis les séries faites. */
+export function sessionMinutes(log: WorkoutLog): number {
+  return Math.round(sessionSeconds(log) / 60);
 }
 
 /** MET moyen d'une séance, pondéré par le nombre de séries faites de chaque exercice. */
@@ -64,7 +72,7 @@ function sessionMet(log: WorkoutLog): number {
 
 /** Calories estimées d'une séance (kcal entiers). 0 si aucune série faite / durée nulle. */
 export function sessionKcal(log: WorkoutLog, weightKg: number): number {
-  const hours = sessionMinutes(log) / 60;
+  const hours = sessionSeconds(log) / 3600;
   if (hours <= 0) return 0;
   return Math.round(sessionMet(log) * weightKg * hours);
 }

@@ -11,6 +11,7 @@ import {
   sessionMinutes,
   totalMinutes,
   weeklyMinutes,
+  sessionSeconds,
 } from '../src/lib/calories';
 import type {LoggedExercise, LoggedSet, WorkoutLog} from '../src/lib/workoutLogs';
 
@@ -113,3 +114,16 @@ describe('totalMinutes & weeklyMinutes & kcalSince', () => {
     expect(kcalSince(history, '2026-06-08T00:00:00.000Z', 60)).toBe(280);
   });
 });
+
+describe('sessionSeconds & short duration calculations', () => {
+  it('calcule la duree exacte en secondes quand le chrono est de quelques secondes', () => {
+    // Séance de 5 secondes
+    const l = logChrono('short', '2026-06-11T18:00:00.000Z', '2026-06-11T18:00:05.000Z', [loadEx([set(70, 10)])]);
+    expect(sessionSeconds(l)).toBe(5);
+    // Les minutes renvoient 0 (Math.round(5/60))
+    expect(sessionMinutes(l)).toBe(0);
+    // Calories : 5 MET * 80 kg * (5 / 3600 heures) = 0.55 kcal, arrondi à 1 kcal
+    expect(sessionKcal(l, 80)).toBe(1);
+  });
+});
+

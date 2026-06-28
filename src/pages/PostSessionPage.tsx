@@ -6,7 +6,7 @@ import ExerciseCard from '../components/ExerciseCard';
 import {Loading} from '../components/ui';
 import {useAuth} from '../lib/auth';
 import {useProfile} from '../lib/userProfile';
-import {defaultWeightKg, sessionMinutes, sessionKcal} from '../lib/calories';
+import {defaultWeightKg, sessionSeconds, sessionKcal} from '../lib/calories';
 import {logVolume, useWorkoutHistory} from '../lib/workoutLogs';
 
 /**
@@ -30,8 +30,16 @@ export default function PostSessionPage() {
 
   const weightKg = profile.weightKg ?? defaultWeightKg(user?.gender);
   const volume = log ? logVolume(log) : 0;
-  const minutes = log ? sessionMinutes(log) : 0;
+  const seconds = log ? sessionSeconds(log) : 0;
   const kcal = log ? sessionKcal(log, weightKg) : 0;
+
+  const durationStr = (() => {
+    if (seconds < 60) return `${seconds} s`;
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    if (s === 0) return `${m} min`;
+    return `${m} min ${s} s`;
+  })();
 
   return (
     <div>
@@ -45,7 +53,7 @@ export default function PostSessionPage() {
         <div className="mt-4 grid grid-cols-3 gap-3">
           <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-center">
             <Timer className="mx-auto h-5 w-5 text-emerald-400" />
-            <div className="mt-1 text-lg font-bold tabular-nums text-emerald-300">{minutes} min</div>
+            <div className="mt-1 text-lg font-bold tabular-nums text-emerald-300">{durationStr}</div>
             <div className="text-[10px] uppercase tracking-wider text-slate-500">Durée</div>
           </div>
           <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-center">
