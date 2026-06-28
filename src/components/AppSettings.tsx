@@ -71,6 +71,15 @@ export default function AppSettings() {
           <Megaphone className="h-5 w-5 text-sky-400" />
           <h2 className="font-semibold">Bandeau d'annonce</h2>
           {status?.announcement.active && <Badge tone="emerald">Affiché</Badge>}
+          {status?.announcement.active && status.announcement.totalCount !== undefined && (
+            <span className="text-xs font-medium">
+              {status.announcement.seenCount === status.announcement.totalCount ? (
+                <span className="text-emerald-400">Terminé — tous les utilisateurs ({status.announcement.seenCount}/{status.announcement.totalCount}) l'ont vu</span>
+              ) : (
+                <span className="text-amber-400">Toujours en cours ({status.announcement.seenCount}/{status.announcement.totalCount} vus, encore au moins une personne ne l'a pas vu)</span>
+              )}
+            </span>
+          )}
         </div>
         <p className="mt-1 text-sm text-slate-400">Un message affiché en haut de l'app pour tous les utilisateurs.</p>
 

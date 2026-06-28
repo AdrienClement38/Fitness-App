@@ -460,6 +460,12 @@ export const adminApi = {
 
 /** Vue admin de l'état applicatif (config complète et éditable). */
 export interface AdminAppStatus {
-  announcement: {message: string; tone: 'info' | 'warn'; active: boolean};
+  announcement: {
+    message: string;
+    tone: 'info' | 'warn';
+    active: boolean;
+    seenCount?: number;
+    totalCount?: number;
+  };
   maintenance: {active: boolean; message: string};
 }

@@ -8,6 +8,7 @@
 import {randomBytes} from 'node:crypto';
 import {getSetting, setSetting} from './repositories/settingsRepository';
 import {googleConfigured} from './google';
+import {getAnnouncementSeenStats} from './repositories/userRepository';
 
 export interface Announcement {
   message: string;
@@ -41,8 +42,14 @@ export function isMaintenanceActive(): boolean {
 }
 
 /** Vue admin : la config complète et éditable. */
-export function getAdminAppStatus() {
-  return {announcement, maintenance};
+export async function getAdminAppStatus() {
+  const stats = announcement.active && announcement.version
+    ? await getAnnouncementSeenStats(announcement.version)
+    : {seenCount: 0, totalCount: 0};
+  return {
+    announcement: {...announcement, ...stats},
+    maintenance,
+  };
 }
 
 /** Vue publique : seulement ce dont le client a besoin (annonce active uniquement). */

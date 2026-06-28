@@ -130,8 +130,8 @@ router.post('/settings/test-email', async (req, res) => {
 
 /* ---- État applicatif : bandeau d'annonce + mode maintenance ----------- */
 
-router.get('/settings/app', (_req, res) => {
-  res.json(getAdminAppStatus());
+router.get('/settings/app', async (_req, res) => {
+  res.json(await getAdminAppStatus());
 });
 
 const announcementBody = z.object({
@@ -143,7 +143,7 @@ router.post('/settings/announcement', async (req, res) => {
   const parsed = announcementBody.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({error: 'Annonce invalide.'});
   await setAnnouncement(parsed.data);
-  return res.json(getAdminAppStatus());
+  return res.json(await getAdminAppStatus());
 });
 
 const maintenanceBody = z.object({active: z.boolean(), message: z.string().max(500)});
@@ -151,7 +151,7 @@ router.post('/settings/maintenance', async (req, res) => {
   const parsed = maintenanceBody.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({error: 'Données invalides.'});
   await setMaintenance(parsed.data);
-  return res.json(getAdminAppStatus());
+  return res.json(await getAdminAppStatus());
 });
 
 export default router;

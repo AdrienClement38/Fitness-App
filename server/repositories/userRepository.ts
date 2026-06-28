@@ -285,3 +285,25 @@ export async function getAdminStats() {
     })),
   };
 }
+
+export async function getAnnouncementSeenStats(version: string) {
+  if (!version) return { seenCount: 0, totalCount: 0 };
+  
+  const [u] = await db.select({ count: sql<number>`count(*)::int` }).from(users);
+  const totalCount = u?.count ?? 0;
+
+  const [seenRow] = await db
+    .select({ count: sql<number>`count(*)::int` })
+    .from(syncItems)
+    .where(
+      and(
+        eq(syncItems.kind, 'announcement-seen'),
+        eq(syncItems.deleted, false),
+        sql`${syncItems.data}->>'version' = ${version}`
+      )
+    );
+  const seenCount = seenRow?.count ?? 0;
+
+  return { seenCount, totalCount };
+}
+
