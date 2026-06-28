@@ -169,28 +169,28 @@ export default function MyProgramPage() {
                         <Trash2 className="h-4 w-4" />
                       </button>
                     </div>
-                    <div className="mt-2 flex flex-wrap items-end gap-x-3 gap-y-2 text-xs text-slate-400">
-                      <label className="flex flex-col gap-1">
-                        <span className="font-medium uppercase tracking-wide text-slate-500">Séries</span>
+                    <div className="mt-2 flex flex-col gap-1.5 text-xs text-slate-400">
+                      <label className="flex items-center gap-2">
+                        <span className="w-20 shrink-0 text-slate-500">Séries</span>
                         <Num value={e.sets} onChange={(v) => patchEx(si, ei, {sets: v})} title="Séries" />
                       </label>
-                      <label className="flex flex-col gap-1">
-                        <span className="font-medium uppercase tracking-wide text-slate-500">{repLabel(e)}</span>
-                        <span className="flex items-center gap-1">
-                          <Num value={e.repsMin} onChange={(v) => patchEx(si, ei, {repsMin: v})} title="min" />
-                          <span className="text-slate-500">–</span>
-                          <Num value={e.repsMax} onChange={(v) => patchEx(si, ei, {repsMax: v})} title="max" />
-                        </span>
+                      <label className="flex items-center gap-2">
+                        <span className="w-20 shrink-0 text-slate-500">{repLabel(e)}</span>
+                        <Num value={e.repsMin} onChange={(v) => patchEx(si, ei, {repsMin: v})} title="min" />
+                        <span className="text-slate-500">–</span>
+                        <Num value={e.repsMax} onChange={(v) => patchEx(si, ei, {repsMax: v})} title="max" />
                       </label>
                       {measureKind(e) === 'load' && (
-                        <label className="flex flex-col gap-1">
-                          <span className="font-medium uppercase tracking-wide text-slate-500">Poids (kg)</span>
+                        <label className="flex items-center gap-2">
+                          <span className="w-20 shrink-0 text-slate-500">Poids</span>
                           <Num value={e.weight ?? null} step={0.5} onChange={(v) => patchEx(si, ei, {weight: v})} title="Poids de base (kg)" />
+                          <span className="text-slate-500">kg</span>
                         </label>
                       )}
-                      <label className="flex flex-col gap-1">
-                        <span className="font-medium uppercase tracking-wide text-slate-500">Repos (s)</span>
+                      <label className="flex items-center gap-2">
+                        <span className="w-20 shrink-0 text-slate-500">Repos</span>
                         <Num value={e.restSeconds} onChange={(v) => patchEx(si, ei, {restSeconds: v})} title="Repos (s)" />
+                        <span className="text-slate-500">s</span>
                       </label>
                     </div>
                   </div>
