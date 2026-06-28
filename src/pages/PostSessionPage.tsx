@@ -57,7 +57,7 @@ export default function PostSessionPage() {
           </div>
           <div className="rounded-xl border border-slate-800 bg-slate-900/50 p-3 text-center" title="Estimation indicative basée sur le modèle METs">
             <Flame className="mx-auto h-5 w-5 text-emerald-400" />
-            <div className="mt-1 text-lg font-bold tabular-nums text-emerald-300">{kcal} kcal</div>
+            <div className="mt-1 text-lg font-bold tabular-nums text-emerald-300">~{kcal} kcal</div>
             <div className="text-[10px] uppercase tracking-wider text-slate-500">Calories</div>
           </div>
         </div>
