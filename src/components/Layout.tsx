@@ -65,7 +65,7 @@ export default function Layout() {
           <Wrench className="h-3.5 w-3.5" /> Mode maintenance ACTIF — l'app est coupée pour les non-admins (toi tu la vois).
         </div>
       )}
-      {announcement && showAnnouncement && (
+      {user && announcement && showAnnouncement && (
         <div
           className={`relative flex items-center justify-center px-9 py-1.5 text-center text-xs font-medium ${
             announcement.tone === 'warn' ? 'bg-amber-500/15 text-amber-300' : 'bg-sky-500/15 text-sky-300'
