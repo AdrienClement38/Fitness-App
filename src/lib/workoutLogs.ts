@@ -243,6 +243,20 @@ export function replaceExercise(
   });
 }
 
+/**
+ * Reporte un poids de travail (depuis la calculette de disques) sur l'exercice #ei :
+ * met à jour le poids des séries PAS ENCORE faites (les séries validées gardent le poids
+ * réellement enregistré). Rien si le poids est nul/négatif.
+ */
+export function setExerciseWeight(ei: number, kg: number) {
+  if (!(kg > 0)) return;
+  updateActive((d) => {
+    const ex = d.exercises[ei];
+    if (!ex) return;
+    for (const s of ex.sets) if (!s.done) s.weight = kg;
+  });
+}
+
 /** Lance le chrono de la séance (bouton « Commencer la séance »). Idempotent. */
 export function startChrono() {
   updateActive((d) => {

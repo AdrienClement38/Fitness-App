@@ -35,7 +35,15 @@ function PlateBar({w}: {w: number}) {
  * pour taper une décimale (« 82,5 ») ou vider le champ — un <input type=number> contrôlé par un
  * nombre efface l'état intermédiaire « 82, » et interdit le champ vide.
  */
-export default function PlateCalculator({initialWeight, onClose}: {initialWeight: number | null; onClose: () => void}) {
+export default function PlateCalculator({
+  initialWeight,
+  onClose,
+  onWeightChange,
+}: {
+  initialWeight: number | null;
+  onClose: () => void;
+  onWeightChange?: (kg: number) => void; // report du poids visé sur la colonne kg de l'exo
+}) {
   useModalDismiss(onClose); // Échap + verrou du scroll de fond
   const bar = useBarWeight();
   const [raw, setRaw] = useState<string>(initialWeight && initialWeight > 0 ? fr(initialWeight) : fr(bar));
@@ -44,7 +52,13 @@ export default function PlateCalculator({initialWeight, onClose}: {initialWeight
   const hasTarget = target > 0;
   const bd = platesForWeight(target, bar);
   const groups = groupPlates(bd.perSide);
-  const nudge = (d: number) => setRaw((r) => fr(Math.max(0, Math.round((parse(r) + d) * 100) / 100)));
+  // Change la saisie ET reporte le poids sur l'exercice (uniquement si un poids valide est saisi).
+  const commit = (nextRaw: string) => {
+    setRaw(nextRaw);
+    const n = parse(nextRaw);
+    if (n > 0) onWeightChange?.(n);
+  };
+  const nudge = (d: number) => commit(fr(Math.max(0, Math.round((parse(raw) + d) * 100) / 100)));
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 p-3 backdrop-blur-sm" onClick={onClose}>
@@ -76,7 +90,7 @@ export default function PlateCalculator({initialWeight, onClose}: {initialWeight
               type="text"
               inputMode="decimal"
               value={raw}
-              onChange={(e) => setRaw(e.target.value.replace(/[^0-9.,]/g, ''))}
+              onChange={(e) => commit(e.target.value.replace(/[^0-9.,]/g, ''))}
               aria-label="Poids total visé (kg)"
               className="w-24 rounded-lg border border-slate-700 bg-slate-800 py-2 text-center text-2xl font-bold tabular-nums focus:border-emerald-500 focus:outline-none"
             />

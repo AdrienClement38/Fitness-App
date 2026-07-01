@@ -8,6 +8,7 @@ import {
   finishActive,
   finishRest,
   replaceExercise,
+  setExerciseWeight,
   setsDone,
   startChrono,
   toggleSetDone,
@@ -392,6 +393,7 @@ export default function WorkoutPage() {
       {plateEi !== null && w.exercises[plateEi] && (
         <PlateCalculator
           initialWeight={w.exercises[plateEi].sets.find((s) => s.weight != null)?.weight ?? null}
+          onWeightChange={(kg) => setExerciseWeight(plateEi, kg)}
           onClose={() => setPlateEi(null)}
         />
       )}
