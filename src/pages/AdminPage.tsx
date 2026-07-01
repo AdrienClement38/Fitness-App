@@ -84,7 +84,9 @@ export default function AdminPage() {
   };
 
   const term = q.trim().toLowerCase();
-  const filtered = users ? (term ? users.filter((u) => u.email.toLowerCase().includes(term)) : users) : [];
+  // Plus récents en premier (date d'inscription décroissante), puis filtre par email.
+  const sorted = users ? [...users].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) : [];
+  const filtered = term ? sorted.filter((u) => u.email.toLowerCase().includes(term)) : sorted;
 
   return (
     <div>
