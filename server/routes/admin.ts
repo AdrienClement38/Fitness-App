@@ -13,6 +13,7 @@ import {
   getAdminStats,
   getUserById,
   listUsersWithCounts,
+  markUserVerified,
   setUserRole,
   updatePassword,
 } from '../repositories/userRepository';
@@ -70,6 +71,15 @@ router.post('/users/:id/reset-password', async (req, res) => {
   await deleteUserSessions(target.id); // déconnecte l'utilisateur de partout
   closeUserSockets(target.id);
   return res.json({tempPassword}); // à transmettre à l'utilisateur ; il le changera ensuite
+});
+
+// Valider manuellement l'email d'un compte (ex. l'email de confirmation n'est pas arrivé).
+router.post('/users/:id/verify-email', async (req, res) => {
+  const target = await getUserById(req.params.id);
+  if (!target) return res.status(404).json({error: 'Utilisateur introuvable.'});
+  await markUserVerified(target.id);
+  notifyUser(target.id, {type: 'account'}); // l'utilisateur voit son statut changer en direct
+  return res.json({ok: true});
 });
 
 /* ---- Paramètres applicatifs : SMTP (envoi d'emails) ------------------- */

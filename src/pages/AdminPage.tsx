@@ -79,6 +79,9 @@ export default function AdminPage() {
       });
     }
   };
+  const onVerify = (u: AdminUser) => {
+    if (confirm(`Valider manuellement l'email de ${u.email} ?`)) act(u.id, () => adminApi.verifyEmail(u.id));
+  };
 
   const term = q.trim().toLowerCase();
   const filtered = users ? (term ? users.filter((u) => u.email.toLowerCase().includes(term)) : users) : [];
@@ -140,6 +143,15 @@ export default function AdminPage() {
               </div>
               {u.id !== user.id && (
                 <div className="mt-3 flex flex-wrap gap-2">
+                  {!u.emailVerified && (
+                    <button
+                      disabled={busy === u.id}
+                      onClick={() => onVerify(u)}
+                      className="rounded-lg border border-emerald-700/50 px-3 py-1.5 text-xs text-emerald-300 hover:bg-emerald-950/40 disabled:opacity-40"
+                    >
+                      Valider email
+                    </button>
+                  )}
                   <button
                     disabled={busy === u.id}
                     onClick={() => onRole(u)}

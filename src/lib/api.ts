@@ -448,6 +448,7 @@ export const adminApi = {
   setRole: (id: string, role: 'user' | 'admin') =>
     post<{ok: boolean; role: string}>(`/admin/users/${encodeURIComponent(id)}/role`, {role}),
   resetPassword: (id: string) => post<{tempPassword: string}>(`/admin/users/${encodeURIComponent(id)}/reset-password`, {}),
+  verifyEmail: (id: string) => post<{ok: boolean}>(`/admin/users/${encodeURIComponent(id)}/verify-email`, {}),
   smtp: () => get<SmtpStatus>('/admin/settings/smtp'),
   saveSmtp: (input: SmtpInput) => post<SmtpStatus>('/admin/settings/smtp', input),
   deleteSmtp: () => del<SmtpStatus>('/admin/settings/smtp'),
