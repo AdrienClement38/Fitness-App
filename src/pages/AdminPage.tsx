@@ -1,5 +1,6 @@
 import {useCallback, useEffect, useState} from 'react';
 import {Navigate} from 'react-router-dom';
+import {Search} from 'lucide-react';
 import {adminApi, type AdminUser} from '../lib/api';
 import {useAuth} from '../lib/auth';
 import {Badge, ErrorState, Loading} from '../components/ui';
@@ -12,6 +13,7 @@ const fmtDate = (iso: string) => new Date(iso).toLocaleDateString('fr-FR', {day:
 export default function AdminPage() {
   const {user, loading: authLoading} = useAuth();
   const [users, setUsers] = useState<AdminUser[] | null>(null);
+  const [q, setQ] = useState(''); // recherche par email
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState<string | null>(null); // id du compte en cours d'action
   const [temp, setTemp] = useState<{email: string; password: string} | null>(null);
@@ -78,6 +80,9 @@ export default function AdminPage() {
     }
   };
 
+  const term = q.trim().toLowerCase();
+  const filtered = users ? (term ? users.filter((u) => u.email.toLowerCase().includes(term)) : users) : [];
+
   return (
     <div>
       <h1 className="text-xl font-bold">Administration</h1>
@@ -103,9 +108,22 @@ export default function AdminPage() {
       {users === null ? (
         !error && <Loading />
       ) : (
-        <div className="mt-4 grid gap-3">
-          <p className="text-xs text-slate-500">{users.length} compte{users.length > 1 ? 's' : ''}</p>
-          {users.map((u) => (
+        <div className="mt-4">
+          <div className="relative">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+            <input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Rechercher un compte (email)…"
+              className="w-full rounded-lg border border-slate-800 bg-slate-900 py-2 pl-9 pr-3 text-sm outline-none placeholder:text-slate-500 focus:border-emerald-500/60"
+            />
+          </div>
+          <p className="mt-2 text-xs text-slate-500">
+            {term ? `${filtered.length} sur ${users.length}` : users.length} compte{users.length > 1 ? 's' : ''}
+          </p>
+          <div className="mt-2 grid max-h-[36rem] gap-3 overflow-y-auto pr-1">
+            {filtered.length === 0 && <p className="py-6 text-center text-sm text-slate-500">Aucun compte pour « {q} ».</p>}
+            {filtered.map((u) => (
             <div key={u.id} className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
               <div className="min-w-0">
                 <p className="flex flex-wrap items-center gap-2 font-semibold">
@@ -147,6 +165,7 @@ export default function AdminPage() {
               )}
             </div>
           ))}
+          </div>
         </div>
       )}
 
