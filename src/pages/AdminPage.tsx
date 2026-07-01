@@ -16,11 +16,31 @@ export default function AdminPage() {
   const [busy, setBusy] = useState<string | null>(null); // id du compte en cours d'action
   const [temp, setTemp] = useState<{email: string; password: string} | null>(null);
 
-  const load = useCallback(() => {
-    adminApi.users().then(setUsers).catch((e) => setError(e instanceof Error ? e.message : 'Erreur'));
+  // `silent` (rafraîchissement de fond) : on garde la dernière liste et on n'affiche pas
+  // d'erreur en cas d'échec réseau ponctuel, pour ne pas polluer l'écran pendant le polling.
+  const load = useCallback((silent = false) => {
+    adminApi
+      .users()
+      .then(setUsers)
+      .catch((e) => {
+        if (!silent) setError(e instanceof Error ? e.message : 'Erreur');
+      });
   }, []);
+  // Mise à jour automatique : au montage, puis toutes les 15 s (uniquement onglet visible,
+  // pour épargner le serveur) et au retour sur l'onglet -> les nouveaux inscrits apparaissent
+  // sans recharger la page.
   useEffect(() => {
-    if (user?.role === 'admin') load();
+    if (user?.role !== 'admin') return;
+    load();
+    const tick = () => {
+      if (document.visibilityState === 'visible') load(true);
+    };
+    const id = window.setInterval(tick, 15000);
+    document.addEventListener('visibilitychange', tick);
+    return () => {
+      clearInterval(id);
+      document.removeEventListener('visibilitychange', tick);
+    };
   }, [user, load]);
 
   // Garde client (le serveur garde aussi sur /api/admin). Attendre la résolution de session.

@@ -19,8 +19,32 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState<AdminStats | null>(null);
   const [error, setError] = useState(false);
 
+  // Mise à jour automatique (comme la liste des comptes) : au montage, toutes les 15 s (onglet
+  // visible) et au retour d'onglet. Un échec ponctuel du polling ne masque pas le tableau déjà
+  // chargé (on garde les dernières stats).
   useEffect(() => {
-    adminApi.stats().then(setStats).catch(() => setError(true));
+    let loaded = false;
+    const load = (silent: boolean) => {
+      adminApi
+        .stats()
+        .then((s) => {
+          setStats(s);
+          loaded = true;
+        })
+        .catch(() => {
+          if (!silent && !loaded) setError(true);
+        });
+    };
+    load(false);
+    const tick = () => {
+      if (document.visibilityState === 'visible') load(true);
+    };
+    const id = window.setInterval(tick, 15000);
+    document.addEventListener('visibilitychange', tick);
+    return () => {
+      clearInterval(id);
+      document.removeEventListener('visibilitychange', tick);
+    };
   }, []);
 
   if (error) return null; // non bloquant : si les stats échouent, on n'affiche rien
