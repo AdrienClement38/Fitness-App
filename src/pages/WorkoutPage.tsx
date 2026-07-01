@@ -1,5 +1,5 @@
 import {useEffect, useRef, useState} from 'react';
-import {Check, Minus, Play, Plus, Timer, TrendingUp, Volume2, VolumeX, X} from 'lucide-react';
+import {Check, Minus, Play, Plus, Replace, Timer, TrendingUp, Volume2, VolumeX, X} from 'lucide-react';
 import {Link, useNavigate} from 'react-router-dom';
 import {mmss} from '../lib/time';
 import {
@@ -7,6 +7,7 @@ import {
   adjustRest,
   finishActive,
   finishRest,
+  replaceExercise,
   setsDone,
   startChrono,
   toggleSetDone,
@@ -18,6 +19,7 @@ import {
 import {overloadHint, type OverloadHint} from '../lib/overload';
 import {restSoundEnabled, setRestSound, stretchSuggestionsEnabled, useRestSound} from '../lib/settings';
 import {armAudio, beep} from '../lib/restAlert';
+import ReplaceExercisePicker from '../components/ReplaceExercisePicker';
 import {useWakeLock} from '../lib/useWakeLock';
 
 function NumCell({
@@ -61,6 +63,7 @@ export default function WorkoutPage() {
   const history = useWorkoutHistory(); // séances terminées -> suggestion de surcharge progressive
   useWakeLock(!!w); // garde l'écran allumé pendant la séance -> l'alerte de fin de repos part à l'heure
   const soundOn = useRestSound();
+  const [replaceEi, setReplaceEi] = useState<number | null>(null); // index de l'exercice à remplacer (modale)
 
   // Tique chaque seconde pendant la séance : horloge + compte à rebours du repos.
   const [, setTick] = useState(0);
@@ -189,16 +192,27 @@ export default function WorkoutPage() {
           const hint = overloadHint(e.kind, e.targetReps, history, e.exerciseId);
           return (
             <div key={ei} className="rounded-xl border border-slate-800 bg-slate-900/50 p-4">
-              <div className="flex items-baseline justify-between gap-2">
-                <Link to={`/exercices/${e.exerciseId}`} className="font-semibold hover:text-emerald-300">
-                  {e.nameFr ?? e.nameEn}
-                </Link>
-                {e.targetReps && (
-                  <span className="shrink-0 text-xs text-slate-500">
-                    objectif {e.targetReps} {objUnit}
-                    {e.restSeconds ? ` · repos ${mmss(e.restSeconds)}` : ''}
-                  </span>
-                )}
+              <div className="flex items-start justify-between gap-2">
+                <div className="min-w-0">
+                  <Link to={`/exercices/${e.exerciseId}`} className="font-semibold hover:text-emerald-300">
+                    {e.nameFr ?? e.nameEn}
+                  </Link>
+                  {e.targetReps && (
+                    <p className="mt-0.5 text-xs text-slate-500">
+                      objectif {e.targetReps} {objUnit}
+                      {e.restSeconds ? ` · repos ${mmss(e.restSeconds)}` : ''}
+                    </p>
+                  )}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setReplaceEi(ei)}
+                  aria-label="Remplacer l'exercice"
+                  title="Remplacer par un exercice similaire (même muscle, selon ton matériel)"
+                  className="flex shrink-0 items-center gap-1 rounded-lg border border-slate-700 px-2 py-1 text-xs text-slate-400 transition-colors hover:border-emerald-500/50 hover:text-emerald-300"
+                >
+                  <Replace className="h-3.5 w-3.5" /> Remplacer
+                </button>
               </div>
 
               {/* Surcharge progressive : objectif déduit de ta dernière séance. Tap = pré-remplir. */}
@@ -359,6 +373,17 @@ export default function WorkoutPage() {
             )}
           </div>
         </div>
+      )}
+
+      {replaceEi !== null && w.exercises[replaceEi] && (
+        <ReplaceExercisePicker
+          exerciseId={w.exercises[replaceEi].exerciseId}
+          onPick={(ex) => {
+            replaceExercise(replaceEi, ex);
+            setReplaceEi(null);
+          }}
+          onClose={() => setReplaceEi(null)}
+        />
       )}
     </div>
   );

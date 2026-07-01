@@ -13,13 +13,19 @@ import {Badge} from './ui';
 export default function ExercisePicker({
   onPick,
   onClose,
+  initialMuscle = '',
+  title = 'Ajouter un exercice',
+  excludeId,
 }: {
   onPick: (e: ExerciseListItem) => void;
   onClose: () => void;
+  initialMuscle?: string; // pré-sélectionne un muscle (ex. « remplacer par même muscle »)
+  title?: string;
+  excludeId?: string; // exercice à masquer de la liste (ex. celui qu'on remplace)
 }) {
   useModalDismiss(onClose); // Échap pour fermer + verrou du scroll de fond
   const [q, setQ] = useState('');
-  const [muscle, setMuscle] = useState('');
+  const [muscle, setMuscle] = useState(initialMuscle);
   const [level, setLevel] = useState('');
   const [page, setPage] = useState(1);
   const [items, setItems] = useState<ExerciseListItem[]>([]);
@@ -69,6 +75,7 @@ export default function ExercisePicker({
 
   const selectClass =
     'min-w-0 flex-1 rounded-lg border border-slate-700 bg-slate-800 px-2 py-2 text-sm focus:border-emerald-500 focus:outline-none';
+  const shown = excludeId ? items.filter((e) => e.id !== excludeId) : items;
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col bg-slate-950/80 p-3 backdrop-blur-sm" onClick={onClose}>
@@ -80,7 +87,7 @@ export default function ExercisePicker({
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between">
-          <h3 id="exercise-picker-title" className="font-semibold">Ajouter un exercice</h3>
+          <h3 id="exercise-picker-title" className="font-semibold">{title}</h3>
           <button onClick={onClose} aria-label="Fermer" className="rounded-md p-1 text-slate-400 hover:bg-slate-800 hover:text-slate-200">
             <X className="h-5 w-5" />
           </button>
@@ -140,12 +147,12 @@ export default function ExercisePicker({
           {!loading && netError && (
             <p className="py-8 text-center text-sm text-amber-300">Connexion indisponible. Réessaie une fois en ligne.</p>
           )}
-          {!loading && !netError && items.length === 0 && (
+          {!loading && !netError && shown.length === 0 && (
             <p className="py-8 text-center text-sm text-slate-500">Aucun résultat avec ces filtres.</p>
           )}
-          {!loading && items.length > 0 && (
+          {!loading && shown.length > 0 && (
             <div className="grid grid-cols-2 gap-2">
-              {items.map((e) => (
+              {shown.map((e) => (
                 <button
                   key={e.id}
                   onClick={() => onPick(e)}

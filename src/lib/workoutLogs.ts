@@ -219,6 +219,26 @@ export function updateActive(mut: (draft: WorkoutLog) => void) {
   saveActive(draft);
 }
 
+/**
+ * Remplace l'exercice #ei de la séance active par un autre (ex. machine prise, pas le
+ * matériel, douleur). Garde le NOMBRE de séries + le repos prescrit, mais réinitialise
+ * les valeurs (nouvel exercice = charge/reps à refaire). Le mode de saisie suit le nouvel exo.
+ */
+export function replaceExercise(
+  ei: number,
+  newEx: {id: string; nameFr: string | null; nameEn: string; category?: string | null; force?: string | null; equipmentId?: string | null; measureKind?: string | null},
+) {
+  updateActive((d) => {
+    const ex = d.exercises[ei];
+    if (!ex) return;
+    ex.exerciseId = newEx.id;
+    ex.nameFr = newEx.nameFr;
+    ex.nameEn = newEx.nameEn;
+    ex.kind = measureKind(newEx);
+    ex.sets = ex.sets.map(() => ({weight: null, reps: null, done: false}));
+  });
+}
+
 /** Lance le chrono de la séance (bouton « Commencer la séance »). Idempotent. */
 export function startChrono() {
   updateActive((d) => {
