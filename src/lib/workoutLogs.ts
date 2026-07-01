@@ -10,6 +10,7 @@ import {pushItems, registerCollection, type SyncItem} from './sync';
 import {mergeCollection} from './syncMerge';
 import {partitionLogsByAge} from './stats';
 import {captureLogs} from './records';
+import {addPrunedContribution} from './lifetimeTotals';
 
 export interface LoggedSet {
   weight: number | null;
@@ -371,7 +372,8 @@ export function pruneOldLogs(maxAgeDays = RETENTION_DAYS) {
   cutoff.setDate(cutoff.getDate() - maxAgeDays);
   const {fresh, expired} = partitionLogsByAge(history, cutoff.toISOString());
   if (expired.length > 0) {
-    captureLogs(expired); // préserve les records AVANT suppression
+    captureLogs(expired); // préserve les records (PR) AVANT suppression
+    addPrunedContribution(expired); // préserve les cumuls à vie (trophées) AVANT suppression
     const at = new Date().toISOString();
     for (const l of expired) tombstones[l.id] = at;
     tombChanged = true;

@@ -10,6 +10,7 @@ import {exportMyData} from '../lib/exportData';
 import {setExplanations, setStretchSuggestions, useExplanations, useStretchSuggestions} from '../lib/settings';
 import {setWeightKg, useProfile} from '../lib/userProfile';
 import {Loading, ToggleSwitch} from '../components/ui';
+import TrophySection from '../components/TrophySection';
 
 const inputClass =
   'w-full rounded-lg border border-slate-700 bg-slate-800 px-3 py-2.5 text-sm outline-none placeholder:text-slate-500 focus:border-emerald-500';
@@ -531,6 +532,8 @@ export default function AccountPage() {
             <span className="text-xs font-normal text-emerald-300/70">Gérer les comptes</span>
           </Link>
         )}
+
+        <TrophySection />
 
         <GenderPref />
         <WeightPref />

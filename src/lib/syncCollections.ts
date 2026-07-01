@@ -6,6 +6,7 @@
  */
 import './favorites';
 import './workoutLogs';
+import './lifetimeTotals';
 import './myPrograms';
 import './records';
 import './userProfile';
