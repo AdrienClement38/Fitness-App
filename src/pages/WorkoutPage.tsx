@@ -392,7 +392,13 @@ export default function WorkoutPage() {
 
       {plateEi !== null && w.exercises[plateEi] && (
         <PlateCalculator
-          initialWeight={w.exercises[plateEi].sets.find((s) => s.weight != null)?.weight ?? null}
+          initialWeight={
+            // Miroir du write-back (qui n'écrit que les séries non faites) : on lit le poids
+            // d'une série À VENIR en priorité, sinon n'importe quelle série.
+            w.exercises[plateEi].sets.find((s) => !s.done && s.weight != null)?.weight ??
+            w.exercises[plateEi].sets.find((s) => s.weight != null)?.weight ??
+            null
+          }
           onWeightChange={(kg) => setExerciseWeight(plateEi, kg)}
           onClose={() => setPlateEi(null)}
         />

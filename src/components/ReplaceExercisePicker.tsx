@@ -32,6 +32,7 @@ export default function ReplaceExercisePicker({
   return (
     <ExercisePicker
       initialMuscle={muscle}
+      primaryMuscle
       excludeId={exerciseId}
       title="Remplacer par un exercice similaire"
       onPick={onPick}

@@ -234,10 +234,19 @@ export function replaceExercise(
   updateActive((d) => {
     const ex = d.exercises[ei];
     if (!ex) return;
+    const kind = measureKind(newEx);
+    // Si le mode de saisie change (ex. reps -> durée en s -> cardio en min), l'objectif et le
+    // repos de l'ancien exo n'ont plus de sens : on repart des défauts du nouveau kind (l'unité
+    // affichée et le repos suivent). On garde le NOMBRE de séries.
+    if (kind !== ex.kind) {
+      const def = PRESCRIPTION_DEFAULTS[kind];
+      ex.targetReps = repsLabel(def.min, def.max);
+      ex.restSeconds = def.rest;
+    }
     ex.exerciseId = newEx.id;
     ex.nameFr = newEx.nameFr;
     ex.nameEn = newEx.nameEn;
-    ex.kind = measureKind(newEx);
+    ex.kind = kind;
     ex.equipmentId = newEx.equipmentId ?? null;
     ex.sets = ex.sets.map(() => ({weight: null, reps: null, done: false}));
   });

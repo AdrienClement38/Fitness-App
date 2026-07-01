@@ -16,12 +16,14 @@ export default function ExercisePicker({
   initialMuscle = '',
   title = 'Ajouter un exercice',
   excludeId,
+  primaryMuscle = false,
 }: {
   onPick: (e: ExerciseListItem) => void;
   onClose: () => void;
   initialMuscle?: string; // pré-sélectionne un muscle (ex. « remplacer par même muscle »)
   title?: string;
   excludeId?: string; // exercice à masquer de la liste (ex. celui qu'on remplace)
+  primaryMuscle?: boolean; // restreint le filtre muscle au rôle PRIMAIRE (alternatives ciblées)
 }) {
   useModalDismiss(onClose); // Échap pour fermer + verrou du scroll de fond
   const [q, setQ] = useState('');
@@ -45,6 +47,7 @@ export default function ExercisePicker({
         const res = await api.exercises({
           search: q || undefined,
           muscle: muscle || undefined,
+          primary: primaryMuscle && muscle ? '1' : undefined,
           level: level || undefined,
           page,
         });
@@ -67,7 +70,7 @@ export default function ExercisePicker({
       active = false;
       clearTimeout(t);
     };
-  }, [q, muscle, level, page]);
+  }, [q, muscle, level, page, primaryMuscle]);
 
   useEffect(() => {
     listRef.current?.scrollTo({top: 0});
