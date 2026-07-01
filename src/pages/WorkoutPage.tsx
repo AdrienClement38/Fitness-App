@@ -1,5 +1,5 @@
 import {useEffect, useRef, useState} from 'react';
-import {Check, Minus, Play, Plus, Replace, Timer, TrendingUp, Volume2, VolumeX, X} from 'lucide-react';
+import {Check, Disc, Minus, Play, Plus, Replace, Timer, TrendingUp, Volume2, VolumeX, X} from 'lucide-react';
 import {Link, useNavigate} from 'react-router-dom';
 import {mmss} from '../lib/time';
 import {
@@ -20,6 +20,8 @@ import {overloadHint, type OverloadHint} from '../lib/overload';
 import {restSoundEnabled, setRestSound, stretchSuggestionsEnabled, useRestSound} from '../lib/settings';
 import {armAudio, beep} from '../lib/restAlert';
 import ReplaceExercisePicker from '../components/ReplaceExercisePicker';
+import PlateCalculator from '../components/PlateCalculator';
+import {usesPlateLoadedBar} from '../lib/plates';
 import {useWakeLock} from '../lib/useWakeLock';
 
 function NumCell({
@@ -64,6 +66,7 @@ export default function WorkoutPage() {
   useWakeLock(!!w); // garde l'écran allumé pendant la séance -> l'alerte de fin de repos part à l'heure
   const soundOn = useRestSound();
   const [replaceEi, setReplaceEi] = useState<number | null>(null); // index de l'exercice à remplacer (modale)
+  const [plateEi, setPlateEi] = useState<number | null>(null); // index de l'exercice pour la calculette de disques
 
   // Tique chaque seconde pendant la séance : horloge + compte à rebours du repos.
   const [, setTick] = useState(0);
@@ -214,6 +217,17 @@ export default function WorkoutPage() {
                   <Replace className="h-3.5 w-3.5" /> Remplacer
                 </button>
               </div>
+
+              {/* Barre libre (droite ou EZ, hors Smith guidée) : calculette de disques. */}
+              {usesPlateLoadedBar(e) && (
+                <button
+                  type="button"
+                  onClick={() => setPlateEi(ei)}
+                  className="mt-2 flex items-center gap-1.5 rounded-lg border border-slate-700 px-2.5 py-1.5 text-xs text-slate-400 transition-colors hover:border-emerald-500/50 hover:text-emerald-300"
+                >
+                  <Disc className="h-3.5 w-3.5" /> Disques sur la barre
+                </button>
+              )}
 
               {/* Surcharge progressive : objectif déduit de ta dernière séance. Tap = pré-remplir. */}
               {hint && (
@@ -373,6 +387,13 @@ export default function WorkoutPage() {
             )}
           </div>
         </div>
+      )}
+
+      {plateEi !== null && w.exercises[plateEi] && (
+        <PlateCalculator
+          initialWeight={w.exercises[plateEi].sets.find((s) => s.weight != null)?.weight ?? null}
+          onClose={() => setPlateEi(null)}
+        />
       )}
 
       {replaceEi !== null && w.exercises[replaceEi] && (

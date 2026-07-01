@@ -25,6 +25,7 @@ export interface LoggedExercise {
   targetReps: string; // objectif affiché : reps, secondes ou minutes selon kind
   kind: MeasureKind; // mode de saisie (load / bodyweight / duration / cardio)
   restSeconds: number | null; // repos prescrit entre les séries
+  equipmentId?: string | null; // matériel (ex. 'barbell') -> calculette de disques ; absent sur les séances pré-migration
   sets: LoggedSet[];
 }
 /** Repos en cours (le compte à rebours survit à un reload : tout est horodaté). */
@@ -61,6 +62,7 @@ export interface SessionSeed {
     nameFr: string | null;
     nameEn: string;
     kind: MeasureKind;
+    equipmentId?: string | null; // matériel -> calculette de disques (barre libre)
     sets: number | null;
     repsMin: number | null;
     repsMax: number | null;
@@ -188,6 +190,7 @@ export function startSession(seed: SessionSeed): string {
           : repsLabel(e.repsMin, e.repsMax),
         kind: e.kind,
         restSeconds: e.restSeconds,
+        equipmentId: e.equipmentId ?? null,
         sets,
       };
     }),
@@ -207,7 +210,7 @@ export function startQuickSession(ex: QuickExercise): string {
     programName: null,
     sessionName: ex.nameFr ?? ex.nameEn,
     exercises: [
-      {exerciseId: ex.id, nameFr: ex.nameFr, nameEn: ex.nameEn, kind, sets: d.sets, repsMin: d.min, repsMax: d.max, restSeconds: d.rest},
+      {exerciseId: ex.id, nameFr: ex.nameFr, nameEn: ex.nameEn, kind, equipmentId: ex.equipmentId, sets: d.sets, repsMin: d.min, repsMax: d.max, restSeconds: d.rest},
     ],
   });
 }
@@ -235,6 +238,7 @@ export function replaceExercise(
     ex.nameFr = newEx.nameFr;
     ex.nameEn = newEx.nameEn;
     ex.kind = measureKind(newEx);
+    ex.equipmentId = newEx.equipmentId ?? null;
     ex.sets = ex.sets.map(() => ({weight: null, reps: null, done: false}));
   });
 }

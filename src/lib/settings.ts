@@ -118,3 +118,40 @@ export function useRestSound(): boolean {
     () => true,
   );
 }
+
+/* ---- Poids de la barre (calculette de disques, par appareil) --------- */
+const BAR_KEY = 'pref-bar-weight';
+const DEFAULT_BAR = 20; // barre olympique standard
+
+function readBar(): number {
+  try {
+    const v = Number(localStorage.getItem(BAR_KEY));
+    return v === 20 || v === 15 || v === 10 ? v : DEFAULT_BAR;
+  } catch {
+    return DEFAULT_BAR;
+  }
+}
+
+let barValue = readBar();
+const barListeners = new Set<() => void>();
+
+export function setBarWeight(kg: number) {
+  barValue = kg;
+  try {
+    localStorage.setItem(BAR_KEY, String(kg));
+  } catch {
+    /* quota / mode privé */
+  }
+  barListeners.forEach((l) => l());
+}
+
+export function useBarWeight(): number {
+  return useSyncExternalStore(
+    (cb) => {
+      barListeners.add(cb);
+      return () => barListeners.delete(cb);
+    },
+    () => barValue,
+    () => DEFAULT_BAR,
+  );
+}

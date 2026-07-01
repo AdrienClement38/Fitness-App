@@ -42,6 +42,7 @@ export default function ProgramDetailPage() {
         nameFr: e.nameFr,
         nameEn: e.nameEn,
         kind: measureKind(e),
+        equipmentId: e.equipmentId,
         sets: e.sets,
         repsMin: e.repsMin,
         repsMax: e.repsMax,
