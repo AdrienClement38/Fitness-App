@@ -52,9 +52,9 @@ function Category({cat}: {cat: CategoryView}) {
       </div>
       {cat.nextLabel ? (
         <>
-          <div className="mb-1 mt-1 flex justify-between text-[11px] text-slate-500">
-            <span>Prochain : {cat.nextLabel}</span>
-            <span>
+          <div className="mb-1 mt-1 flex justify-between gap-2 text-[11px] text-slate-500">
+            <span className="whitespace-nowrap">Prochain : {cat.nextLabel}</span>
+            <span className="whitespace-nowrap">
               {cat.currentLabel} / {cat.targetLabel}
             </span>
           </div>
@@ -76,7 +76,7 @@ function Category({cat}: {cat: CategoryView}) {
 export default function TrophySection() {
   const history = useWorkoutHistory();
   const carry = useCarryEntries();
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false); // replié par défaut (n'encombre pas la page compte)
 
   const totals = lifetimeTotals(history, carry);
   const cats = achievements(totals);
