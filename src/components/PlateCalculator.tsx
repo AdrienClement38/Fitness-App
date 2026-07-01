@@ -12,6 +12,20 @@ const parse = (raw: string) => {
   return Number.isFinite(n) && n > 0 ? n : 0;
 };
 
+/** Un disque dessiné : rectangle vert, hauteur ∝ poids, valeur inscrite dessus. */
+function PlateBar({w}: {w: number}) {
+  const h = Math.round(26 + (w / 25) * 42); // 1,25 kg ≈ 28 px … 25 kg ≈ 68 px
+  return (
+    <div
+      style={{height: `${h}px`}}
+      className="mx-px flex w-5 shrink-0 items-center justify-center rounded-[3px] bg-emerald-500 text-[8px] font-bold leading-none text-emerald-950 ring-1 ring-emerald-300/50"
+      title={`${fr(w)} kg`}
+    >
+      {fr(w)}
+    </div>
+  );
+}
+
 /**
  * « Disques sur la barre » : à partir d'un poids total visé, dit quels disques mettre de
  * chaque côté d'une barre libre. Le poids de la barre (20/15/10) est mémorisé par appareil.
@@ -109,19 +123,24 @@ export default function PlateCalculator({initialWeight, onClose}: {initialWeight
             <p className="text-center text-sm text-slate-300">Barre seule — {fr(bd.achieved)} kg, aucun disque.</p>
           ) : (
             <>
-              <p className="mb-2 text-center text-xs text-slate-500">De chaque côté :</p>
-              <div className="flex flex-wrap items-center justify-center gap-1.5">
-                {groups.map((g, i) => (
-                  <span
-                    key={i}
-                    className="flex items-center gap-1 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1.5 text-sm font-semibold text-emerald-200"
-                  >
-                    {g.count > 1 && <span className="text-emerald-400">{g.count}×</span>}
-                    {fr(g.plate)} kg
-                  </span>
-                ))}
-              </div>
-              <p className="mt-3 text-center text-sm font-medium">
+              {/* Barre dessinée : disques (léger → lourd) · BARRE · (lourd → léger), en miroir. */}
+              {bd.perSide.length <= 12 && (
+                <div className="mb-3 flex items-center justify-center overflow-x-auto py-1">
+                  <div className="h-1.5 w-2.5 shrink-0 rounded-l-sm bg-slate-500" />
+                  {[...bd.perSide].reverse().map((p, i) => (
+                    <PlateBar key={`l${i}`} w={p} />
+                  ))}
+                  <div className="h-1.5 w-6 shrink-0 bg-slate-400" />
+                  {bd.perSide.map((p, i) => (
+                    <PlateBar key={`r${i}`} w={p} />
+                  ))}
+                  <div className="h-1.5 w-2.5 shrink-0 rounded-r-sm bg-slate-500" />
+                </div>
+              )}
+              <p className="text-center text-sm font-semibold text-emerald-200">
+                Par côté : {groups.map((g) => `${g.count > 1 ? `${g.count}× ` : ''}${fr(g.plate)} kg`).join('  +  ')}
+              </p>
+              <p className="mt-1.5 text-center text-sm font-medium">
                 = {fr(bd.achieved)} kg <span className="text-slate-500">(barre {fr(bar)} + 2 × {fr((bd.achieved - bar) / 2)})</span>
               </p>
             </>
