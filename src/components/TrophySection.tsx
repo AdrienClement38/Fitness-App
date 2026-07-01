@@ -81,6 +81,8 @@ export default function TrophySection() {
   const totals = lifetimeTotals(history, carry);
   const cats = achievements(totals);
   const nothing = totals.tonnageKg === 0 && totals.cardioMin === 0 && totals.sessions === 0;
+  const earned = cats.reduce((n, c) => n + c.tiers.filter((t) => t.reached).length, 0);
+  const totalTiers = cats.reduce((n, c) => n + c.tiers.length, 0);
 
   return (
     <div className="mt-3 rounded-xl border border-slate-800 bg-slate-900/50 p-4">
@@ -88,6 +90,12 @@ export default function TrophySection() {
         <span className="flex items-center gap-2">
           <Trophy className="h-5 w-5 text-amber-400" />
           <span className="font-semibold">Trophées</span>
+          <span
+            className={`rounded-full px-2 py-0.5 text-xs font-semibold ${earned > 0 ? 'bg-amber-400/15 text-amber-300' : 'bg-slate-800 text-slate-500'}`}
+            title={`${earned} trophée${earned > 1 ? 's' : ''} débloqué${earned > 1 ? 's' : ''} sur ${totalTiers}`}
+          >
+            {earned}
+          </span>
         </span>
         {open ? <ChevronUp className="h-5 w-5 text-slate-400" /> : <ChevronDown className="h-5 w-5 text-slate-400" />}
       </button>
